@@ -348,7 +348,7 @@ const TOPIC_PRESETS=[
    - freeTrial:true の間はテスト期間として無料で有効化できる
    - 正式リリース時は freeTrial:false にし、url に Stripe Payment Link を設定
      （App Store 配信時は StoreKit の IAP に置き換えること） */
-const PURCHASE={price:'¥480',url:'',freeTrial:true};
+const PURCHASE={price:'¥160',url:'',freeTrial:true};
 function isPremium(){ return !!db.premium; }
 function catUnlocked(ci){ return isPremium() || ci===0; }
 
