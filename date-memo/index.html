@@ -224,6 +224,7 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 <nav id="tabbar">
   <button data-tab="list" class="on"><span class="ti">💐</span>お相手</button>
   <button data-tab="topics"><span class="ti">💬</span>話題</button>
+  <button data-tab="my"><span class="ti">📝</span>MYメモ</button>
   <button data-tab="settings"><span class="ti">⚙️</span>設定</button>
 </nav>
 
@@ -525,12 +526,15 @@ function render(){
     renderBrief(p);
   }else if(view.name==='topics'){
     renderTopics();
+  }else if(view.name==='my'){
+    renderMyTopics();
   }else if(view.name==='settings'){
     renderSettings();
   }else{
     renderList();
   }
-  const active=view.name==='settings'?'settings':(view.name==='topics'&&!view.pid?'topics':'list');
+  const active=view.name==='settings'?'settings':view.name==='my'?'my'
+    :(view.name==='topics'&&!view.pid?'topics':'list');
   document.querySelectorAll('#tabbar button').forEach(b=>
     b.classList.toggle('on',b.dataset.tab===active));
 }
@@ -804,34 +808,16 @@ function renderTopics(){
       </div>`;
   }).join('');
 
-  const myRows=(db.myTopics||[]).map(t=>{
-    const open=expandedTopics.has(t.id);
-    const exp=t.note?`<button class="t-exp ${open?'open':''}" data-x="${t.id}">▼</button>`:'';
-    const sub=t.note?`<div class="t-sub" data-sub="${t.id}" ${open?'':'hidden'}>
-      <div class="fl-q" style="white-space:pre-wrap">📝 ${esc(t.note)}</div></div>`:'';
-    const editBtn=`<button class="t-edit" data-edit="${t.id}">編集</button>`;
-    let row;
-    if(p){
-      const on=!!p.talked[t.id];
-      row=`<div class="t-row"><label class="t-main"><input type="checkbox" data-t="${t.id}" ${on?'checked':''}>
-        <span class="t-text ${on?'done':''}">${esc(t.text)}</span></label>${editBtn}${exp}</div>`;
-    }else{
-      row=`<div class="t-row" ${t.note?`data-x="${t.id}"`:''}><span class="t-text">${esc(t.text)}</span>${editBtn}${exp}</div>`;
-    }
-    return `<div class="t-item">${row}${sub}</div>`;
-  }).join('');
-  const mySec=`<div class="sec-title">📝 MY話題リスト<button class="hbtn" id="myAdd">＋ 追加</button></div>
-    ${myRows?`<div class="card plain">${myRows}</div>`
-      :`<div class="card" style="color:var(--sub);font-size:14.5px">「この人と話したいこと」を自由にメモできます。<br>例：出張のお土産の話、次の連休の予定を聞く</div>`}`;
+  const mySec=p?`<div class="sec-title">📝 MY話題リスト<button class="hbtn" id="myAdd">＋ 追加</button></div>
+    ${(db.myTopics||[]).length?`<div class="card plain">${myTopicRows(p)}</div>`
+      :`<div class="card" style="color:var(--sub);font-size:14.5px">「MYメモ」タブから、話したいことを自由に追加できます。</div>`}`:'';
 
   const gacha=`<button class="btn btn-sub" id="gachaBtn" style="margin:0 0 8px">🎲 話題ガチャで3つ引く</button>`;
   $main.innerHTML=head+upsell+gacha+mySec+secs;
   document.getElementById('gachaBtn').onclick=()=>openGacha(p);
-  document.getElementById('myAdd').onclick=()=>openMyTopicSheet(null);
-  $main.querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{
-    e.stopPropagation();
-    openMyTopicSheet(db.myTopics.find(x=>x.id===b.dataset.edit));
-  });
+  const myAdd=document.getElementById('myAdd');
+  if(myAdd) myAdd.onclick=()=>openMyTopicSheet(null);
+  bindMyTopicEdit();
   const pv=document.getElementById('pvOpen');
   if(pv) pv.onclick=()=>openPaywall();
   $main.querySelectorAll('[data-unlock]').forEach(b=>b.onclick=()=>openPaywall());
@@ -870,11 +856,13 @@ window.addEventListener('popstate',e=>{
 });
 document.querySelectorAll('#tabbar button').forEach(b=>b.onclick=()=>{
   const t=b.dataset.tab;
-  const target=t==='topics'?{name:'topics'}:t==='settings'?{name:'settings'}:{name:'list'};
+  const target=t==='topics'?{name:'topics'}:t==='my'?{name:'my'}
+    :t==='settings'?{name:'settings'}:{name:'list'};
   if(view.name===target.name&&!view.pid){ window.scrollTo({top:0,behavior:'smooth'}); return; }
   nav(target,false);
 });
 $fab.onclick=()=>{
+  if(view.name==='my'){ openMyTopicSheet(null); return; }
   if(!isPremium()&&db.partners.length>=3){
     openPaywall('無料版で登録できるお相手は3人までです。プレミアムで無制限になります。');
     return;
@@ -993,6 +981,57 @@ function openDateForm(p,d){
     p.updatedAt=Date.now();
     save(); closeSheet(true); render(); toast('削除しました');
   };
+}
+
+function myTopicRows(p){
+  return (db.myTopics||[]).map(t=>{
+    const open=expandedTopics.has(t.id);
+    const exp=t.note?`<button class="t-exp ${open?'open':''}" data-x="${t.id}">▼</button>`:'';
+    const sub=t.note?`<div class="t-sub" data-sub="${t.id}" ${open?'':'hidden'}>
+      <div class="fl-q" style="white-space:pre-wrap">📝 ${esc(t.note)}</div></div>`:'';
+    const editBtn=`<button class="t-edit" data-edit="${t.id}">編集</button>`;
+    let row;
+    if(p){
+      const on=!!p.talked[t.id];
+      row=`<div class="t-row"><label class="t-main"><input type="checkbox" data-t="${t.id}" ${on?'checked':''}>
+        <span class="t-text ${on?'done':''}">${esc(t.text)}</span></label>${editBtn}${exp}</div>`;
+    }else{
+      row=`<div class="t-row" ${t.note?`data-x="${t.id}"`:''}><span class="t-text">${esc(t.text)}</span>${editBtn}${exp}</div>`;
+    }
+    return `<div class="t-item">${row}${sub}</div>`;
+  }).join('');
+}
+function bindMyTopicEdit(){
+  $main.querySelectorAll('[data-edit]').forEach(b=>b.onclick=e=>{
+    e.stopPropagation();
+    openMyTopicSheet(db.myTopics.find(x=>x.id===b.dataset.edit));
+  });
+}
+
+function renderMyTopics(){
+  $title.textContent='MYメモ';
+  $back.style.display='none';
+  $fab.style.display='flex';
+  const rows=myTopicRows(null);
+  $main.innerHTML=`
+    <p class="set-note" style="margin:2px 4px 12px">「今度これを話したい」「次に聞くこと」を自由にメモ。お相手ごとの話題チェック・デート前カンペ・話題ガチャにも自動で入ります。</p>
+    ${rows?`<div class="card plain">${rows}</div>`
+      :`<div class="empty"><div class="big">📝</div>まだメモがありません。<br>右下の「＋」から追加しましょう。</div>`}
+    ${rows?`<button class="btn btn-sub" id="myGacha" style="margin-top:12px">🎲 話題ガチャで3つ引く</button>`:''}`;
+  bindMyTopicEdit();
+  $main.querySelectorAll('[data-x]').forEach(el=>el.onclick=e=>{
+    e.stopPropagation();
+    const id=el.dataset.x;
+    const sub=$main.querySelector(`[data-sub="${id}"]`);
+    if(!sub) return;
+    const open=sub.hasAttribute('hidden');
+    if(open){ sub.removeAttribute('hidden'); expandedTopics.add(id); }
+    else{ sub.setAttribute('hidden',''); expandedTopics.delete(id); }
+    const btn=$main.querySelector(`button.t-exp[data-x="${id}"]`);
+    if(btn) btn.classList.toggle('open',open);
+  });
+  const g=document.getElementById('myGacha');
+  if(g) g.onclick=()=>openGacha(null);
 }
 
 function openMyTopicSheet(item){
