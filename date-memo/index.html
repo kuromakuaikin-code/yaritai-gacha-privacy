@@ -129,10 +129,16 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .btn-sub{background:var(--gray-soft);color:var(--text);margin-top:10px}
 .btn-danger-text{color:var(--danger);font-size:14px;padding:14px;width:100%;text-align:center;margin-top:4px}
 
-.t-row{display:flex;align-items:center;gap:10px;padding:12px 16px;font-size:14.5px;width:100%;text-align:left}
-.t-row+.t-row{border-top:1px solid var(--line)}
+.t-item+.t-item{border-top:1px solid var(--line)}
+.t-row{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 16px;font-size:14.5px;width:100%;text-align:left}
 .t-row input[type=checkbox]{width:20px;height:20px;flex-shrink:0;accent-color:var(--accent)}
+.t-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .t-text{flex:1;word-break:break-word}
+.t-exp{color:var(--sub);padding:4px 8px;font-size:11px;transition:transform .2s;flex-shrink:0}
+.t-exp.open{transform:rotate(180deg)}
+.t-sub{padding:0 16px 12px 28px;display:flex;flex-direction:column;gap:6px}
+.t-sq{font-size:13px;line-height:1.5;color:var(--text);background:var(--gray-soft);
+  border-radius:4px 12px 12px 12px;padding:7px 11px;align-self:flex-start}
 .t-text.done{color:var(--sub);text-decoration:line-through}
 .t-del{color:var(--sub);font-size:16px;padding:2px 6px;flex-shrink:0}
 .t-progress{height:6px;border-radius:999px;background:var(--gray-soft);overflow:hidden;margin-top:8px}
@@ -219,26 +225,42 @@ const stMap=Object.fromEntries(STATUSES.map(s=>[s.id,s]));
 
 const TOPIC_PRESETS=[
   {name:'🍀 はじめまして（1回目）',items:[
-    ['a1','出身地・地元のこと'],['a2','休日の過ごし方'],['a3','仕事の内容・やりがい'],
-    ['a4','最近ハマっていること'],['a5','好きな食べ物・苦手な食べ物'],['a6','行きつけのお店・好きなカフェ'],
-    ['a7','最近観た映画・ドラマ'],['a8','ペット・動物の話'],
+    ['a1','出身地・地元のこと',['都会派？自然派？どんな町だった？','学生時代までずっと地元？','おすすめの地元グルメ・スポットは？']],
+    ['a2','休日の過ごし方',['インドア派？アウトドア派？','理想の休日プランは？','直近の休みは何してた？']],
+    ['a3','仕事の内容・やりがい',['その仕事を選んだきっかけは？','忙しい時期・時間帯はいつ頃？','仕事で一番嬉しかった瞬間は？']],
+    ['a4','最近ハマっていること',['ハマったきっかけは？','どのくらいの頻度でやってる？','今度一緒にできそうなものはある？']],
+    ['a5','好きな食べ物・苦手な食べ物',['和食・洋食・中華どれ派？','辛いもの・甘いものは平気？','アレルギーや苦手はある？（お店選びに直結）']],
+    ['a6','行きつけのお店・好きなカフェ',['どんな雰囲気のお店が好き？','コーヒー派？紅茶派？','今度行ってみたいお店は？（次のデートに繋がる）']],
+    ['a7','最近観た映画・ドラマ',['泣ける系？笑える系？好きなジャンルは？','映画館派？おうち派？','昔から何度も観ている作品は？']],
+    ['a8','ペット・動物の話',['飼ったことある？飼ってみたい？','犬派？猫派？','動物園や水族館は好き？（デートに繋がる）']],
   ]},
   {name:'☕ 距離を縮める（2〜3回目）',items:[
-    ['b1','趣味の深掘り（始めたきっかけ）'],['b2','旅行の思い出・行ってみたい場所'],
-    ['b3','学生時代の部活・思い出'],['b4','友人関係・休日は誰と過ごすか'],
-    ['b5','お酒はどのくらい飲むか'],['b6','家族構成・家族との関係'],
-    ['b7','記念日や誕生日の過ごし方'],['b8','尊敬する人・影響を受けた人'],
+    ['b1','趣味の深掘り（始めたきっかけ）',['始めたきっかけは？','その趣味のどこが一番好き？','初心者でも一緒に楽しめる？']],
+    ['b2','旅行の思い出・行ってみたい場所',['今までで一番良かった旅行先は？','国内派？海外派？','計画きっちり派？行き当たりばったり派？']],
+    ['b3','学生時代の部活・思い出',['何部だった？どんな役割？','クラスではどんなキャラだった？','当時からの友達とは今も会う？']],
+    ['b4','友人関係・休日は誰と過ごすか',['よく会う友達はどんな人？','大人数でわいわい派？少人数派？','友達との予定と恋人との予定のバランスは？']],
+    ['b5','お酒はどのくらい飲むか',['飲み会の頻度はどのくらい？','好きなお酒の種類は？','飲めない人と一緒の時はどうしてる？']],
+    ['b6','家族構成・家族との関係',['兄弟姉妹はいる？何番目？','家族と会ったり連絡したりする頻度は？','家族とはどんな話をする？']],
+    ['b7','記念日や誕生日の過ごし方',['誕生日はいつ？どう過ごすことが多い？','記念日は大事にしたい派？','今までで嬉しかったプレゼントは？']],
+    ['b8','尊敬する人・影響を受けた人',['その人のどんなところを尊敬してる？','影響を受けた本や言葉はある？','目標にしている生き方は？']],
   ]},
   {name:'🏡 価値観・将来のこと',items:[
-    ['c1','結婚後の働き方（共働きか）'],['c2','住みたい場所・転勤の可能性'],
-    ['c3','家事の分担の考え方'],['c4','お金の使い方・貯金の考え方'],
-    ['c5','子どもについての考え'],['c6','親との付き合い方・同居の考え'],
-    ['c7','理想の休日・生活リズム'],['c8','大事にしている価値観'],
+    ['c1','結婚後の働き方（共働きか）',['共働きを続けたい？','転勤や異動の可能性はある？','相手のキャリアをどう支え合いたい？']],
+    ['c2','住みたい場所・転勤の可能性',['都心派？郊外派？','賃貸派？持ち家派？','お互いの職場や実家との距離はどう考える？']],
+    ['c3','家事の分担の考え方',['得意な家事・苦手な家事は？','普段料理はする？','きっちり分担派？気づいた方がやる派？']],
+    ['c4','お金の使い方・貯金の考え方',['何にお金をかけたいタイプ？','貯金は計画的にする方？','結婚後の財布は一緒？別々？']],
+    ['c5','子どもについての考え',['子どもは欲しい？何人くらい？','教育で大事にしたいことは？','共働きの場合の育児分担のイメージは？']],
+    ['c6','親との付き合い方・同居の考え',['将来の同居や近居の可能性は？','親の介護についての考えは？','お互いの実家との理想の距離感は？']],
+    ['c7','理想の休日・生活リズム',['朝型？夜型？','休日は一緒に過ごしたい？別々の時間もほしい？','生活リズムが違ったらどう合わせる？']],
+    ['c8','大事にしている価値観',['これだけは譲れないことは？','逆に相手に合わせられることは？','意見がぶつかった時はどう解決したい？']],
   ]},
   {name:'💍 真剣交際の前に確認',items:[
-    ['d1','健康状態・生活習慣（喫煙など）'],['d2','借金・ローンの有無'],
-    ['d3','宗教・政治への考え方'],['d4','結婚の希望時期'],
-    ['d5','転職・キャリアの予定'],['d6','ペットの可否・アレルギー'],
+    ['d1','健康状態・生活習慣（喫煙など）',['タバコは吸う？相手が吸うのはOK？','持病や通院はある？（自分からも開示する）','健康診断は毎年受けてる？']],
+    ['d2','借金・ローンの有無',['奨学金やローンはある？（自分から話すと切り出しやすい）','クレジットやリボの使い方は？','お金の管理はどうしてる？']],
+    ['d3','宗教・政治への考え方',['家の宗教・慣習はある？','冠婚葬祭で大事にしていることは？','考えが違う部分は尊重し合える？']],
+    ['d4','結婚の希望時期',['いつ頃までに結婚したい？','婚約から式までの理想の流れは？','親への挨拶はどのタイミングがいい？']],
+    ['d5','転職・キャリアの予定',['近いうちに転職や独立の予定は？','海外赴任・転勤の可能性は？','仕事と家庭の優先順位の考え方は？']],
+    ['d6','ペットの可否・アレルギー',['一緒に住むならペットはOK？','動物や食べ物のアレルギーはある？','今飼っているペットは結婚後どうする？']],
   ]},
 ];
 /* プレミアム（課金）設定：url に Stripe Payment Link 等を設定すると
@@ -249,9 +271,10 @@ function isPremium(){ return !!db.premium; }
 function catUnlocked(ci){ return isPremium() || ci===0; }
 
 function catTopics(ci){
-  return TOPIC_PRESETS[ci].items.map(([id,text])=>({id,text}))
+  return TOPIC_PRESETS[ci].items.map(([id,text,sub])=>({id,text,sub}))
     .concat((db.custom||[]).filter(c=>c.cat===ci).map(c=>({id:c.id,text:c.text,custom:true})));
 }
+const expandedTopics=new Set();
 function allTopicCount(){
   const preset=TOPIC_PRESETS.reduce((s,c,ci)=>s+(catUnlocked(ci)?c.items.length:0),0);
   return preset+(isPremium()?(db.custom||[]).length:0);
@@ -453,19 +476,26 @@ function renderTopics(){
   const upsell=isPremium()?'':`
     <button class="card pv-card" id="pvOpen">
       <div class="pv-t">⭐ プレミアムで話題を全種類解放</div>
-      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題＋自分だけの話題追加｜${PURCHASE.price} 買い切り</div>
+      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題（深掘りパターン付き）＋自分だけの話題追加｜${PURCHASE.price} 買い切り</div>
     </button>`;
 
   const secs=TOPIC_PRESETS.map((cat,ci)=>{
     const unlocked=catUnlocked(ci);
     const rows=catTopics(ci).map(t=>{
       const del=(t.custom&&unlocked)?`<button class="t-del" data-del="${t.id}">✕</button>`:'';
+      const open=expandedTopics.has(t.id);
+      const exp=t.sub?`<button class="t-exp ${open?'open':''}" data-x="${t.id}">▼</button>`:'';
+      const sub=t.sub?`<div class="t-sub" data-sub="${t.id}" ${open?'':'hidden'}>
+        ${t.sub.map(s=>`<div class="t-sq">💬 ${esc(s)}</div>`).join('')}</div>`:'';
+      let row;
       if(p&&unlocked){
         const on=!!p.talked[t.id];
-        return `<label class="t-row"><input type="checkbox" data-t="${t.id}" ${on?'checked':''}>
-          <span class="t-text ${on?'done':''}">${esc(t.text)}</span>${del}</label>`;
+        row=`<div class="t-row"><label class="t-main"><input type="checkbox" data-t="${t.id}" ${on?'checked':''}>
+          <span class="t-text ${on?'done':''}">${esc(t.text)}</span></label>${del}${exp}</div>`;
+      }else{
+        row=`<div class="t-row" ${t.sub&&unlocked?`data-x="${t.id}"`:''}><span class="t-text">${esc(t.text)}</span>${del}${exp}</div>`;
       }
-      return `<div class="t-row"><span class="t-text">${esc(t.text)}</span>${del}</div>`;
+      return `<div class="t-item">${row}${sub}</div>`;
     }).join('');
     const title=`<div class="sec-title">${cat.name}${unlocked?'':'<span class="badge-pv">⭐ プレミアム</span>'}
       <button class="hbtn" data-add="${ci}">＋ 追加</button></div>`;
@@ -494,6 +524,17 @@ function renderTopics(){
     if(cb.checked) p.talked[cb.dataset.t]=true; else delete p.talked[cb.dataset.t];
     cb.nextElementSibling.classList.toggle('done',cb.checked);
     save(); refreshHead();
+  });
+  $main.querySelectorAll('[data-x]').forEach(el=>el.onclick=e=>{
+    e.stopPropagation();
+    const id=el.dataset.x;
+    const sub=$main.querySelector(`[data-sub="${id}"]`);
+    if(!sub) return;
+    const open=sub.hasAttribute('hidden');
+    if(open){ sub.removeAttribute('hidden'); expandedTopics.add(id); }
+    else{ sub.setAttribute('hidden',''); expandedTopics.delete(id); }
+    const btn=$main.querySelector(`button.t-exp[data-x="${id}"]`);
+    if(btn) btn.classList.toggle('open',open);
   });
   $main.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
     if(!isPremium()){ openPaywall(); return; }
@@ -646,6 +687,7 @@ function openPaywall(){
     <div class="card">
       <ul class="pv-feat">
         <li>💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）</li>
+        <li>🔍 各話題の「深掘りパターン」（話の広げ方の例）も全て見られる</li>
         <li>✏️ 自分だけの話題を追加し放題</li>
         <li>🔁 ${PURCHASE.price} の買い切り。追加課金・サブスクなし</li>
         <li>🔒 データはこれまで通り端末内にのみ保存</li>
