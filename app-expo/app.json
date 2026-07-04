@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "婚活デートメモ",
+    "slug": "konkatsu-date-memo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "com.kuromakuaikin.datememo",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true
+      }
+    },
+    "android": {
+      "package": "com.kuromakuaikin.datememo"
+    },
+    "splash": {
+      "image": "./assets/icon.png",
+      "backgroundColor": "#faf6f7",
+      "resizeMode": "contain"
+    }
+  }
+}
