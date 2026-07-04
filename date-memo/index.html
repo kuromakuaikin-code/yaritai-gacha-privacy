@@ -55,21 +55,33 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
   display:flex;flex-direction:column;align-items:center;gap:2px}
 #tabbar button.on{color:var(--accent-dark)}
 #tabbar button:not(.on) .ti{filter:grayscale(1);opacity:.55}
-#tabbar .ti{font-size:22px;line-height:1.2}
+#tabbar .ti{font-size:22px;line-height:1.2;transition:transform .18s}
+#tabbar button.on .ti{transform:translateY(-1px) scale(1.12)}
 
 .search{display:flex;gap:8px;margin-bottom:10px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch}
 .chip{flex-shrink:0;font-size:13.5px;font-weight:700;padding:6px 14px;border-radius:999px;
   background:var(--gray-soft);color:var(--sub);border:1px solid transparent}
 .chip.on{background:var(--accent-soft);color:var(--accent-dark);border-color:var(--accent)}
+.chips.wrap{flex-wrap:wrap;overflow:visible;padding-bottom:0}
+@keyframes vfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.vfade{animation:vfade .22s ease}
 
 .card{background:var(--card);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;
-  box-shadow:0 1px 3px rgba(0,0,0,.05);border:1px solid var(--line)}
-.p-card{display:block;width:100%;text-align:left}
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.04);border:1px solid var(--line)}
+.p-card{display:block;width:100%;text-align:left;transition:transform .12s}
 .p-card:active{transform:scale(.985)}
 .p-top{display:flex;align-items:center;gap:10px}
 .avatar{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent-dark);
   display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0}
+.av0{background:#fdeef2;color:#c74564}.av1{background:#eaf1f8;color:#4a7fb5}
+.av2{background:#e7f5ee;color:#2f8a63}.av3{background:#fdf3e2;color:#ad7418}
+.av4{background:#f1eafa;color:#7a5cbb}.av5{background:#e6f4f4;color:#357f7f}
+@media (prefers-color-scheme:dark){
+  .av0{background:#3a262d;color:#f08fa8}.av1{background:#25313e;color:#7aa7d4}
+  .av2{background:#243830;color:#5cbb92}.av3{background:#3a3122;color:#e8b45f}
+  .av4{background:#2f2839;color:#b39ae0}.av5{background:#223434;color:#6fbcbc}
+}
 .p-name{font-weight:700;font-size:17px}
 .p-meta{font-size:13.5px;color:var(--sub)}
 .badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;margin-left:auto;flex-shrink:0}
@@ -86,10 +98,11 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .empty .big{font-size:44px;margin-bottom:10px}
 
 .fab{position:fixed;right:20px;bottom:calc(84px + var(--safe-bottom));z-index:15;
-  width:58px;height:58px;border-radius:50%;background:var(--accent);color:#fff;
-  font-size:30px;font-weight:300;box-shadow:0 4px 14px rgba(224,90,122,.45);
-  display:flex;align-items:center;justify-content:center}
-.fab:active{transform:scale(.94)}
+  width:58px;height:58px;border-radius:50%;color:#fff;
+  background:linear-gradient(135deg,#ec7590,#c74564);
+  font-size:30px;font-weight:300;box-shadow:0 6px 16px rgba(199,69,100,.4);
+  display:flex;align-items:center;justify-content:center;transition:transform .12s}
+.fab:active{transform:scale(.92)}
 
 .sec-title{font-size:14px;font-weight:700;color:var(--sub);margin:18px 2px 8px;
   display:flex;align-items:center}
@@ -109,12 +122,15 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .d-label.good{color:var(--green)}.d-label.bad{color:var(--danger)}.d-label.next{color:var(--blue)}
 .d-edit{position:absolute;top:10px;right:12px;font-size:13px;color:var(--sub);padding:4px}
 
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:none;
-  align-items:flex-end;justify-content:center}
-.overlay.show{display:flex}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:flex;
+  align-items:flex-end;justify-content:center;opacity:0;visibility:hidden;
+  transition:opacity .22s,visibility .22s}
+.overlay.show{opacity:1;visibility:visible}
 .sheet{background:var(--bg);width:100%;max-width:560px;max-height:92%;overflow-y:auto;
   border-radius:18px 18px 0 0;padding:16px 18px calc(24px + var(--safe-bottom));
-  -webkit-overflow-scrolling:touch}
+  -webkit-overflow-scrolling:touch;
+  transform:translateY(100%);transition:transform .3s cubic-bezier(.32,.72,.33,1)}
+.overlay.show .sheet{transform:none}
 .sheet h2{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center}
 .sheet h2 .hbtn{margin-left:auto;font-weight:400;color:var(--sub)}
 .f-row{margin-bottom:12px}
@@ -481,6 +497,12 @@ function nextUpcoming(p){
   const ds=p.dates.filter(d=>d.nextDate&&d.nextDate>=today).map(d=>d.nextDate).sort();
   return ds[0]||null;
 }
+function avatarHtml(name){
+  const s=String(name||'?');
+  let h=0;
+  for(let i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0;
+  return `<div class="avatar av${h%6}">${esc(s.slice(0,1))}</div>`;
+}
 function samplePartner(){
   return {id:uid(),name:'サンプル：Aさん',age:'31',job:'メーカー営業',metVia:'婚活アプリ',
     likes:'カフェ巡り、猫、温泉',ng:'仕事の愚痴は控えめに',memo:'笑顔が素敵。会話のテンポが合う',
@@ -514,6 +536,7 @@ function nav(v,push){
   view=v;
   if(push) history.pushState(v,''); else history.replaceState(v,'');
   render(); window.scrollTo(0,0);
+  $main.classList.remove('vfade'); void $main.offsetWidth; $main.classList.add('vfade');
 }
 function render(){
   if(view.name==='detail'){
@@ -572,7 +595,7 @@ function renderList(){
     const meta=[p.age?`${esc(p.age)}歳`:'',esc(p.job||''),esc(p.metVia||'')].filter(Boolean).join('・');
     return `<button class="card p-card" data-id="${p.id}">
       <div class="p-top">
-        <div class="avatar">${esc((p.name||'?').slice(0,1))}</div>
+        ${avatarHtml(p.name)}
         <div style="min-width:0">
           <div class="p-name">${esc(p.name)}</div>
           <div class="p-meta">${meta||'&nbsp;'}</div>
@@ -656,7 +679,7 @@ function renderDetail(p){
   $main.innerHTML=`
     <div class="card">
       <div class="p-top" style="margin-bottom:${prof?'12px':'0'}">
-        <div class="avatar">${esc((p.name||'?').slice(0,1))}</div>
+        ${avatarHtml(p.name)}
         <div class="p-name" style="flex:1">${esc(p.name)}</div>
         <span class="badge ${st.cls}">${st.label}</span>
       </div>
@@ -707,7 +730,7 @@ function renderBrief(p){
   $main.innerHTML=`
     <div class="card">
       <div class="p-top">
-        <div class="avatar">${esc((p.name||'?').slice(0,1))}</div>
+        ${avatarHtml(p.name)}
         <div style="min-width:0">
           <div class="p-name">${esc(p.name)}</div>
           <div class="p-meta">${meta||'&nbsp;'}</div>
@@ -886,18 +909,16 @@ function closeSheet(force){
 }
 $ov.addEventListener('click',e=>{ if(e.target===$ov) closeSheet(); });
 
-function statusOpts(sel){
-  return STATUSES.map(s=>`<option value="${s.id}" ${s.id===sel?'selected':''}>${s.label}</option>`).join('');
-}
-
 function openPartnerForm(p){
+  let status=p?.status||'active';
   openSheet(`
     <h2>${p?'プロフィールを編集':'お相手を追加'}<button class="hbtn" id="shClose">閉じる</button></h2>
     <div class="f-row"><label>名前・ニックネーム *</label><input id="fName" value="${esc(p?.name||'')}" placeholder="例：Aさん、カフェの田中さん"></div>
-    <div class="f-cols">
-      <div class="f-row"><label>年齢</label><input id="fAge" inputmode="numeric" value="${esc(p?.age||'')}" placeholder="32"></div>
-      <div class="f-row"><label>ステータス</label><select id="fStatus">${statusOpts(p?.status||'active')}</select></div>
-    </div>
+    <div class="f-row"><label>年齢</label><input id="fAge" inputmode="numeric" value="${esc(p?.age||'')}" placeholder="32"></div>
+    <div class="f-row"><label>ステータス</label>
+      <div class="chips wrap" id="fStatusChips">
+        ${STATUSES.map(s=>`<button type="button" class="chip ${s.id===status?'on':''}" data-s="${s.id}">${s.label}</button>`).join('')}
+      </div></div>
     <div class="f-row"><label>職業</label><input id="fJob" value="${esc(p?.job||'')}" placeholder="例：メーカー営業"></div>
     <div class="f-row"><label>出会い</label><input id="fMet" value="${esc(p?.metVia||'')}" placeholder="例：○○アプリ、相談所、友人の紹介"></div>
     <div class="f-row"><label>好きなもの・趣味</label><textarea id="fLikes" placeholder="例：コーヒー、登山、猫を飼っている">${esc(p?.likes||'')}</textarea></div>
@@ -907,12 +928,17 @@ function openPartnerForm(p){
     ${p?`<button class="btn-danger-text" id="shDel">このお相手を削除</button>`:''}
   `);
   document.getElementById('shClose').onclick=closeSheet;
+  document.getElementById('fStatusChips').querySelectorAll('.chip').forEach(c=>c.onclick=()=>{
+    status=c.dataset.s; sheetDirty=true;
+    document.getElementById('fStatusChips').querySelectorAll('.chip').forEach(x=>
+      x.classList.toggle('on',x.dataset.s===status));
+  });
   document.getElementById('shSave').onclick=()=>{
     const name=document.getElementById('fName').value.trim();
     if(!name){ toast('名前を入力してください'); return; }
     const vals={
       name, age:document.getElementById('fAge').value.trim(),
-      status:document.getElementById('fStatus').value,
+      status,
       job:document.getElementById('fJob').value.trim(),
       metVia:document.getElementById('fMet').value.trim(),
       likes:document.getElementById('fLikes').value.trim(),
