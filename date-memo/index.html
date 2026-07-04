@@ -51,6 +51,17 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 #tabbar{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;
   background:var(--card);border-top:1px solid var(--line);
   padding-bottom:var(--safe-bottom)}
+
+#adbar{display:none;position:fixed;left:0;right:0;bottom:calc(62px + var(--safe-bottom));z-index:24;
+  height:52px;background:var(--card);border-top:1px solid var(--line);
+  padding:0 12px;align-items:center;gap:8px;font-size:12.5px;color:var(--sub);text-align:left}
+body.with-ad #adbar{display:flex}
+body.with-ad main{padding-bottom:calc(190px + var(--safe-bottom))}
+body.with-ad .fab{bottom:calc(140px + var(--safe-bottom))}
+.ad-tag{flex-shrink:0;font-size:10.5px;font-weight:700;border:1px solid var(--line);
+  border-radius:4px;padding:1px 6px;color:var(--gray)}
+.ad-body{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ad-off{flex-shrink:0;font-size:12px;font-weight:700;color:var(--accent-dark)}
 #tabbar button{flex:1;padding:8px 0 7px;font-size:11.5px;font-weight:700;color:var(--sub);
   display:flex;flex-direction:column;align-items:center;gap:2px}
 #tabbar button.on{color:var(--accent-dark)}
@@ -237,6 +248,12 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 <main id="main"></main>
 <button class="fab" id="fab">＋</button>
 
+<button id="adbar">
+  <span class="ad-tag">広告</span>
+  <span class="ad-body">ここに広告が表示されます（テスト用サンプル枠）</span>
+  <span class="ad-off">非表示にする ›</span>
+</button>
+
 <nav id="tabbar">
   <button data-tab="list" class="on"><span class="ti">💐</span>お相手</button>
   <button data-tab="topics"><span class="ti">💬</span>話題</button>
@@ -364,8 +381,12 @@ const TOPIC_PRESETS=[
    - freeTrial:true の間はテスト期間として無料で有効化できる
    - 正式リリース時は freeTrial:false にし、url に Stripe Payment Link を設定
      （App Store 配信時は StoreKit の IAP に置き換えること） */
-const PURCHASE={price:'¥160',url:'',freeTrial:true};
+const PURCHASE={price:'¥160',adFreePrice:'¥120',url:'',freeTrial:true};
+/* 広告設定：正式リリース時に adCode へ AdSense 等のタグを設定する
+   （iOSネイティブ版では AdMob バナーに置き換え）。空の間はサンプル枠を表示 */
+const ADS={enabled:true};
 function isPremium(){ return !!db.premium; }
+function isAdFree(){ return !!db.adFree || isPremium(); }
 function catUnlocked(ci){ return isPremium() || ci===0; }
 
 function catTopics(ci){
@@ -560,7 +581,10 @@ function render(){
     :(view.name==='topics'&&!view.pid?'topics':'list');
   document.querySelectorAll('#tabbar button').forEach(b=>
     b.classList.toggle('on',b.dataset.tab===active));
+  document.body.classList.toggle('with-ad',ADS.enabled&&!isAdFree());
 }
+document.getElementById('adbar').onclick=()=>
+  openPaywall(`広告なしプラン（${PURCHASE.adFreePrice}・永続）でこの広告を非表示にできます。`);
 
 function renderList(){
   $title.textContent='婚活デートメモ';
@@ -1110,21 +1134,30 @@ function openPaywall(msg){
         <li>💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）</li>
         <li>🔍 各話題の「深掘りパターン」（会話の流れの例）も全て見られる</li>
         <li>👥 お相手の登録が無制限に（無料版は3人まで）</li>
-        <li>🔁 正式版は ${PURCHASE.price} の買い切り予定。追加課金・サブスクなし</li>
+        <li>🚫 広告が永続的に非表示（プレミアムに含まれます）</li>
+        <li>🔁 買い切りのみ。追加課金・サブスクなし</li>
         <li>🔒 データはこれまで通り端末内にのみ保存</li>
       </ul>
     </div>
-    <button class="btn btn-main" id="pvBuy">${PURCHASE.freeTrial?'無料で有効にする（テスト期間中）':`プレミアムを購入する（${PURCHASE.price}）`}</button>
-    <button class="btn btn-sub" id="shClose2">あとで</button>
+    <button class="btn btn-main" id="pvBuy">⭐ プレミアム ${PURCHASE.freeTrial?'を無料で有効化（テスト中）':`を購入（${PURCHASE.price}）`}</button>
+    ${isAdFree()?'':`<button class="btn btn-sub" id="pvAdFree">🚫 広告なしのみ ${PURCHASE.freeTrial?'を無料で有効化（テスト中）':`（${PURCHASE.adFreePrice}・永続）`}</button>`}
+    <button class="btn-danger-text" id="shClose2" style="color:var(--sub)">あとで</button>
   `);
   document.getElementById('shClose').onclick=()=>closeSheet(true);
   document.getElementById('shClose2').onclick=()=>closeSheet(true);
-  document.getElementById('pvBuy').onclick=startPurchase;
+  document.getElementById('pvBuy').onclick=()=>startPurchase('premium');
+  const af=document.getElementById('pvAdFree');
+  if(af) af.onclick=()=>startPurchase('adfree');
 }
-function startPurchase(){
+function startPurchase(kind){
   if(PURCHASE.freeTrial){
-    db.premium=true; save(); closeSheet(true); render();
-    toast('プレミアムを有効にしました 🎉');
+    if(kind==='adfree'){
+      db.adFree=true; save(); closeSheet(true); render();
+      toast('広告を非表示にしました 🎉');
+    }else{
+      db.premium=true; save(); closeSheet(true); render();
+      toast('プレミアムを有効にしました 🎉');
+    }
     return;
   }
   if(PURCHASE.url){ location.href=PURCHASE.url; return; }
@@ -1139,6 +1172,7 @@ function renderSettings(){
   $main.innerHTML=`
     <div class="card plain">
       <button class="set-item" id="setPremium">⭐ プレミアム<span class="arr">${isPremium()?'有効':'未購入 ›'}</span></button>
+      <button class="set-item" id="setAdFree">🚫 広告なし<span class="arr">${isPremium()?'プレミアムに込み':db.adFree?'有効':'未購入 ›'}</span></button>
       <button class="set-item" id="setLock">🔒 パスコードロック<span class="arr">${db.passcode?'オン ›':'オフ ›'}</span></button>
       <button class="set-item" id="setExport">📤 バックアップを書き出す<span class="arr">›</span></button>
       <button class="set-item" id="setImport">📥 バックアップを読み込む<span class="arr">›</span></button>
@@ -1156,6 +1190,15 @@ function renderSettings(){
         db.premium=false; save(); render(); toast('プレミアムを無効にしました');
       }
     }else openPaywall();
+  };
+  document.getElementById('setAdFree').onclick=()=>{
+    if(isPremium()){ toast('プレミアムに広告なしが含まれています'); return; }
+    if(db.adFree){
+      // テスト用：解除できるようにしておく（本番では購入の復元に置き換える）
+      if(confirm('広告なしを無効に戻しますか？（テスト用）')){
+        db.adFree=false; save(); render(); toast('広告なしを無効にしました');
+      }
+    }else openPaywall(`広告なしプラン（${PURCHASE.adFreePrice}・永続）は一度の購入でずっと広告が消えます。`);
   };
   document.getElementById('setLock').onclick=()=>{
     if(db.passcode){
@@ -1183,7 +1226,7 @@ function renderSettings(){
   document.getElementById('setWipe').onclick=()=>{
     if(!confirm('すべてのお相手と記録を削除します。元に戻せません。よろしいですか？')) return;
     if(!confirm('本当に削除しますか？')) return;
-    db={partners:[],passcode:null,custom:[],myTopics:[],premium:db.premium,
+    db={partners:[],passcode:null,custom:[],myTopics:[],premium:db.premium,adFree:db.adFree,
         installDismissed:db.installDismissed,firstRun:db.firstRun}; save();
     nav({name:'list'},false); toast('削除しました');
   };
