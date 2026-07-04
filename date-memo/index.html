@@ -207,6 +207,7 @@ body.with-ad .fab{bottom:calc(140px + var(--safe-bottom))}
 .set-item{display:flex;align-items:center;width:100%;text-align:left;
   padding:15px 16px;font-size:16px;gap:10px}
 .set-item+.set-item{border-top:1px solid var(--line)}
+a.set-item{text-decoration:none;color:inherit}
 .set-item .arr{margin-left:auto;color:var(--sub)}
 .set-note{font-size:13.5px;color:var(--sub);margin:8px 4px 16px}
 .card.plain{padding:0;overflow:hidden}
@@ -1180,6 +1181,11 @@ function renderSettings(){
     </div>
     <p class="set-note">データはすべてこの端末（ブラウザ）の中にだけ保存され、外部には送信されません。機種変更の際はバックアップの書き出し・読み込みをご利用ください。<br><br>
     ※ パスコードは簡易的な画面ロックです。端末自体のロックも併せてご利用ください。</p>
+    <div class="sec-title">アプリについて</div>
+    <div class="card plain">
+      <a class="set-item" href="terms.html" target="_blank" rel="noopener">📄 利用規約<span class="arr">›</span></a>
+      <a class="set-item" href="privacy.html" target="_blank" rel="noopener">🔒 プライバシーポリシー<span class="arr">›</span></a>
+    </div>
     <input type="file" id="impFile" accept="application/json" style="display:none">
   `;
 
