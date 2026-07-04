@@ -13,7 +13,7 @@
 <title>婚活デートメモ</title>
 <style>
 :root{
-  --bg:#faf6f7;--card:#ffffff;--text:#3a2e33;--sub:#8d7b82;--line:#f0e4e8;
+  --bg:#faf6f7;--card:#ffffff;--text:#2e2227;--sub:#6f5b64;--line:#eddde3;
   --accent:#e05a7a;--accent-soft:#fdeef2;--accent-dark:#c74564;
   --green:#3d9970;--green-soft:#e7f5ee;--blue:#4a7fb5;--blue-soft:#eaf1f8;
   --gray:#9a8f94;--gray-soft:#f1edef;--gold:#e8a33d;
@@ -22,7 +22,7 @@
 }
 @media (prefers-color-scheme:dark){
   :root{
-    --bg:#1c171a;--card:#282126;--text:#f2e9ed;--sub:#a8969e;--line:#3a3036;
+    --bg:#1c171a;--card:#282126;--text:#f5edf1;--sub:#bcaab3;--line:#413740;
     --accent:#e87693;--accent-soft:#3a262d;--accent-dark:#f08fa8;
     --green:#5cbb92;--green-soft:#243830;--blue:#7aa7d4;--blue-soft:#25313e;
     --gray:#a09298;--gray-soft:#332c30;--gold:#e8b45f;
@@ -31,8 +31,9 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
-  background:var(--bg);color:var(--text);font-size:15px;line-height:1.6;
-  padding-top:var(--safe-top);overscroll-behavior-y:none}
+  background:var(--bg);color:var(--text);font-size:16px;line-height:1.65;
+  padding-top:var(--safe-top);overscroll-behavior-y:none;
+  -webkit-font-smoothing:antialiased}
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
 input,textarea,select{font-family:inherit;font-size:16px;color:var(--text);
   background:var(--card);border:1px solid var(--line);border-radius:10px;
@@ -43,22 +44,22 @@ textarea{resize:vertical;min-height:64px}
 header{position:sticky;top:0;z-index:20;background:var(--bg);
   padding:calc(10px + var(--safe-top)) 16px 10px;margin-top:calc(-1 * var(--safe-top));
   display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--line)}
-header h1{font-size:17px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hbtn{font-size:14px;color:var(--accent);font-weight:600;padding:6px 8px;flex-shrink:0}
+header h1{font-size:18px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hbtn{font-size:15px;color:var(--accent-dark);font-weight:700;padding:6px 8px;flex-shrink:0}
 main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bottom))}
 
 #tabbar{position:fixed;left:0;right:0;bottom:0;z-index:25;display:flex;
   background:var(--card);border-top:1px solid var(--line);
   padding-bottom:var(--safe-bottom)}
-#tabbar button{flex:1;padding:8px 0 7px;font-size:10.5px;font-weight:600;color:var(--sub);
+#tabbar button{flex:1;padding:8px 0 7px;font-size:11.5px;font-weight:700;color:var(--sub);
   display:flex;flex-direction:column;align-items:center;gap:2px}
-#tabbar button.on{color:var(--accent)}
+#tabbar button.on{color:var(--accent-dark)}
 #tabbar button:not(.on) .ti{filter:grayscale(1);opacity:.55}
-#tabbar .ti{font-size:21px;line-height:1.2}
+#tabbar .ti{font-size:22px;line-height:1.2}
 
 .search{display:flex;gap:8px;margin-bottom:10px}
 .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch}
-.chip{flex-shrink:0;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;
+.chip{flex-shrink:0;font-size:13.5px;font-weight:700;padding:6px 14px;border-radius:999px;
   background:var(--gray-soft);color:var(--sub);border:1px solid transparent}
 .chip.on{background:var(--accent-soft);color:var(--accent-dark);border-color:var(--accent)}
 
@@ -69,17 +70,17 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .p-top{display:flex;align-items:center;gap:10px}
 .avatar{width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent-dark);
   display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;flex-shrink:0}
-.p-name{font-weight:700;font-size:16px}
-.p-meta{font-size:12.5px;color:var(--sub)}
-.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;margin-left:auto;flex-shrink:0}
+.p-name{font-weight:700;font-size:17px}
+.p-meta{font-size:13.5px;color:var(--sub)}
+.badge{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;margin-left:auto;flex-shrink:0}
 .st-active{background:var(--accent-soft);color:var(--accent-dark)}
 .st-watch{background:var(--blue-soft);color:var(--blue)}
 .st-serious{background:var(--green-soft);color:var(--green)}
 .st-end{background:var(--gray-soft);color:var(--gray)}
-.p-foot{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:12.5px;color:var(--sub)}
+.p-foot{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:13.5px;color:var(--sub)}
 .p-next{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  font-size:12.5px;color:var(--blue);margin-top:6px}
-.stars{color:var(--gold);letter-spacing:1px;font-size:13px}
+  font-size:13.5px;font-weight:600;color:var(--blue);margin-top:6px}
+.stars{color:var(--gold);letter-spacing:1px;font-size:14px}
 
 .empty{text-align:center;color:var(--sub);padding:56px 20px}
 .empty .big{font-size:44px;margin-bottom:10px}
@@ -90,23 +91,23 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
   display:flex;align-items:center;justify-content:center}
 .fab:active{transform:scale(.94)}
 
-.sec-title{font-size:13px;font-weight:700;color:var(--sub);margin:18px 2px 8px;
+.sec-title{font-size:14px;font-weight:700;color:var(--sub);margin:18px 2px 8px;
   display:flex;align-items:center}
 .sec-title .hbtn{margin-left:auto;padding:0 2px}
-.prof-grid{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:14px}
-.prof-grid dt{color:var(--sub);font-size:12.5px;padding-top:2px;white-space:nowrap}
+.prof-grid{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:15px}
+.prof-grid dt{color:var(--sub);font-size:13.5px;padding-top:2px;white-space:nowrap}
 .prof-grid dd{white-space:pre-wrap;word-break:break-word}
 
 .d-card{position:relative}
 .d-head{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
-.d-no{font-size:11px;font-weight:700;color:var(--accent-dark);background:var(--accent-soft);
-  padding:2px 8px;border-radius:999px;flex-shrink:0}
-.d-date{font-size:13px;font-weight:700}
-.d-place{font-size:12.5px;color:var(--sub);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.d-body{font-size:13.5px;white-space:pre-wrap;word-break:break-word}
-.d-label{font-size:11.5px;font-weight:700;margin-top:6px}
+.d-no{font-size:12px;font-weight:700;color:var(--accent-dark);background:var(--accent-soft);
+  padding:2px 9px;border-radius:999px;flex-shrink:0}
+.d-date{font-size:14.5px;font-weight:700}
+.d-place{font-size:13.5px;color:var(--sub);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.d-body{font-size:15px;white-space:pre-wrap;word-break:break-word}
+.d-label{font-size:12.5px;font-weight:700;margin-top:8px}
 .d-label.good{color:var(--green)}.d-label.bad{color:var(--danger)}.d-label.next{color:var(--blue)}
-.d-edit{position:absolute;top:10px;right:12px;font-size:12px;color:var(--sub);padding:4px}
+.d-edit{position:absolute;top:10px;right:12px;font-size:13px;color:var(--sub);padding:4px}
 
 .overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:none;
   align-items:flex-end;justify-content:center}
@@ -117,7 +118,7 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .sheet h2{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;align-items:center}
 .sheet h2 .hbtn{margin-left:auto;font-weight:400;color:var(--sub)}
 .f-row{margin-bottom:12px}
-.f-row label{display:block;font-size:12.5px;font-weight:700;color:var(--sub);margin-bottom:5px}
+.f-row label{display:block;font-size:13.5px;font-weight:700;color:var(--sub);margin-bottom:5px}
 .f-cols{display:flex;gap:10px}.f-cols>.f-row{flex:1}
 .rate-in{display:flex;gap:4px;font-size:30px;color:#c9bfc4}
 .rate-in button{padding:2px}
@@ -130,15 +131,15 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .btn-danger-text{color:var(--danger);font-size:14px;padding:14px;width:100%;text-align:center;margin-top:4px}
 
 .t-item+.t-item{border-top:1px solid var(--line)}
-.t-row{display:flex;align-items:center;gap:10px;padding:12px 12px 12px 16px;font-size:14.5px;width:100%;text-align:left}
-.t-row input[type=checkbox]{width:20px;height:20px;flex-shrink:0;accent-color:var(--accent)}
+.t-row{display:flex;align-items:center;gap:10px;padding:13px 12px 13px 16px;font-size:15.5px;width:100%;text-align:left}
+.t-row input[type=checkbox]{width:22px;height:22px;flex-shrink:0;accent-color:var(--accent)}
 .t-main{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
 .t-text{flex:1;word-break:break-word}
-.t-exp{color:var(--sub);padding:4px 8px;font-size:11px;transition:transform .2s;flex-shrink:0}
+.t-exp{color:var(--sub);padding:6px 10px;font-size:12px;transition:transform .2s;flex-shrink:0}
 .t-exp.open{transform:rotate(180deg)}
 .t-sub{padding:0 16px 12px 28px;display:flex;flex-direction:column;gap:6px}
-.t-sq{font-size:13px;line-height:1.5;color:var(--text);background:var(--gray-soft);
-  border-radius:4px 12px 12px 12px;padding:7px 11px;align-self:flex-start}
+.t-sq{font-size:14px;line-height:1.55;color:var(--text);background:var(--gray-soft);
+  border-radius:4px 12px 12px 12px;padding:8px 12px;align-self:flex-start}
 .t-text.done{color:var(--sub);text-decoration:line-through}
 .t-del{color:var(--sub);font-size:16px;padding:2px 6px;flex-shrink:0}
 .t-progress{height:6px;border-radius:999px;background:var(--gray-soft);overflow:hidden;margin-top:8px}
@@ -147,21 +148,21 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .locked-wrap{position:relative}
 .locked-rows{filter:blur(3px);opacity:.55;pointer-events:none;user-select:none}
 .unlock-btn{position:absolute;inset:0;display:flex;flex-direction:column;gap:4px;
-  align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--accent-dark)}
-.unlock-btn small{font-weight:600;font-size:11.5px;color:var(--sub)}
-.pv-card{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;
+  align-items:center;justify-content:center;font-weight:700;font-size:15px;color:var(--accent-dark)}
+.unlock-btn small{font-weight:700;font-size:12.5px;color:var(--sub)}
+.pv-card{background:linear-gradient(135deg,#e0517a,#b13a58);color:#fff;
   border:none;text-align:left;width:100%}
-.pv-card .pv-t{font-weight:700;font-size:15px}
-.pv-card .pv-s{font-size:12.5px;opacity:.9;margin-top:2px}
+.pv-card .pv-t{font-weight:700;font-size:16px}
+.pv-card .pv-s{font-size:13px;opacity:.95;margin-top:2px}
 .pv-feat{list-style:none;margin:10px 0 4px}
-.pv-feat li{display:flex;gap:8px;padding:7px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.pv-feat li{display:flex;gap:8px;padding:8px 0;font-size:15px;border-bottom:1px solid var(--line)}
 .pv-feat li:last-child{border-bottom:none}
 .badge-pv{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;
   background:var(--gold);color:#fff;margin-left:6px;vertical-align:1px}
 
 .notice{display:flex;gap:8px;align-items:flex-start;background:var(--blue-soft);
-  border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;
-  margin-bottom:10px;font-size:12.5px;line-height:1.55}
+  border:1px solid var(--line);border-radius:var(--radius);padding:11px 13px;
+  margin-bottom:10px;font-size:13.5px;line-height:1.55}
 .notice>div{flex:1;min-width:0}
 .notice .n-x{color:var(--sub);padding:0 4px;font-size:14px;flex-shrink:0}
 .notice .hbtn{padding:0 4px}
@@ -169,10 +170,10 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .ng-card{border-color:var(--danger)}
 
 .set-item{display:flex;align-items:center;width:100%;text-align:left;
-  padding:14px 16px;font-size:15px;gap:10px}
+  padding:15px 16px;font-size:16px;gap:10px}
 .set-item+.set-item{border-top:1px solid var(--line)}
 .set-item .arr{margin-left:auto;color:var(--sub)}
-.set-note{font-size:12px;color:var(--sub);margin:8px 4px 16px}
+.set-note{font-size:13.5px;color:var(--sub);margin:8px 4px 16px}
 .card.plain{padding:0;overflow:hidden}
 
 #lock{position:fixed;inset:0;z-index:100;background:var(--bg);display:none;
@@ -189,7 +190,7 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .shake{animation:shake .3s}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
 .toast{position:fixed;left:50%;bottom:calc(100px + var(--safe-bottom));transform:translateX(-50%);
-  background:var(--text);color:var(--bg);font-size:13.5px;font-weight:600;
+  background:var(--text);color:var(--bg);font-size:14.5px;font-weight:600;
   padding:10px 18px;border-radius:999px;z-index:60;opacity:0;transition:opacity .25s;pointer-events:none;
   white-space:nowrap}
 .toast.show{opacity:1}
@@ -272,10 +273,11 @@ const TOPIC_PRESETS=[
     ['d6','ペットの可否・アレルギー',['一緒に住むならペットはOK？','動物や食べ物のアレルギーはある？','今飼っているペットは結婚後どうする？']],
   ]},
 ];
-/* プレミアム（課金）設定：url に Stripe Payment Link 等を設定すると
-   購入ボタンがそこへ遷移する。未設定の間はデモ動作（確認ダイアログで解放）。
-   App Store 配信時は StoreKit の IAP に置き換えること。 */
-const PURCHASE={price:'¥480',url:''};
+/* プレミアム（課金）設定：
+   - freeTrial:true の間はテスト期間として無料で有効化できる
+   - 正式リリース時は freeTrial:false にし、url に Stripe Payment Link を設定
+     （App Store 配信時は StoreKit の IAP に置き換えること） */
+const PURCHASE={price:'¥480',url:'',freeTrial:true};
 function isPremium(){ return !!db.premium; }
 function catUnlocked(ci){ return isPremium() || ci===0; }
 
@@ -688,7 +690,7 @@ function renderTopics(){
   const upsell=isPremium()?'':`
     <button class="card pv-card" id="pvOpen">
       <div class="pv-t">⭐ プレミアムで話題を全種類解放</div>
-      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題（深掘りパターン付き）＋自分だけの話題追加｜${PURCHASE.price} 買い切り</div>
+      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題（深掘りパターン付き）＋自分だけの話題追加｜${PURCHASE.freeTrial?'今なら無料':PURCHASE.price+' 買い切り'}</div>
     </button>`;
 
   const secs=TOPIC_PRESETS.map((cat,ci)=>{
@@ -715,7 +717,7 @@ function renderTopics(){
     return `${title}
       <div class="card plain locked-wrap">
         <div class="locked-rows">${rows}</div>
-        <button class="unlock-btn" data-unlock="1">🔒 タップして解放<small>${PURCHASE.price} 買い切り</small></button>
+        <button class="unlock-btn" data-unlock="1">🔒 タップして解放<small>${PURCHASE.freeTrial?'テスト期間中は無料':PURCHASE.price+' 買い切り'}</small></button>
       </div>`;
   }).join('');
 
@@ -923,11 +925,11 @@ function openPaywall(msg){
         <li>🔍 各話題の「深掘りパターン」（話の広げ方の例）も全て見られる</li>
         <li>👥 お相手の登録が無制限に（無料版は3人まで）</li>
         <li>✏️ 自分だけの話題を追加し放題</li>
-        <li>🔁 ${PURCHASE.price} の買い切り。追加課金・サブスクなし</li>
+        <li>🔁 正式版は ${PURCHASE.price} の買い切り予定。追加課金・サブスクなし</li>
         <li>🔒 データはこれまで通り端末内にのみ保存</li>
       </ul>
     </div>
-    <button class="btn btn-main" id="pvBuy">プレミアムを購入する（${PURCHASE.price}）</button>
+    <button class="btn btn-main" id="pvBuy">${PURCHASE.freeTrial?'無料で有効にする（テスト期間中）':`プレミアムを購入する（${PURCHASE.price}）`}</button>
     <button class="btn btn-sub" id="shClose2">あとで</button>
   `);
   document.getElementById('shClose').onclick=()=>closeSheet(true);
@@ -935,11 +937,13 @@ function openPaywall(msg){
   document.getElementById('pvBuy').onclick=startPurchase;
 }
 function startPurchase(){
-  if(PURCHASE.url){ location.href=PURCHASE.url; return; }
-  // 決済未接続のデモ動作。公開時は Stripe Payment Link / App Store IAP に置き換える
-  if(confirm(`【デモ】決済は未接続です。\nプレミアム（${PURCHASE.price} 買い切り）を有効にしますか？`)){
-    db.premium=true; save(); closeSheet(true); render(); toast('プレミアムを有効にしました 🎉');
+  if(PURCHASE.freeTrial){
+    db.premium=true; save(); closeSheet(true); render();
+    toast('プレミアムを有効にしました 🎉');
+    return;
   }
+  if(PURCHASE.url){ location.href=PURCHASE.url; return; }
+  toast('決済の準備中です。しばらくお待ちください');
 }
 
 /* ---------- settings ---------- */
@@ -962,8 +966,8 @@ function renderSettings(){
 
   document.getElementById('setPremium').onclick=()=>{
     if(isPremium()){
-      // デモ用：解除できるようにしておく（本番では購入の復元に置き換える）
-      if(confirm('【デモ】プレミアムを無効に戻しますか？')){
+      // テスト用：解除できるようにしておく（本番では購入の復元に置き換える）
+      if(confirm('プレミアムを無効に戻しますか？（テスト用）')){
         db.premium=false; save(); render(); toast('プレミアムを無効にしました');
       }
     }else openPaywall();
