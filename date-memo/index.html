@@ -159,6 +159,15 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .badge-pv{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;
   background:var(--gold);color:#fff;margin-left:6px;vertical-align:1px}
 
+.notice{display:flex;gap:8px;align-items:flex-start;background:var(--blue-soft);
+  border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;
+  margin-bottom:10px;font-size:12.5px;line-height:1.55}
+.notice>div{flex:1;min-width:0}
+.notice .n-x{color:var(--sub);padding:0 4px;font-size:14px;flex-shrink:0}
+.notice .hbtn{padding:0 4px}
+.sort-sel{width:auto;flex-shrink:0;font-size:13px;padding:8px 10px;border-radius:10px}
+.ng-card{border-color:var(--danger)}
+
 .set-item{display:flex;align-items:center;width:100%;text-align:left;
   padding:14px 16px;font-size:15px;gap:10px}
 .set-item+.set-item{border-top:1px solid var(--line)}
@@ -289,16 +298,83 @@ function talkedCount(p){
 
 let db=load();
 let view={name:'list'};        // {name:'list'} | {name:'detail', id}
-let filter='all', query='';
+let filter='all', query='', sortBy='upd';
+let deferredInstall=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault(); deferredInstall=e;
+  if(view.name==='list') render();
+});
+function isStandalone(){
+  return navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
+}
+function installBanner(){
+  if(db.installDismissed||isStandalone()) return '';
+  if(/iPhone|iPad|iPod/.test(navigator.userAgent))
+    return `<div class="notice">📲<div>ホーム画面に追加すると、アプリとして起動できてデータも消えにくくなります。共有ボタン →<b>「ホーム画面に追加」</b></div><button class="n-x" data-nx="install">✕</button></div>`;
+  if(deferredInstall)
+    return `<div class="notice">📲<div>アプリとしてインストールできます。</div><button class="hbtn" id="nInstallBtn">インストール</button><button class="n-x" data-nx="install">✕</button></div>`;
+  return '';
+}
+function backupBanner(){
+  const now=Date.now(), D=86400000;
+  if(db.partners.length<2) return '';
+  if(now-(db.lastBackup||db.firstRun||now)<14*D) return '';
+  if(now-(db.backupNudge||0)<7*D) return '';
+  return `<div class="notice">💾<div>しばらくバックアップしていません。機種変更や不具合に備えて書き出しておきましょう。</div><button class="hbtn" id="nBackup">書き出す</button><button class="n-x" data-nx="backup">✕</button></div>`;
+}
 
+function normalize(d){
+  d.partners=Array.isArray(d.partners)?d.partners:[];
+  d.custom=Array.isArray(d.custom)?d.custom:[];
+  return d;
+}
 function load(){
   try{
     const d=JSON.parse(localStorage.getItem(KEY));
-    if(d && Array.isArray(d.partners)){ d.custom=d.custom||[]; return d; }
+    if(d && Array.isArray(d.partners)) return normalize(d);
   }catch(e){}
   return {partners:[],passcode:null,custom:[]};
 }
-function save(){ localStorage.setItem(KEY,JSON.stringify(db)); }
+
+/* localStorage と IndexedDB に二重保存する。
+   iOS Safari は放置サイトの localStorage を消すことがあるため、
+   より消えにくい IndexedDB を正とし、LS は高速起動用ミラーにする */
+let _idb=null;
+function idbOpen(){
+  if(_idb) return _idb;
+  _idb=new Promise((res,rej)=>{
+    const r=indexedDB.open('konkatsu-date-memo',1);
+    r.onupgradeneeded=()=>r.result.createObjectStore('kv');
+    r.onsuccess=()=>res(r.result);
+    r.onerror=()=>rej(r.error);
+  });
+  return _idb;
+}
+async function idbGet(k){
+  const d=await idbOpen();
+  return new Promise((res,rej)=>{
+    const q=d.transaction('kv').objectStore('kv').get(k);
+    q.onsuccess=()=>res(q.result); q.onerror=()=>rej(q.error);
+  });
+}
+async function idbSet(k,v){
+  const d=await idbOpen();
+  return new Promise((res,rej)=>{
+    const t=d.transaction('kv','readwrite');
+    t.objectStore('kv').put(v,k);
+    t.oncomplete=()=>res(); t.onerror=()=>rej(t.error);
+  });
+}
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(db)); }catch(e){}
+  try{ if(window.indexedDB) idbSet('db',JSON.parse(JSON.stringify(db))).catch(()=>{}); }catch(e){}
+}
+
+async function hashCode(c){
+  if(!(window.crypto&&crypto.subtle)) return 'p:'+c;
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('datememo:'+c));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function partner(id){ return db.partners.find(p=>p.id===id); }
@@ -308,6 +384,28 @@ function fmtDate(iso){
   return `${y}/${Number(m)}/${Number(d)}`;
 }
 function stars(n){ return n?'★'.repeat(n)+'☆'.repeat(5-n):''; }
+function todayISO(off){
+  const t=new Date(); t.setDate(t.getDate()+(off||0));
+  return `${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
+}
+function daysUntil(iso){
+  const t=new Date(); t.setHours(0,0,0,0);
+  const n=Math.round((new Date(iso+'T00:00:00')-t)/86400000);
+  return n<=0?'今日！':`あと${n}日`;
+}
+function nextUpcoming(p){
+  const today=todayISO();
+  const ds=p.dates.filter(d=>d.nextDate&&d.nextDate>=today).map(d=>d.nextDate).sort();
+  return ds[0]||null;
+}
+function samplePartner(){
+  return {id:uid(),name:'サンプル：Aさん',age:'31',job:'メーカー営業',metVia:'婚活アプリ',
+    likes:'カフェ巡り、猫、温泉',ng:'仕事の愚痴は控えめに',memo:'笑顔が素敵。会話のテンポが合う',
+    status:'active',talked:{a1:true,a2:true},createdAt:Date.now(),updatedAt:Date.now(),
+    dates:[{id:uid(),date:todayISO(-7),place:'駅前のカフェでお茶',rating:4,
+      topics:'休日の過ごし方、出身地の話',good:'聞き上手で話しやすかった',
+      bad:'少し緊張していたかも',next:'水族館デート。誕生日を聞く',nextDate:todayISO(7)}]};
+}
 function lastDate(p){
   if(!p.dates.length) return null;
   return [...p.dates].sort((a,b)=>b.date.localeCompare(a.date))[0];
@@ -339,6 +437,10 @@ function render(){
     const p=partner(view.id);
     if(!p){ view={name:'list'}; return render(); }
     renderDetail(p);
+  }else if(view.name==='brief'){
+    const p=partner(view.id);
+    if(!p){ view={name:'list'}; return render(); }
+    renderBrief(p);
   }else if(view.name==='topics'){
     renderTopics();
   }else if(view.name==='settings'){
@@ -361,7 +463,18 @@ function renderList(){
     const q=query.toLowerCase();
     list=list.filter(p=>(p.name+p.job+p.metVia+p.memo).toLowerCase().includes(q));
   }
-  list.sort((a,b)=>(b.updatedAt||0)-(a.updatedAt||0));
+  list.sort((a,b)=>{
+    if(sortBy==='rate') return avgRating(b)-avgRating(a);
+    if(sortBy==='last'){
+      const la=lastDate(a),lb=lastDate(b);
+      return (lb?lb.date:'').localeCompare(la?la.date:'');
+    }
+    if(sortBy==='next'){
+      const na=nextUpcoming(a),nb=nextUpcoming(b);
+      return (na||'9999').localeCompare(nb||'9999');
+    }
+    return (b.updatedAt||0)-(a.updatedAt||0);
+  });
 
   const chips=[{id:'all',label:'すべて'},...STATUSES].map(s=>
     `<button class="chip ${filter===s.id?'on':''}" data-f="${s.id}">${s.label}</button>`).join('');
@@ -385,19 +498,43 @@ function renderList(){
         ${ld?`<span>📅 ${fmtDate(ld.date)}</span>`:''}
         ${av?`<span class="stars">${stars(av)}</span>`:''}
       </div>
-      ${ld&&ld.next?`<div class="p-next">📌 次回：${esc(ld.next)}</div>`:''}
+      ${(()=>{const nd=nextUpcoming(p);const tx=(ld&&ld.next)||'';
+        if(!nd&&!tx) return '';
+        return `<div class="p-next">📌 次回：${nd?`${fmtDate(nd)}（${daysUntil(nd)}）`:''}${nd&&tx?' ':''}${esc(tx)}</div>`;})()}
     </button>`;
   }).join('');
 
   $main.innerHTML=`
-    <div class="search"><input type="search" id="q" placeholder="名前・職業・出会いで検索" value="${esc(query)}"></div>
+    ${installBanner()}${backupBanner()}
+    <div class="search">
+      <input type="search" id="q" placeholder="名前・職業・出会いで検索" value="${esc(query)}">
+      <select id="sortSel" class="sort-sel">
+        <option value="upd" ${sortBy==='upd'?'selected':''}>更新順</option>
+        <option value="next" ${sortBy==='next'?'selected':''}>予定が近い順</option>
+        <option value="last" ${sortBy==='last'?'selected':''}>デート日順</option>
+        <option value="rate" ${sortBy==='rate'?'selected':''}>評価順</option>
+      </select>
+    </div>
     <div class="chips">${chips}</div>
-    ${cards || `<div class="empty"><div class="big">💐</div>お相手がまだ登録されていません。<br>右下の「＋」から追加しましょう。</div>`}`;
+    ${cards || `<div class="empty"><div class="big">💐</div>お相手がまだ登録されていません。<br>右下の「＋」から追加しましょう。
+      ${db.partners.length===0?'<button class="btn btn-sub" id="addSample" style="max-width:260px;margin:18px auto 0">サンプルデータを入れてみる</button>':''}</div>`}`;
 
   $main.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{filter=c.dataset.f;render();});
   $main.querySelectorAll('.p-card').forEach(c=>c.onclick=()=>nav({name:'detail',id:c.dataset.id},true));
   const q=$main.querySelector('#q');
   q.oninput=()=>{query=q.value;renderListDebounced();};
+  $main.querySelector('#sortSel').onchange=e=>{sortBy=e.target.value;render();};
+  $main.querySelectorAll('[data-nx]').forEach(b=>b.onclick=()=>{
+    if(b.dataset.nx==='install') db.installDismissed=true;
+    else db.backupNudge=Date.now();
+    save(); render();
+  });
+  const ib=$main.querySelector('#nInstallBtn');
+  if(ib) ib.onclick=()=>{ if(deferredInstall){ deferredInstall.prompt(); deferredInstall=null; render(); } };
+  const nb=$main.querySelector('#nBackup');
+  if(nb) nb.onclick=doExport;
+  const smp=$main.querySelector('#addSample');
+  if(smp) smp.onclick=()=>{ db.partners.push(samplePartner()); save(); render(); toast('サンプルを追加しました'); };
 }
 let _deb;
 function renderListDebounced(){ clearTimeout(_deb); _deb=setTimeout(render,200); }
@@ -426,7 +563,7 @@ function renderDetail(p){
       ${d.topics?`<div class="d-body">${esc(d.topics)}</div>`:''}
       ${d.good?`<div class="d-label good">👍 良かったこと</div><div class="d-body">${esc(d.good)}</div>`:''}
       ${d.bad?`<div class="d-label bad">🤔 気になったこと</div><div class="d-body">${esc(d.bad)}</div>`:''}
-      ${d.next?`<div class="d-label next">📌 次回・宿題</div><div class="d-body">${esc(d.next)}</div>`:''}
+      ${d.next||d.nextDate?`<div class="d-label next">📌 次回・宿題${d.nextDate?`（${fmtDate(d.nextDate)}）`:''}</div><div class="d-body">${esc(d.next||'')}</div>`:''}
     </div>`;
   }).join('');
 
@@ -440,6 +577,10 @@ function renderDetail(p){
       ${prof?`<dl class="prof-grid">${prof}</dl>`:''}
     </div>
     <button class="hbtn" id="editP" style="display:block;margin-left:auto">プロフィールを編集</button>
+    <button class="card p-card" id="goBrief" style="display:flex;align-items:center;gap:8px">
+      <span>📋 デート前カンペ</span>
+      <span style="margin-left:auto;font-size:13px;color:var(--sub)">直前チェック用 ›</span>
+    </button>
     <button class="card p-card" id="goTopics" style="display:flex;align-items:center;gap:8px">
       <span>💬 話題チェック</span>
       <span style="margin-left:auto;font-size:13px;color:var(--sub)">${talkedCount(p)} / ${allTopicCount()} 話した ›</span>
@@ -451,9 +592,80 @@ function renderDetail(p){
   $main.querySelector('#editP').onclick=()=>openPartnerForm(p);
   $main.querySelector('#addD').onclick=()=>openDateForm(p,null);
   $main.querySelector('#goTopics').onclick=()=>nav({name:'topics',pid:p.id},true);
+  $main.querySelector('#goBrief').onclick=()=>nav({name:'brief',id:p.id},true);
   $main.querySelectorAll('.d-edit').forEach(b=>b.onclick=()=>{
     openDateForm(p,p.dates.find(d=>d.id===b.dataset.did));
   });
+}
+
+function untalkedTopics(p){
+  const out=[];
+  TOPIC_PRESETS.forEach((c,ci)=>{
+    if(!catUnlocked(ci)) return;
+    c.items.forEach(([id,text,sub])=>{ if(!(p&&p.talked&&p.talked[id])) out.push({id,text,sub}); });
+  });
+  if(isPremium()) (db.custom||[]).forEach(c=>{ if(!(p&&p.talked&&p.talked[c.id])) out.push({id:c.id,text:c.text}); });
+  return out;
+}
+
+function renderBrief(p){
+  $title.textContent='デート前カンペ';
+  $back.style.display='block';
+  $fab.style.display='none';
+  const ld=lastDate(p);
+  const nd=nextUpcoming(p);
+  const st=stMap[p.status]||STATUSES[0];
+  const pick=untalkedTopics(p).slice(0,5);
+  const meta=[p.age?`${esc(p.age)}歳`:'',esc(p.job||''),esc(p.metVia||'')].filter(Boolean).join('・');
+
+  $main.innerHTML=`
+    <div class="card">
+      <div class="p-top">
+        <div class="avatar">${esc((p.name||'?').slice(0,1))}</div>
+        <div style="min-width:0">
+          <div class="p-name">${esc(p.name)}</div>
+          <div class="p-meta">${meta||'&nbsp;'}</div>
+        </div>
+        <span class="badge ${st.cls}">${st.label}</span>
+      </div>
+    </div>
+    ${nd||(ld&&ld.next)?`<div class="card" style="border-color:var(--blue)">
+      <div class="d-label next" style="margin-top:0">📌 次の予定</div>
+      <div class="d-body">${nd?`<b>${fmtDate(nd)}（${daysUntil(nd)}）</b> `:''}${esc((ld&&ld.next)||'')}</div></div>`:''}
+    ${p.ng?`<div class="card ng-card">
+      <div class="d-label bad" style="margin-top:0">⚠️ NG・地雷（触れない）</div>
+      <div class="d-body">${esc(p.ng)}</div></div>`:''}
+    ${p.likes?`<div class="card">
+      <div class="d-label good" style="margin-top:0">💚 好きなもの・趣味</div>
+      <div class="d-body">${esc(p.likes)}</div></div>`:''}
+    ${ld?`<div class="card">
+      <div class="d-label" style="margin-top:0;color:var(--sub)">🕐 前回のデート（${fmtDate(ld.date)}${ld.place?'・'+esc(ld.place):''}）</div>
+      ${ld.good?`<div class="d-label good">👍 良かったこと</div><div class="d-body">${esc(ld.good)}</div>`:''}
+      ${ld.bad?`<div class="d-label bad">🤔 気になったこと</div><div class="d-body">${esc(ld.bad)}</div>`:''}</div>`:''}
+    <div class="sec-title">💬 まだ話していない話題</div>
+    ${pick.length?`<div class="card plain">${pick.map(t=>`<div class="t-item"><div class="t-row"><span class="t-text">${esc(t.text)}</span></div></div>`).join('')}</div>`
+      :'<div class="card">解放中の話題は全て話しました 🎉</div>'}
+    <button class="btn btn-sub" id="briefGacha">🎲 話題ガチャで3つ引く</button>`;
+  $main.querySelector('#briefGacha').onclick=()=>openGacha(p);
+}
+
+function openGacha(p){
+  const pool=untalkedTopics(p);
+  const drawHtml=()=>{
+    const picks=[...pool].sort(()=>Math.random()-.5).slice(0,3);
+    if(!picks.length) return '<div class="card">引ける話題がありません。全部話しました！🎉</div>';
+    return picks.map(t=>`<div class="card">
+      <div style="font-weight:700">💬 ${esc(t.text)}</div>
+      ${t.sub?`<div class="t-sq" style="margin-top:7px">${esc(t.sub[Math.floor(Math.random()*t.sub.length)])}</div>`:''}
+    </div>`).join('');
+  };
+  openSheet(`
+    <h2>🎲 話題ガチャ<button class="hbtn" id="shClose">閉じる</button></h2>
+    <p class="set-note" style="margin-top:0">${p?'まだ話していない話題':'解放中の話題'}からランダムに3つ引きます。</p>
+    <div id="gRes">${drawHtml()}</div>
+    <button class="btn btn-main" id="gAgain">もう一回引く</button>`);
+  document.getElementById('shClose').onclick=()=>closeSheet(true);
+  document.getElementById('gAgain').onclick=()=>{ document.getElementById('gRes').innerHTML=drawHtml(); };
 }
 
 function renderTopics(){
@@ -507,10 +719,12 @@ function renderTopics(){
       </div>`;
   }).join('');
 
-  $main.innerHTML=head+upsell+secs;
+  const gacha=`<button class="btn btn-sub" id="gachaBtn" style="margin:0 0 8px">🎲 話題ガチャで3つ引く</button>`;
+  $main.innerHTML=head+upsell+gacha+secs;
+  document.getElementById('gachaBtn').onclick=()=>openGacha(p);
   const pv=document.getElementById('pvOpen');
-  if(pv) pv.onclick=openPaywall;
-  $main.querySelectorAll('[data-unlock]').forEach(b=>b.onclick=openPaywall);
+  if(pv) pv.onclick=()=>openPaywall();
+  $main.querySelectorAll('[data-unlock]').forEach(b=>b.onclick=()=>openPaywall());
 
   const refreshHead=()=>{
     if(!p) return;
@@ -538,12 +752,7 @@ function renderTopics(){
   });
   $main.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
     if(!isPremium()){ openPaywall(); return; }
-    const text=prompt('追加する話題を入力してください');
-    if(text===null) return;
-    const v=text.trim();
-    if(!v){ toast('話題を入力してください'); return; }
-    db.custom.push({id:uid(),cat:Number(b.dataset.add),text:v});
-    save(); render();
+    openTopicAddSheet(Number(b.dataset.add));
   });
   $main.querySelectorAll('[data-del]').forEach(b=>b.onclick=e=>{
     e.preventDefault();
@@ -566,7 +775,13 @@ document.querySelectorAll('#tabbar button').forEach(b=>b.onclick=()=>{
   if(view.name===target.name&&!view.pid){ window.scrollTo({top:0,behavior:'smooth'}); return; }
   nav(target,false);
 });
-$fab.onclick=()=>openPartnerForm(null);
+$fab.onclick=()=>{
+  if(!isPremium()&&db.partners.length>=3){
+    openPaywall('無料版で登録できるお相手は3人までです。プレミアムで無制限になります。');
+    return;
+  }
+  openPartnerForm(null);
+};
 
 /* ---------- sheets ---------- */
 const $ov=document.getElementById('overlay');
@@ -631,8 +846,7 @@ function openPartnerForm(p){
 }
 
 function openDateForm(p,d){
-  const today=new Date();
-  const iso=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}-${String(today.getDate()).padStart(2,'0')}`;
+  const iso=todayISO();
   let rating=d?.rating||0;
   openSheet(`
     <h2>${d?'デート記録を編集':'デート記録を追加'}<button class="hbtn" id="shClose">閉じる</button></h2>
@@ -645,6 +859,7 @@ function openDateForm(p,d){
     <div class="f-row"><label>👍 良かったこと</label><textarea id="fGood" placeholder="例：店員さんへの態度が丁寧だった">${esc(d?.good||'')}</textarea></div>
     <div class="f-row"><label>🤔 気になったこと</label><textarea id="fBad" placeholder="例：会話中スマホをよく見ていた">${esc(d?.bad||'')}</textarea></div>
     <div class="f-row"><label>📌 次回の予定・宿題</label><textarea id="fNext" placeholder="例：次はおすすめの水族館へ。誕生日を聞く">${esc(d?.next||'')}</textarea></div>
+    <div class="f-row"><label>📅 次回の予定日（決まっていれば）</label><input type="date" id="fNextDate" value="${d?.nextDate||''}"></div>
     <button class="btn btn-main" id="shSave">保存</button>
     ${d?`<button class="btn-danger-text" id="shDel">この記録を削除</button>`:''}
   `);
@@ -665,6 +880,7 @@ function openDateForm(p,d){
       good:document.getElementById('fGood').value.trim(),
       bad:document.getElementById('fBad').value.trim(),
       next:document.getElementById('fNext').value.trim(),
+      nextDate:document.getElementById('fNextDate').value,
     };
     if(d){ Object.assign(d,vals); }
     else{ p.dates.push({id:uid(),...vals}); }
@@ -680,14 +896,32 @@ function openDateForm(p,d){
   };
 }
 
+function openTopicAddSheet(ci){
+  openSheet(`
+    <h2>話題を追加<button class="hbtn" id="shClose">閉じる</button></h2>
+    <div class="f-row"><label>カテゴリ</label>
+      <select id="tCat">${TOPIC_PRESETS.map((c,i)=>`<option value="${i}" ${i===ci?'selected':''}>${c.name}</option>`).join('')}</select></div>
+    <div class="f-row"><label>話題</label><input id="tText" placeholder="例：好きな音楽・ライブの話"></div>
+    <button class="btn btn-main" id="tSave">追加する</button>`);
+  document.getElementById('shClose').onclick=closeSheet;
+  document.getElementById('tSave').onclick=()=>{
+    const v=document.getElementById('tText').value.trim();
+    if(!v){ toast('話題を入力してください'); return; }
+    db.custom.push({id:uid(),cat:Number(document.getElementById('tCat').value),text:v});
+    save(); closeSheet(true); render(); toast('追加しました');
+  };
+}
+
 /* ---------- premium / paywall ---------- */
-function openPaywall(){
+function openPaywall(msg){
   openSheet(`
     <h2>⭐ プレミアム<button class="hbtn" id="shClose">閉じる</button></h2>
+    ${typeof msg==='string'&&msg?`<p class="set-note" style="margin-top:0">${esc(msg)}</p>`:''}
     <div class="card">
       <ul class="pv-feat">
         <li>💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）</li>
         <li>🔍 各話題の「深掘りパターン」（話の広げ方の例）も全て見られる</li>
+        <li>👥 お相手の登録が無制限に（無料版は3人まで）</li>
         <li>✏️ 自分だけの話題を追加し放題</li>
         <li>🔁 ${PURCHASE.price} の買い切り。追加課金・サブスクなし</li>
         <li>🔒 データはこれまで通り端末内にのみ保存</li>
@@ -739,21 +973,9 @@ function renderSettings(){
       if(confirm('パスコードロックを解除しますか？')){
         db.passcode=null; save(); toast('ロックを解除しました'); render();
       }
-    }else{
-      const c=prompt('4桁の数字を入力してください');
-      if(c===null) return;
-      if(!/^\d{4}$/.test(c)){ toast('4桁の数字で入力してください'); return; }
-      db.passcode=c; save(); toast('ロックを設定しました'); render();
-    }
+    }else openPasscodeSheet();
   };
-  document.getElementById('setExport').onclick=()=>{
-    const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);
-    a.download='konkatsu-date-memo-backup.json';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  };
+  document.getElementById('setExport').onclick=doExport;
   const fileIn=document.getElementById('impFile');
   document.getElementById('setImport').onclick=()=>fileIn.click();
   fileIn.onchange=()=>{
@@ -763,9 +985,8 @@ function renderSettings(){
       try{
         const d=JSON.parse(r.result);
         if(!d||!Array.isArray(d.partners)) throw 0;
-        d.custom=d.custom||[];
         if(!confirm(`バックアップ（お相手${d.partners.length}名）で現在のデータを置き換えますか？`)) return;
-        db=d; save(); nav({name:'list'},false); toast('読み込みました');
+        db=normalize(d); save(); nav({name:'list'},false); toast('読み込みました');
       }catch(e){ toast('ファイルを読み込めませんでした'); }
     };
     r.readAsText(f);
@@ -773,8 +994,38 @@ function renderSettings(){
   document.getElementById('setWipe').onclick=()=>{
     if(!confirm('すべてのお相手と記録を削除します。元に戻せません。よろしいですか？')) return;
     if(!confirm('本当に削除しますか？')) return;
-    db={partners:[],passcode:null,custom:[],premium:db.premium}; save();
+    db={partners:[],passcode:null,custom:[],premium:db.premium,
+        installDismissed:db.installDismissed,firstRun:db.firstRun}; save();
     nav({name:'list'},false); toast('削除しました');
+  };
+}
+
+function doExport(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='konkatsu-date-memo-backup.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  db.lastBackup=Date.now(); save();
+  if(view.name==='list') render();
+  toast('書き出しました');
+}
+
+function openPasscodeSheet(){
+  openSheet(`
+    <h2>🔒 パスコードを設定<button class="hbtn" id="shClose">閉じる</button></h2>
+    <div class="f-row"><label>4桁の数字</label><input id="pc1" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>
+    <div class="f-row"><label>確認のためもう一度</label><input id="pc2" type="password" inputmode="numeric" maxlength="4" autocomplete="off"></div>
+    <p class="set-note">※簡易的な画面ロックです。パスコードを忘れると解除できず、データの初期化が必要になります。</p>
+    <button class="btn btn-main" id="pcSave">設定する</button>`);
+  document.getElementById('shClose').onclick=closeSheet;
+  document.getElementById('pcSave').onclick=async()=>{
+    const c1=document.getElementById('pc1').value, c2=document.getElementById('pc2').value;
+    if(!/^\d{4}$/.test(c1)){ toast('4桁の数字で入力してください'); return; }
+    if(c1!==c2){ toast('2回の入力が一致しません'); return; }
+    db.passcode=await hashCode(c1);
+    save(); closeSheet(true); render(); toast('ロックを設定しました');
   };
 }
 
@@ -796,11 +1047,14 @@ function showLock(){
     if(input.length>=4) return;
     input+=k; drawDots();
     if(input.length===4){
-      if(input===db.passcode){ $lock.classList.remove('show'); }
-      else{
-        dots.classList.add('shake');
-        setTimeout(()=>{ dots.classList.remove('shake'); input=''; drawDots(); },350);
-      }
+      (async()=>{
+        const ok=input===db.passcode||(await hashCode(input))===db.passcode;
+        if(ok){ $lock.classList.remove('show'); }
+        else{
+          dots.classList.add('shake');
+          setTimeout(()=>{ dots.classList.remove('shake'); input=''; drawDots(); },350);
+        }
+      })();
     }
   });
 }
@@ -810,12 +1064,36 @@ document.addEventListener('visibilitychange',()=>{
 });
 
 if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
+  const hadController=!!navigator.serviceWorker.controller;
   window.addEventListener('load',()=>{ navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+  if(hadController){
+    let notified=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{
+      if(!notified){ notified=true; toast('アプリを最新版に更新しました'); }
+    });
+  }
 }
 
 history.replaceState(view,'');
 showLock();
 render();
+
+/* 起動後に IndexedDB（正）を読み、LS が消えていた場合などに復元する */
+(async()=>{
+  try{
+    if(window.indexedDB){
+      const d=await idbGet('db');
+      if(d&&Array.isArray(d.partners)&&JSON.stringify(d)!==JSON.stringify(db)){
+        db=normalize(d); render();
+        if(db.passcode&&!$lock.classList.contains('show')) showLock();
+      }
+    }
+  }catch(e){}
+  if(!db.firstRun) db.firstRun=Date.now();
+  if(db.passcode&&/^\d{4}$/.test(db.passcode)) db.passcode=await hashCode(db.passcode);
+  save();
+  try{ if(navigator.storage&&navigator.storage.persist) navigator.storage.persist(); }catch(e){}
+})();
 </script>
 </body>
 </html>
