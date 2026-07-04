@@ -138,6 +138,21 @@ main{max-width:560px;margin:0 auto;padding:14px 16px calc(140px + var(--safe-bot
 .t-progress{height:6px;border-radius:999px;background:var(--gray-soft);overflow:hidden;margin-top:8px}
 .t-progress>div{height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
 
+.locked-wrap{position:relative}
+.locked-rows{filter:blur(3px);opacity:.55;pointer-events:none;user-select:none}
+.unlock-btn{position:absolute;inset:0;display:flex;flex-direction:column;gap:4px;
+  align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--accent-dark)}
+.unlock-btn small{font-weight:600;font-size:11.5px;color:var(--sub)}
+.pv-card{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;
+  border:none;text-align:left;width:100%}
+.pv-card .pv-t{font-weight:700;font-size:15px}
+.pv-card .pv-s{font-size:12.5px;opacity:.9;margin-top:2px}
+.pv-feat{list-style:none;margin:10px 0 4px}
+.pv-feat li{display:flex;gap:8px;padding:7px 0;font-size:14px;border-bottom:1px solid var(--line)}
+.pv-feat li:last-child{border-bottom:none}
+.badge-pv{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;
+  background:var(--gold);color:#fff;margin-left:6px;vertical-align:1px}
+
 .set-item{display:flex;align-items:center;width:100%;text-align:left;
   padding:14px 16px;font-size:15px;gap:10px}
 .set-item+.set-item{border-top:1px solid var(--line)}
@@ -226,18 +241,26 @@ const TOPIC_PRESETS=[
     ['d5','転職・キャリアの予定'],['d6','ペットの可否・アレルギー'],
   ]},
 ];
+/* プレミアム（課金）設定：url に Stripe Payment Link 等を設定すると
+   購入ボタンがそこへ遷移する。未設定の間はデモ動作（確認ダイアログで解放）。
+   App Store 配信時は StoreKit の IAP に置き換えること。 */
+const PURCHASE={price:'¥480',url:''};
+function isPremium(){ return !!db.premium; }
+function catUnlocked(ci){ return isPremium() || ci===0; }
+
 function catTopics(ci){
   return TOPIC_PRESETS[ci].items.map(([id,text])=>({id,text}))
     .concat((db.custom||[]).filter(c=>c.cat===ci).map(c=>({id:c.id,text:c.text,custom:true})));
 }
 function allTopicCount(){
-  return TOPIC_PRESETS.reduce((s,c)=>s+c.items.length,0)+(db.custom||[]).length;
+  const preset=TOPIC_PRESETS.reduce((s,c,ci)=>s+(catUnlocked(ci)?c.items.length:0),0);
+  return preset+(isPremium()?(db.custom||[]).length:0);
 }
 function talkedCount(p){
   if(!p.talked) return 0;
   const valid=new Set();
-  TOPIC_PRESETS.forEach(c=>c.items.forEach(([id])=>valid.add(id)));
-  (db.custom||[]).forEach(c=>valid.add(c.id));
+  TOPIC_PRESETS.forEach((c,ci)=>{ if(catUnlocked(ci)) c.items.forEach(([id])=>valid.add(id)); });
+  if(isPremium()) (db.custom||[]).forEach(c=>valid.add(c.id));
   return Object.keys(p.talked).filter(id=>p.talked[id]&&valid.has(id)).length;
 }
 
@@ -427,21 +450,37 @@ function renderTopics(){
         <div class="t-progress"><div id="tBar" style="width:${total?Math.round(done/total*100):0}%"></div></div></div>`
     :`<p class="set-note" style="margin-top:2px">デート前の話題探しにどうぞ。お相手の詳細画面から開くと、話した話題にチェックを付けられます。「＋ 追加」で自分の話題も登録できます。</p>`;
 
+  const upsell=isPremium()?'':`
+    <button class="card pv-card" id="pvOpen">
+      <div class="pv-t">⭐ プレミアムで話題を全種類解放</div>
+      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題＋自分だけの話題追加｜${PURCHASE.price} 買い切り</div>
+    </button>`;
+
   const secs=TOPIC_PRESETS.map((cat,ci)=>{
+    const unlocked=catUnlocked(ci);
     const rows=catTopics(ci).map(t=>{
-      const del=t.custom?`<button class="t-del" data-del="${t.id}">✕</button>`:'';
-      if(p){
+      const del=(t.custom&&unlocked)?`<button class="t-del" data-del="${t.id}">✕</button>`:'';
+      if(p&&unlocked){
         const on=!!p.talked[t.id];
         return `<label class="t-row"><input type="checkbox" data-t="${t.id}" ${on?'checked':''}>
           <span class="t-text ${on?'done':''}">${esc(t.text)}</span>${del}</label>`;
       }
       return `<div class="t-row"><span class="t-text">${esc(t.text)}</span>${del}</div>`;
     }).join('');
-    return `<div class="sec-title">${cat.name}<button class="hbtn" data-add="${ci}">＋ 追加</button></div>
-      <div class="card plain">${rows}</div>`;
+    const title=`<div class="sec-title">${cat.name}${unlocked?'':'<span class="badge-pv">⭐ プレミアム</span>'}
+      <button class="hbtn" data-add="${ci}">＋ 追加</button></div>`;
+    if(unlocked) return `${title}<div class="card plain">${rows}</div>`;
+    return `${title}
+      <div class="card plain locked-wrap">
+        <div class="locked-rows">${rows}</div>
+        <button class="unlock-btn" data-unlock="1">🔒 タップして解放<small>${PURCHASE.price} 買い切り</small></button>
+      </div>`;
   }).join('');
 
-  $main.innerHTML=head+secs;
+  $main.innerHTML=head+upsell+secs;
+  const pv=document.getElementById('pvOpen');
+  if(pv) pv.onclick=openPaywall;
+  $main.querySelectorAll('[data-unlock]').forEach(b=>b.onclick=openPaywall);
 
   const refreshHead=()=>{
     if(!p) return;
@@ -457,6 +496,7 @@ function renderTopics(){
     save(); refreshHead();
   });
   $main.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
+    if(!isPremium()){ openPaywall(); return; }
     const text=prompt('追加する話題を入力してください');
     if(text===null) return;
     const v=text.trim();
@@ -599,6 +639,33 @@ function openDateForm(p,d){
   };
 }
 
+/* ---------- premium / paywall ---------- */
+function openPaywall(){
+  openSheet(`
+    <h2>⭐ プレミアム<button class="hbtn" id="shClose">閉じる</button></h2>
+    <div class="card">
+      <ul class="pv-feat">
+        <li>💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）</li>
+        <li>✏️ 自分だけの話題を追加し放題</li>
+        <li>🔁 ${PURCHASE.price} の買い切り。追加課金・サブスクなし</li>
+        <li>🔒 データはこれまで通り端末内にのみ保存</li>
+      </ul>
+    </div>
+    <button class="btn btn-main" id="pvBuy">プレミアムを購入する（${PURCHASE.price}）</button>
+    <button class="btn btn-sub" id="shClose2">あとで</button>
+  `);
+  document.getElementById('shClose').onclick=()=>closeSheet(true);
+  document.getElementById('shClose2').onclick=()=>closeSheet(true);
+  document.getElementById('pvBuy').onclick=startPurchase;
+}
+function startPurchase(){
+  if(PURCHASE.url){ location.href=PURCHASE.url; return; }
+  // 決済未接続のデモ動作。公開時は Stripe Payment Link / App Store IAP に置き換える
+  if(confirm(`【デモ】決済は未接続です。\nプレミアム（${PURCHASE.price} 買い切り）を有効にしますか？`)){
+    db.premium=true; save(); closeSheet(true); render(); toast('プレミアムを有効にしました 🎉');
+  }
+}
+
 /* ---------- settings ---------- */
 function renderSettings(){
   $title.textContent='設定';
@@ -606,6 +673,7 @@ function renderSettings(){
   $fab.style.display='none';
   $main.innerHTML=`
     <div class="card plain">
+      <button class="set-item" id="setPremium">⭐ プレミアム<span class="arr">${isPremium()?'有効':'未購入 ›'}</span></button>
       <button class="set-item" id="setLock">🔒 パスコードロック<span class="arr">${db.passcode?'オン ›':'オフ ›'}</span></button>
       <button class="set-item" id="setExport">📤 バックアップを書き出す<span class="arr">›</span></button>
       <button class="set-item" id="setImport">📥 バックアップを読み込む<span class="arr">›</span></button>
@@ -616,6 +684,14 @@ function renderSettings(){
     <input type="file" id="impFile" accept="application/json" style="display:none">
   `;
 
+  document.getElementById('setPremium').onclick=()=>{
+    if(isPremium()){
+      // デモ用：解除できるようにしておく（本番では購入の復元に置き換える）
+      if(confirm('【デモ】プレミアムを無効に戻しますか？')){
+        db.premium=false; save(); render(); toast('プレミアムを無効にしました');
+      }
+    }else openPaywall();
+  };
   document.getElementById('setLock').onclick=()=>{
     if(db.passcode){
       if(confirm('パスコードロックを解除しますか？')){
@@ -655,7 +731,7 @@ function renderSettings(){
   document.getElementById('setWipe').onclick=()=>{
     if(!confirm('すべてのお相手と記録を削除します。元に戻せません。よろしいですか？')) return;
     if(!confirm('本当に削除しますか？')) return;
-    db={partners:[],passcode:null,custom:[]}; save();
+    db={partners:[],passcode:null,custom:[],premium:db.premium}; save();
     nav({name:'list'},false); toast('削除しました');
   };
 }
