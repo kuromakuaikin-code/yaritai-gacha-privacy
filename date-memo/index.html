@@ -382,10 +382,20 @@ const TOPIC_PRESETS=[
    - freeTrial:true の間はテスト期間として無料で有効化できる
    - 正式リリース時は freeTrial:false にし、url に Stripe Payment Link を設定
      （App Store 配信時は StoreKit の IAP に置き換えること） */
-const PURCHASE={price:'¥160',adFreePrice:'¥120',url:'',freeTrial:true};
-/* 広告設定：正式リリース時に adCode へ AdSense 等のタグを設定する
-   （iOSネイティブ版では AdMob バナーに置き換え）。空の間はサンプル枠を表示 */
-const ADS={enabled:true};
+const APP_VERSION='1.0.0';
+
+/* ==== 本番リリース設定（詳細は README.md のリリース手順を参照） ====
+   1) freeTrial を false にする
+   2) url / adFreeUrl に Stripe Payment Link を設定（購入完了メールで解除コードを案内）
+   3) UNLOCK に解除コードの SHA-256 を登録（printf '%s' 'コード' | shasum -a 256）
+   4) ADS.adsenseClient / adsenseSlot に AdSense のIDを設定（設定するまではサンプル枠）
+   ※ App Store 配信時は Stripe ではなく StoreKit の IAP に置き換えること */
+const PURCHASE={price:'¥160',adFreePrice:'¥120',url:'',adFreeUrl:'',freeTrial:true};
+const ADS={enabled:true,adsenseClient:'',adsenseSlot:''};
+const UNLOCK={
+  premium:[],   // 例: ['2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae']
+  adfree:[],
+};
 function isPremium(){ return !!db.premium; }
 function isAdFree(){ return !!db.adFree || isPremium(); }
 function catUnlocked(ci){ return isPremium() || ci===0; }
@@ -491,10 +501,14 @@ function save(){
   try{ if(window.indexedDB) idbSet('db',JSON.parse(JSON.stringify(db))).catch(()=>{}); }catch(e){}
 }
 
-async function hashCode(c){
-  if(!(window.crypto&&crypto.subtle)) return 'p:'+c;
-  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode('datememo:'+c));
+async function sha256(s){
+  if(!(window.crypto&&crypto.subtle)) return null;
+  const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function hashCode(c){
+  const h=await sha256('datememo:'+c);
+  return h||('p:'+c);
 }
 function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
 function esc(s){ return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -583,9 +597,29 @@ function render(){
   document.querySelectorAll('#tabbar button').forEach(b=>
     b.classList.toggle('on',b.dataset.tab===active));
   document.body.classList.toggle('with-ad',ADS.enabled&&!isAdFree());
+  setupAds();
 }
 document.getElementById('adbar').onclick=()=>
   openPaywall(`広告なしプラン（${PURCHASE.adFreePrice}・永続）でこの広告を非表示にできます。`);
+
+/* AdSense のIDが設定されていれば実広告を読み込む（未設定はサンプル枠のまま） */
+let _adsInit=false;
+function setupAds(){
+  if(_adsInit||!ADS.enabled||isAdFree()) return;
+  if(!(ADS.adsenseClient&&ADS.adsenseSlot)) return;
+  _adsInit=true;
+  const s=document.createElement('script');
+  s.async=true;
+  s.crossOrigin='anonymous';
+  s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+encodeURIComponent(ADS.adsenseClient);
+  document.head.appendChild(s);
+  const bar=document.getElementById('adbar');
+  bar.onclick=null;
+  bar.style.cursor='default';
+  bar.innerHTML=`<ins class="adsbygoogle" style="display:inline-block;width:100%;height:50px"
+    data-ad-client="${esc(ADS.adsenseClient)}" data-ad-slot="${esc(ADS.adsenseSlot)}"></ins>`;
+  try{ (window.adsbygoogle=window.adsbygoogle||[]).push({}); }catch(e){}
+}
 
 function renderList(){
   $title.textContent='婚活デートメモ';
@@ -1142,6 +1176,7 @@ function openPaywall(msg){
     </div>
     <button class="btn btn-main" id="pvBuy">⭐ プレミアム ${PURCHASE.freeTrial?'を無料で有効化（テスト中）':`を購入（${PURCHASE.price}）`}</button>
     ${isAdFree()?'':`<button class="btn btn-sub" id="pvAdFree">🚫 広告なしのみ ${PURCHASE.freeTrial?'を無料で有効化（テスト中）':`（${PURCHASE.adFreePrice}・永続）`}</button>`}
+    ${PURCHASE.freeTrial?'':`<button class="btn-danger-text" id="pvCode" style="color:var(--blue)">解除コードをお持ちの方はこちら</button>`}
     <button class="btn-danger-text" id="shClose2" style="color:var(--sub)">あとで</button>
   `);
   document.getElementById('shClose').onclick=()=>closeSheet(true);
@@ -1149,6 +1184,8 @@ function openPaywall(msg){
   document.getElementById('pvBuy').onclick=()=>startPurchase('premium');
   const af=document.getElementById('pvAdFree');
   if(af) af.onclick=()=>startPurchase('adfree');
+  const pc=document.getElementById('pvCode');
+  if(pc) pc.onclick=openCodeSheet;
 }
 function startPurchase(kind){
   if(PURCHASE.freeTrial){
@@ -1161,8 +1198,33 @@ function startPurchase(kind){
     }
     return;
   }
-  if(PURCHASE.url){ location.href=PURCHASE.url; return; }
+  const url=kind==='adfree'?(PURCHASE.adFreeUrl||PURCHASE.url):PURCHASE.url;
+  if(url){ location.href=url; return; }
   toast('決済の準備中です。しばらくお待ちください');
+}
+
+/* 購入完了メール等で案内した解除コードで機能を有効化（機種変更時の復元も兼ねる） */
+function openCodeSheet(){
+  openSheet(`
+    <h2>🎟 解除コードを入力<button class="hbtn" id="shClose">閉じる</button></h2>
+    <p class="set-note" style="margin-top:0">購入完了時に案内された解除コードを入力してください。機種変更後の復元にも使えます。</p>
+    <div class="f-row"><label>解除コード</label><input id="ucode" autocomplete="off" autocapitalize="off" placeholder="例：DATEMEMO-XXXX-XXXX"></div>
+    <button class="btn btn-main" id="ucodeGo">有効にする</button>`);
+  document.getElementById('shClose').onclick=closeSheet;
+  document.getElementById('ucodeGo').onclick=async()=>{
+    const c=document.getElementById('ucode').value.trim();
+    if(!c){ toast('コードを入力してください'); return; }
+    const h=await sha256(c);
+    if(h&&UNLOCK.premium.includes(h)){
+      db.premium=true; save(); closeSheet(true); render();
+      toast('プレミアムを有効にしました 🎉');
+    }else if(h&&UNLOCK.adfree.includes(h)){
+      db.adFree=true; save(); closeSheet(true); render();
+      toast('広告を非表示にしました 🎉');
+    }else{
+      toast('コードが正しくありません');
+    }
+  };
 }
 
 /* ---------- settings ---------- */
@@ -1174,6 +1236,7 @@ function renderSettings(){
     <div class="card plain">
       <button class="set-item" id="setPremium">⭐ プレミアム<span class="arr">${isPremium()?'有効':'未購入 ›'}</span></button>
       <button class="set-item" id="setAdFree">🚫 広告なし<span class="arr">${isPremium()?'プレミアムに込み':db.adFree?'有効':'未購入 ›'}</span></button>
+      <button class="set-item" id="setCode">🎟 購入の復元（解除コード）<span class="arr">›</span></button>
       <button class="set-item" id="setLock">🔒 パスコードロック<span class="arr">${db.passcode?'オン ›':'オフ ›'}</span></button>
       <button class="set-item" id="setExport">📤 バックアップを書き出す<span class="arr">›</span></button>
       <button class="set-item" id="setImport">📥 バックアップを読み込む<span class="arr">›</span></button>
@@ -1186,6 +1249,7 @@ function renderSettings(){
       <a class="set-item" href="terms.html" target="_blank" rel="noopener">📄 利用規約<span class="arr">›</span></a>
       <a class="set-item" href="privacy.html" target="_blank" rel="noopener">🔒 プライバシーポリシー<span class="arr">›</span></a>
     </div>
+    <p class="set-note" style="text-align:center">婚活デートメモ v${APP_VERSION}</p>
     <input type="file" id="impFile" accept="application/json" style="display:none">
   `;
 
@@ -1206,6 +1270,7 @@ function renderSettings(){
       }
     }else openPaywall(`広告なしプラン（${PURCHASE.adFreePrice}・永続）は一度の購入でずっと広告が消えます。`);
   };
+  document.getElementById('setCode').onclick=openCodeSheet;
   document.getElementById('setLock').onclick=()=>{
     if(db.passcode){
       if(confirm('パスコードロックを解除しますか？')){
