@@ -1,0 +1,15 @@
+{
+  "name": "婚活デートメモ",
+  "short_name": "デートメモ",
+  "description": "婚活のお相手とデートの記録を端末内だけに保存するメモアプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf6f7",
+  "theme_color": "#e05a7a",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
