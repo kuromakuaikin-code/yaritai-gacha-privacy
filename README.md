@@ -3,7 +3,8 @@ Privacy policy for やりたいガチャ
 
 ## 婚活デートメモ
 
-- アプリ本体（スマホ向けWebアプリ / iOS版のプロトタイプ）: `date-memo/index.html`
+- アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
+- iOS版（SwiftUI・App Store提出用）: `ios/`（セットアップは `ios/README.md`）
 - プライバシーポリシー: `date-memo/privacy.md`
 - 利用規約: `date-memo/terms.md`
 
