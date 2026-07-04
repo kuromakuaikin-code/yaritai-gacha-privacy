@@ -75,8 +75,31 @@ body.with-ad .fab{bottom:calc(140px + var(--safe-bottom))}
   background:var(--gray-soft);color:var(--sub);border:1px solid transparent}
 .chip.on{background:var(--accent-soft);color:var(--accent-dark);border-color:var(--accent)}
 .chips.wrap{flex-wrap:wrap;overflow:visible;padding-bottom:0}
+.chip.st-active.on{background:var(--accent-soft);color:var(--accent-dark);border-color:var(--accent)}
+.chip.st-watch.on{background:var(--blue-soft);color:var(--blue);border-color:var(--blue)}
+.chip.st-serious.on{background:var(--green-soft);color:var(--green);border-color:var(--green)}
+.chip.st-end.on{background:var(--gray-soft);color:var(--gray);border-color:var(--gray)}
 @keyframes vfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 .vfade{animation:vfade .22s ease}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.3)}100%{transform:scale(1)}}
+input[type=checkbox]:checked{animation:pop .25s}
+.rate-in button.pop{animation:pop .25s}
+.num-pop{display:inline-block;animation:pop .3s}
+.t-sub:not([hidden]){animation:vfade .18s ease}
+#gRes .card{animation:vfade .3s ease backwards}
+#gRes .card:nth-child(2){animation-delay:.08s}
+#gRes .card:nth-child(3){animation-delay:.16s}
+
+.tl{position:relative;padding-left:18px}
+.tl::before{content:'';position:absolute;left:5px;top:14px;bottom:14px;width:2px;background:var(--line)}
+.tl .d-card::before{content:'';position:absolute;left:-17px;top:18px;width:10px;height:10px;
+  border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+
+#splash{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;flex-direction:column;
+  gap:10px;align-items:center;justify-content:center;font-weight:700;font-size:15px;color:var(--accent-dark);
+  transition:opacity .35s}
+#splash .sp-heart{font-size:58px;animation:pop .5s}
+#splash.hide{opacity:0;pointer-events:none}
 
 .card{background:var(--card);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;
   box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(0,0,0,.04);border:1px solid var(--line)}
@@ -233,6 +256,8 @@ a.set-item{text-decoration:none;color:inherit}
 </style>
 </head>
 <body>
+
+<div id="splash"><div class="sp-heart">💐</div>婚活デートメモ</div>
 
 <div id="lock">
   <div class="big">🔒</div>
@@ -645,14 +670,15 @@ function renderList(){
   });
 
   const chips=[{id:'all',label:'すべて'},...STATUSES].map(s=>
-    `<button class="chip ${filter===s.id?'on':''}" data-f="${s.id}">${s.label}</button>`).join('');
+    `<button class="chip ${s.cls||''} ${filter===s.id?'on':''}" data-f="${s.id}">${s.label}</button>`).join('');
 
-  const cards=list.map(p=>{
+  const cards=list.map((p,i)=>{
     const st=stMap[p.status]||STATUSES[0];
+    const delay=Math.min(i,6)*40;
     const ld=lastDate(p);
     const av=avgRating(p);
     const meta=[p.age?`${esc(p.age)}歳`:'',esc(p.job||''),esc(p.metVia||'')].filter(Boolean).join('・');
-    return `<button class="card p-card" data-id="${p.id}">
+    return `<button class="card p-card" data-id="${p.id}" style="animation:vfade .25s ease ${delay}ms backwards">
       <div class="p-top">
         ${avatarHtml(p.name)}
         <div style="min-width:0">
@@ -684,8 +710,10 @@ function renderList(){
       </select>
     </div>
     <div class="chips">${chips}</div>
-    ${cards || `<div class="empty"><div class="big">💐</div>お相手がまだ登録されていません。<br>右下の「＋」から追加しましょう。
-      ${db.partners.length===0?'<button class="btn btn-sub" id="addSample" style="max-width:260px;margin:18px auto 0">サンプルデータを入れてみる</button>':''}</div>`}`;
+    ${cards || (db.partners.length
+      ?`<div class="empty"><div class="big">🔍</div>条件に合うお相手が見つかりません。<br>検索や絞り込みを変えてみてください。</div>`
+      :`<div class="empty"><div class="big">💐</div>お相手がまだ登録されていません。<br>右下の「＋」から追加しましょう。
+        <button class="btn btn-sub" id="addSample" style="max-width:260px;margin:18px auto 0">サンプルデータを入れてみる</button></div>`)}`;
 
   $main.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{filter=c.dataset.f;render();});
   $main.querySelectorAll('.p-card').forEach(c=>c.onclick=()=>nav({name:'detail',id:c.dataset.id},true));
@@ -755,7 +783,7 @@ function renderDetail(p){
     </button>
     <div class="sec-title">デート記録（${p.dates.length}回）
       <button class="hbtn" id="addD">＋ 記録を追加</button></div>
-    ${dates || `<div class="empty" style="padding:28px"><div class="big">📝</div>まだ記録がありません。<br>デートの後に振り返りを残しましょう。</div>`}`;
+    ${dates?`<div class="tl">${dates}</div>`:`<div class="empty" style="padding:28px"><div class="big">📝</div>まだ記録がありません。<br>デートの後に振り返りを残しましょう。</div>`}`;
 
   $main.querySelector('#editP').onclick=()=>openPartnerForm(p);
   $main.querySelector('#addD').onclick=()=>openDateForm(p,null);
@@ -908,7 +936,10 @@ function renderTopics(){
     if(!p) return;
     const d=talkedCount(p), tt=allTopicCount();
     const el=document.getElementById('tDone');
-    if(el) el.textContent=d;
+    if(el){
+      el.textContent=d;
+      el.classList.remove('num-pop'); void el.offsetWidth; el.classList.add('num-pop');
+    }
     const bar=document.getElementById('tBar');
     if(bar) bar.style.width=(tt?Math.round(d/tt*100):0)+'%';
   };
@@ -976,7 +1007,7 @@ function openPartnerForm(p){
     <div class="f-row"><label>年齢</label><input id="fAge" inputmode="numeric" value="${esc(p?.age||'')}" placeholder="32"></div>
     <div class="f-row"><label>ステータス</label>
       <div class="chips wrap" id="fStatusChips">
-        ${STATUSES.map(s=>`<button type="button" class="chip ${s.id===status?'on':''}" data-s="${s.id}">${s.label}</button>`).join('')}
+        ${STATUSES.map(s=>`<button type="button" class="chip ${s.cls} ${s.id===status?'on':''}" data-s="${s.id}">${s.label}</button>`).join('')}
       </div></div>
     <div class="f-row"><label>職業</label><input id="fJob" value="${esc(p?.job||'')}" placeholder="例：メーカー営業"></div>
     <div class="f-row"><label>出会い</label><input id="fMet" value="${esc(p?.metVia||'')}" placeholder="例：○○アプリ、相談所、友人の紹介"></div>
@@ -1042,6 +1073,7 @@ function openDateForm(p,d){
     rating=(rating===n)?0:n;
     document.getElementById('fRate').querySelectorAll('button').forEach(x=>
       x.classList.toggle('on',Number(x.dataset.n)<=rating));
+    b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
   });
   document.getElementById('shSave').onclick=()=>{
     const date=document.getElementById('fDate').value;
@@ -1380,6 +1412,12 @@ if('serviceWorker' in navigator && location.protocol.indexOf('http')===0){
 history.replaceState(view,'');
 showLock();
 render();
+
+setTimeout(()=>{
+  const sp=document.getElementById('splash');
+  sp.classList.add('hide');
+  setTimeout(()=>sp.remove(),400);
+},450);
 
 /* 起動後に IndexedDB（正）を読み、LS が消えていた場合などに復元する */
 (async()=>{
