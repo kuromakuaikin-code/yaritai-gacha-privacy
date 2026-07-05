@@ -11,7 +11,8 @@
       "buildNumber": "2",
       "supportsTablet": false,
       "infoPlist": {
-        "CFBundleAllowMixedLocalizations": true
+        "CFBundleAllowMixedLocalizations": true,
+        "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
@@ -21,6 +22,12 @@
       "image": "./assets/icon.png",
       "backgroundColor": "#faf6f7",
       "resizeMode": "contain"
+    },
+    "owner": "aikin",
+    "extra": {
+      "eas": {
+        "projectId": "4cf7fbeb-22a5-4893-9526-528573304d83"
+      }
     },
     "plugins": [
       [
