@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-  Modal, Pressable, ScrollView, StyleSheet, Text, TextInput, View,
+  KeyboardAvoidingView, Modal, Platform, Pressable, ScrollView, StyleSheet,
+  Text, TextInput, View,
 } from 'react-native';
 import { colors } from './config';
 import { statusOf } from './types';
@@ -118,17 +119,21 @@ export function Sheet({ visible, onClose, title, children }: {
 }) {
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={st.overlay} onPress={onClose}>
-        <Pressable style={st.sheet} onPress={() => {}}>
-          <View style={st.sheetHead}>
-            <Text style={st.sheetTitle}>{title}</Text>
-            <Pressable onPress={onClose} hitSlop={10}>
-              <Text style={{ color: colors.sub, fontSize: 15 }}>閉じる</Text>
-            </Pressable>
-          </View>
-          <ScrollView keyboardShouldPersistTaps="handled">{children}</ScrollView>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
+        <Pressable style={st.overlay} onPress={onClose}>
+          <Pressable style={st.sheet} onPress={() => {}}>
+            <View style={st.sheetHead}>
+              <Text style={st.sheetTitle}>{title}</Text>
+              <Pressable onPress={onClose} hitSlop={10}>
+                <Text style={{ color: colors.sub, fontSize: 15 }}>閉じる</Text>
+              </Pressable>
+            </View>
+            <ScrollView keyboardShouldPersistTaps="handled">{children}</ScrollView>
+          </Pressable>
         </Pressable>
-      </Pressable>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
