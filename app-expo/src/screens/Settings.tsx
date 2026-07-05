@@ -15,7 +15,18 @@ export function SettingsScreen() {
   const [paywallOpen, setPaywallOpen] = useState(false);
   const [passOpen, setPassOpen] = useState(false);
 
-  const exportBackup = async () => {
+  const exportBackup = () => {
+    Alert.alert(
+      'データを書き出す',
+      'このあと開く画面で「ファイルに保存」を選び、iCloud Drive に保存するのがおすすめです。\n\n保存したファイルがあれば、機種変更やアプリを入れ直したときに「データを読み込む」で元どおりに復元できます。',
+      [
+        { text: 'キャンセル', style: 'cancel' },
+        { text: '書き出す', onPress: doExport },
+      ],
+    );
+  };
+
+  const doExport = async () => {
     try {
       const now = Date.now();
       const json = JSON.stringify({ ...db, lastBackup: now }, null, 2);
@@ -37,8 +48,8 @@ export function SettingsScreen() {
       const text = await FileSystem.readAsStringAsync(res.assets[0].uri);
       const data = JSON.parse(text);
       if (!data || !Array.isArray(data.partners)) throw new Error('bad file');
-      Alert.alert('バックアップを読み込む',
-        `バックアップ（お相手${data.partners.length}名）で現在のデータを置き換えますか？`, [
+      Alert.alert('データを読み込む',
+        `保存したデータ（お相手${data.partners.length}名）で、今のアプリの中身を置き換えます。よろしいですか？`, [
           { text: 'キャンセル', style: 'cancel' },
           { text: '読み込む', onPress: () => replace(data) },
         ]);
@@ -107,17 +118,21 @@ export function SettingsScreen() {
           )}
         </Card>
 
-        <View style={st.secTitle}><Text style={st.secTitleText}>セキュリティ・データ</Text></View>
+        <View style={st.secTitle}><Text style={st.secTitleText}>セキュリティ</Text></View>
         <Card>
           <Row label="🔒 パスコードロック" value={db.passcode ? 'オン ›' : 'オフ ›'}
                onPress={togglePasscode} />
-          <Row label="📤 バックアップを書き出す" value="›" onPress={exportBackup} />
-          <Row label="📥 バックアップを読み込む" value="›" onPress={importBackup} />
+        </Card>
+
+        <View style={st.secTitle}><Text style={st.secTitleText}>データのお引っ越し・保険</Text></View>
+        <Card>
+          <Row label="📤 データを書き出す" value="機種変更・保険用 ›" onPress={exportBackup} />
+          <Row label="📥 データを読み込む" value="復元・引っ越し用 ›" onPress={importBackup} />
           <Row label="🗑 全データを削除" value="" danger onPress={wipe} />
         </Card>
         <Text style={[st.subText, { fontSize: 12.5, marginTop: 4 }]}>
-          データはすべてこの端末の中にだけ保存され、外部には送信されません。
-          Web版のバックアップファイルもそのまま読み込めます。
+          データはこの端末の中にだけ保存され、外部には送信されません。そのため、アプリを削除するとデータも消えます。
+          「データを書き出す」でファイルに保存しておくと、機種変更やアプリの入れ直しのときに「データを読み込む」で元に戻せます。
         </Text>
 
         <View style={st.secTitle}><Text style={st.secTitleText}>アプリについて</Text></View>
