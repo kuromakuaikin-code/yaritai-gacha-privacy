@@ -1270,11 +1270,11 @@ function renderSettings(){
       <button class="set-item" id="setAdFree">🚫 広告なし<span class="arr">${isPremium()?'プレミアムに込み':db.adFree?'有効':'未購入 ›'}</span></button>
       <button class="set-item" id="setCode">🎟 購入の復元（解除コード）<span class="arr">›</span></button>
       <button class="set-item" id="setLock">🔒 パスコードロック<span class="arr">${db.passcode?'オン ›':'オフ ›'}</span></button>
-      <button class="set-item" id="setExport">📤 バックアップを書き出す<span class="arr">›</span></button>
-      <button class="set-item" id="setImport">📥 バックアップを読み込む<span class="arr">›</span></button>
+      <button class="set-item" id="setExport">📤 データを書き出す<span class="arr">機種変更・保険用 ›</span></button>
+      <button class="set-item" id="setImport">📥 データを読み込む<span class="arr">復元・引っ越し用 ›</span></button>
       <button class="set-item" id="setWipe" style="color:var(--danger)">🗑 全データを削除</button>
     </div>
-    <p class="set-note">データはすべてこの端末（ブラウザ）の中にだけ保存され、外部には送信されません。機種変更の際はバックアップの書き出し・読み込みをご利用ください。<br><br>
+    <p class="set-note">データはこの端末（ブラウザ）の中にだけ保存され、外部には送信されません。そのため、アプリやサイトデータを削除するとデータも消えます。「データを書き出す」でファイルに保存しておくと、機種変更や入れ直しのときに「データを読み込む」で元に戻せます。<br><br>
     ※ パスコードは簡易的な画面ロックです。端末自体のロックも併せてご利用ください。</p>
     <div class="sec-title">アプリについて</div>
     <div class="card plain">
