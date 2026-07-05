@@ -3,10 +3,10 @@ import { Alert, Linking, Pressable, ScrollView, Text, View } from 'react-native'
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
-import { useDb, hashPasscode, isPremium, isAdFree } from '../db';
+import { useDb, hashPasscode, isPremium } from '../db';
 import { buyProduct, restorePurchases } from '../iap';
 import {
-  ADFREE_PRICE, ADFREE_PRODUCT_ID, APP_VERSION, FREE_PARTNER_LIMIT, FREE_TRIAL,
+  APP_VERSION, FREE_PARTNER_LIMIT, FREE_TRIAL,
   PREMIUM_PRICE, PREMIUM_PRODUCT_ID, PRIVACY_URL, TERMS_URL, colors,
 } from '../config';
 import { Card, Field, PrimaryButton, Sheet, SubButton, st } from '../ui';
@@ -66,7 +66,7 @@ export function SettingsScreen() {
         text: '削除する', style: 'destructive',
         onPress: () => replace({
           partners: [], myTopics: [],
-          premium: db.premium, adFree: db.adFree, passcode: null,
+          premium: db.premium, passcode: null,
         }),
       },
     ]);
@@ -99,29 +99,15 @@ export function SettingsScreen() {
                    ]);
                  }
                }} />
-          <Row label="🚫 広告なし"
-               value={isPremium(db) ? 'プレミアムに込み' : db.adFree ? '有効' : '未購入 ›'}
-               onPress={() => {
-                 if (!isAdFree(db)) { setPaywallOpen(true); return; }
-                 if (FREE_TRIAL && db.adFree && !isPremium(db)) {
-                   Alert.alert('広告なしを無効に戻しますか？（テスト用）', '', [
-                     { text: 'キャンセル', style: 'cancel' },
-                     { text: '無効にする', onPress: () => update(d => { d.adFree = false; }) },
-                   ]);
-                 }
-               }} />
           {!FREE_TRIAL && (
             <Row label="🔄 購入の復元" value="›"
                  onPress={async () => {
                    const ids = await restorePurchases();
-                   if (ids.length === 0) {
+                   if (!ids.includes(PREMIUM_PRODUCT_ID)) {
                      Alert.alert('復元できる購入が見つかりませんでした');
                      return;
                    }
-                   update(d => {
-                     if (ids.includes(PREMIUM_PRODUCT_ID)) d.premium = true;
-                     if (ids.includes(ADFREE_PRODUCT_ID)) d.adFree = true;
-                   });
+                   update(d => { d.premium = true; });
                    Alert.alert('購入を復元しました');
                  }} />
           )}
@@ -194,19 +180,6 @@ export function PaywallSheet({ visible, onClose, message }: {
     }
   };
 
-  const buyAdFree = async () => {
-    if (FREE_TRIAL) {
-      update(d => { d.adFree = true; });
-      onClose();
-      return;
-    }
-    const ok = await buyProduct(ADFREE_PRODUCT_ID);
-    if (ok) {
-      update(d => { d.adFree = true; });
-      onClose();
-    }
-  };
-
   return (
     <Sheet visible={visible} onClose={onClose} title="⭐ プレミアム">
       {message ? <Text style={[st.subText, { marginBottom: 10 }]}>{message}</Text> : null}
@@ -214,18 +187,13 @@ export function PaywallSheet({ visible, onClose, message }: {
         <Feature text="💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）" />
         <Feature text="🔍 各話題の「深掘りパターン」（会話の流れの例）も全て見られる" />
         <Feature text={`👥 お相手の登録が無制限に（無料版は${FREE_PARTNER_LIMIT}人まで）`} />
-        <Feature text="🚫 広告が永続的に非表示（プレミアムに含まれます）" />
+        <Feature text="🚫 広告が永続的に非表示" />
         <Feature text="🔁 買い切りのみ。追加課金・サブスクなし" />
         <Feature text="🔒 データはこれまで通り端末内にのみ保存" />
       </Card>
       <PrimaryButton
         label={FREE_TRIAL ? '⭐ プレミアムを無料で有効化（テスト中）' : `⭐ プレミアムを購入（${PREMIUM_PRICE}）`}
         onPress={buyPremium} />
-      {!isAdFree(db) && (
-        <SubButton
-          label={FREE_TRIAL ? '🚫 広告なしのみを無料で有効化（テスト中）' : `🚫 広告なしのみ（${ADFREE_PRICE}・永続）`}
-          onPress={buyAdFree} />
-      )}
       <Pressable onPress={onClose} style={{ alignItems: 'center', padding: 14 }}>
         <Text style={st.subText}>あとで</Text>
       </Pressable>

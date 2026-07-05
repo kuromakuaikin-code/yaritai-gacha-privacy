@@ -411,18 +411,17 @@ const APP_VERSION='1.0.0';
 
 /* ==== 本番リリース設定（詳細は README.md のリリース手順を参照） ====
    1) freeTrial を false にする
-   2) url / adFreeUrl に Stripe Payment Link を設定（購入完了メールで解除コードを案内）
-   3) UNLOCK に解除コードの SHA-256 を登録（printf '%s' 'コード' | shasum -a 256）
+   2) url に Stripe Payment Link を設定（購入完了メールで解除コードを案内）
+   3) UNLOCK.premium に解除コードの SHA-256 を登録（printf '%s' 'コード' | shasum -a 256）
    4) ADS.adsenseClient / adsenseSlot に AdSense のIDを設定（設定するまではサンプル枠）
    ※ App Store 配信時は Stripe ではなく StoreKit の IAP に置き換えること */
-const PURCHASE={price:'¥160',adFreePrice:'¥120',url:'',adFreeUrl:'',freeTrial:true};
+const PURCHASE={price:'¥160',url:'',freeTrial:true};
 const ADS={enabled:true,adsenseClient:'',adsenseSlot:''};
 const UNLOCK={
   premium:[],   // 例: ['2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae']
-  adfree:[],
 };
 function isPremium(){ return !!db.premium; }
-function isAdFree(){ return !!db.adFree || isPremium(); }
+function isAdFree(){ return isPremium(); }
 function catUnlocked(ci){ return isPremium() || ci===0; }
 
 function catTopics(ci){
@@ -625,7 +624,7 @@ function render(){
   setupAds();
 }
 document.getElementById('adbar').onclick=()=>
-  openPaywall(`広告なしプラン（${PURCHASE.adFreePrice}・永続）でこの広告を非表示にできます。`);
+  openPaywall('プレミアム（買い切り）でこの広告を非表示にできます。');
 
 /* AdSense のIDが設定されていれば実広告を読み込む（未設定はサンプル枠のまま） */
 let _adsInit=false;
@@ -890,7 +889,7 @@ function renderTopics(){
   const upsell=isPremium()?'':`
     <button class="card pv-card" id="pvOpen">
       <div class="pv-t">⭐ プレミアムで話題を全種類解放</div>
-      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題（会話の流れの例つき）を解放｜${PURCHASE.freeTrial?'今なら無料':PURCHASE.price+' 買い切り'}</div>
+      <div class="pv-s">残り${TOPIC_PRESETS.reduce((s,c,ci)=>s+(ci>0?c.items.length:0),0)}種の話題（会話の流れの例つき）＋お相手無制限＋広告なしを解放｜${PURCHASE.freeTrial?'今なら無料':PURCHASE.price+' 買い切り'}</div>
     </button>`;
 
   const secs=TOPIC_PRESETS.map((cat,ci)=>{
@@ -1201,37 +1200,28 @@ function openPaywall(msg){
         <li>💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）</li>
         <li>🔍 各話題の「深掘りパターン」（会話の流れの例）も全て見られる</li>
         <li>👥 お相手の登録が無制限に（無料版は3人まで）</li>
-        <li>🚫 広告が永続的に非表示（プレミアムに含まれます）</li>
+        <li>🚫 広告が永続的に非表示</li>
         <li>🔁 買い切りのみ。追加課金・サブスクなし</li>
         <li>🔒 データはこれまで通り端末内にのみ保存</li>
       </ul>
     </div>
     <button class="btn btn-main" id="pvBuy">⭐ プレミアム ${PURCHASE.freeTrial?'を無料で有効化（テスト中）':`を購入（${PURCHASE.price}）`}</button>
-    ${isAdFree()?'':`<button class="btn btn-sub" id="pvAdFree">🚫 広告なしのみ ${PURCHASE.freeTrial?'を無料で有効化（テスト中）':`（${PURCHASE.adFreePrice}・永続）`}</button>`}
     ${PURCHASE.freeTrial?'':`<button class="btn-danger-text" id="pvCode" style="color:var(--blue)">解除コードをお持ちの方はこちら</button>`}
     <button class="btn-danger-text" id="shClose2" style="color:var(--sub)">あとで</button>
   `);
   document.getElementById('shClose').onclick=()=>closeSheet(true);
   document.getElementById('shClose2').onclick=()=>closeSheet(true);
-  document.getElementById('pvBuy').onclick=()=>startPurchase('premium');
-  const af=document.getElementById('pvAdFree');
-  if(af) af.onclick=()=>startPurchase('adfree');
+  document.getElementById('pvBuy').onclick=()=>startPurchase();
   const pc=document.getElementById('pvCode');
   if(pc) pc.onclick=openCodeSheet;
 }
-function startPurchase(kind){
+function startPurchase(){
   if(PURCHASE.freeTrial){
-    if(kind==='adfree'){
-      db.adFree=true; save(); closeSheet(true); render();
-      toast('広告を非表示にしました 🎉');
-    }else{
-      db.premium=true; save(); closeSheet(true); render();
-      toast('プレミアムを有効にしました 🎉');
-    }
+    db.premium=true; save(); closeSheet(true); render();
+    toast('プレミアムを有効にしました 🎉');
     return;
   }
-  const url=kind==='adfree'?(PURCHASE.adFreeUrl||PURCHASE.url):PURCHASE.url;
-  if(url){ location.href=url; return; }
+  if(PURCHASE.url){ location.href=PURCHASE.url; return; }
   toast('決済の準備中です。しばらくお待ちください');
 }
 
@@ -1250,9 +1240,6 @@ function openCodeSheet(){
     if(h&&UNLOCK.premium.includes(h)){
       db.premium=true; save(); closeSheet(true); render();
       toast('プレミアムを有効にしました 🎉');
-    }else if(h&&UNLOCK.adfree.includes(h)){
-      db.adFree=true; save(); closeSheet(true); render();
-      toast('広告を非表示にしました 🎉');
     }else{
       toast('コードが正しくありません');
     }
@@ -1267,7 +1254,6 @@ function renderSettings(){
   $main.innerHTML=`
     <div class="card plain">
       <button class="set-item" id="setPremium">⭐ プレミアム<span class="arr">${isPremium()?'有効':'未購入 ›'}</span></button>
-      <button class="set-item" id="setAdFree">🚫 広告なし<span class="arr">${isPremium()?'プレミアムに込み':db.adFree?'有効':'未購入 ›'}</span></button>
       <button class="set-item" id="setCode">🎟 購入の復元（解除コード）<span class="arr">›</span></button>
       <button class="set-item" id="setLock">🔒 パスコードロック<span class="arr">${db.passcode?'オン ›':'オフ ›'}</span></button>
       <button class="set-item" id="setExport">📤 データを書き出す<span class="arr">機種変更・保険用 ›</span></button>
@@ -1292,15 +1278,6 @@ function renderSettings(){
         db.premium=false; save(); render(); toast('プレミアムを無効にしました');
       }
     }else openPaywall();
-  };
-  document.getElementById('setAdFree').onclick=()=>{
-    if(isPremium()){ toast('プレミアムに広告なしが含まれています'); return; }
-    if(db.adFree){
-      // テスト用：解除できるようにしておく（本番では購入の復元に置き換える）
-      if(confirm('広告なしを無効に戻しますか？（テスト用）')){
-        db.adFree=false; save(); render(); toast('広告なしを無効にしました');
-      }
-    }else openPaywall(`広告なしプラン（${PURCHASE.adFreePrice}・永続）は一度の購入でずっと広告が消えます。`);
   };
   document.getElementById('setCode').onclick=openCodeSheet;
   document.getElementById('setLock').onclick=()=>{
@@ -1329,7 +1306,7 @@ function renderSettings(){
   document.getElementById('setWipe').onclick=()=>{
     if(!confirm('すべてのお相手と記録を削除します。元に戻せません。よろしいですか？')) return;
     if(!confirm('本当に削除しますか？')) return;
-    db={partners:[],passcode:null,custom:[],myTopics:[],premium:db.premium,adFree:db.adFree,
+    db={partners:[],passcode:null,custom:[],myTopics:[],premium:db.premium,
         installDismissed:db.installDismissed,firstRun:db.firstRun}; save();
     nav({name:'list'},false); toast('削除しました');
   };
