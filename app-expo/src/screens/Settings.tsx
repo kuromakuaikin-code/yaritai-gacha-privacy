@@ -173,10 +173,12 @@ export function PaywallSheet({ visible, onClose, message }: {
       onClose();
       return;
     }
-    const ok = await buyProduct(PREMIUM_PRODUCT_ID);
-    if (ok) {
+    const r = await buyProduct(PREMIUM_PRODUCT_ID);
+    if (r.success) {
       update(d => { d.premium = true; });
       onClose();
+    } else if (!r.cancelled) {
+      Alert.alert('購入できませんでした', r.message ?? '時間をおいて再度お試しください');
     }
   };
 
