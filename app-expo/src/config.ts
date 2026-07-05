@@ -8,9 +8,14 @@ export const FREE_TRIAL = true;
 export const FREE_PARTNER_LIMIT = 3;
 
 /** 広告表示（広告なし/プレミアム購入者には出ない）。
- *  本実装時は react-native-google-mobile-ads のバナーに置き換える
- *  （EAS Build 必須・ATT対応または非パーソナライズ配信） */
+ *  EAS Build ではAdMobの実バナーが自動で有効になり、
+ *  Expo Go ではサンプル枠にフォールバックする。
+ *  非パーソナライズ配信（NPA）固定のためATTダイアログは不要 */
 export const ADS_ENABLED = true;
+
+/** AdMobのバナーユニットID。空の間はGoogle公式のテスト広告を表示。
+ *  リリース時に AdMob 管理画面で作成した本番IDに差し替える */
+export const ADMOB_BANNER_UNIT_ID = '';
 
 export const PREMIUM_PRICE = '¥160';
 export const ADFREE_PRICE = '¥120';
