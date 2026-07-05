@@ -35,6 +35,10 @@ eas submit --platform ios    # App Store Connect へアップロード
 
 ## リリース前チェックリスト
 
+**最新の手順は `RELEASE.md` を参照**（IAP・AdMob・復元は実装済み。フラグ差し替えのみ）
+
+<details><summary>旧メモ</summary>
+
 1. `src/config.ts` の `FREE_TRIAL` を `false` に
 2. 課金: `react-native-iap` か RevenueCat を導入し、
    `com.kuromakuaikin.datememo.premium`（¥160）/ `.adfree`（¥120）の非消耗型IAPを実装
@@ -44,3 +48,5 @@ eas submit --platform ios    # App Store Connect へアップロード
 4. App Store Connect のプライバシーポリシーURL:
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/privacy.html`
 5. アイコン: `assets/icon.png` を1024pxに差し替え推奨（現在はWeb版の512px）
+
+</details>

@@ -4,9 +4,10 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import * as DocumentPicker from 'expo-document-picker';
 import { useDb, hashPasscode, isPremium, isAdFree } from '../db';
+import { buyProduct, restorePurchases } from '../iap';
 import {
-  ADFREE_PRICE, APP_VERSION, FREE_PARTNER_LIMIT, FREE_TRIAL, PREMIUM_PRICE,
-  PRIVACY_URL, TERMS_URL, colors,
+  ADFREE_PRICE, ADFREE_PRODUCT_ID, APP_VERSION, FREE_PARTNER_LIMIT, FREE_TRIAL,
+  PREMIUM_PRICE, PREMIUM_PRODUCT_ID, PRIVACY_URL, TERMS_URL, colors,
 } from '../config';
 import { Card, Field, PrimaryButton, Sheet, SubButton, st } from '../ui';
 
@@ -111,9 +112,17 @@ export function SettingsScreen() {
                }} />
           {!FREE_TRIAL && (
             <Row label="🔄 購入の復元" value="›"
-                 onPress={() => {
-                   // 正式リリース時: react-native-iap / RevenueCat の restorePurchases に置き換え
-                   Alert.alert('決済の準備中です');
+                 onPress={async () => {
+                   const ids = await restorePurchases();
+                   if (ids.length === 0) {
+                     Alert.alert('復元できる購入が見つかりませんでした');
+                     return;
+                   }
+                   update(d => {
+                     if (ids.includes(PREMIUM_PRODUCT_ID)) d.premium = true;
+                     if (ids.includes(ADFREE_PRODUCT_ID)) d.adFree = true;
+                   });
+                   Alert.alert('購入を復元しました');
                  }} />
           )}
         </Card>
@@ -172,24 +181,30 @@ export function PaywallSheet({ visible, onClose, message }: {
 }) {
   const { db, update } = useDb();
 
-  const buyPremium = () => {
+  const buyPremium = async () => {
     if (FREE_TRIAL) {
       update(d => { d.premium = true; });
       onClose();
       return;
     }
-    // 正式リリース時: react-native-iap / RevenueCat で
-    // com.kuromakuaikin.datememo.premium を購入
-    Alert.alert('決済の準備中です');
+    const ok = await buyProduct(PREMIUM_PRODUCT_ID);
+    if (ok) {
+      update(d => { d.premium = true; });
+      onClose();
+    }
   };
 
-  const buyAdFree = () => {
+  const buyAdFree = async () => {
     if (FREE_TRIAL) {
       update(d => { d.adFree = true; });
       onClose();
       return;
     }
-    Alert.alert('決済の準備中です');
+    const ok = await buyProduct(ADFREE_PRODUCT_ID);
+    if (ok) {
+      update(d => { d.adFree = true; });
+      onClose();
+    }
   };
 
   return (
