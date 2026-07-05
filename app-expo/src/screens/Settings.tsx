@@ -77,12 +77,34 @@ export function SettingsScreen() {
         <View style={st.secTitle}><Text style={st.secTitleText}>プラン</Text></View>
         <Card>
           <Row label="⭐ プレミアム" value={isPremium(db) ? '有効' : '未購入 ›'}
-               onPress={() => setPaywallOpen(true)} />
+               onPress={() => {
+                 if (!isPremium(db)) { setPaywallOpen(true); return; }
+                 // 買い切りのため購入後は状態表示のみ。テスト期間中だけ解除できる
+                 if (FREE_TRIAL) {
+                   Alert.alert('プレミアムを無効に戻しますか？（テスト用）', '', [
+                     { text: 'キャンセル', style: 'cancel' },
+                     { text: '無効にする', onPress: () => update(d => { d.premium = false; }) },
+                   ]);
+                 }
+               }} />
           <Row label="🚫 広告なし"
                value={isPremium(db) ? 'プレミアムに込み' : db.adFree ? '有効' : '未購入 ›'}
                onPress={() => {
-                 if (!isAdFree(db)) setPaywallOpen(true);
+                 if (!isAdFree(db)) { setPaywallOpen(true); return; }
+                 if (FREE_TRIAL && db.adFree && !isPremium(db)) {
+                   Alert.alert('広告なしを無効に戻しますか？（テスト用）', '', [
+                     { text: 'キャンセル', style: 'cancel' },
+                     { text: '無効にする', onPress: () => update(d => { d.adFree = false; }) },
+                   ]);
+                 }
                }} />
+          {!FREE_TRIAL && (
+            <Row label="🔄 購入の復元" value="›"
+                 onPress={() => {
+                   // 正式リリース時: react-native-iap / RevenueCat の restorePurchases に置き換え
+                   Alert.alert('決済の準備中です');
+                 }} />
+          )}
         </Card>
 
         <View style={st.secTitle}><Text style={st.secTitleText}>セキュリティ・データ</Text></View>
