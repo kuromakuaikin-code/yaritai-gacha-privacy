@@ -18,10 +18,8 @@ export const ADS_ENABLED = true;
 export const ADMOB_BANNER_UNIT_ID = '';
 
 export const PREMIUM_PRICE = '¥160';
-export const ADFREE_PRICE = '¥120';
 
 export const PREMIUM_PRODUCT_ID = 'com.kuromakuaikin.datememo.premium';
-export const ADFREE_PRODUCT_ID = 'com.kuromakuaikin.datememo.adfree';
 
 export const PRIVACY_URL = 'https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/privacy.html';
 export const TERMS_URL = 'https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/terms.html';

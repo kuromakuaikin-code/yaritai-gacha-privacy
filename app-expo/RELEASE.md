@@ -15,9 +15,9 @@
 
 1. https://appstoreconnect.apple.com → マイApp → 新規App
    - 名前: 婚活デートメモ ／ バンドルID: `com.kuromakuaikin.datememo`
-2. App内課金 → 非消耗型を2つ作成
+2. App内課金 → 非消耗型を1つ作成
    - `com.kuromakuaikin.datememo.premium` … ¥160（価格Tier確認）
-   - `com.kuromakuaikin.datememo.adfree` … ¥120
+   - 話題リスト全解放・お相手登録無制限・広告非表示をまとめて含む単一プラン
 3. 掲載情報・スクショ・プライバシー回答は `store-listing.md` からコピペ
 
 ## 2. AdMob の準備

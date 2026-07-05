@@ -4,7 +4,7 @@
 // - EAS Build した本番アプリでのみ実際に動作する
 // - サンドボックステスト時に API 差異があれば、このファイルだけ直せばよい
 
-import { ADFREE_PRODUCT_ID, PREMIUM_PRODUCT_ID } from './config';
+import { PREMIUM_PRODUCT_ID } from './config';
 
 let mod: any | null | undefined;
 
@@ -38,7 +38,7 @@ export async function buyProduct(productId: string): Promise<boolean> {
   try {
     await ensureConnection(m);
     if (typeof m.getProducts === 'function') {
-      await m.getProducts({ skus: [PREMIUM_PRODUCT_ID, ADFREE_PRODUCT_ID] });
+      await m.getProducts({ skus: [PREMIUM_PRODUCT_ID] });
     }
     const result = await m.requestPurchase({
       sku: productId,

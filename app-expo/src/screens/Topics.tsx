@@ -148,7 +148,7 @@ function TopicsBody({ partnerId }: { partnerId: string | null }) {
                 ⭐ プレミアムで話題を全種類解放
               </Text>
               <Text style={{ color: '#ffe3ec', fontSize: 13, marginTop: 2 }}>
-                残り22種の話題（会話の流れの例つき）を解放｜{FREE_TRIAL ? '今なら無料' : `${PREMIUM_PRICE} 買い切り`}
+                残り22種の話題＋お相手無制限＋広告なしを解放｜{FREE_TRIAL ? '今なら無料' : `${PREMIUM_PRICE} 買い切り`}
               </Text>
             </Card>
           </Pressable>

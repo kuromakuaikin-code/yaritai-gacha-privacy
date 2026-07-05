@@ -81,7 +81,7 @@ export const useDb = () => useContext(DbContext);
 // ---- 派生ヘルパー ----
 
 export const isPremium = (db: Db) => !!db.premium;
-export const isAdFree = (db: Db) => !!db.adFree || !!db.premium;
+export const isAdFree = (db: Db) => isPremium(db);
 
 export const allTopicCount = (db: Db) =>
   unlockedTopics(isPremium(db)).length + db.myTopics.length;
