@@ -3,7 +3,7 @@ export const APP_VERSION = '1.0.0';
 /** テスト期間中は true（購入ボタンで無料解放）。
  *  正式リリース時に false にし、react-native-iap か RevenueCat で
  *  以下のプロダクトIDの非消耗型IAPを実装する */
-export const FREE_TRIAL = true;
+export const FREE_TRIAL = false;
 
 export const FREE_PARTNER_LIMIT = 3;
 
@@ -15,9 +15,9 @@ export const ADS_ENABLED = true;
 
 /** AdMobのバナーユニットID。空の間はGoogle公式のテスト広告を表示。
  *  リリース時に AdMob 管理画面で作成した本番IDに差し替える */
-export const ADMOB_BANNER_UNIT_ID = '';
+export const ADMOB_BANNER_UNIT_ID = 'ca-app-pub-6229107230327893/4016409816';
 
-export const PREMIUM_PRICE = '¥160';
+export const PREMIUM_PRICE = '¥200';
 
 export const PREMIUM_PRODUCT_ID = 'com.kuromakuaikin.datememo.premium';
 
