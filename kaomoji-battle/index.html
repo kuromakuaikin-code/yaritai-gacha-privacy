@@ -29,6 +29,24 @@
   .screen { display: none; max-width: 520px; margin: 0 auto; padding: 16px; }
   .screen.active { display: block; }
 
+  /* ---- パソコン向けレイアウト ---- */
+  .key-hint { display: none; color: var(--muted); font-weight: normal; }
+  @media (min-width: 900px) {
+    .screen { max-width: 860px; padding: 24px; }
+    h1 { font-size: 40px; }
+    .subtitle { font-size: 15px; }
+    .grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .card .face { font-size: 30px; }
+    .card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+    #screen-battle { max-width: 640px; }
+    .stage { min-height: 160px; }
+    .avatar { font-size: 44px; }
+    .avatar.small { font-size: 32px; }
+    .log { height: 140px; font-size: 14px; }
+    button:hover:not(:disabled) { filter: brightness(1.2); }
+    .key-hint { display: inline; }
+  }
+
   h1 {
     text-align: center;
     font-size: 28px;
@@ -255,9 +273,9 @@
   <div class="log" id="log"></div>
 
   <div class="actions">
-    <button id="btn-attack" onclick="playerAction('attack')">こうげき<span class="sub">ゲージ+25</span></button>
-    <button id="btn-guard" onclick="playerAction('guard')">ぼうぎょ<span class="sub">被ダメ半減 +40</span></button>
-    <button id="btn-special" class="special-btn" onclick="playerAction('special')">ひっさつ<span class="sub" id="special-sub"></span></button>
+    <button id="btn-attack" onclick="playerAction('attack')"><span class="key-hint">[1] </span>こうげき<span class="sub">ゲージ+25</span></button>
+    <button id="btn-guard" onclick="playerAction('guard')"><span class="key-hint">[2] </span>ぼうぎょ<span class="sub">被ダメ半減 +40</span></button>
+    <button id="btn-special" class="special-btn" onclick="playerAction('special')"><span class="key-hint">[3] </span>ひっさつ<span class="sub" id="special-sub"></span></button>
   </div>
 
   <div class="back-link"><a href="#" onclick="quitBattle(); return false;">← ファイター選択にもどる</a></div>
@@ -696,6 +714,21 @@ function quitBattle() {
   if (busy) return;
   backToSelect();
 }
+
+// ============================================================
+// キーボード操作(パソコン向け)
+// 1/2/3 = こうげき/ぼうぎょ/ひっさつ、Enter = もういっかい
+// ============================================================
+document.addEventListener("keydown", (e) => {
+  if ($("overlay").classList.contains("active")) {
+    if (e.key === "Enter") rematch();
+    return;
+  }
+  if (!$("screen-battle").classList.contains("active") || busy) return;
+  if (e.key === "1") playerAction("attack");
+  else if (e.key === "2") playerAction("guard");
+  else if (e.key === "3" && player.gauge >= GAUGE_MAX) playerAction("special");
+});
 
 renderSelect();
 </script>
