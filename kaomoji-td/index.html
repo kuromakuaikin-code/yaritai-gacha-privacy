@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>顔文字TD - ちゃぶ台ディフェンス</title>
+<style>
+  :root {
+    --bg: #1a1b2e;
+    --panel: #252747;
+    --panel2: #2e3060;
+    --accent: #ffd54f;
+    --accent2: #7c8cff;
+    --danger: #ff6b81;
+    --ok: #69f0ae;
+    --text: #f0f1ff;
+    --muted: #9aa0c8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    overflow-x: hidden;
+  }
+  #game { max-width: 640px; margin: 0 auto; padding: 8px 10px 16px; }
+
+  /* ---- HUD ---- */
+  #hud {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 8px; padding: 6px 4px; font-size: 14px; font-weight: bold;
+  }
+  #hud .hp { color: var(--danger); }
+  #hud .bytes { color: var(--accent); }
+  #hud .wave { color: var(--muted); font-size: 13px; }
+  #btn-speed {
+    background: var(--panel2); color: var(--text);
+    border: none; border-radius: 8px; padding: 5px 10px;
+    font-family: inherit; font-size: 12px; font-weight: bold; cursor: pointer;
+  }
+
+  /* ---- 戦場(チャット画面風) ---- */
+  #field {
+    position: relative;
+    background: linear-gradient(180deg, #23244a 0%, #1d1e3c 100%);
+    border: 2px solid var(--panel2);
+    border-radius: 14px;
+    height: 46vh; min-height: 300px; max-height: 430px;
+    overflow: hidden;
+  }
+  .lane {
+    position: absolute; left: 0; width: 100%; height: 33.333%;
+    border-bottom: 1px dashed rgba(124, 140, 255, .18);
+  }
+  .lane .ghost-text {
+    position: absolute; left: 8px; bottom: 4px;
+    color: rgba(154, 160, 200, .18); font-size: 11px; letter-spacing: 3px;
+    white-space: nowrap; overflow: hidden; max-width: 90%;
+  }
+  .cell {
+    position: absolute; z-index: 5; cursor: pointer;
+    border-radius: 8px;
+  }
+  .cell.placeable { background: rgba(105, 240, 174, .12); border: 1px dashed rgba(105, 240, 174, .5); }
+  .cell.blocked-hl { background: rgba(255, 107, 129, .12); }
+
+  #sendzone {
+    position: absolute; right: 0; top: 0; height: 100%; width: 34px;
+    background: rgba(124, 140, 255, .12);
+    border-left: 2px solid var(--accent2);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+  }
+  #sendzone .label {
+    writing-mode: vertical-rl; font-size: 12px; font-weight: bold; color: var(--accent2);
+    letter-spacing: 4px;
+  }
+  #field.basehit { animation: basehit .3s; }
+  @keyframes basehit { 30% { box-shadow: inset 0 0 40px rgba(255, 107, 129, .8); } }
+
+  .tower {
+    position: absolute; z-index: 10; text-align: center;
+    transform: translate(-50%, -50%);
+    font-size: 13px; white-space: nowrap; cursor: pointer;
+    line-height: 1.1;
+  }
+  .tower .lv { font-size: 8px; color: var(--accent); display: block; letter-spacing: 1px; }
+  .tower.attacking { animation: atk .18s; }
+  @keyframes atk { 50% { transform: translate(-50%, -50%) scale(1.25); } }
+  .tower .charge-ring {
+    position: absolute; left: 50%; top: -13px; transform: translateX(-50%);
+    font-size: 12px; color: var(--accent);
+    display: none;
+  }
+  .tower.charged { text-shadow: 0 0 10px var(--accent); }
+  .tower.charged .charge-ring { display: block; animation: pulse .7s infinite; }
+  @keyframes pulse { 50% { opacity: .4; } }
+  .tower.flipping { animation: flipAnim .5s; }
+  @keyframes flipAnim { 40% { transform: translate(-50%, -60%) rotate(-24deg) scale(1.3); } }
+
+  .enemy {
+    position: absolute; z-index: 8;
+    transform: translate(-50%, -50%);
+    font-size: 19px; line-height: 1;
+    transition: none;
+  }
+  .enemy .hpbar {
+    position: absolute; left: 50%; top: -7px; transform: translateX(-50%);
+    width: 22px; height: 3px; background: #14152b; border-radius: 2px; overflow: hidden;
+  }
+  .enemy .hpbar i { display: block; height: 100%; background: var(--danger); }
+  .enemy.hurt { animation: hurt .15s; }
+  @keyframes hurt { 50% { filter: brightness(3); transform: translate(-50%, -50%) scale(.85); } }
+  .enemy.boss { font-size: 34px; }
+  .enemy.mini { font-size: 14px; }
+  .enemy.healing { text-shadow: 0 0 8px var(--ok); }
+  .enemy.slowed { filter: saturate(.3) brightness(.8); }
+
+  .proj {
+    position: absolute; z-index: 9; transform: translate(-50%, -50%);
+    font-size: 11px; pointer-events: none;
+  }
+  .fx-flip {
+    position: absolute; z-index: 12; transform: translate(-50%, -50%);
+    font-size: 22px; pointer-events: none;
+    animation: fxflip .55s forwards;
+  }
+  @keyframes fxflip {
+    0% { opacity: 1; margin-left: 0; }
+    100% { opacity: 0; margin-left: -70px; transform: translate(-50%, -50%) rotate(-160deg); }
+  }
+  .float-txt {
+    position: absolute; z-index: 15; transform: translate(-50%, -50%);
+    font-size: 12px; font-weight: bold; color: var(--accent);
+    pointer-events: none;
+    animation: floatUp .8s forwards;
+  }
+  .float-txt.dmg-b { color: var(--danger); font-size: 15px; }
+  @keyframes floatUp { to { margin-top: -26px; opacity: 0; } }
+
+  /* ---- ウェーブバー ---- */
+  #wavebar {
+    display: flex; align-items: center; gap: 10px; margin-top: 8px;
+  }
+  #btn-wave {
+    flex: 1;
+    background: var(--accent2); color: #fff;
+    border: none; border-radius: 10px; padding: 11px;
+    font-family: inherit; font-size: 14px; font-weight: bold; cursor: pointer;
+  }
+  #btn-wave:disabled { opacity: .35; }
+  #wave-bonus { font-size: 11px; color: var(--muted); min-width: 90px; text-align: right; }
+
+  /* ---- ユニットパレット ---- */
+  #palette {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 8px;
+  }
+  .ucard {
+    background: var(--panel);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 7px 2px 6px;
+    text-align: center; cursor: pointer;
+    transition: transform .08s;
+  }
+  .ucard:active { transform: scale(.95); }
+  .ucard.selected { border-color: var(--ok); background: var(--panel2); }
+  .ucard.poor { opacity: .38; }
+  .ucard .face { font-size: 13px; display: block; white-space: nowrap; overflow: hidden; }
+  .ucard .uname { font-size: 9px; color: var(--muted); display: block; margin-top: 3px; }
+  .ucard .cost { font-size: 11px; color: var(--accent); font-weight: bold; display: block; }
+
+  #unit-desc {
+    font-size: 11px; color: var(--muted); text-align: center; margin-top: 6px; min-height: 1.5em;
+  }
+
+  /* ---- タワーメニュー ---- */
+  #tower-menu {
+    position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%);
+    background: var(--panel);
+    border: 2px solid var(--accent2);
+    border-radius: 14px;
+    padding: 12px 14px;
+    z-index: 40;
+    width: min(92vw, 360px);
+    display: none;
+  }
+  #tower-menu.show { display: block; }
+  #tm-title { font-size: 14px; font-weight: bold; margin-bottom: 4px; }
+  #tm-info { font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+  #tower-menu .row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  #tower-menu button {
+    background: var(--panel2); color: var(--text);
+    border: none; border-radius: 10px; padding: 10px 4px;
+    font-family: inherit; font-size: 12px; font-weight: bold; cursor: pointer;
+  }
+  #tower-menu button:disabled { opacity: .35; }
+  #tm-upgrade { background: var(--accent2); }
+
+  /* ---- 結果 ---- */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(10, 11, 24, .85);
+    display: none; align-items: center; justify-content: center; z-index: 50;
+  }
+  .overlay.active { display: flex; }
+  .result-box {
+    background: var(--panel);
+    border-radius: 20px; padding: 28px 24px; text-align: center;
+    width: min(88vw, 380px);
+    animation: popIn .3s;
+  }
+  @keyframes popIn { from { transform: scale(.7); opacity: 0; } }
+  .result-box .big { font-size: 32px; font-weight: bold; margin-bottom: 6px; }
+  .result-box .big.win { color: var(--accent); }
+  .result-box .big.lose { color: var(--danger); }
+  .result-box .stars { font-size: 26px; margin: 6px 0; color: var(--accent); }
+  .result-box .rface { font-size: 26px; margin: 10px 0; white-space: nowrap; }
+  .result-box .msg { color: var(--muted); font-size: 13px; margin-bottom: 16px; line-height: 1.8; }
+  .result-box button {
+    width: 100%; margin-top: 8px; padding: 14px;
+    background: var(--accent2); color: #fff;
+    border: none; border-radius: 12px;
+    font-family: inherit; font-size: 15px; font-weight: bold; cursor: pointer;
+  }
+
+  h1 { text-align: center; font-size: 17px; color: var(--accent); padding-top: 6px; }
+  .tagline { text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+
+  @media (min-width: 900px) {
+    #field { height: 400px; max-height: 400px; }
+    .tower { font-size: 17px; }
+    .enemy { font-size: 22px; }
+    .ucard .face { font-size: 15px; }
+    .ucard .uname { font-size: 10px; }
+    .ucard:hover { border-color: var(--accent2); }
+  }
+</style>
+</head>
+<body>
+<div id="game">
+  <h1>顔文字TD</h1>
+  <p class="tagline">絵文字軍の侵略から、テキスト文明さいごの送信ボタンを守れ!</p>
+
+  <div id="hud">
+    <span class="hp" id="hud-hp"></span>
+    <span class="bytes" id="hud-bytes"></span>
+    <span class="wave" id="hud-wave"></span>
+    <button id="btn-speed">▶ ×1</button>
+  </div>
+
+  <div id="field"></div>
+
+  <div id="wavebar">
+    <button id="btn-wave"></button>
+    <span id="wave-bonus"></span>
+  </div>
+
+  <div id="palette"></div>
+  <p id="unit-desc">ユニットをえらんで、すきなマスに配置しよう</p>
+</div>
+
+<div id="tower-menu">
+  <div id="tm-title"></div>
+  <div id="tm-info"></div>
+  <div class="row">
+    <button id="tm-upgrade"></button>
+    <button id="tm-sell"></button>
+    <button id="tm-close">とじる</button>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="result-box">
+    <div class="big" id="r-title"></div>
+    <div class="stars" id="r-stars"></div>
+    <div class="rface" id="r-face"></div>
+    <div class="msg" id="r-msg"></div>
+    <button onclick="location.reload()">もういっかい</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// ============================================================
+// 定数・データ
+// ============================================================
+const COLS = 6, LANES = 3;
+const BASE_HP_MAX = 10;
+const START_BYTES = 300;
+const PREP_SECONDS = 22;
+
+const TOWERS = {
+  shobon: {
+    name: "しょぼん", face: "(´・ω・`)", cost: 50,
+    dmg: 10, rate: 1.1, range: 3,
+    desc: "安い遠距離ユニット。送信ボタンがピンチなほど攻撃力UP",
+  },
+  cat: {
+    name: "ねこ", face: "(=^・ω・^=)", cost: 100,
+    dmg: 5, rate: 2.8, range: 3,
+    desc: "高速れんしゃのねこパンチ。同じ行の敵をなぐる",
+  },
+  magic: {
+    name: "魔法つかい", face: "(ノ◕ヮ◕)ノ✧", cost: 160,
+    dmg: 26, rate: 0.55, range: 7, pierceArmor: true,
+    desc: "行のはしまでとどくキラキラ砲。🛡️の装甲を無視",
+  },
+  sleepy: {
+    name: "ねむり", face: "( ˘ω˘ )", cost: 120,
+    slow: 0.45, radius: 1.7,
+    desc: "まわりの敵をねむらせて遅くする(全行にきく)",
+  },
+  flip: {
+    name: "ちゃぶ台", face: "(╯°□°)╯", cost: 200,
+    charge: 18, fdmg: 25, push: 2.2, frange: 3.5,
+    desc: "チャージ完了後タップ! 行の敵をまとめて投げ返す",
+  },
+};
+
+const ENEMIES = {
+  grunt: { face: "😀", hp: 24, speed: 0.75, dmg: 1, reward: 8 },
+  fast:  { face: "🏃", hp: 18, speed: 1.6, dmg: 1, reward: 10 },
+  tank:  { face: "🛡️", hp: 85, speed: 0.5, armor: 3, dmg: 2, reward: 20 },
+  heal:  { face: "❤️", hp: 40, speed: 0.65, dmg: 1, reward: 15, healer: true },
+  split: { face: "💩", hp: 38, speed: 0.75, dmg: 1, reward: 8, splits: true },
+  mini:  { face: "💩", hp: 12, speed: 1.05, dmg: 1, reward: 3, mini: true },
+  boss:  { face: "🗿", hp: 550, speed: 0.24, armor: 3, dmg: 5, reward: 150, boss: true, noPush: true },
+};
+
+// g(type, count, interval(ms), delay(ms))
+const g = (type, count, interval, delay = 0) => ({ type, count, interval, delay });
+const WAVES = [
+  [g("grunt", 6, 1100)],
+  [g("grunt", 12, 700)],
+  [g("grunt", 8, 700), g("fast", 4, 1000, 1500)],
+  [g("grunt", 8, 650), g("tank", 3, 2200, 1000)],
+  [g("grunt", 12, 500), g("fast", 6, 800, 2000), g("heal", 2, 4000, 3000)],
+  [g("tank", 6, 1700), g("fast", 8, 650, 1200)],
+  [g("grunt", 10, 550), g("split", 4, 2000, 1500), g("heal", 2, 4000, 4000)],
+  [g("fast", 10, 500), g("tank", 6, 1600, 1000), g("heal", 3, 3500, 2500)],
+  [g("grunt", 14, 450), g("split", 6, 1500, 1000), g("tank", 4, 1900, 2000), g("heal", 3, 3200, 3000)],
+  [g("grunt", 10, 700), g("fast", 6, 900, 3000), g("boss", 1, 0, 6000), g("heal", 2, 4000, 8000)],
+];
+const waveHpMult = (w) => 1 + (w - 1) * 0.10;
+
+// ============================================================
+// 状態
+// ============================================================
+const S = {
+  bytes: START_BYTES,
+  baseHp: BASE_HP_MAX,
+  wave: 0,                 // クリア済みウェーブ数
+  phase: "prep",           // prep | combat | over
+  speed: 1,
+  prepLeft: 0,             // 秒
+  kills: 0,
+  towers: [],              // {type, lane, col, lv, cd, chargeLeft, el}
+  enemies: [],             // {type, lane, x, hp, maxHp, el, ...}
+  projs: [],               // {x, lane, tx, target, dmg, el, ...}
+  spawnQueue: [],          // {type, at(ms)}
+  combatTime: 0,           // ウェーブ内経過ms
+  selected: null,          // パレット選択中のタワーtype
+  menuTower: null,
+};
+
+// テスト用ターボ(?turbo=N で時間N倍)
+const TURBO = Math.max(1, Math.min(20, parseFloat(new URLSearchParams(location.search).get("turbo")) || 1));
+
+const $ = (id) => document.getElementById(id);
+const field = $("field");
+const laneY = (lane) => ((lane + 0.5) / LANES) * 100;   // %
+const colX = (x) => (x / COLS) * 100;                   // %
+const dist = (aLane, ax, bLane, bx) => Math.hypot(ax - bx, aLane - bLane);
+
+// ============================================================
+// 戦場の構築
+// ============================================================
+const GHOST_TEXTS = [
+  "きょうのかいぎ 15:00〜 …",
+  "りょうかいです!よろしくおねがいします…",
+  "そういえばこのまえの件ですが…",
+];
+function buildField() {
+  for (let l = 0; l < LANES; l++) {
+    const lane = document.createElement("div");
+    lane.className = "lane";
+    lane.style.top = (l / LANES) * 100 + "%";
+    lane.innerHTML = `<span class="ghost-text">${GHOST_TEXTS[l]}</span>`;
+    field.appendChild(lane);
+  }
+  const send = document.createElement("div");
+  send.id = "sendzone";
+  send.innerHTML = `<span class="label">送信</span>`;
+  field.appendChild(send);
+
+  for (let l = 0; l < LANES; l++) {
+    for (let c = 0; c < COLS; c++) {
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.style.left = colX(c) + "%";
+      cell.style.top = (l / LANES) * 100 + "%";
+      cell.style.width = 100 / COLS + "%";
+      cell.style.height = 100 / LANES + "%";
+      cell.dataset.lane = l;
+      cell.dataset.col = c;
+      cell.addEventListener("click", () => onCellTap(l, c));
+      field.appendChild(cell);
+    }
+  }
+}
+
+function towerAt(lane, col) {
+  return S.towers.find((t) => t.lane === lane && t.col === col);
+}
+
+// ============================================================
+// パレット・配置
+// ============================================================
+function buildPalette() {
+  const pal = $("palette");
+  for (const [key, def] of Object.entries(TOWERS)) {
+    const card = document.createElement("div");
+    card.className = "ucard";
+    card.id = "ucard-" + key;
+    card.innerHTML = `
+      <span class="face">${def.face}</span>
+      <span class="uname">${def.name}</span>
+      <span class="cost">${def.cost}b</span>`;
+    card.addEventListener("click", () => selectUnit(key));
+    pal.appendChild(card);
+  }
+}
+
+function selectUnit(key) {
+  closeTowerMenu();
+  S.selected = S.selected === key ? null : key;
+  document.querySelectorAll(".ucard").forEach((c) => c.classList.remove("selected"));
+  if (S.selected) {
+    $("ucard-" + key).classList.add("selected");
+    $("unit-desc").textContent = TOWERS[key].desc;
+  } else {
+    $("unit-desc").textContent = "ユニットをえらんで、すきなマスに配置しよう";
+  }
+  updateCellHighlights();
+}
+
+function updateCellHighlights() {
+  document.querySelectorAll(".cell").forEach((cell) => {
+    const l = +cell.dataset.lane, c = +cell.dataset.col;
+    cell.classList.toggle("placeable", !!S.selected && !towerAt(l, c) && S.bytes >= TOWERS[S.selected].cost);
+  });
+}
+
+function onCellTap(lane, col) {
+  if (S.phase === "over") return;
+  const existing = towerAt(lane, col);
+  if (existing) { onTowerTap(existing); return; }
+  if (!S.selected) return;
+  placeTower(S.selected, lane, col);
+}
+
+function placeTower(type, lane, col) {
+  const def = TOWERS[type];
+  if (!def || towerAt(lane, col) || S.bytes < def.cost) return false;
+  S.bytes -= def.cost;
+  const el = document.createElement("div");
+  el.className = "tower";
+  el.innerHTML = `<span class="charge-ring">!!タップ!!</span><span class="tface">${def.face}</span><span class="lv"></span>`;
+  el.style.left = colX(col + 0.5) + "%";
+  el.style.top = laneY(lane) + "%";
+  el.addEventListener("click", (e) => { e.stopPropagation(); onTowerTap(t); });
+  field.appendChild(el);
+  const t = { type, lane, col, lv: 1, cd: 0, chargeLeft: def.charge || 0, el };
+  S.towers.push(t);
+  updateTowerLv(t);
+  fitTowerFace(t);
+  updateHUD();
+  updateCellHighlights();
+  return true;
+}
+
+// 顔がマス幅からはみ出すぶんだけフォントを縮める
+function fitTowerFace(t) {
+  const cellW = field.clientWidth / COLS;
+  t.el.style.fontSize = "";
+  const w = t.el.querySelector(".tface").getBoundingClientRect().width;
+  const base = parseFloat(getComputedStyle(t.el).fontSize);
+  if (w > cellW * 1.04) {
+    t.el.style.fontSize = Math.max(8, base * (cellW * 1.04) / w) + "px";
+  }
+}
+window.addEventListener("resize", () => S.towers.forEach(fitTowerFace));
+
+function updateTowerLv(t) {
+  t.el.querySelector(".lv").textContent = "★".repeat(t.lv - 1);
+}
+
+// レベル補正
+const lvMult = (lv) => [1, 1.5, 2.2][lv - 1];
+const upgradeCost = (t) => Math.round(TOWERS[t.type].cost * (t.lv === 1 ? 0.7 : 1.2));
+
+// ============================================================
+// タワーメニュー / ちゃぶ台発動
+// ============================================================
+function onTowerTap(t) {
+  // チャージ完了したちゃぶ台はタップで即発動
+  if (t.type === "flip" && t.chargeLeft <= 0 && S.phase === "combat") {
+    doFlip(t);
+    return;
+  }
+  openTowerMenu(t);
+}
+
+function openTowerMenu(t) {
+  S.menuTower = t;
+  const def = TOWERS[t.type];
+  $("tm-title").textContent = `${def.face} ${def.name} Lv${t.lv}`;
+  const m = lvMult(t.lv);
+  let info;
+  if (t.type === "sleepy") info = `スロー ${Math.round(def.slow * 100 * m > 70 ? 70 : def.slow * 100 * m)}% / 半径 ${(def.radius + (t.lv - 1) * 0.3).toFixed(1)}`;
+  else if (t.type === "flip") info = `投げダメージ ${Math.round(def.fdmg * m)} / チャージ ${chargeTime(t)}秒`;
+  else info = `攻撃力 ${Math.round(def.dmg * m)} / 連射 ${(def.rate * (t.type === "cat" ? m : 1)).toFixed(1)}/秒 / 射程 ${def.range}`;
+  $("tm-info").textContent = info;
+
+  const up = $("tm-upgrade");
+  if (t.lv >= 3) {
+    up.textContent = "Lv MAX";
+    up.disabled = true;
+  } else {
+    up.textContent = `強化 ${upgradeCost(t)}b`;
+    up.disabled = S.bytes < upgradeCost(t);
+  }
+  $("tm-sell").textContent = `撤去 +${sellValue(t)}b`;
+  $("tower-menu").classList.add("show");
+}
+
+function closeTowerMenu() {
+  S.menuTower = null;
+  $("tower-menu").classList.remove("show");
+}
+
+function sellValue(t) {
+  const def = TOWERS[t.type];
+  let paid = def.cost;
+  if (t.lv >= 2) paid += Math.round(def.cost * 0.7);
+  if (t.lv >= 3) paid += Math.round(def.cost * 1.2);
+  return Math.round(paid * 0.7);
+}
+
+$("tm-upgrade").addEventListener("click", () => {
+  const t = S.menuTower;
+  if (!t || t.lv >= 3 || S.bytes < upgradeCost(t)) return;
+  S.bytes -= upgradeCost(t);
+  t.lv++;
+  updateTowerLv(t);
+  updateHUD();
+  openTowerMenu(t);
+});
+$("tm-sell").addEventListener("click", () => {
+  const t = S.menuTower;
+  if (!t) return;
+  S.bytes += sellValue(t);
+  t.el.remove();
+  S.towers = S.towers.filter((x) => x !== t);
+  closeTowerMenu();
+  updateHUD();
+  updateCellHighlights();
+});
+$("tm-close").addEventListener("click", closeTowerMenu);
+
+const chargeTime = (t) => TOWERS.flip.charge - (t.lv - 1) * 4;
+
+function doFlip(t) {
+  const def = TOWERS.flip;
+  t.chargeLeft = chargeTime(t);
+  t.el.classList.remove("charged", "flipping");
+  void t.el.offsetWidth;
+  t.el.classList.add("flipping");
+  t.el.querySelector(".tface").textContent = "(╯°□°)╯︵";
+
+  // ┻━┻が行を飛んでいくエフェクト
+  const fx = document.createElement("div");
+  fx.className = "fx-flip";
+  fx.textContent = "┻━┻";
+  fx.style.left = colX(t.col + 1.2) + "%";
+  fx.style.top = laneY(t.lane) + "%";
+  field.appendChild(fx);
+  setTimeout(() => fx.remove(), 600);
+  setTimeout(() => { t.el.querySelector(".tface").textContent = def.face; }, 500);
+
+  const dmg = Math.round(def.fdmg * lvMult(t.lv));
+  const push = def.push + (t.lv - 1) * 0.5;
+  for (const e of S.enemies) {
+    if (e.lane !== t.lane) continue;
+    const dx = e.x - t.col - 0.5;
+    if (dx < -0.5 || dx > def.frange) continue;
+    hitEnemy(e, dmg, true);
+    if (!ENEMIES[e.type].noPush && e.hp > 0) {
+      e.x = Math.max(-0.8, e.x - push);
+    }
+  }
+}
+
+// ============================================================
+// 敵
+// ============================================================
+function spawnEnemy(type, lane, x) {
+  const def = ENEMIES[type];
+  const hp = Math.round(def.hp * waveHpMult(S.wave + 1));
+  const el = document.createElement("div");
+  el.className = "enemy" + (def.boss ? " boss" : "") + (def.mini ? " mini" : "");
+  el.innerHTML = `<div class="hpbar"><i></i></div>${def.face}`;
+  field.appendChild(el);
+  const e = { type, lane, x: x !== undefined ? x : -0.6, hp, maxHp: hp, el, slow: 0 };
+  S.enemies.push(e);
+  return e;
+}
+
+function hitEnemy(e, rawDmg, pierceArmor) {
+  const def = ENEMIES[e.type];
+  const dmg = Math.max(1, rawDmg - (pierceArmor ? 0 : (def.armor || 0)));
+  e.hp -= dmg;
+  e.el.classList.remove("hurt");
+  void e.el.offsetWidth;
+  e.el.classList.add("hurt");
+  if (e.hp <= 0) killEnemy(e);
+}
+
+function killEnemy(e) {
+  const def = ENEMIES[e.type];
+  S.kills++;
+  S.bytes += def.reward;
+  floatText(`+${def.reward}b`, e.lane, e.x);
+  if (def.splits) {
+    for (let i = 0; i < 2; i++) spawnEnemy("mini", e.lane, Math.max(-0.5, e.x - 0.3 + i * 0.5));
+  }
+  removeEnemy(e);
+  updateHUD();
+}
+
+function removeEnemy(e) {
+  e.el.remove();
+  S.enemies = S.enemies.filter((x) => x !== e);
+}
+
+function enemyReachBase(e) {
+  const def = ENEMIES[e.type];
+  S.baseHp = Math.max(0, S.baseHp - def.dmg);
+  field.classList.remove("basehit");
+  void field.offsetWidth;
+  field.classList.add("basehit");
+  floatText(`-${def.dmg}`, e.lane, COLS - 0.4, true);
+  removeEnemy(e);
+  updateHUD();
+  if (S.baseHp <= 0) gameOver(false);
+}
+
+function floatText(text, lane, x, isDmg) {
+  const el = document.createElement("div");
+  el.className = "float-txt" + (isDmg ? " dmg-b" : "");
+  el.textContent = text;
+  el.style.left = colX(x) + "%";
+  el.style.top = laneY(lane) + "%";
+  field.appendChild(el);
+  setTimeout(() => el.remove(), 850);
+}
+
+// ============================================================
+// ウェーブ管理
+// ============================================================
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function queueWave(waveIdx) {
+  S.spawnQueue = [];
+  for (const grp of WAVES[waveIdx]) {
+    for (let i = 0; i < grp.count; i++) {
+      S.spawnQueue.push({ type: grp.type, at: grp.delay + i * grp.interval });
+    }
+  }
+  S.spawnQueue.sort((a, b) => a.at - b.at);
+  // 出現行の割りふり: シャッフル巡回で偏りを防ぐ(2割だけ完全ランダムのスパイス)
+  let order = shuffle([0, 1, 2]);
+  let k = 0;
+  for (const s of S.spawnQueue) {
+    if (Math.random() < 0.2) {
+      s.lane = Math.floor(Math.random() * LANES);
+    } else {
+      if (k % LANES === 0) order = shuffle(order);
+      s.lane = order[k % LANES];
+      k++;
+    }
+  }
+  S.combatTime = 0;
+}
+
+function startWave() {
+  if (S.phase !== "prep" || S.wave >= WAVES.length) return;
+  // 早がけボーナス
+  const bonus = Math.ceil(S.prepLeft) * 2;
+  if (bonus > 0 && S.wave > 0) {
+    S.bytes += bonus;
+    $("wave-bonus").textContent = `早がけ +${bonus}b!`;
+    setTimeout(() => { $("wave-bonus").textContent = ""; }, 2000);
+  }
+  queueWave(S.wave);
+  S.phase = "combat";
+  closeTowerMenu();
+  updateHUD();
+}
+
+function onWaveCleared() {
+  S.wave++;
+  const bonus = 30 + S.wave * 8;
+  S.bytes += bonus;
+  if (S.wave >= WAVES.length) { gameOver(true); return; }
+  S.phase = "prep";
+  S.prepLeft = PREP_SECONDS;
+  updateHUD();
+}
+
+$("btn-wave").addEventListener("click", startWave);
+
+// ============================================================
+// 結果
+// ============================================================
+function gameOver(won) {
+  if (S.phase === "over") return;
+  S.phase = "over";
+  closeTowerMenu();
+  const stars = won ? (S.baseHp >= BASE_HP_MAX ? 3 : S.baseHp >= 6 ? 2 : 1) : 0;
+  $("r-title").textContent = won ? "ぼうえい成功!" : "送信ボタン陥落…";
+  $("r-title").className = "big " + (won ? "win" : "lose");
+  $("r-stars").textContent = won ? "★".repeat(stars) + "☆".repeat(3 - stars) : "";
+  $("r-face").textContent = won ? "(╯^▽^)╯ ✧ (=^・^=)♪" : "(´；ω；`) 😀😀😀";
+  $("r-msg").innerHTML = won
+    ? `テキスト文明は守られた!<br>のこりHP ${S.baseHp}/${BASE_HP_MAX} / 撃破 ${S.kills}体`
+    : `ウェーブ${S.wave + 1}で陥落… 撃破 ${S.kills}体<br>配置をかえて、もういちど!`;
+  $("overlay").classList.add("active");
+}
+
+// ============================================================
+// HUD
+// ============================================================
+function updateHUD() {
+  $("hud-hp").textContent = "❤ " + S.baseHp + "/" + BASE_HP_MAX;
+  $("hud-bytes").textContent = "💾 " + S.bytes + "b";
+  $("hud-wave").textContent = `WAVE ${Math.min(S.wave + 1, WAVES.length)}/${WAVES.length}`;
+  const btn = $("btn-wave");
+  if (S.phase === "prep") {
+    btn.disabled = false;
+    btn.textContent = S.wave === 0
+      ? `ウェーブ1 スタート!`
+      : `ウェーブ${S.wave + 1} スタート (あと${Math.ceil(S.prepLeft)}秒 / 早がけ+${Math.ceil(S.prepLeft) * 2}b)`;
+  } else {
+    btn.disabled = true;
+    btn.textContent = S.phase === "combat" ? "ぼうえい中…" : "-";
+  }
+  // パレットの購入可否
+  for (const [key, def] of Object.entries(TOWERS)) {
+    $("ucard-" + key).classList.toggle("poor", S.bytes < def.cost);
+  }
+}
+
+$("btn-speed").addEventListener("click", () => {
+  S.speed = S.speed === 1 ? 2 : 1;
+  $("btn-speed").textContent = "▶ ×" + S.speed;
+});
+
+// ============================================================
+// メインループ
+// ============================================================
+let lastTime = performance.now();
+
+function tick(now) {
+  requestAnimationFrame(tick);
+  let dt = Math.min(50, now - lastTime);
+  lastTime = now;
+  if (S.phase === "over") return;
+  dt *= S.speed * TURBO;
+  const dts = dt / 1000;
+
+  if (S.phase === "prep" && S.wave > 0) {
+    S.prepLeft -= dts;
+    if (S.prepLeft <= 0) { startWave(); }
+    else updateHUD();
+  }
+
+  if (S.phase === "combat") {
+    S.combatTime += dt;
+
+    // 出撃
+    while (S.spawnQueue.length && S.spawnQueue[0].at <= S.combatTime) {
+      const s = S.spawnQueue.shift();
+      spawnEnemy(s.type, s.lane);
+    }
+
+    // スロー場の計算
+    const auras = S.towers.filter((t) => t.type === "sleepy");
+    for (const e of S.enemies) {
+      let slow = 0;
+      for (const a of auras) {
+        const r = TOWERS.sleepy.radius + (a.lv - 1) * 0.3;
+        if (dist(a.lane, a.col + 0.5, e.lane, e.x) <= r) {
+          slow = Math.max(slow, Math.min(0.7, TOWERS.sleepy.slow * lvMult(a.lv)));
+        }
+      }
+      e.slow = slow;
+      e.el.classList.toggle("slowed", slow > 0);
+    }
+
+    // ヒーラー
+    for (const h of S.enemies) {
+      if (!ENEMIES[h.type].healer) continue;
+      let healed = false;
+      for (const e of S.enemies) {
+        if (e === h || e.hp >= e.maxHp) continue;
+        if (dist(h.lane, h.x, e.lane, e.x) <= 1.3) {
+          e.hp = Math.min(e.maxHp, e.hp + 6 * dts);
+          healed = true;
+        }
+      }
+      h.el.classList.toggle("healing", healed);
+    }
+
+    // 敵の移動
+    for (const e of [...S.enemies]) {
+      e.x += ENEMIES[e.type].speed * (1 - e.slow) * dts;
+      if (e.x >= COLS - 0.1) { enemyReachBase(e); continue; }
+      e.el.style.left = colX(e.x) + "%";
+      e.el.style.top = laneY(e.lane) + "%";
+      e.el.querySelector(".hpbar i").style.width = Math.max(0, (e.hp / e.maxHp) * 100) + "%";
+    }
+
+    // タワー
+    for (const t of S.towers) {
+      const def = TOWERS[t.type];
+      if (t.type === "sleepy") continue;
+      if (t.type === "flip") {
+        if (t.chargeLeft > 0) {
+          t.chargeLeft -= dts;
+          if (t.chargeLeft <= 0) t.el.classList.add("charged");
+        }
+        continue;
+      }
+      t.cd -= dts;
+      if (t.cd > 0) continue;
+      // 同じ行・射程内で最も送信ボタンに近い敵
+      let target = null;
+      for (const e of S.enemies) {
+        if (e.lane !== t.lane) continue;
+        if (Math.abs(e.x - (t.col + 0.5)) > def.range) continue;
+        if (!target || e.x > target.x) target = e;
+      }
+      if (!target) continue;
+      const rate = def.rate * (t.type === "cat" ? lvMult(t.lv) : 1);
+      // 加算方式: フレームが粗くても平均レートを保つ(ためこみは1発ぶんまで)
+      t.cd = Math.max(t.cd + 1 / rate, -1 / rate);
+      t.el.classList.remove("attacking");
+      void t.el.offsetWidth;
+      t.el.classList.add("attacking");
+      fireProjectile(t, target);
+    }
+
+    // 弾
+    for (const p of [...S.projs]) {
+      if (!S.enemies.includes(p.target)) { p.el.remove(); S.projs.splice(S.projs.indexOf(p), 1); continue; }
+      const dir = Math.sign(p.target.x - p.x) || 1;
+      p.x += dir * 9 * dts;
+      const arrived = dir > 0 ? p.x >= p.target.x - 0.15 : p.x <= p.target.x + 0.15;
+      p.el.style.left = colX(p.x) + "%";
+      if (arrived) {
+        hitEnemy(p.target, p.dmg, p.pierceArmor);
+        p.el.remove();
+        S.projs.splice(S.projs.indexOf(p), 1);
+      }
+    }
+
+    // ウェーブ終了判定
+    if (!S.spawnQueue.length && !S.enemies.length && S.phase === "combat") {
+      onWaveCleared();
+    }
+  }
+}
+
+function fireProjectile(t, target) {
+  const def = TOWERS[t.type];
+  let dmg = def.dmg * lvMult(t.lv);
+  // しょぼんの火事場ボーナス
+  if (t.type === "shobon") dmg *= 1 + (BASE_HP_MAX - S.baseHp) * 0.06;
+  const el = document.createElement("div");
+  el.className = "proj";
+  el.textContent = t.type === "magic" ? "✧" : t.type === "cat" ? "つ" : "・";
+  el.style.left = colX(t.col + 0.5) + "%";
+  el.style.top = laneY(t.lane) + "%";
+  field.appendChild(el);
+  S.projs.push({ x: t.col + 0.5, lane: t.lane, target, dmg: Math.round(dmg), pierceArmor: !!def.pierceArmor, el });
+}
+
+// ============================================================
+// キーボード(パソコン向け): 1〜5でユニット選択 / Spaceでウェーブ開始
+// ============================================================
+const KEY_ORDER = Object.keys(TOWERS);
+document.addEventListener("keydown", (e) => {
+  if (e.key === " ") { e.preventDefault(); startWave(); return; }
+  const i = parseInt(e.key, 10) - 1;
+  if (i >= 0 && i < KEY_ORDER.length) selectUnit(KEY_ORDER[i]);
+});
+
+// ============================================================
+// テスト・デバッグ用API
+// ============================================================
+window.__td = {
+  state: S,
+  place: placeTower,
+  upgrade(lane, col) {
+    const t = towerAt(lane, col);
+    if (!t || t.lv >= 3 || S.bytes < upgradeCost(t)) return false;
+    S.bytes -= upgradeCost(t);
+    t.lv++;
+    updateTowerLv(t);
+    updateHUD();
+    return true;
+  },
+  flipAll() {
+    for (const t of S.towers) if (t.type === "flip" && t.chargeLeft <= 0) doFlip(t);
+  },
+  startWave,
+};
+
+// ============================================================
+// 起動
+// ============================================================
+buildField();
+buildPalette();
+updateHUD();
+requestAnimationFrame(tick);
+</script>
+</body>
+</html>

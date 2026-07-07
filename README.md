@@ -1,7 +1,14 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
-## 顔文字バトル
+## 顔文字TD(ちゃぶ台ディフェンス)
+
+- スマホ/パソコン両対応のタワーディフェンス: `kaomoji-td/index.html`
+- 絵文字軍の侵略から送信ボタンを守る。顔文字ユニット5種を配置して10ウェーブ防衛
+- ちゃぶ台がえし(手動発動のノックバック)が看板ムーブ。通貨は「バイト」
+- GitHub Pages公開時のURL: `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kaomoji-td/`
+
+## 顔文字バトル(試作)
 
 - スマホ/パソコン両対応のWebミニゲーム: `kaomoji-battle/index.html`
 - 3つのモード: コマンドバトル(ターン制)/ れんだバトル(10秒連打)/ よみあいジャンケン(三すくみ3本先取)
