@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>顔文字バトル</title>
+<style>
+  :root {
+    --bg: #1a1b2e;
+    --panel: #252747;
+    --panel2: #2e3060;
+    --accent: #ffd54f;
+    --accent2: #7c8cff;
+    --danger: #ff6b81;
+    --ok: #69f0ae;
+    --text: #f0f1ff;
+    --muted: #9aa0c8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .screen { display: none; max-width: 520px; margin: 0 auto; padding: 16px; }
+  .screen.active { display: block; }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    margin: 12px 0 4px;
+    color: var(--accent);
+    text-shadow: 0 2px 0 rgba(0,0,0,.4);
+  }
+  .subtitle { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
+  .streak {
+    text-align: center; font-size: 14px; margin-bottom: 14px;
+    color: var(--accent);
+  }
+
+  /* ---- select screen ---- */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .card {
+    background: var(--panel);
+    border: 2px solid transparent;
+    border-radius: 14px;
+    padding: 14px 8px 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .1s, border-color .1s;
+  }
+  .card:active { transform: scale(.96); }
+  .card .face { font-size: 26px; display: block; margin-bottom: 8px; white-space: nowrap; }
+  .card .name { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
+  .card .stats { font-size: 11px; color: var(--muted); line-height: 1.5; }
+  .card .special { font-size: 11px; color: var(--accent2); margin-top: 4px; }
+
+  /* ---- battle screen ---- */
+  .arena {
+    background: linear-gradient(180deg, #2b2d55 0%, #1f2140 100%);
+    border-radius: 16px;
+    padding: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .fighter-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .fighter { width: 48%; text-align: center; position: relative; }
+  .fighter .label { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
+  .fighter .fname { font-size: 13px; font-weight: bold; margin-bottom: 6px; min-height: 1.2em; }
+  .hpbar {
+    height: 12px; background: #14152b; border-radius: 6px; overflow: hidden;
+    margin-bottom: 3px;
+  }
+  .hpbar .fill {
+    height: 100%; background: var(--ok); width: 100%;
+    transition: width .4s ease, background .4s;
+    border-radius: 6px;
+  }
+  .hptext { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
+  .gaugebar {
+    height: 7px; background: #14152b; border-radius: 4px; overflow: hidden; margin-bottom: 8px;
+  }
+  .gaugebar .fill {
+    height: 100%; background: var(--accent2); width: 0%;
+    transition: width .3s ease;
+    border-radius: 4px;
+  }
+  .gaugebar .fill.full { background: var(--accent); animation: pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity: .55; } }
+
+  .stage {
+    display: flex; justify-content: space-between; align-items: center;
+    min-height: 110px; margin-top: 6px; padding: 0 4px;
+  }
+  .avatar {
+    font-size: 30px; white-space: nowrap; position: relative;
+    transition: transform .15s;
+    max-width: 48%;
+  }
+  .avatar.small { font-size: 22px; }
+  .avatar.shake { animation: shake .45s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-10px) rotate(-6deg); }
+    40% { transform: translateX(8px) rotate(5deg); }
+    60% { transform: translateX(-6px) rotate(-3deg); }
+    80% { transform: translateX(4px) rotate(2deg); }
+  }
+  .avatar.lunge-r { animation: lungeR .4s; }
+  @keyframes lungeR { 40% { transform: translateX(28px) scale(1.12); } }
+  .avatar.lunge-l { animation: lungeL .4s; }
+  @keyframes lungeL { 40% { transform: translateX(-28px) scale(1.12); } }
+  .avatar.ko { animation: ko .8s forwards; }
+  @keyframes ko {
+    to { transform: rotate(100deg) translateY(34px); opacity: .35; }
+  }
+  .avatar.guard-pose { text-shadow: 0 0 12px var(--accent2); }
+
+  .dmg {
+    position: absolute; left: 50%; top: -6px;
+    transform: translateX(-50%);
+    font-size: 22px; font-weight: bold; color: var(--danger);
+    pointer-events: none;
+    animation: floatUp .9s forwards;
+    text-shadow: 0 1px 0 #000;
+    white-space: nowrap;
+  }
+  .dmg.crit { color: var(--accent); font-size: 27px; }
+  .dmg.heal { color: var(--ok); }
+  .dmg.miss { color: var(--muted); font-size: 16px; }
+  @keyframes floatUp {
+    0% { opacity: 0; margin-top: 8px; }
+    20% { opacity: 1; }
+    100% { opacity: 0; margin-top: -30px; }
+  }
+
+  .flash {
+    position: absolute; inset: 0; background: #fff; opacity: 0;
+    pointer-events: none; border-radius: 16px;
+  }
+  .flash.on { animation: flashAnim .35s; }
+  @keyframes flashAnim { 15% { opacity: .5; } 100% { opacity: 0; } }
+
+  .log {
+    background: var(--panel);
+    border-radius: 12px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    height: 108px;
+    overflow-y: auto;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .log p { margin: 0; }
+  .log .sys { color: var(--muted); }
+  .log .me { color: var(--ok); }
+  .log .foe { color: var(--danger); }
+  .log .sp { color: var(--accent); font-weight: bold; }
+
+  .actions {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px;
+  }
+  button {
+    font-family: inherit;
+    background: var(--panel2);
+    color: var(--text);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 4px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .08s, opacity .2s;
+  }
+  button:active { transform: scale(.95); }
+  button:disabled { opacity: .35; pointer-events: none; }
+  button .sub { display: block; font-size: 10px; font-weight: normal; color: var(--muted); margin-top: 3px; }
+  button.special-btn.ready {
+    background: linear-gradient(135deg, #b8860b, #ffd54f);
+    color: #222;
+    animation: pulse 1s infinite;
+  }
+  button.special-btn.ready .sub { color: #443; }
+
+  /* ---- result overlay ---- */
+  .overlay {
+    position: fixed; inset: 0;
+    background: rgba(10, 11, 24, .82);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 10;
+  }
+  .overlay.active { display: flex; }
+  .result-box {
+    background: var(--panel);
+    border-radius: 20px;
+    padding: 28px 24px;
+    text-align: center;
+    width: min(88vw, 380px);
+    animation: popIn .3s;
+  }
+  @keyframes popIn { from { transform: scale(.7); opacity: 0; } }
+  .result-box .big { font-size: 34px; font-weight: bold; margin-bottom: 8px; }
+  .result-box .big.win { color: var(--accent); }
+  .result-box .big.lose { color: var(--danger); }
+  .result-box .rface { font-size: 34px; margin: 12px 0; white-space: nowrap; }
+  .result-box .msg { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+  .result-box button { width: 100%; margin-top: 8px; padding: 14px; }
+  .result-box button.primary { background: var(--accent2); }
+
+  .back-link { text-align: center; margin-top: 14px; }
+  .back-link a { color: var(--muted); font-size: 12px; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- ============ 選択画面 ============ -->
+<div class="screen active" id="screen-select">
+  <h1>顔文字バトル</h1>
+  <p class="subtitle">ファイターを選んでCPUと勝負!</p>
+  <p class="streak" id="streak-label"></p>
+  <div class="grid" id="fighter-grid"></div>
+</div>
+
+<!-- ============ バトル画面 ============ -->
+<div class="screen" id="screen-battle">
+  <div class="arena">
+    <div class="flash" id="flash"></div>
+    <div class="fighter-row">
+      <div class="fighter">
+        <div class="label">あなた</div>
+        <div class="fname" id="p-name"></div>
+        <div class="hpbar"><div class="fill" id="p-hp"></div></div>
+        <div class="hptext" id="p-hptext"></div>
+        <div class="gaugebar"><div class="fill" id="p-gauge"></div></div>
+      </div>
+      <div class="fighter">
+        <div class="label">あいて</div>
+        <div class="fname" id="e-name"></div>
+        <div class="hpbar"><div class="fill" id="e-hp"></div></div>
+        <div class="hptext" id="e-hptext"></div>
+        <div class="gaugebar"><div class="fill" id="e-gauge"></div></div>
+      </div>
+    </div>
+    <div class="stage">
+      <div class="avatar" id="p-avatar"></div>
+      <div class="avatar" id="e-avatar"></div>
+    </div>
+  </div>
+
+  <div class="log" id="log"></div>
+
+  <div class="actions">
+    <button id="btn-attack" onclick="playerAction('attack')">こうげき<span class="sub">ゲージ+25</span></button>
+    <button id="btn-guard" onclick="playerAction('guard')">ぼうぎょ<span class="sub">被ダメ半減 +40</span></button>
+    <button id="btn-special" class="special-btn" onclick="playerAction('special')">ひっさつ<span class="sub" id="special-sub"></span></button>
+  </div>
+
+  <div class="back-link"><a href="#" onclick="quitBattle(); return false;">← ファイター選択にもどる</a></div>
+</div>
+
+<!-- ============ 結果 ============ -->
+<div class="overlay" id="overlay">
+  <div class="result-box">
+    <div class="big" id="result-title"></div>
+    <div class="rface" id="result-face"></div>
+    <div class="msg" id="result-msg"></div>
+    <button class="primary" onclick="rematch()">もういっかい</button>
+    <button onclick="backToSelect()">ファイターをかえる</button>
+  </div>
+</div>
+
+<script>
+"use strict";
+
+// ============================================================
+// ファイターデータ
+// hp/atk/def/spd はおおよそ 60〜130 のレンジ。合計はほぼ同じに調整。
+// ============================================================
+const FIGHTERS = [
+  {
+    id: "flip", name: "ちゃぶ台がえし",
+    face: "(╯°□°)╯", faceHurt: "(╯>_<)╯", faceWin: "(╯^▽^)╯", faceLose: "(╯._.)╯",
+    hp: 100, atk: 105, def: 85, spd: 90,
+    special: { name: "ちゃぶ台がえし", text: "︵ ┻━┻", mult: 2.4 },
+    desc: "怒りの一撃が強烈",
+  },
+  {
+    id: "muscle", name: "マッスル",
+    face: "ᕦ(ò_óˇ)ᕤ", faceHurt: "ᕙ(>_<)ᕗ", faceWin: "ᕦ(òᴗó)ᕤ", faceLose: "ᕙ(´ᴗ`)ᕗ",
+    hp: 125, atk: 95, def: 105, spd: 55,
+    special: { name: "フルパワーラリアット", text: "ᕦ(ò_óˇ)ᕤ=͟͟͞͞⊃", mult: 2.2 },
+    desc: "かたくてタフ、でも遅い",
+  },
+  {
+    id: "cat", name: "ねこ",
+    face: "(=^・ω・^=)", faceHurt: "(=TωT=)", faceWin: "(=^・^=)♪", faceLose: "(=；ω；=)",
+    hp: 90, atk: 90, def: 80, spd: 125,
+    special: { name: "ひゃくれつねこパンチ", text: "(=ﾟωﾟ)=つ≡つ", mult: 2.0 },
+    desc: "素早くてよく避ける",
+  },
+  {
+    id: "sleepy", name: "ねむりの達人",
+    face: "( ˘ω˘ )", faceHurt: "( ˘×˘ )", faceWin: "( ˘ω˘ )zzZ", faceLose: "(×ω× )",
+    hp: 115, atk: 80, def: 95, spd: 60,
+    special: { name: "スヤァの回復", text: "( ˘ω˘ ).｡oO", mult: 0, heal: 0.45 },
+    desc: "必殺技でHPを大回復",
+  },
+  {
+    id: "magic", name: "キラキラ魔法つかい",
+    face: "(ノ◕ヮ◕)ノ*:･ﾟ✧", faceHurt: "(ノ>_<)ノ", faceWin: "(ノ◕ヮ◕)ノ✧✧✧", faceLose: "(ノ_ _)ノ",
+    hp: 85, atk: 115, def: 70, spd: 95,
+    special: { name: "ギガキラキラ", text: "*:･ﾟ✧*:･ﾟ✧*:･ﾟ✧", mult: 2.6 },
+    desc: "火力は最強クラス、打たれ弱い",
+  },
+  {
+    id: "angry", name: "おこ",
+    face: "ヽ(`Д´)ノ", faceHurt: "ヽ(>Д<)ノ", faceWin: "ヽ(^Д^)ノ", faceLose: "ヽ(´Д`)ノ",
+    hp: 105, atk: 110, def: 80, spd: 75,
+    special: { name: "ゲキオコプンプン丸", text: "ヽ(`Д´#)ノ┌┛", mult: 2.3 },
+    desc: "会心が出やすい",
+    critBonus: 0.15,
+  },
+  {
+    id: "shobon", name: "しょぼん",
+    face: "(´・ω・`)", faceHurt: "(´；ω；`)", faceWin: "(`・ω・´)", faceLose: "(´・ω・`)…",
+    hp: 110, atk: 85, def: 90, spd: 85,
+    special: { name: "逆ギレショボンビーム", text: "(´・ω・`)つ―――*", mult: 2.5 },
+    desc: "追い込まれるほど強い",
+    desperate: true,
+  },
+  {
+    id: "smirk", name: "ニヤリ",
+    face: "( ̄ー ̄)", faceHurt: "( ﾟдﾟ)", faceWin: "( ̄ー ̄)ﾆﾔﾘ", faceLose: "(￣□￣;)",
+    hp: 95, atk: 100, def: 85, spd: 105,
+    special: { name: "みきりからの一閃", text: "( ̄ー ̄)ノ゛≡≡≡卍", mult: 2.1 },
+    desc: "バランス型の技巧派",
+    dodgeBonus: 0.08,
+  },
+];
+
+const GAUGE_MAX = 100;
+const STORAGE_KEY = "kaomojiBattleStreak";
+
+let player = null;
+let enemy = null;
+let busy = false;
+
+// ============================================================
+// ユーティリティ
+// ============================================================
+const $ = (id) => document.getElementById(id);
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const rand = (min, max) => Math.random() * (max - min) + min;
+const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+function getStreak() {
+  return parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0;
+}
+function setStreak(n) {
+  localStorage.setItem(STORAGE_KEY, String(n));
+}
+
+// ============================================================
+// 選択画面
+// ============================================================
+function renderSelect() {
+  const streak = getStreak();
+  $("streak-label").textContent = streak > 0 ? `🔥 現在 ${streak} 連勝中!` : "";
+  const grid = $("fighter-grid");
+  grid.innerHTML = "";
+  for (const f of FIGHTERS) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <span class="face">${f.face}</span>
+      <div class="name">${f.name}</div>
+      <div class="stats">HP ${f.hp} / 攻 ${f.atk} / 防 ${f.def} / 速 ${f.spd}</div>
+      <div class="special">必殺: ${f.special.name}</div>
+      <div class="stats">${f.desc}</div>
+    `;
+    card.onclick = () => startBattle(f);
+    grid.appendChild(card);
+  }
+}
+
+function showScreen(id) {
+  document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
+  $(id).classList.add("active");
+}
+
+// ============================================================
+// バトル管理
+// ============================================================
+function makeCombatant(data) {
+  return {
+    data,
+    hp: data.hp,
+    maxHp: data.hp,
+    gauge: 0,
+    guarding: false,
+  };
+}
+
+function startBattle(fighterData) {
+  const others = FIGHTERS.filter((f) => f.id !== fighterData.id);
+  player = makeCombatant(fighterData);
+  enemy = makeCombatant(pick(others));
+  busy = false;
+
+  $("log").innerHTML = "";
+  $("overlay").classList.remove("active");
+  $("p-name").textContent = player.data.name;
+  $("e-name").textContent = enemy.data.name;
+  setAvatar($("p-avatar"), player.data.face);
+  setAvatar($("e-avatar"), enemy.data.face);
+  $("p-avatar").className = "avatar";
+  $("e-avatar").className = "avatar";
+  $("special-sub").textContent = `わざ: ${player.data.special.name}`;
+
+  updateBars();
+  showScreen("screen-battle");
+  addLog(`${enemy.data.name} ${enemy.data.face} があらわれた!`, "sys");
+  setButtons(true);
+}
+
+function setAvatar(el, face) {
+  el.textContent = face;
+  el.classList.toggle("small", face.length > 9);
+}
+
+function updateBars() {
+  const upd = (c, hpId, hpTextId, gaugeId) => {
+    const ratio = Math.max(0, c.hp / c.maxHp);
+    const fill = $(hpId);
+    fill.style.width = ratio * 100 + "%";
+    fill.style.background = ratio > 0.5 ? "var(--ok)" : ratio > 0.25 ? "var(--accent)" : "var(--danger)";
+    $(hpTextId).textContent = `${Math.max(0, Math.ceil(c.hp))} / ${c.maxHp}`;
+    const g = $(gaugeId);
+    g.style.width = Math.min(100, c.gauge) + "%";
+    g.classList.toggle("full", c.gauge >= GAUGE_MAX);
+  };
+  upd(player, "p-hp", "p-hptext", "p-gauge");
+  upd(enemy, "e-hp", "e-hptext", "e-gauge");
+
+  const sp = $("btn-special");
+  sp.classList.toggle("ready", player.gauge >= GAUGE_MAX);
+}
+
+function addLog(text, cls) {
+  const log = $("log");
+  const p = document.createElement("p");
+  if (cls) p.className = cls;
+  p.textContent = text;
+  log.appendChild(p);
+  log.scrollTop = log.scrollHeight;
+}
+
+function setButtons(enabled) {
+  $("btn-attack").disabled = !enabled;
+  $("btn-guard").disabled = !enabled;
+  $("btn-special").disabled = !enabled || player.gauge < GAUGE_MAX;
+}
+
+function showDamage(targetEl, text, cls) {
+  const d = document.createElement("div");
+  d.className = "dmg " + (cls || "");
+  d.textContent = text;
+  targetEl.appendChild(d);
+  setTimeout(() => d.remove(), 950);
+}
+
+// ============================================================
+// 戦闘計算
+// ============================================================
+function calcAttack(attacker, defender, mult) {
+  const a = attacker.data;
+  const d = defender.data;
+
+  // 回避判定(素早さ差 + 固有ボーナス)
+  const dodgeChance = Math.max(0, Math.min(0.3, (d.spd - a.spd) / 400 + 0.05 + (d.dodgeBonus || 0)));
+  if (mult <= 1 && Math.random() < dodgeChance) {
+    return { dodged: true, dmg: 0, crit: false };
+  }
+
+  // 基本ダメージ
+  let dmg = a.atk * 0.28 * mult * rand(0.85, 1.15);
+  dmg *= 100 / (60 + d.def * 0.5);
+
+  // しょぼん: HPが減るほど威力アップ(最大+60%)
+  if (a.desperate) {
+    dmg *= 1 + (1 - attacker.hp / attacker.maxHp) * 0.6;
+  }
+
+  // 会心
+  const critChance = 0.1 + (a.critBonus || 0);
+  const crit = Math.random() < critChance;
+  if (crit) dmg *= 1.6;
+
+  // ガード
+  if (defender.guarding) dmg *= 0.45;
+
+  return { dodged: false, dmg: Math.max(1, Math.round(dmg)), crit };
+}
+
+async function doAttack(attacker, defender, isPlayer) {
+  const atkEl = isPlayer ? $("p-avatar") : $("e-avatar");
+  const defEl = isPlayer ? $("e-avatar") : $("p-avatar");
+  const who = isPlayer ? "me" : "foe";
+
+  atkEl.classList.add(isPlayer ? "lunge-r" : "lunge-l");
+  await wait(200);
+
+  const result = calcAttack(attacker, defender, 1);
+  if (result.dodged) {
+    addLog(`${defender.data.name}はひらりとかわした!`, "sys");
+    showDamage(defEl, "MISS", "miss");
+    attacker.gauge = Math.min(GAUGE_MAX, attacker.gauge + 15);
+  } else {
+    defender.hp -= result.dmg;
+    defEl.classList.add("shake");
+    setAvatar(defEl, defender.data.faceHurt);
+    showDamage(defEl, result.dmg + (result.crit ? "!!" : ""), result.crit ? "crit" : "");
+    addLog(
+      `${attacker.data.name}のこうげき! ${result.crit ? "会心の一撃! " : ""}${result.dmg}ダメージ!`,
+      result.crit ? "sp" : who
+    );
+    attacker.gauge = Math.min(GAUGE_MAX, attacker.gauge + 25);
+    defender.gauge = Math.min(GAUGE_MAX, defender.gauge + 20);
+  }
+
+  await wait(450);
+  atkEl.classList.remove("lunge-r", "lunge-l");
+  defEl.classList.remove("shake");
+  if (defender.hp > 0) setAvatar(defEl, defender.data.face);
+  updateBars();
+}
+
+async function doSpecial(attacker, defender, isPlayer) {
+  const atkEl = isPlayer ? $("p-avatar") : $("e-avatar");
+  const defEl = isPlayer ? $("e-avatar") : $("p-avatar");
+  const sp = attacker.data.special;
+  attacker.gauge = 0;
+
+  addLog(`${attacker.data.name}のひっさつわざ! 「${sp.name}」`, "sp");
+  $("flash").classList.add("on");
+  setAvatar(atkEl, sp.text);
+  await wait(550);
+  $("flash").classList.remove("on");
+
+  if (sp.heal) {
+    const amount = Math.round(attacker.maxHp * sp.heal);
+    attacker.hp = Math.min(attacker.maxHp, attacker.hp + amount);
+    showDamage(atkEl, "+" + amount, "heal");
+    addLog(`${attacker.data.name}はぐっすりねむってHPが${amount}回復した!`, isPlayer ? "me" : "foe");
+  } else {
+    const result = calcAttack(attacker, defender, sp.mult);
+    defender.hp -= result.dmg;
+    defEl.classList.add("shake");
+    setAvatar(defEl, defender.data.faceHurt);
+    showDamage(defEl, result.dmg + (result.crit ? "!!" : ""), "crit");
+    addLog(`${result.crit ? "会心の" : ""}大ダメージ! ${result.dmg}!`, "sp");
+    defender.gauge = Math.min(GAUGE_MAX, defender.gauge + 20);
+  }
+
+  await wait(500);
+  setAvatar(atkEl, attacker.data.face);
+  defEl.classList.remove("shake");
+  if (defender.hp > 0) setAvatar(defEl, defender.data.face);
+  updateBars();
+}
+
+async function doGuard(combatant, isPlayer) {
+  combatant.guarding = true;
+  combatant.gauge = Math.min(GAUGE_MAX, combatant.gauge + 40);
+  const el = isPlayer ? $("p-avatar") : $("e-avatar");
+  el.classList.add("guard-pose");
+  addLog(`${combatant.data.name}はみをまもっている… (ゲージ+40)`, isPlayer ? "me" : "foe");
+  await wait(400);
+  updateBars();
+}
+
+// ============================================================
+// ターン進行
+// ============================================================
+function chooseEnemyAction() {
+  if (enemy.gauge >= GAUGE_MAX) {
+    // 回復技は瀕死時ほど使いたい
+    if (enemy.data.special.heal) {
+      if (enemy.hp / enemy.maxHp < 0.55) return "special";
+    } else {
+      return "special";
+    }
+  }
+  if (enemy.hp / enemy.maxHp < 0.3 && Math.random() < 0.3) return "guard";
+  if (Math.random() < 0.12) return "guard";
+  return "attack";
+}
+
+async function execAction(actor, target, action, isPlayer) {
+  if (action === "attack") await doAttack(actor, target, isPlayer);
+  else if (action === "guard") await doGuard(actor, isPlayer);
+  else if (action === "special") await doSpecial(actor, target, isPlayer);
+}
+
+async function playerAction(action) {
+  if (busy || !player || player.hp <= 0 || enemy.hp <= 0) return;
+  busy = true;
+  setButtons(false);
+
+  const enemyAction = chooseEnemyAction();
+
+  // ガードは先に構える
+  player.guarding = false;
+  enemy.guarding = false;
+  if (action === "guard") await execAction(player, enemy, "guard", true);
+  if (enemyAction === "guard") await execAction(enemy, player, "guard", false);
+
+  // 素早さ順で行動(同速はランダム)
+  const playerFirst =
+    player.data.spd === enemy.data.spd
+      ? Math.random() < 0.5
+      : player.data.spd > enemy.data.spd;
+
+  const queue = playerFirst
+    ? [[player, enemy, action, true], [enemy, player, enemyAction, false]]
+    : [[enemy, player, enemyAction, false], [player, enemy, action, true]];
+
+  for (const [actor, target, act, isP] of queue) {
+    if (act === "guard") continue; // すでに実行済み
+    if (actor.hp <= 0) continue;
+    await execAction(actor, target, act, isP);
+    if (target.hp <= 0) break;
+    await wait(250);
+  }
+
+  if (await checkEnd()) return;
+
+  busy = false;
+  setButtons(true);
+}
+
+async function checkEnd() {
+  if (player.hp > 0 && enemy.hp > 0) return false;
+
+  const won = enemy.hp <= 0;
+  const loserEl = won ? $("e-avatar") : $("p-avatar");
+  const winnerEl = won ? $("p-avatar") : $("e-avatar");
+  const winner = won ? player : enemy;
+  const loser = won ? enemy : player;
+
+  setAvatar(loserEl, loser.data.faceLose);
+  loserEl.classList.add("ko");
+  setAvatar(winnerEl, winner.data.faceWin);
+  addLog(`${loser.data.name}はたおれた!`, "sys");
+  await wait(1100);
+
+  let streak = getStreak();
+  if (won) {
+    streak += 1;
+    setStreak(streak);
+    $("result-title").textContent = "WIN!";
+    $("result-title").className = "big win";
+    $("result-face").textContent = player.data.faceWin;
+    $("result-msg").textContent = `${enemy.data.name}をたおした! 🔥 ${streak}連勝中!`;
+  } else {
+    setStreak(0);
+    $("result-title").textContent = "LOSE…";
+    $("result-title").className = "big lose";
+    $("result-face").textContent = player.data.faceLose;
+    $("result-msg").textContent =
+      streak > 0 ? `連勝が${streak}でとぎれた… もういっかい!` : "つぎはかてる、きっと。";
+  }
+  $("overlay").classList.add("active");
+  return true;
+}
+
+// ============================================================
+// 画面遷移
+// ============================================================
+function rematch() {
+  startBattle(player.data);
+}
+
+function backToSelect() {
+  $("overlay").classList.remove("active");
+  renderSelect();
+  showScreen("screen-select");
+}
+
+function quitBattle() {
+  if (busy) return;
+  backToSelect();
+}
+
+renderSelect();
+</script>
+</body>
+</html>

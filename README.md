@@ -1,6 +1,12 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
+## 顔文字バトル
+
+- スマホ向けWebミニゲーム: `kaomoji-battle/index.html`
+- 顔文字ファイター8体から選んでCPUとターン制バトル(こうげき/ぼうぎょ/ひっさつ)
+- GitHub Pages公開時のURL: `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kaomoji-battle/`
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
