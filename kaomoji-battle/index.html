@@ -29,24 +29,6 @@
   .screen { display: none; max-width: 520px; margin: 0 auto; padding: 16px; }
   .screen.active { display: block; }
 
-  /* ---- パソコン向けレイアウト ---- */
-  .key-hint { display: none; color: var(--muted); font-weight: normal; }
-  @media (min-width: 900px) {
-    .screen { max-width: 860px; padding: 24px; }
-    h1 { font-size: 40px; }
-    .subtitle { font-size: 15px; }
-    .grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .card .face { font-size: 30px; }
-    .card:hover { border-color: var(--accent2); transform: translateY(-3px); }
-    #screen-battle { max-width: 640px; }
-    .stage { min-height: 160px; }
-    .avatar { font-size: 44px; }
-    .avatar.small { font-size: 32px; }
-    .log { height: 140px; font-size: 14px; }
-    button:hover:not(:disabled) { filter: brightness(1.2); }
-    .key-hint { display: inline; }
-  }
-
   h1 {
     text-align: center;
     font-size: 28px;
@@ -55,12 +37,48 @@
     text-shadow: 0 2px 0 rgba(0,0,0,.4);
   }
   .subtitle { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 14px; }
-  .streak {
-    text-align: center; font-size: 14px; margin-bottom: 14px;
-    color: var(--accent);
+  .streak { text-align: center; font-size: 14px; margin-bottom: 14px; color: var(--accent); }
+  .section-label { font-size: 13px; color: var(--muted); margin: 16px 0 8px; }
+
+  button {
+    font-family: inherit;
+    background: var(--panel2);
+    color: var(--text);
+    border: none;
+    border-radius: 12px;
+    padding: 14px 4px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform .08s, opacity .2s;
+  }
+  button:active { transform: scale(.95); }
+  button:disabled { opacity: .35; pointer-events: none; }
+  button .sub { display: block; font-size: 10px; font-weight: normal; color: var(--muted); margin-top: 3px; }
+
+  /* ---- モード選択 ---- */
+  .mode-list { display: grid; gap: 10px; }
+  .mode-card {
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 14px;
+    transition: transform .1s, border-color .1s;
+    border: 2px solid transparent;
+    text-align: left;
+  }
+  .mode-card:active { transform: scale(.97); }
+  .mode-card .icon { font-size: 26px; flex-shrink: 0; }
+  .mode-card .mname { font-size: 16px; font-weight: bold; }
+  .mode-card .mdesc { font-size: 12px; color: var(--muted); margin-top: 3px; line-height: 1.5; }
+  .vs-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .vs-toggle button.selected {
+    background: var(--accent2);
+    color: #fff;
   }
 
-  /* ---- select screen ---- */
+  /* ---- ファイター選択 ---- */
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .card {
     background: var(--panel);
@@ -76,8 +94,14 @@
   .card .name { font-size: 14px; font-weight: bold; margin-bottom: 6px; }
   .card .stats { font-size: 11px; color: var(--muted); line-height: 1.5; }
   .card .special { font-size: 11px; color: var(--accent2); margin-top: 4px; }
+  .pick-banner {
+    text-align: center; font-size: 16px; font-weight: bold;
+    background: var(--panel);
+    border-radius: 12px; padding: 12px; margin-bottom: 12px;
+  }
+  .pick-banner.p2 { color: var(--danger); }
 
-  /* ---- battle screen ---- */
+  /* ---- バトル共通 ---- */
   .arena {
     background: linear-gradient(180deg, #2b2d55 0%, #1f2140 100%);
     border-radius: 16px;
@@ -89,19 +113,14 @@
   .fighter { width: 48%; text-align: center; position: relative; }
   .fighter .label { font-size: 12px; color: var(--muted); margin-bottom: 2px; }
   .fighter .fname { font-size: 13px; font-weight: bold; margin-bottom: 6px; min-height: 1.2em; }
-  .hpbar {
-    height: 12px; background: #14152b; border-radius: 6px; overflow: hidden;
-    margin-bottom: 3px;
-  }
+  .hpbar { height: 12px; background: #14152b; border-radius: 6px; overflow: hidden; margin-bottom: 3px; }
   .hpbar .fill {
     height: 100%; background: var(--ok); width: 100%;
     transition: width .4s ease, background .4s;
     border-radius: 6px;
   }
   .hptext { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
-  .gaugebar {
-    height: 7px; background: #14152b; border-radius: 4px; overflow: hidden; margin-bottom: 8px;
-  }
+  .gaugebar { height: 7px; background: #14152b; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
   .gaugebar .fill {
     height: 100%; background: var(--accent2); width: 0%;
     transition: width .3s ease;
@@ -133,9 +152,7 @@
   .avatar.lunge-l { animation: lungeL .4s; }
   @keyframes lungeL { 40% { transform: translateX(-28px) scale(1.12); } }
   .avatar.ko { animation: ko .8s forwards; }
-  @keyframes ko {
-    to { transform: rotate(100deg) translateY(34px); opacity: .35; }
-  }
+  @keyframes ko { to { transform: rotate(100deg) translateY(34px); opacity: .35; } }
   .avatar.guard-pose { text-shadow: 0 0 12px var(--accent2); }
 
   .dmg {
@@ -163,6 +180,16 @@
   .flash.on { animation: flashAnim .35s; }
   @keyframes flashAnim { 15% { opacity: .5; } 100% { opacity: 0; } }
 
+  .turn-banner {
+    text-align: center; font-size: 14px; font-weight: bold;
+    background: var(--panel);
+    border-radius: 10px; padding: 8px; margin-top: 10px;
+    display: none;
+  }
+  .turn-banner.show { display: block; }
+  .turn-banner.p1 { color: var(--ok); }
+  .turn-banner.p2 { color: var(--danger); }
+
   .log {
     background: var(--panel);
     border-radius: 12px;
@@ -179,24 +206,7 @@
   .log .foe { color: var(--danger); }
   .log .sp { color: var(--accent); font-weight: bold; }
 
-  .actions {
-    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px;
-  }
-  button {
-    font-family: inherit;
-    background: var(--panel2);
-    color: var(--text);
-    border: none;
-    border-radius: 12px;
-    padding: 14px 4px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform .08s, opacity .2s;
-  }
-  button:active { transform: scale(.95); }
-  button:disabled { opacity: .35; pointer-events: none; }
-  button .sub { display: block; font-size: 10px; font-weight: normal; color: var(--muted); margin-top: 3px; }
+  .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px; }
   button.special-btn.ready {
     background: linear-gradient(135deg, #b8860b, #ffd54f);
     color: #222;
@@ -204,7 +214,72 @@
   }
   button.special-btn.ready .sub { color: #443; }
 
-  /* ---- result overlay ---- */
+  /* ---- れんだバトル ---- */
+  .mash-arena {
+    background: linear-gradient(180deg, #2b2d55 0%, #1f2140 100%);
+    border-radius: 16px;
+    padding: 16px 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .mash-timer { font-size: 40px; font-weight: bold; color: var(--accent); min-height: 1.2em; }
+  .mash-count-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); margin-top: 4px; }
+  .tugbar {
+    height: 20px; background: var(--danger); border-radius: 10px; overflow: hidden;
+    margin: 12px 0;
+  }
+  .tugbar .fill { height: 100%; background: var(--ok); width: 50%; transition: width .12s linear; border-radius: 10px 0 0 10px; }
+  .mash-stage { display: flex; justify-content: space-between; align-items: center; min-height: 90px; }
+  .mash-tap-area {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+  }
+  .mash-tap-area.solo { grid-template-columns: 1fr; }
+  .tap-pad {
+    border-radius: 14px;
+    padding: 34px 8px;
+    font-size: 17px; font-weight: bold;
+    text-align: center;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+  .tap-pad.p1 { background: rgba(105, 240, 174, .16); color: var(--ok); border: 2px solid var(--ok); }
+  .tap-pad.p2 { background: rgba(255, 107, 129, .16); color: var(--danger); border: 2px solid var(--danger); }
+  .tap-pad:active { transform: scale(.97); }
+  .tap-pad .sub { display: block; font-size: 11px; font-weight: normal; margin-top: 4px; opacity: .7; }
+
+  /* ---- ジャンケン ---- */
+  .jk-arena {
+    background: linear-gradient(180deg, #2b2d55 0%, #1f2140 100%);
+    border-radius: 16px;
+    padding: 16px 14px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .jk-score { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+  .jk-score .s1 { color: var(--ok); }
+  .jk-score .s2 { color: var(--danger); }
+  .jk-round { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .jk-stage { display: flex; justify-content: space-around; align-items: center; min-height: 100px; }
+  .jk-move { font-size: 26px; min-height: 1.4em; margin-top: 6px; }
+  .jk-center { font-size: 18px; font-weight: bold; color: var(--accent); min-width: 70px; }
+  .jk-msg { font-size: 14px; font-weight: bold; min-height: 1.6em; margin-top: 8px; }
+  .jk-hint {
+    font-size: 12px; color: var(--muted); text-align: center; margin-top: 10px; line-height: 1.6;
+  }
+  .handoff {
+    background: var(--panel);
+    border-radius: 14px;
+    padding: 40px 16px;
+    text-align: center;
+    margin-top: 12px;
+    cursor: pointer;
+  }
+  .handoff .big { font-size: 18px; font-weight: bold; margin-bottom: 8px; }
+  .handoff .small { font-size: 13px; color: var(--muted); }
+
+  /* ---- 結果 ---- */
   .overlay {
     position: fixed; inset: 0;
     background: rgba(10, 11, 24, .82);
@@ -232,32 +307,88 @@
 
   .back-link { text-align: center; margin-top: 14px; }
   .back-link a { color: var(--muted); font-size: 12px; text-decoration: none; }
+
+  /* ---- パソコン向けレイアウト ---- */
+  .key-hint { display: none; color: var(--muted); font-weight: normal; }
+  @media (min-width: 900px) {
+    .screen { max-width: 640px; padding: 24px; }
+    #screen-title { max-width: 560px; }
+    h1 { font-size: 40px; }
+    .subtitle { font-size: 15px; }
+    .grid { grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    #screen-select { max-width: 860px; }
+    .card .face { font-size: 30px; }
+    .card:hover, .mode-card:hover { border-color: var(--accent2); transform: translateY(-2px); }
+    .stage, .mash-stage, .jk-stage { min-height: 150px; }
+    .avatar { font-size: 44px; }
+    .avatar.small { font-size: 32px; }
+    .log { height: 140px; font-size: 14px; }
+    button:hover:not(:disabled) { filter: brightness(1.2); }
+    .key-hint { display: inline; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ============ 選択画面 ============ -->
-<div class="screen active" id="screen-select">
+<!-- ============ タイトル / モード選択 ============ -->
+<div class="screen active" id="screen-title">
   <h1>顔文字バトル</h1>
-  <p class="subtitle">ファイターを選んでCPUと勝負!</p>
+  <p class="subtitle">顔文字たちの真剣勝負!</p>
   <p class="streak" id="streak-label"></p>
-  <div class="grid" id="fighter-grid"></div>
+
+  <p class="section-label">たいせん形式</p>
+  <div class="vs-toggle">
+    <button id="vs-cpu" class="selected" onclick="setVsHuman(false)">CPUとたたかう<span class="sub">ひとりで</span></button>
+    <button id="vs-human" onclick="setVsHuman(true)">2人でたいせん<span class="sub">この1台で</span></button>
+  </div>
+
+  <p class="section-label">モードをえらんでスタート</p>
+  <div class="mode-list">
+    <button class="mode-card" onclick="chooseMode('command')">
+      <span class="icon">⚔️</span>
+      <span>
+        <span class="mname">コマンドバトル</span>
+        <span class="mdesc">こうげき/ぼうぎょ/ひっさつを選ぶターン制バトル。ゲージをためて必殺技!</span>
+      </span>
+    </button>
+    <button class="mode-card" onclick="chooseMode('mash')">
+      <span class="icon">🔥</span>
+      <span>
+        <span class="mname">れんだバトル</span>
+        <span class="mdesc">10秒間ひたすら連打! スマホはタップ、パソコンはFキーとJキーで勝負。</span>
+      </span>
+    </button>
+    <button class="mode-card" onclick="chooseMode('janken')">
+      <span class="icon">🧠</span>
+      <span>
+        <span class="mname">よみあいジャンケン</span>
+        <span class="mdesc">だげき→なげ→ガード→だげきの三すくみ。相手の心を読んで3本先取!</span>
+      </span>
+    </button>
+  </div>
 </div>
 
-<!-- ============ バトル画面 ============ -->
+<!-- ============ ファイター選択 ============ -->
+<div class="screen" id="screen-select">
+  <div class="pick-banner" id="pick-banner"></div>
+  <div class="grid" id="fighter-grid"></div>
+  <div class="back-link"><a href="#" onclick="goTitle(); return false;">← モード選択にもどる</a></div>
+</div>
+
+<!-- ============ コマンドバトル ============ -->
 <div class="screen" id="screen-battle">
   <div class="arena">
     <div class="flash" id="flash"></div>
     <div class="fighter-row">
       <div class="fighter">
-        <div class="label">あなた</div>
+        <div class="label" id="p-label">あなた</div>
         <div class="fname" id="p-name"></div>
         <div class="hpbar"><div class="fill" id="p-hp"></div></div>
         <div class="hptext" id="p-hptext"></div>
         <div class="gaugebar"><div class="fill" id="p-gauge"></div></div>
       </div>
       <div class="fighter">
-        <div class="label">あいて</div>
+        <div class="label" id="e-label">あいて</div>
         <div class="fname" id="e-name"></div>
         <div class="hpbar"><div class="fill" id="e-hp"></div></div>
         <div class="hptext" id="e-hptext"></div>
@@ -270,15 +401,73 @@
     </div>
   </div>
 
+  <div class="turn-banner" id="turn-banner"></div>
   <div class="log" id="log"></div>
 
   <div class="actions">
-    <button id="btn-attack" onclick="playerAction('attack')"><span class="key-hint">[1] </span>こうげき<span class="sub">ゲージ+25</span></button>
-    <button id="btn-guard" onclick="playerAction('guard')"><span class="key-hint">[2] </span>ぼうぎょ<span class="sub">被ダメ半減 +40</span></button>
-    <button id="btn-special" class="special-btn" onclick="playerAction('special')"><span class="key-hint">[3] </span>ひっさつ<span class="sub" id="special-sub"></span></button>
+    <button id="btn-attack" onclick="commandInput('attack')"><span class="key-hint">[1] </span>こうげき<span class="sub">ゲージ+25</span></button>
+    <button id="btn-guard" onclick="commandInput('guard')"><span class="key-hint">[2] </span>ぼうぎょ<span class="sub">被ダメ半減 +40</span></button>
+    <button id="btn-special" class="special-btn" onclick="commandInput('special')"><span class="key-hint">[3] </span>ひっさつ<span class="sub" id="special-sub"></span></button>
   </div>
 
-  <div class="back-link"><a href="#" onclick="quitBattle(); return false;">← ファイター選択にもどる</a></div>
+  <div class="back-link"><a href="#" onclick="goTitle(); return false;">← モード選択にもどる</a></div>
+</div>
+
+<!-- ============ れんだバトル ============ -->
+<div class="screen" id="screen-mash">
+  <div class="mash-arena">
+    <div class="mash-timer" id="mash-timer">3</div>
+    <div class="tugbar"><div class="fill" id="mash-fill"></div></div>
+    <div class="mash-count-row">
+      <span id="mash-c1" style="color: var(--ok)">0</span>
+      <span id="mash-c2" style="color: var(--danger)">0</span>
+    </div>
+    <div class="mash-stage">
+      <div class="avatar" id="mash-a1"></div>
+      <div class="avatar" id="mash-a2"></div>
+    </div>
+  </div>
+  <div class="mash-tap-area" id="mash-tap-area">
+    <div class="tap-pad p1" id="tap-p1">れんだ!<span class="sub" id="tap-p1-sub"></span></div>
+    <div class="tap-pad p2" id="tap-p2">れんだ!<span class="sub">P2 / Jキー</span></div>
+  </div>
+  <div class="back-link"><a href="#" onclick="quitMash(); return false;">← モード選択にもどる</a></div>
+</div>
+
+<!-- ============ よみあいジャンケン ============ -->
+<div class="screen" id="screen-janken">
+  <div class="jk-arena">
+    <div class="jk-score"><span class="s1" id="jk-s1">0</span> - <span class="s2" id="jk-s2">0</span></div>
+    <div class="jk-round" id="jk-round"></div>
+    <div class="jk-stage">
+      <div>
+        <div class="avatar" id="jk-a1"></div>
+        <div class="jk-move" id="jk-m1"></div>
+      </div>
+      <div class="jk-center" id="jk-center">VS</div>
+      <div>
+        <div class="avatar" id="jk-a2"></div>
+        <div class="jk-move" id="jk-m2"></div>
+      </div>
+    </div>
+    <div class="jk-msg" id="jk-msg"></div>
+  </div>
+
+  <div class="turn-banner" id="jk-banner"></div>
+
+  <div class="handoff" id="jk-handoff" onclick="jkHandoffDone()" style="display:none">
+    <div class="big" id="jk-handoff-title"></div>
+    <div class="small">じゅんびできたらここをタップ</div>
+  </div>
+
+  <div class="actions" id="jk-actions">
+    <button id="jk-btn-strike" onclick="jkInput('strike')"><span class="key-hint">[1] </span>だげき 👊<span class="sub">なげ に勝つ</span></button>
+    <button id="jk-btn-throw" onclick="jkInput('throw')"><span class="key-hint">[2] </span>なげ 🌀<span class="sub">ガード に勝つ</span></button>
+    <button id="jk-btn-guard" onclick="jkInput('guard')"><span class="key-hint">[3] </span>ガード 🛡<span class="sub">だげき に勝つ</span></button>
+  </div>
+  <div class="jk-hint">だげき は なげ に勝ち、なげ は ガード に勝ち、ガード は だげき に勝つ。3本先取!</div>
+
+  <div class="back-link"><a href="#" onclick="goTitle(); return false;">← モード選択にもどる</a></div>
 </div>
 
 <!-- ============ 結果 ============ -->
@@ -287,8 +476,8 @@
     <div class="big" id="result-title"></div>
     <div class="rface" id="result-face"></div>
     <div class="msg" id="result-msg"></div>
-    <button class="primary" onclick="rematch()">もういっかい</button>
-    <button onclick="backToSelect()">ファイターをかえる</button>
+    <button class="primary" onclick="rematch()">もういっかい<span class="key-hint"> [Enter]</span></button>
+    <button onclick="goTitle()">モード選択にもどる</button>
   </div>
 </div>
 
@@ -364,91 +553,203 @@ const FIGHTERS = [
 const GAUGE_MAX = 100;
 const STORAGE_KEY = "kaomojiBattleStreak";
 
-let player = null;
-let enemy = null;
-let busy = false;
+// ============================================================
+// 共有状態
+// ============================================================
+let mode = "command";      // command | mash | janken
+let vsHuman = false;
+let fighter1 = null;       // 選択されたファイターデータ
+let fighter2 = null;
+let pickingFor = 1;        // ファイター選択中のプレイヤー
 
-// ============================================================
-// ユーティリティ
-// ============================================================
 const $ = (id) => document.getElementById(id);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const rand = (min, max) => Math.random() * (max - min) + min;
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
-function getStreak() {
-  return parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0;
-}
-function setStreak(n) {
-  localStorage.setItem(STORAGE_KEY, String(n));
-}
-
-// ============================================================
-// 選択画面
-// ============================================================
-function renderSelect() {
-  const streak = getStreak();
-  $("streak-label").textContent = streak > 0 ? `🔥 現在 ${streak} 連勝中!` : "";
-  const grid = $("fighter-grid");
-  grid.innerHTML = "";
-  for (const f of FIGHTERS) {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <span class="face">${f.face}</span>
-      <div class="name">${f.name}</div>
-      <div class="stats">HP ${f.hp} / 攻 ${f.atk} / 防 ${f.def} / 速 ${f.spd}</div>
-      <div class="special">必殺: ${f.special.name}</div>
-      <div class="stats">${f.desc}</div>
-    `;
-    card.onclick = () => startBattle(f);
-    grid.appendChild(card);
-  }
-}
+function getStreak() { return parseInt(localStorage.getItem(STORAGE_KEY) || "0", 10) || 0; }
+function setStreak(n) { localStorage.setItem(STORAGE_KEY, String(n)); }
 
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach((s) => s.classList.remove("active"));
   $(id).classList.add("active");
 }
 
-// ============================================================
-// バトル管理
-// ============================================================
-function makeCombatant(data) {
-  return {
-    data,
-    hp: data.hp,
-    maxHp: data.hp,
-    gauge: 0,
-    guarding: false,
-  };
-}
-
-function startBattle(fighterData) {
-  const others = FIGHTERS.filter((f) => f.id !== fighterData.id);
-  player = makeCombatant(fighterData);
-  enemy = makeCombatant(pick(others));
-  busy = false;
-
-  $("log").innerHTML = "";
-  $("overlay").classList.remove("active");
-  $("p-name").textContent = player.data.name;
-  $("e-name").textContent = enemy.data.name;
-  setAvatar($("p-avatar"), player.data.face);
-  setAvatar($("e-avatar"), enemy.data.face);
-  $("p-avatar").className = "avatar";
-  $("e-avatar").className = "avatar";
-  $("special-sub").textContent = `わざ: ${player.data.special.name}`;
-
-  updateBars();
-  showScreen("screen-battle");
-  addLog(`${enemy.data.name} ${enemy.data.face} があらわれた!`, "sys");
-  setButtons(true);
-}
-
 function setAvatar(el, face) {
   el.textContent = face;
   el.classList.toggle("small", face.length > 9);
+}
+
+function showDamage(targetEl, text, cls) {
+  const d = document.createElement("div");
+  d.className = "dmg " + (cls || "");
+  d.textContent = text;
+  targetEl.appendChild(d);
+  setTimeout(() => d.remove(), 950);
+}
+
+function p1Label() { return vsHuman ? "P1" : "あなた"; }
+function p2Label() { return vsHuman ? "P2" : "CPU"; }
+
+// ============================================================
+// タイトル / モード選択
+// ============================================================
+function renderTitle() {
+  const streak = getStreak();
+  $("streak-label").textContent = streak > 0 ? `🔥 CPU戦 ${streak} 連勝中!` : "";
+  $("vs-cpu").classList.toggle("selected", !vsHuman);
+  $("vs-human").classList.toggle("selected", vsHuman);
+}
+
+function setVsHuman(v) {
+  vsHuman = v;
+  renderTitle();
+}
+
+function chooseMode(m) {
+  mode = m;
+  pickingFor = 1;
+  fighter1 = null;
+  fighter2 = null;
+  renderSelect();
+  showScreen("screen-select");
+}
+
+function goTitle() {
+  stopMash();
+  $("overlay").classList.remove("active");
+  renderTitle();
+  showScreen("screen-title");
+}
+
+// ============================================================
+// ファイター選択
+// ============================================================
+const MODE_NAMES = { command: "コマンドバトル", mash: "れんだバトル", janken: "よみあいジャンケン" };
+
+function renderSelect() {
+  const banner = $("pick-banner");
+  banner.textContent = `${MODE_NAMES[mode]} — ${pickingFor === 1 ? p1Label() : "P2"} のファイターをえらんで!`;
+  banner.classList.toggle("p2", pickingFor === 2);
+
+  const grid = $("fighter-grid");
+  grid.innerHTML = "";
+  const showBattleStats = mode === "command";
+  for (const f of FIGHTERS) {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <span class="face">${f.face}</span>
+      <div class="name">${f.name}</div>
+      ${showBattleStats ? `
+        <div class="stats">HP ${f.hp} / 攻 ${f.atk} / 防 ${f.def} / 速 ${f.spd}</div>
+        <div class="special">必殺: ${f.special.name}</div>
+        <div class="stats">${f.desc}</div>` : ""}
+    `;
+    card.onclick = () => pickFighter(f);
+    grid.appendChild(card);
+  }
+}
+
+function pickFighter(f) {
+  if (pickingFor === 1) {
+    fighter1 = f;
+    if (vsHuman) {
+      pickingFor = 2;
+      renderSelect();
+      return;
+    }
+    const others = FIGHTERS.filter((x) => x.id !== f.id);
+    fighter2 = pick(others);
+  } else {
+    fighter2 = f;
+  }
+  startGame();
+}
+
+function startGame() {
+  $("overlay").classList.remove("active");
+  if (mode === "command") startCommandBattle();
+  else if (mode === "mash") startMash();
+  else startJanken();
+}
+
+function rematch() {
+  if (!fighter1) return;
+  if (!vsHuman && mode === "command") {
+    // CPU戦は相手を変えて再戦
+    fighter2 = pick(FIGHTERS.filter((x) => x.id !== fighter1.id));
+  }
+  startGame();
+}
+
+// ============================================================
+// 結果表示(共通)
+// p1Won: true=P1勝ち / false=P2勝ち
+// ============================================================
+function showResult(p1Won, detail) {
+  // CPU戦の連勝カウント
+  let streakMsg = "";
+  if (!vsHuman) {
+    let streak = getStreak();
+    if (p1Won) {
+      streak += 1;
+      setStreak(streak);
+      streakMsg = ` 🔥 ${streak}連勝中!`;
+    } else {
+      if (streak > 0) streakMsg = ` 連勝が${streak}でとぎれた…`;
+      setStreak(0);
+    }
+  }
+
+  const winnerF = p1Won ? fighter1 : fighter2;
+  if (vsHuman) {
+    $("result-title").textContent = p1Won ? "P1のかち!" : "P2のかち!";
+    $("result-title").className = "big win";
+  } else {
+    $("result-title").textContent = p1Won ? "WIN!" : "LOSE…";
+    $("result-title").className = "big " + (p1Won ? "win" : "lose");
+  }
+  $("result-face").textContent = p1Won || vsHuman ? winnerF.faceWin : fighter1.faceLose;
+  $("result-msg").textContent = detail + streakMsg;
+  $("overlay").classList.add("active");
+}
+
+// ============================================================
+// モード1: コマンドバトル
+// ============================================================
+let c1 = null, c2 = null;       // combatants
+let cmdBusy = false;
+let cmdResolver = null;         // 人間の行動入力待ち
+let cmdPicker = 1;              // いま入力しているプレイヤー
+let battleToken = 0;            // 画面離脱で古いループを止める
+
+function makeCombatant(data) {
+  return { data, hp: data.hp, maxHp: data.hp, gauge: 0, guarding: false };
+}
+
+function startCommandBattle() {
+  c1 = makeCombatant(fighter1);
+  c2 = makeCombatant(fighter2);
+  cmdBusy = false;
+  cmdResolver = null;
+  battleToken++;
+
+  $("log").innerHTML = "";
+  $("p-label").textContent = p1Label();
+  $("e-label").textContent = p2Label();
+  $("p-name").textContent = c1.data.name;
+  $("e-name").textContent = c2.data.name;
+  setAvatar($("p-avatar"), c1.data.face);
+  setAvatar($("e-avatar"), c2.data.face);
+  $("p-avatar").className = "avatar";
+  $("e-avatar").className = "avatar";
+
+  updateBars();
+  showScreen("screen-battle");
+  if (vsHuman) addLog(`${c1.data.name} vs ${c2.data.name} しょうぶ開始!`, "sys");
+  else addLog(`${c2.data.name} ${c2.data.face} があらわれた!`, "sys");
+  commandLoop(battleToken);
 }
 
 function updateBars() {
@@ -462,11 +763,8 @@ function updateBars() {
     g.style.width = Math.min(100, c.gauge) + "%";
     g.classList.toggle("full", c.gauge >= GAUGE_MAX);
   };
-  upd(player, "p-hp", "p-hptext", "p-gauge");
-  upd(enemy, "e-hp", "e-hptext", "e-gauge");
-
-  const sp = $("btn-special");
-  sp.classList.toggle("ready", player.gauge >= GAUGE_MAX);
+  upd(c1, "p-hp", "p-hptext", "p-gauge");
+  upd(c2, "e-hp", "e-hptext", "e-gauge");
 }
 
 function addLog(text, cls) {
@@ -478,23 +776,91 @@ function addLog(text, cls) {
   log.scrollTop = log.scrollHeight;
 }
 
-function setButtons(enabled) {
+function setCmdButtons(enabled, forCombatant) {
   $("btn-attack").disabled = !enabled;
   $("btn-guard").disabled = !enabled;
-  $("btn-special").disabled = !enabled || player.gauge < GAUGE_MAX;
+  const c = forCombatant || c1;
+  $("btn-special").disabled = !enabled || c.gauge < GAUGE_MAX;
+  $("btn-special").classList.toggle("ready", enabled && c.gauge >= GAUGE_MAX);
+  $("special-sub").textContent = `わざ: ${c.data.special.name}`;
 }
 
-function showDamage(targetEl, text, cls) {
-  const d = document.createElement("div");
-  d.className = "dmg " + (cls || "");
-  d.textContent = text;
-  targetEl.appendChild(d);
-  setTimeout(() => d.remove(), 950);
+function showTurnBanner(text, cls) {
+  const b = $("turn-banner");
+  if (!text) { b.className = "turn-banner"; return; }
+  b.textContent = text;
+  b.className = "turn-banner show " + cls;
 }
 
-// ============================================================
-// 戦闘計算
-// ============================================================
+// 人間の行動入力を待つ
+function requestCmdAction(picker) {
+  cmdPicker = picker;
+  const c = picker === 1 ? c1 : c2;
+  if (vsHuman) showTurnBanner(`${picker === 1 ? "P1" : "P2"} のばん! わざをえらんで`, picker === 1 ? "p1" : "p2");
+  setCmdButtons(true, c);
+  return new Promise((res) => { cmdResolver = res; });
+}
+
+function commandInput(action) {
+  if (!cmdResolver) return;
+  const c = cmdPicker === 1 ? c1 : c2;
+  if (action === "special" && c.gauge < GAUGE_MAX) return;
+  setCmdButtons(false);
+  showTurnBanner(null);
+  const r = cmdResolver;
+  cmdResolver = null;
+  r(action);
+}
+
+function chooseAI(self) {
+  if (self.gauge >= GAUGE_MAX) {
+    if (self.data.special.heal) {
+      if (self.hp / self.maxHp < 0.55) return "special";
+    } else {
+      return "special";
+    }
+  }
+  if (self.hp / self.maxHp < 0.3 && Math.random() < 0.3) return "guard";
+  if (Math.random() < 0.12) return "guard";
+  return "attack";
+}
+
+async function commandLoop(token) {
+  while (token === battleToken && c1.hp > 0 && c2.hp > 0) {
+    const a1 = await requestCmdAction(1);
+    if (token !== battleToken) return;
+    const a2 = vsHuman ? await requestCmdAction(2) : chooseAI(c2);
+    if (token !== battleToken) return;
+
+    cmdBusy = true;
+    c1.guarding = false;
+    c2.guarding = false;
+
+    // ガードは先に構える
+    if (a1 === "guard") await doGuard(c1, true);
+    if (a2 === "guard") await doGuard(c2, false);
+
+    // 素早さ順で行動(同速はランダム)
+    const p1First = c1.data.spd === c2.data.spd ? Math.random() < 0.5 : c1.data.spd > c2.data.spd;
+    const queue = p1First
+      ? [[c1, c2, a1, true], [c2, c1, a2, false]]
+      : [[c2, c1, a2, false], [c1, c2, a1, true]];
+
+    for (const [actor, target, act, isP1] of queue) {
+      if (act === "guard") continue;
+      if (actor.hp <= 0) continue;
+      if (act === "attack") await doAttack(actor, target, isP1);
+      else await doSpecial(actor, target, isP1);
+      if (token !== battleToken) return;
+      if (target.hp <= 0) break;
+      await wait(250);
+    }
+    cmdBusy = false;
+  }
+  if (token !== battleToken) return;
+  await finishCommandBattle();
+}
+
 function calcAttack(attacker, defender, mult) {
   const a = attacker.data;
   const d = defender.data;
@@ -505,32 +871,25 @@ function calcAttack(attacker, defender, mult) {
     return { dodged: true, dmg: 0, crit: false };
   }
 
-  // 基本ダメージ
   let dmg = a.atk * 0.28 * mult * rand(0.85, 1.15);
   dmg *= 100 / (60 + d.def * 0.5);
 
   // しょぼん: HPが減るほど威力アップ(最大+60%)
-  if (a.desperate) {
-    dmg *= 1 + (1 - attacker.hp / attacker.maxHp) * 0.6;
-  }
+  if (a.desperate) dmg *= 1 + (1 - attacker.hp / attacker.maxHp) * 0.6;
 
-  // 会心
-  const critChance = 0.1 + (a.critBonus || 0);
-  const crit = Math.random() < critChance;
+  const crit = Math.random() < 0.1 + (a.critBonus || 0);
   if (crit) dmg *= 1.6;
-
-  // ガード
   if (defender.guarding) dmg *= 0.45;
 
   return { dodged: false, dmg: Math.max(1, Math.round(dmg)), crit };
 }
 
-async function doAttack(attacker, defender, isPlayer) {
-  const atkEl = isPlayer ? $("p-avatar") : $("e-avatar");
-  const defEl = isPlayer ? $("e-avatar") : $("p-avatar");
-  const who = isPlayer ? "me" : "foe";
+async function doAttack(attacker, defender, isP1) {
+  const atkEl = isP1 ? $("p-avatar") : $("e-avatar");
+  const defEl = isP1 ? $("e-avatar") : $("p-avatar");
+  const who = isP1 ? "me" : "foe";
 
-  atkEl.classList.add(isPlayer ? "lunge-r" : "lunge-l");
+  atkEl.classList.add(isP1 ? "lunge-r" : "lunge-l");
   await wait(200);
 
   const result = calcAttack(attacker, defender, 1);
@@ -558,9 +917,9 @@ async function doAttack(attacker, defender, isPlayer) {
   updateBars();
 }
 
-async function doSpecial(attacker, defender, isPlayer) {
-  const atkEl = isPlayer ? $("p-avatar") : $("e-avatar");
-  const defEl = isPlayer ? $("e-avatar") : $("p-avatar");
+async function doSpecial(attacker, defender, isP1) {
+  const atkEl = isP1 ? $("p-avatar") : $("e-avatar");
+  const defEl = isP1 ? $("e-avatar") : $("p-avatar");
   const sp = attacker.data.special;
   attacker.gauge = 0;
 
@@ -574,7 +933,7 @@ async function doSpecial(attacker, defender, isPlayer) {
     const amount = Math.round(attacker.maxHp * sp.heal);
     attacker.hp = Math.min(attacker.maxHp, attacker.hp + amount);
     showDamage(atkEl, "+" + amount, "heal");
-    addLog(`${attacker.data.name}はぐっすりねむってHPが${amount}回復した!`, isPlayer ? "me" : "foe");
+    addLog(`${attacker.data.name}はぐっすりねむってHPが${amount}回復した!`, isP1 ? "me" : "foe");
   } else {
     const result = calcAttack(attacker, defender, sp.mult);
     defender.hp -= result.dmg;
@@ -592,84 +951,23 @@ async function doSpecial(attacker, defender, isPlayer) {
   updateBars();
 }
 
-async function doGuard(combatant, isPlayer) {
+async function doGuard(combatant, isP1) {
   combatant.guarding = true;
   combatant.gauge = Math.min(GAUGE_MAX, combatant.gauge + 40);
-  const el = isPlayer ? $("p-avatar") : $("e-avatar");
+  const el = isP1 ? $("p-avatar") : $("e-avatar");
   el.classList.add("guard-pose");
-  addLog(`${combatant.data.name}はみをまもっている… (ゲージ+40)`, isPlayer ? "me" : "foe");
+  addLog(`${combatant.data.name}はみをまもっている… (ゲージ+40)`, isP1 ? "me" : "foe");
   await wait(400);
+  el.classList.remove("guard-pose");
   updateBars();
 }
 
-// ============================================================
-// ターン進行
-// ============================================================
-function chooseEnemyAction() {
-  if (enemy.gauge >= GAUGE_MAX) {
-    // 回復技は瀕死時ほど使いたい
-    if (enemy.data.special.heal) {
-      if (enemy.hp / enemy.maxHp < 0.55) return "special";
-    } else {
-      return "special";
-    }
-  }
-  if (enemy.hp / enemy.maxHp < 0.3 && Math.random() < 0.3) return "guard";
-  if (Math.random() < 0.12) return "guard";
-  return "attack";
-}
-
-async function execAction(actor, target, action, isPlayer) {
-  if (action === "attack") await doAttack(actor, target, isPlayer);
-  else if (action === "guard") await doGuard(actor, isPlayer);
-  else if (action === "special") await doSpecial(actor, target, isPlayer);
-}
-
-async function playerAction(action) {
-  if (busy || !player || player.hp <= 0 || enemy.hp <= 0) return;
-  busy = true;
-  setButtons(false);
-
-  const enemyAction = chooseEnemyAction();
-
-  // ガードは先に構える
-  player.guarding = false;
-  enemy.guarding = false;
-  if (action === "guard") await execAction(player, enemy, "guard", true);
-  if (enemyAction === "guard") await execAction(enemy, player, "guard", false);
-
-  // 素早さ順で行動(同速はランダム)
-  const playerFirst =
-    player.data.spd === enemy.data.spd
-      ? Math.random() < 0.5
-      : player.data.spd > enemy.data.spd;
-
-  const queue = playerFirst
-    ? [[player, enemy, action, true], [enemy, player, enemyAction, false]]
-    : [[enemy, player, enemyAction, false], [player, enemy, action, true]];
-
-  for (const [actor, target, act, isP] of queue) {
-    if (act === "guard") continue; // すでに実行済み
-    if (actor.hp <= 0) continue;
-    await execAction(actor, target, act, isP);
-    if (target.hp <= 0) break;
-    await wait(250);
-  }
-
-  if (await checkEnd()) return;
-
-  busy = false;
-  setButtons(true);
-}
-
-async function checkEnd() {
-  if (player.hp > 0 && enemy.hp > 0) return false;
-
-  const won = enemy.hp <= 0;
-  const loserEl = won ? $("e-avatar") : $("p-avatar");
-  const winnerEl = won ? $("p-avatar") : $("e-avatar");
-  const winner = won ? player : enemy;
-  const loser = won ? enemy : player;
+async function finishCommandBattle() {
+  const p1Won = c2.hp <= 0;
+  const loserEl = p1Won ? $("e-avatar") : $("p-avatar");
+  const winnerEl = p1Won ? $("p-avatar") : $("e-avatar");
+  const winner = p1Won ? c1 : c2;
+  const loser = p1Won ? c2 : c1;
 
   setAvatar(loserEl, loser.data.faceLose);
   loserEl.classList.add("ko");
@@ -677,60 +975,317 @@ async function checkEnd() {
   addLog(`${loser.data.name}はたおれた!`, "sys");
   await wait(1100);
 
-  let streak = getStreak();
-  if (won) {
-    streak += 1;
-    setStreak(streak);
-    $("result-title").textContent = "WIN!";
-    $("result-title").className = "big win";
-    $("result-face").textContent = player.data.faceWin;
-    $("result-msg").textContent = `${enemy.data.name}をたおした! 🔥 ${streak}連勝中!`;
-  } else {
-    setStreak(0);
-    $("result-title").textContent = "LOSE…";
-    $("result-title").className = "big lose";
-    $("result-face").textContent = player.data.faceLose;
-    $("result-msg").textContent =
-      streak > 0 ? `連勝が${streak}でとぎれた… もういっかい!` : "つぎはかてる、きっと。";
+  showResult(p1Won, vsHuman
+    ? `${winner.data.name}のしょうり!`
+    : p1Won ? `${loser.data.name}をたおした!` : "つぎはかてる、きっと。");
+}
+
+// ============================================================
+// モード2: れんだバトル
+// ============================================================
+const MASH_SECONDS = 10;
+let mashState = null; // {count1, count2, running, timers: []}
+
+function startMash() {
+  stopMash();
+  mashState = { count1: 0, count2: 0, running: false, timers: [] };
+
+  setAvatar($("mash-a1"), fighter1.face);
+  setAvatar($("mash-a2"), fighter2.face);
+  $("mash-a1").className = "avatar";
+  $("mash-a2").className = "avatar";
+  $("mash-c1").textContent = "0";
+  $("mash-c2").textContent = "0";
+  $("mash-fill").style.width = "50%";
+
+  $("mash-tap-area").classList.toggle("solo", !vsHuman);
+  $("tap-p2").style.display = vsHuman ? "" : "none";
+  $("tap-p1-sub").textContent = vsHuman ? "P1 / Fキー" : "タップ / Fキー連打!";
+
+  showScreen("screen-mash");
+  mashCountdown();
+}
+
+function stopMash() {
+  if (mashState) {
+    mashState.running = false;
+    mashState.timers.forEach(clearInterval);
+    mashState.timers.forEach(clearTimeout);
+    mashState = null;
   }
-  $("overlay").classList.add("active");
-  return true;
 }
+
+async function mashCountdown() {
+  const timer = $("mash-timer");
+  for (const t of ["3", "2", "1", "GO!"]) {
+    if (!mashState) return;
+    timer.textContent = t;
+    await wait(700);
+  }
+  if (!mashState) return;
+  mashState.running = true;
+
+  // CPUの連打(毎秒6〜9回ぶんをまとめて加算)
+  if (!vsHuman) {
+    const cpuTick = setInterval(() => {
+      if (!mashState || !mashState.running) return;
+      mashState.count2 += Math.random() < 0.5 ? 0 : 1;
+      // 平均 約7.5回/秒 = 100msごとに0.75回
+      if (Math.random() < 0.25) mashState.count2 += 1;
+      updateMashUI();
+    }, 100);
+    mashState.timers.push(cpuTick);
+  }
+
+  // 残り時間表示
+  let remain = MASH_SECONDS * 10; // 0.1秒単位
+  const tick = setInterval(() => {
+    if (!mashState) { clearInterval(tick); return; }
+    remain--;
+    $("mash-timer").textContent = (remain / 10).toFixed(1);
+    if (remain <= 0) {
+      clearInterval(tick);
+      finishMash();
+    }
+  }, 100);
+  mashState.timers.push(tick);
+}
+
+function mashTap(player) {
+  if (!mashState || !mashState.running) return;
+  if (player === 1) mashState.count1++;
+  else mashState.count2++;
+  const el = player === 1 ? $("mash-a1") : $("mash-a2");
+  el.classList.remove("shake");
+  void el.offsetWidth; // アニメ再発火
+  el.classList.add("shake");
+  updateMashUI();
+}
+
+function updateMashUI() {
+  if (!mashState) return;
+  $("mash-c1").textContent = mashState.count1;
+  $("mash-c2").textContent = mashState.count2;
+  const total = mashState.count1 + mashState.count2;
+  const ratio = total === 0 ? 0.5 : mashState.count1 / total;
+  $("mash-fill").style.width = (ratio * 100).toFixed(1) + "%";
+}
+
+function finishMash() {
+  if (!mashState) return;
+  mashState.running = false;
+  mashState.timers.forEach(clearInterval);
+  $("mash-timer").textContent = "おわり!";
+  const { count1, count2 } = mashState;
+
+  setTimeout(() => {
+    if (count1 === count2) {
+      // 引き分けは同カウントのまま再戦をうながす
+      $("result-title").textContent = "ひきわけ!";
+      $("result-title").className = "big win";
+      $("result-face").textContent = `${fighter1.face} ${fighter2.face}`;
+      $("result-msg").textContent = `${count1}回 vs ${count2}回 のガチ引き分け! もう一回!`;
+      $("overlay").classList.add("active");
+      return;
+    }
+    const p1Won = count1 > count2;
+    const l = p1Won ? $("mash-a2") : $("mash-a1");
+    setAvatar(l, (p1Won ? fighter2 : fighter1).faceLose);
+    l.classList.add("ko");
+    showResult(p1Won, `${count1}回 vs ${count2}回!`);
+  }, 700);
+}
+
+function quitMash() {
+  stopMash();
+  goTitle();
+}
+
+// タップ/クリック入力
+$("tap-p1").addEventListener("pointerdown", (e) => { e.preventDefault(); mashTap(1); });
+$("tap-p2").addEventListener("pointerdown", (e) => { e.preventDefault(); mashTap(2); });
 
 // ============================================================
-// 画面遷移
+// モード3: よみあいジャンケン
 // ============================================================
-function rematch() {
-  startBattle(player.data);
+const JK_WIN = 3;
+const JK_MOVES = {
+  strike: { label: "だげき", emoji: "👊", beats: "throw" },
+  throw:  { label: "なげ",   emoji: "🌀", beats: "guard" },
+  guard:  { label: "ガード", emoji: "🛡", beats: "strike" },
+};
+let jk = null; // {s1, s2, round, phase, pick1, resolver}
+
+function startJanken() {
+  jk = { s1: 0, s2: 0, round: 1, pick1: null, resolver: null, aiHistory: [] };
+  setAvatar($("jk-a1"), fighter1.face);
+  setAvatar($("jk-a2"), fighter2.face);
+  $("jk-a1").className = "avatar";
+  $("jk-a2").className = "avatar";
+  $("jk-msg").textContent = "";
+  showScreen("screen-janken");
+  jkRoundStart();
 }
 
-function backToSelect() {
-  $("overlay").classList.remove("active");
-  renderSelect();
-  showScreen("screen-select");
+function jkUpdateHeader() {
+  $("jk-s1").textContent = jk.s1;
+  $("jk-s2").textContent = jk.s2;
+  $("jk-round").textContent = `だい ${jk.round} ラウンド (${JK_WIN}本先取) — ${p1Label()} vs ${p2Label()}`;
 }
 
-function quitBattle() {
-  if (busy) return;
-  backToSelect();
+function jkSetActions(visible) {
+  $("jk-actions").style.display = visible ? "" : "none";
+}
+
+function jkRoundStart() {
+  jkUpdateHeader();
+  $("jk-m1").textContent = "";
+  $("jk-m2").textContent = "";
+  $("jk-center").textContent = "VS";
+  setAvatar($("jk-a1"), fighter1.face);
+  setAvatar($("jk-a2"), fighter2.face);
+  jk.pick1 = null;
+  $("jk-handoff").style.display = "none";
+  jkSetActions(true);
+
+  const banner = $("jk-banner");
+  if (vsHuman) {
+    banner.textContent = "P1: わざをえらんで(P2はみないで!)";
+    banner.className = "turn-banner show p1";
+  } else {
+    banner.textContent = "";
+    banner.className = "turn-banner";
+  }
+}
+
+function jkInput(move) {
+  if (!jk) return;
+  if (vsHuman && jk.pick1 === null) {
+    // P1の選択 → 端末をわたす
+    jk.pick1 = move;
+    jkSetActions(false);
+    $("jk-handoff-title").textContent = "P2 に端末をわたして!";
+    $("jk-handoff").style.display = "";
+    $("jk-banner").className = "turn-banner";
+    return;
+  }
+  // P2(または CPU戦のP1)の選択 → 判定
+  if (vsHuman) {
+    jkResolve(jk.pick1, move);
+  } else {
+    jkResolve(move, jkChooseAI(move));
+  }
+}
+
+function jkHandoffDone() {
+  $("jk-handoff").style.display = "none";
+  jkSetActions(true);
+  const banner = $("jk-banner");
+  banner.textContent = "P2: わざをえらんで(P1はみないで!)";
+  banner.className = "turn-banner show p2";
+}
+
+// CPU: プレイヤーの過去の手をゆるく学習して読む
+function jkChooseAI(playerMove) {
+  jk.aiHistory.push(playerMove);
+  const keys = Object.keys(JK_MOVES);
+  if (jk.aiHistory.length >= 2 && Math.random() < 0.45) {
+    // よく出す手に勝つ手(そのカウンター)を選ぶ
+    const counts = {};
+    for (const m of jk.aiHistory) counts[m] = (counts[m] || 0) + 1;
+    const fav = keys.reduce((a, b) => (counts[a] || 0) >= (counts[b] || 0) ? a : b);
+    return keys.find((k) => JK_MOVES[k].beats === fav) || pick(keys);
+  }
+  return pick(keys);
+}
+
+async function jkResolve(m1, m2) {
+  jkSetActions(false);
+  $("jk-banner").className = "turn-banner";
+
+  const c = $("jk-center");
+  c.textContent = "せーの…";
+  await wait(600);
+  if (!jk) return;
+
+  $("jk-m1").textContent = JK_MOVES[m1].emoji + " " + JK_MOVES[m1].label;
+  $("jk-m2").textContent = JK_MOVES[m2].label + " " + JK_MOVES[m2].emoji;
+  c.textContent = "!!";
+
+  let msg;
+  if (m1 === m2) {
+    msg = "あいこ!";
+    $("jk-msg").style.color = "var(--muted)";
+  } else if (JK_MOVES[m1].beats === m2) {
+    jk.s1++;
+    msg = `${p1Label()}のポイント! ${JK_MOVES[m1].label}が${JK_MOVES[m2].label}をやぶった!`;
+    $("jk-msg").style.color = "var(--ok)";
+    $("jk-a2").classList.add("shake");
+    setAvatar($("jk-a2"), fighter2.faceHurt);
+  } else {
+    jk.s2++;
+    msg = `${p2Label()}のポイント! ${JK_MOVES[m2].label}が${JK_MOVES[m1].label}をやぶった!`;
+    $("jk-msg").style.color = "var(--danger)";
+    $("jk-a1").classList.add("shake");
+    setAvatar($("jk-a1"), fighter1.faceHurt);
+  }
+  $("jk-msg").textContent = msg;
+  jkUpdateHeader();
+
+  await wait(1300);
+  if (!jk) return;
+  $("jk-a1").classList.remove("shake");
+  $("jk-a2").classList.remove("shake");
+  $("jk-msg").textContent = "";
+
+  if (jk.s1 >= JK_WIN || jk.s2 >= JK_WIN) {
+    const p1Won = jk.s1 >= JK_WIN;
+    const l = p1Won ? $("jk-a2") : $("jk-a1");
+    setAvatar(l, (p1Won ? fighter2 : fighter1).faceLose);
+    l.classList.add("ko");
+    await wait(900);
+    showResult(p1Won, `${jk.s1} - ${jk.s2} でけっちゃく!`);
+    return;
+  }
+  jk.round++;
+  jkRoundStart();
 }
 
 // ============================================================
 // キーボード操作(パソコン向け)
-// 1/2/3 = こうげき/ぼうぎょ/ひっさつ、Enter = もういっかい
+// コマンド/ジャンケン: 1/2/3、れんだ: F/J、結果: Enter
 // ============================================================
 document.addEventListener("keydown", (e) => {
   if ($("overlay").classList.contains("active")) {
     if (e.key === "Enter") rematch();
     return;
   }
-  if (!$("screen-battle").classList.contains("active") || busy) return;
-  if (e.key === "1") playerAction("attack");
-  else if (e.key === "2") playerAction("guard");
-  else if (e.key === "3" && player.gauge >= GAUGE_MAX) playerAction("special");
+  if ($("screen-battle").classList.contains("active")) {
+    if (e.key === "1") commandInput("attack");
+    else if (e.key === "2") commandInput("guard");
+    else if (e.key === "3") commandInput("special");
+    return;
+  }
+  if ($("screen-janken").classList.contains("active")) {
+    if ($("jk-handoff").style.display !== "none") {
+      if (e.key === "Enter") jkHandoffDone();
+      return;
+    }
+    if ($("jk-actions").style.display === "none") return;
+    if (e.key === "1") jkInput("strike");
+    else if (e.key === "2") jkInput("throw");
+    else if (e.key === "3") jkInput("guard");
+    return;
+  }
+  if ($("screen-mash").classList.contains("active") && !e.repeat) {
+    const k = e.key.toLowerCase();
+    if (k === "f") mashTap(1);
+    else if (k === "j") { if (vsHuman) mashTap(2); }
+    return;
+  }
 });
 
-renderSelect();
+renderTitle();
 </script>
 </body>
 </html>

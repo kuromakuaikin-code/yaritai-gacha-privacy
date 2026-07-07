@@ -3,8 +3,9 @@ Privacy policy for やりたいガチャ
 
 ## 顔文字バトル
 
-- スマホ向けWebミニゲーム: `kaomoji-battle/index.html`
-- 顔文字ファイター8体から選んでCPUとターン制バトル(こうげき/ぼうぎょ/ひっさつ)
+- スマホ/パソコン両対応のWebミニゲーム: `kaomoji-battle/index.html`
+- 3つのモード: コマンドバトル(ターン制)/ れんだバトル(10秒連打)/ よみあいジャンケン(三すくみ3本先取)
+- どのモードもCPU戦と2人対戦(1台で)に対応。顔文字ファイターは8体
 - GitHub Pages公開時のURL: `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kaomoji-battle/`
 
 ## 婚活デートメモ
