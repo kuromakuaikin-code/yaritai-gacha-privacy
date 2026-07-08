@@ -297,6 +297,45 @@ var texRune = canvasTex(512,function(x,s){
   }
 });
 
+// 混沌魔法の陣（スカーレット・ウィッチ風：角ばったスパイクと幾何学模様）
+var texChaos = canvasTex(512,function(x,s){
+  var m=s/2;
+  x.strokeStyle='rgba(255,255,255,.95)'; x.fillStyle='rgba(255,255,255,.8)'; x.lineCap='round';
+  function circle(r,w,a){
+    x.globalAlpha=a; x.lineWidth=w;
+    x.beginPath(); x.arc(m,m,r,0,Math.PI*2); x.stroke();
+  }
+  circle(240,6,1); circle(224,2,.75); circle(126,3,.9); circle(58,2,.85);
+  // 外向きのスパイク（16本）
+  x.globalAlpha=.85;
+  for(var i=0;i<16;i++){
+    var a=i/16*Math.PI*2;
+    x.beginPath();
+    x.moveTo(m+Math.cos(a-.055)*140, m+Math.sin(a-.055)*140);
+    x.lineTo(m+Math.cos(a)*214,       m+Math.sin(a)*214);
+    x.lineTo(m+Math.cos(a+.055)*140, m+Math.sin(a+.055)*140);
+    x.closePath(); x.fill();
+  }
+  // ジグザグの8芒星
+  x.globalAlpha=.8; x.lineWidth=2.5;
+  x.beginPath();
+  for(var k=0;k<=16;k++){
+    var a2=k/16*Math.PI*2, r2=(k%2===0)?122:70;
+    var px=m+Math.cos(a2)*r2, py=m+Math.sin(a2)*r2;
+    if(k===0) x.moveTo(px,py); else x.lineTo(px,py);
+  }
+  x.stroke();
+  // 内側の六角形
+  x.globalAlpha=.7; x.lineWidth=2;
+  x.beginPath();
+  for(var h=0;h<=6;h++){
+    var a3=h/6*Math.PI*2+Math.PI/6;
+    var hx=m+Math.cos(a3)*96, hy=m+Math.sin(a3)*96;
+    if(h===0) x.moveTo(hx,hy); else x.lineTo(hx,hy);
+  }
+  x.stroke();
+});
+
 // 光の柱（縦グラデーション）
 var texPillar = canvasTex(128,function(x,s){
   var img=x.createImageData(s,s), d=img.data;
@@ -478,7 +517,25 @@ var meshRune   = new DynMesh(texRune,  true, 4);
 var meshRing   = new DynMesh(texRing,  true, 8);
 var meshPillar = new DynMesh(texPillar,true, 8);
 var meshSlash  = new DynMesh(texSlash, true, 110);
-var meshes=[meshRune, meshRing, meshPillar, meshSlash];
+var meshChaos  = new DynMesh(texChaos, true, 6);
+var meshes=[meshRune, meshRing, meshPillar, meshSlash, meshChaos];
+
+// カメラに正対する回転する板ポリ（宙に浮かぶ魔法陣用）
+function camFacingQuad(mesh, cx,cy,cz, r, rot, col){
+  var cd=Math.cos(cam.pitch)*cam.dist, sd=Math.sin(cam.pitch)*cam.dist;
+  var nx=Math.sin(cam.yaw)*cd-cx, ny=sd+.6-cy, nz=Math.cos(cam.yaw)*cd-cz;
+  var nl=1/(Math.hypot(nx,ny,nz)||1); nx*=nl; ny*=nl; nz*=nl;
+  var ax=nz, az=-nx, al=1/(Math.hypot(ax,az)||1); ax*=al; az*=al; // e1=cross(up,n)
+  var bx=ny*az, by=nz*ax-nx*az, bz=-ny*ax;                        // e2=cross(n,e1)
+  var c=Math.cos(rot), s=Math.sin(rot);
+  var ux=(c*ax+s*bx)*r, uy=s*by*r, uz=(c*az+s*bz)*r;
+  var vx=(-s*ax+c*bx)*r, vy=c*by*r, vz=(-s*az+c*bz)*r;
+  mesh.quad(
+    [[cx-ux-vx,cy-uy-vy,cz-uz-vz],[cx+ux-vx,cy+uy-vy,cz+uz-vz],
+     [cx+ux+vx,cy+uy+vy,cz+uz+vz],[cx-ux+vx,cy-uy+vy,cz-uz+vz]],
+    [col,col,col,col]
+  );
+}
 
 /* ---------- カラーストップ定義 ---------- */
 var STOP_FIRE  =[[0,1,.98,.75,0],[.12,1,.9,.45,.95],[.45,1,.45,.12,.8],[.8,.7,.12,.05,.35],[1,.2,.02,.02,0]];
@@ -488,6 +545,9 @@ var STOP_BOOM  =[[0,1,1,.95,1],[.2,1,.75,.3,.95],[.6,1,.35,.08,.6],[1,.3,.05,.02
 var STOP_MAGIC =[[0,.75,.95,1,0],[.2,.6,.9,1,.9],[.7,.55,.5,1,.6],[1,.4,.2,.9,0]];
 var STOP_HEAL  =[[0,.85,1,.9,0],[.25,.55,1,.7,.9],[.7,.95,.95,.55,.6],[1,.6,1,.7,0]];
 var STOP_BOLT  =[[0,1,1,1,1],[.4,.75,.85,1,.9],[1,.4,.6,1,0]];
+var STOP_CHAOS =[[0,1,.6,.65,0],[.2,1,.22,.35,.95],[.7,.85,.08,.25,.6],[1,.4,.02,.1,0]];
+var STOP_CBOLT =[[0,1,.65,.7,1],[.5,1,.2,.4,.85],[1,.5,.05,.15,0]];
+var STOP_CMIST =[[0,.2,.04,.08,0],[.25,.24,.05,.1,.45],[1,.12,.02,.06,0]];
 
 /* ---------- エフェクト定義 ---------- */
 var flashEl=document.getElementById('flash');
@@ -740,6 +800,73 @@ var EFFECTS=[
     }
   },
   draw:function(st,t){}
+},
+{ id:'hex', name:'緋色魔法', desc:'宙に浮かぶ混沌の魔法陣と緋色の魔力',
+  reset:function(st){ st.tend=0; },
+  update:function(st,dt,t){
+    // 立ち昇る緋色の魔力の渦
+    if(Math.random()<dt*55){
+      var a=rand(0,6.28), r=rand(.5,1.25);
+      sysFlare.spawn({
+        orbit:true, cx:0, cz:0, r:r, ang:a, angV:rand(1.8,3.4), vr:rand(-.3,-.1),
+        x:Math.cos(a)*r, y:rand(.1,.5), z:Math.sin(a)*r, vy:rand(.6,1.5),
+        life:rand(1.2,2.2), size0:rand(.06,.14), size1:.02, stops:STOP_CHAOS
+      });
+    }
+    // 中心と両手元の緋色の輝き
+    if(Math.random()<dt*16){
+      var hand=[[0,1.5,0],[-.85,1.1,0],[.85,1.1,0]][Math.floor(rand(0,3))];
+      sysSoft.spawn({
+        x:hand[0]+rand(-.15,.15), y:hand[1]+rand(-.15,.15), z:hand[2]+rand(-.1,.1),
+        vx:rand(-.2,.2), vy:rand(-.1,.3), vz:rand(-.2,.2),
+        life:rand(.4,.8), size0:rand(.3,.55), size1:.08,
+        rot:rand(0,6.28), rotV:rand(-2,2), stops:STOP_CHAOS
+      });
+    }
+    // 足元の暗赤色の霧
+    if(Math.random()<dt*10){
+      sysSmoke.spawn({
+        x:rand(-.9,.9), y:rand(0,.25), z:rand(-.9,.9),
+        vx:rand(-.2,.2), vy:rand(.1,.35), vz:rand(-.2,.2),
+        life:rand(1.5,2.8), size0:.5, size1:1.3,
+        rot:rand(0,6.28), rotV:rand(-.6,.6), stops:STOP_CMIST
+      });
+    }
+    // 陣のまわりで弾ける赤い放電
+    st.tend-=dt;
+    if(st.tend<=0){
+      st.tend=rand(.12,.3);
+      var a0=rand(0,6.28), a1=a0+rand(.8,2.4);
+      var p0=[Math.cos(a0)*.95, 1.5+Math.sin(a0)*.95*.8, rand(-.15,.15)];
+      var p1=[Math.cos(a1)*.95, 1.5+Math.sin(a1)*.95*.8, rand(-.15,.15)];
+      var seg=9, px=p0[0],py=p0[1],pz=p0[2];
+      for(var i=1;i<=seg;i++){
+        var f=i/seg;
+        var nx2=lerp(p0[0],p1[0],f)+rand(-.16,.16);
+        var ny2=lerp(p0[1],p1[1],f)+rand(-.16,.16);
+        var nz2=lerp(p0[2],p1[2],f)+rand(-.16,.16);
+        var d=Math.hypot(nx2-px,ny2-py,nz2-pz), steps=Math.max(1,Math.ceil(d/.08));
+        for(var s2=0;s2<steps;s2++){
+          var g2=s2/steps;
+          sysSoft.spawn({
+            x:lerp(px,nx2,g2), y:lerp(py,ny2,g2), z:lerp(pz,nz2,g2),
+            vx:0,vy:0,vz:0, life:rand(.1,.2),
+            size0:.12, size1:.03, stops:STOP_CBOLT
+          });
+        }
+        px=nx2;py=ny2;pz=nz2;
+      }
+    }
+  },
+  draw:function(st,t){
+    var p=.72+Math.sin(t*3.1)*.2+Math.sin(t*7.7)*.08;
+    // 宙に浮かぶ混沌の陣（カメラに正対・中央＋左右の手元）
+    camFacingQuad(meshChaos, 0, 1.5, 0, .98+Math.sin(t*2.2)*.05,  t*.9,  [1,.28,.36,.95*p]);
+    camFacingQuad(meshChaos, -.85, 1.1, 0, .42, -t*1.6, [1,.35,.42,.8*p]);
+    camFacingQuad(meshChaos,  .85, 1.1, 0, .42,  t*1.6, [1,.35,.42,.8*p]);
+    // 足元の緋色のリング
+    meshRing.flatQuad(0,.02,0,1.5, t*.25,[1,.2,.3,.5*p]);
+  }
 }
 ];
 
