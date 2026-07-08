@@ -1,6 +1,10 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
+## Fable 5 性能調査
+
+- 調査10 ゲームエフェクト（WebGL・全部コード生成）: `fable5-effects/index.html`（[解説](fable5-effects/README.md)）
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
