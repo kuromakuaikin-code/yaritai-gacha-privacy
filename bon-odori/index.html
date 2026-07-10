@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>盆踊りナビ｜全国の盆踊り・町内会の小さなお祭りまで</title>
-<meta name="description" content="全国の有名な盆踊りから、町内会・商店街・団地の小さな盆踊りまで探せる情報サイト。都道府県・日程・規模で絞り込み。自分の地域のイベントも登録できます。">
+<title>盆踊りナビ 東海版｜愛知・岐阜・三重・静岡の盆踊り、町内会の小さなお祭りまで</title>
+<meta name="description" content="東海4県（愛知・岐阜・三重・静岡）の盆踊り情報サイト。郡上おどりなどの有名どころから、商店街・神社・町内会の小さな盆踊りまで。都道府県・日程・規模で絞り込み。自分の地域のイベントも登録できます。">
 <style>
 :root{
   --bg:#fdf8f0;
@@ -102,6 +102,8 @@ header .wrap{display:flex;flex-direction:column;gap:6px}
 .badge.scale-mid{background:var(--indigo-soft);color:var(--indigo)}
 .badge.scale-small{background:#e7f3ea;color:#3c7a4e}
 .badge.user{background:#fff3d6;color:#a2701c}
+.badge.conf-high{background:#e7f3ea;color:#3c7a4e}
+.badge.conf-med{background:#f0ece5;color:#8a7a6e}
 .meta{font-size:.85rem;color:var(--sub);display:flex;flex-direction:column;gap:2px}
 .meta .date{color:var(--ink);font-weight:700}
 .tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:8px}
@@ -169,8 +171,8 @@ footer a{color:#e8d9a0}
 
 <header>
   <div class="wrap">
-    <div class="logo"><span class="lantern">🏮</span>盆踊りナビ</div>
-    <div class="tagline">全国の有名な盆踊りから、<b>町内会・商店街・団地の小さな盆踊り</b>まで。今年の夏、近くのやぐらを見つけよう。</div>
+    <div class="logo"><span class="lantern">🏮</span>盆踊りナビ <span style="font-size:.95rem;background:rgba(255,255,255,.18);border-radius:8px;padding:2px 10px;letter-spacing:.1em">東海版</span></div>
+    <div class="tagline">愛知・岐阜・三重・静岡の盆踊りを、有名どころから<b>商店街・神社・町内会の小さな盆踊り</b>まで。今年の夏、近くのやぐらを見つけよう。</div>
   </div>
 </header>
 
@@ -178,7 +180,7 @@ footer a{color:#e8d9a0}
 
   <div class="panel">
     <div class="row">
-      <input type="search" id="q" placeholder="🔍 名前・地名で検索（例：中野、団地、音頭）">
+      <input type="search" id="q" placeholder="🔍 名前・地名で検索（例：郡上、名古屋、音頭）">
       <select id="pref"><option value="">都道府県：すべて</option></select>
       <select id="month">
         <option value="">時期：すべて</option>
@@ -219,7 +221,7 @@ footer a{color:#e8d9a0}
   </div>
 
   <div class="notice">
-    ※ 掲載されている日程・内容は<b>参考情報（一部はサンプル）</b>です。開催日時・場所は毎年変わることがあります。お出かけ前に必ず主催者の公式サイト・自治体の広報等で最新情報をご確認ください。「じぶんで登録」したイベントは、この端末（ブラウザ）内にのみ保存されます。
+    ※ 掲載情報は自治体・観光協会・主催者等の公開情報をもとに作成した<b>参考情報</b>です。日時・場所は変更・中止になることがあります。お出かけ前に必ず各イベントの詳細に記載の情報源（公式サイト・広報等）で最新情報をご確認ください。「じぶんで登録」したイベントは、この端末（ブラウザ）内にのみ保存されます。
   </div>
 
 </div>
@@ -299,85 +301,12 @@ footer a{color:#e8d9a0}
 "use strict";
 
 /* ============ データ ============
-   scale: large=全国的に有名 / mid=地域の祭り / small=町内会・商店街レベル
-   dateNote: 日程が毎年変動するものの注記
-   sample: true のものは「こういう小さな盆踊りが載る」ことを示すサンプル
+   イベントデータは events.json に分離（編集・追加はそちら）。
+   scale: large=全国的に有名 / mid=市・地域規模 / small=町内会・商店街・神社レベル
+   confidence: high=2026年日程を一次情報で確認 / medium=例年開催は確認 / low=詳細未確認
 ================================= */
-const PREFS=["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"];
-
-const EVENTS=[
-  {id:"gujo",name:"郡上おどり",pref:"岐阜県",city:"郡上市八幡町",venue:"郡上八幡市街地（会場は日ごとに移動）",
-   month:[7,8,9],dateText:"7月中旬〜9月上旬の約30夜（徹夜おどりは8月13〜16日頃）",time:"20:00頃〜（徹夜おどりは明け方まで)",
-   scale:"large",tags:["飛び入り参加OK","入場無料","浴衣歓迎"],
-   desc:"400年以上続く日本三大盆踊りのひとつ。約30夜にわたり開催され、誰でも輪に入って踊れるのが最大の魅力。お盆の「徹夜おどり」は夜通し踊り明かす。国指定重要無形民俗文化財・ユネスコ無形文化遺産（風流踊）。",
-   dateNote:"開催日程は毎年変わります。郡上八幡観光協会の公式発表をご確認ください。"},
-  {id:"nishimonai",name:"西馬音内の盆踊",pref:"秋田県",city:"雄勝郡羽後町",venue:"西馬音内本町通り",
-   month:[8],dateText:"毎年8月16日〜18日",time:"19:00頃〜",
-   scale:"large",tags:["入場無料"],
-   desc:"約700年の歴史を持つ日本三大盆踊りのひとつ。編み笠や黒い彦三頭巾で顔を隠して踊る幻想的な姿と、篝火に照らされる「亡者踊り」とも呼ばれる独特の情緒が有名。国指定重要無形民俗文化財・ユネスコ無形文化遺産（風流踊）。",
-   dateNote:"観覧席等の詳細は羽後町の公式情報をご確認ください。"},
-  {id:"awa",name:"阿波おどり",pref:"徳島県",city:"徳島市",venue:"徳島市中心部の演舞場ほか",
-   month:[8],dateText:"毎年8月中旬（例年8月12日〜15日）",time:"夕方〜夜",
-   scale:"large",tags:["浴衣歓迎"],
-   desc:"「踊る阿呆に見る阿呆」で知られる日本最大級の踊りの祭典。厳密には盆踊りを起源とする阿波踊りで、街全体が連（れん）の踊りで埋め尽くされる。にわか連に参加すれば観光客も踊れる。",
-   dateNote:"演舞場のチケット・日程は公式サイトをご確認ください。"},
-  {id:"tsukiji",name:"築地本願寺納涼盆踊り大会",pref:"東京都",city:"中央区",venue:"築地本願寺 境内",
-   month:[7,8],dateText:"例年7月下旬〜8月上旬の数日間",time:"19:00頃〜21:00頃",
-   scale:"mid",tags:["屋台あり","飛び入り参加OK","入場無料","浴衣歓迎"],
-   desc:"「日本一おいしい盆踊り」と呼ばれるほど、築地場外市場の名店が屋台を出すことで有名。寺の境内にやぐらが組まれ、誰でも踊りの輪に参加できる都心の人気盆踊り。",
-   dateNote:"開催日は毎年異なります。築地本願寺公式サイトをご確認ください。"},
-  {id:"nakano",name:"中野駅前大盆踊り大会",pref:"東京都",city:"中野区",venue:"中野駅前・中野サンプラザ周辺",
-   month:[8],dateText:"例年8月上旬の週末",time:"夕方〜21:00頃",
-   scale:"mid",tags:["飛び入り参加OK","入場無料","浴衣歓迎"],
-   desc:"駅前広場で開催される都市型の大型盆踊り。DJ盆踊りなど新しいスタイルも取り入れ、若い世代にも人気。定番の音頭からポップスまで幅広い選曲で踊れる。",
-   dateNote:"開催有無・日程は実行委員会の公式発表をご確認ください。"},
-  {id:"kawara",name:"河原町ふるさと夏まつり盆踊り",pref:"宮城県",city:"（サンプル）仙台市",venue:"河川敷特設会場",
-   month:[8],dateText:"例年8月中旬の週末",time:"18:30〜21:00",
-   scale:"mid",tags:["屋台あり","入場無料","飛び入り参加OK"],sample:true,
-   desc:"地域の郷土芸能の披露と盆踊りが一度に楽しめる、市民参加型の夏祭り。フィナーレには小規模な打ち上げ花火も。",
-   dateNote:"（サンプル掲載）実際の開催情報は自治体広報をご確認ください。"},
-  {id:"sapporo",name:"すすきの・北海盆踊り（さっぽろ夏まつり）",pref:"北海道",city:"札幌市中央区",venue:"大通公園",
-   month:[8],dateText:"例年8月中旬（さっぽろ夏まつり期間中）",time:"18:00頃〜",
-   scale:"mid",tags:["飛び入り参加OK","入場無料","子ども向け"],
-   desc:"「北海盆唄」に合わせて大通公園で踊る札幌の夏の風物詩。前半は子ども盆踊り、後半は大人の部という二部構成が特徴。",
-   dateNote:"さっぽろ夏まつり公式サイトをご確認ください。"},
-  {id:"kawachi",name:"河内音頭まつり（八尾河内音頭まつり）",pref:"大阪府",city:"八尾市",venue:"久宝寺緑地ほか",
-   month:[8,9],dateText:"例年8月下旬〜9月上旬",time:"夕方〜夜",
-   scale:"mid",tags:["屋台あり","飛び入り参加OK","入場無料"],
-   desc:"河内地方に伝わる「河内音頭」の本場の祭り。生の音頭取りと楽団の演奏に合わせて何重もの踊りの輪ができる。テンポの良い音頭は初めてでも見よう見まねで踊れる。",
-   dateNote:"開催日程は公式サイトをご確認ください。"},
-  {id:"eisa",name:"沖縄全島エイサーまつり",pref:"沖縄県",city:"沖縄市",venue:"コザ運動公園ほか",
-   month:[8,9],dateText:"例年旧盆明けの最初の週末",time:"夕方〜夜",
-   scale:"large",tags:["屋台あり"],
-   desc:"沖縄の旧盆に祖先を送る念仏踊りを起源とする「エイサー」の最大の祭典。各地の青年会が太鼓と踊りを披露する。本土の盆踊りとはひと味違う迫力。",
-   dateNote:"旧盆の日程により毎年変動します。公式サイトをご確認ください。"},
-
-  /* ---- 地域密着（小規模）サンプル：町内会・商店街・団地レベル ---- */
-  {id:"s1",name:"みどり町三丁目 町内会盆踊り",pref:"東京都",city:"（サンプル）練馬区",venue:"みどり町第二公園",
-   month:[7],dateText:"7月最終土曜 1日のみ",time:"18:00〜20:30",
-   scale:"small",tags:["屋台あり","子ども向け","入場無料","雨天中止"],sample:true,
-   desc:"町内会青年部による手作りの盆踊り。炭坑節・東京音頭・アンパンマン音頭の定番3曲を繰り返すアットホームな会。19時からは子ども向けのお菓子まきあり。焼きそば・かき氷の模擬店は売り切れ御免。"},
-  {id:"s2",name:"さくら台団地 納涼盆踊り大会",pref:"神奈川県",city:"（サンプル）横浜市",venue:"団地中央広場",
-   month:[8],dateText:"8月第1金・土曜の2日間",time:"18:30〜21:00",
-   scale:"small",tags:["屋台あり","飛び入り参加OK","入場無料","浴衣歓迎"],sample:true,
-   desc:"団地自治会主催、50年続く納涼大会。やぐらを囲んで住民もOB・OGも一緒に踊る。2日目最後の「ダンシング・ヒーロー」が名物。"},
-  {id:"s3",name:"本町商店街 サマー盆踊りナイト",pref:"埼玉県",city:"（サンプル）川越市",venue:"商店街特設会場（歩行者天国）",
-   month:[8],dateText:"8月中旬の土曜",time:"17:00〜21:00",
-   scale:"small",tags:["屋台あり","入場無料","子ども向け"],sample:true,
-   desc:"商店街の店先がそのまま夜店になる盆踊り。スタンプラリーや店主たちによる生バンド演奏の音頭もあり、買い物ついでに立ち寄れる。"},
-  {id:"s4",name:"八幡神社 例祭奉納盆踊り",pref:"長野県",city:"（サンプル）松本市",venue:"八幡神社 境内",
-   month:[8],dateText:"8月14日・15日",time:"19:00〜21:30",
-   scale:"small",tags:["入場無料","浴衣歓迎"],sample:true,
-   desc:"神社の境内で提灯の灯りに包まれて踊る、昔ながらの奉納盆踊り。保存会のお囃子と生歌が自慢。地区外からの参加も歓迎。"},
-  {id:"s5",name:"ひまわり保育園・地域交流 夕涼み盆踊り",pref:"大阪府",city:"（サンプル）豊中市",venue:"園庭",
-   month:[7],dateText:"7月中旬の土曜",time:"16:30〜19:00",
-   scale:"small",tags:["子ども向け","入場無料","雨天中止"],sample:true,
-   desc:"園児と地域の親子向けの小さな夕涼み会。ちびっこ音頭中心で、未就園児も参加OK。ヨーヨー釣り・輪投げコーナーあり。"},
-  {id:"s6",name:"港町ふれあい盆踊りと灯籠流し",pref:"広島県",city:"（サンプル）尾道市",venue:"港前広場",
-   month:[8],dateText:"8月15日",time:"18:00〜21:00",
-   scale:"small",tags:["屋台あり","入場無料"],sample:true,
-   desc:"盆踊りのあとに灯籠流しでご先祖様を送る、お盆らしい地域の行事。海辺の夕景と提灯が美しい。"}
-];
+const PREFS=["愛知県","岐阜県","三重県","静岡県"];
+let EVENTS=[];
 
 /* ============ 状態 ============ */
 const LS_USER="bon_user_events_v1";
@@ -437,7 +366,8 @@ function render(){
         <div class="badges">
           <span class="badge scale-${ev.scale}">${SCALE_LABEL[ev.scale]||""}</span>
           ${ev.user?'<span class="badge user">じぶんで登録</span>':""}
-          ${ev.sample?'<span class="badge user">サンプル</span>':""}
+          ${ev.confidence==="high"?'<span class="badge conf-high">2026年日程 確認済み</span>':""}
+          ${ev.confidence==="medium"?'<span class="badge conf-med">日程は例年情報</span>':""}
         </div>
         <div class="meta">
           <span class="date">📅 ${esc(ev.dateText)}</span>
@@ -458,7 +388,8 @@ function openDetail(id){
     <div class="badges" style="margin-bottom:4px">
       <span class="badge scale-${ev.scale}">${SCALE_LABEL[ev.scale]||""}</span>
       ${ev.user?'<span class="badge user">じぶんで登録</span>':""}
-      ${ev.sample?'<span class="badge user">サンプル</span>':""}
+      ${ev.confidence==="high"?'<span class="badge conf-high">2026年日程 確認済み</span>':""}
+      ${ev.confidence==="medium"?'<span class="badge conf-med">日程は例年情報</span>':""}
     </div>
     <h2>🏮 ${esc(ev.name)}</h2>
     <dl class="dl">
@@ -469,11 +400,12 @@ function openDetail(id){
     </dl>
     ${ev.desc?`<div class="desc">${esc(ev.desc)}</div>`:""}
     ${ev.dateNote?`<div class="note-user">📌 ${esc(ev.dateNote)}</div>`:""}
+    ${ev.sourceUrl?`<div class="note-user" style="background:#eef2f8;color:#2c3e6b">ℹ️ 情報源：<a href="${esc(ev.sourceUrl)}" target="_blank" rel="noopener">${esc(ev.sourceName||"公式情報")}</a>（お出かけ前に最新情報をご確認ください）</div>`:""}
     ${ev.user?`<div class="note-user">この情報はあなたがこの端末で登録したものです。</div>
       <div class="linkrow"><button class="btn btn-ghost" data-del="${esc(ev.id)}">🗑 この登録を削除</button></div>`:""}
     <div class="linkrow">
       <a class="btn btn-ghost" style="text-decoration:none" target="_blank" rel="noopener"
-         href="https://www.google.com/maps/search/${encodeURIComponent(ev.pref+" "+ev.city.replace(/（サンプル）/,"")+" "+(ev.venue||""))}">🗺 地図で見る</a>
+         href="https://www.google.com/maps/search/${encodeURIComponent(ev.pref+" "+ev.city+" "+(ev.venue||""))}">🗺 地図で見る</a>
       <a class="btn btn-ghost" style="text-decoration:none" target="_blank" rel="noopener"
          href="https://www.google.com/search?q=${encodeURIComponent(ev.name+" "+ev.pref+" 盆踊り 開催")}">🔎 最新情報を検索</a>
     </div>`;
@@ -554,7 +486,18 @@ document.addEventListener("click",e=>{
   }
 });
 
+/* ============ データ読み込み ============ */
 render();
+fetch("events.json")
+  .then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
+  .then(data=>{EVENTS=Array.isArray(data)?data:(data.events||[]);render();})
+  .catch(()=>{
+    const empty=$("#empty");
+    if(!allEvents().length){
+      empty.style.display="block";
+      empty.innerHTML='<div class="big">🏮</div>イベントデータ（events.json）を読み込めませんでした。<br>通信環境をご確認のうえ、再読み込みしてください。';
+    }
+  });
 </script>
 </body>
 </html>
