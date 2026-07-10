@@ -1,6 +1,19 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
+## 盆踊りナビ愛知
+
+愛知県内の町内会・学区・神社・公園レベルのローカルな盆踊りを探せるサイト。
+目的：「今週末、愛知の近所で開催される小さな盆踊りを見つけること」
+
+- 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/
+- 一覧: 今日開催／今週末／市町村／現在地に近い順。各イベントに情報元・最終確認日・投稿者区分（運営確認済み／主催者投稿／住民投稿・未確認）・中止/延期/雨天情報を表示
+- 個別ページ: イベントごとに `bon-odori/e/*.html`（タイトルにイベント名・市町村・開催日を含む、schema.org Event 構造化データ付き）
+- **データ更新**: `bon-odori/events.json` を編集 → `cd bon-odori && python3 build.py` → コミット
+- 運用手順・掲載ルール（転載禁止等）・要確認リスト: `bon-odori/ADMIN.md`
+- 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
+- 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`

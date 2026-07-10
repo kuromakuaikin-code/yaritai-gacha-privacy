@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>盆踊りナビ愛知｜今週末、近所の小さな盆踊りを探す（町内会・学区・神社・公園）</title>
+<meta name="description" content="愛知県内の町内会・学区・神社・公園レベルのローカルな盆踊りを探せるサイト。今日開催・今週末開催・市町村・現在地に近い順で検索。情報元と最終確認日つきで、中止・延期・雨天時の情報も分かります。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>">
+<link rel="canonical" href="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/">
+<style>
+:root{
+  --bg:#faf7f2;--card:#fff;--ink:#33291f;--sub:#7d7264;--line:#e7ddd0;
+  --accent:#c0392b;--accent-soft:#fbe9e5;
+  --green:#2e7d4f;--green-soft:#e6f2ea;
+  --blue:#2c5282;--blue-soft:#e8eef7;
+  --orange:#b45309;--orange-soft:#fdf0dd;
+  --gray-soft:#efece7;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px}
+a{color:var(--blue)}
+.wrap{max-width:640px;margin:0 auto;padding:0 12px}
+
+header{background:#2c3e6b;color:#fff;padding:14px 0 12px}
+header h1{font-size:1.15rem;display:flex;align-items:center;gap:7px}
+header .sub{font-size:.78rem;opacity:.9;margin-top:2px}
+
+/* クイックフィルタ（スティッキー） */
+.filters{position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--line)}
+.tabrow{display:flex;gap:6px}
+.tab{flex:1;text-align:center;padding:10px 4px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:.9rem;font-weight:700;color:var(--sub);cursor:pointer}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.subrow{display:flex;gap:6px;margin-top:7px}
+.subrow select{flex:1;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;background:#fff;color:var(--ink)}
+#btnNear{flex:0 0 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:.9rem;font-weight:700;color:var(--sub);cursor:pointer}
+#btnNear.on{background:var(--blue);border-color:var(--blue);color:#fff}
+
+.count{font-size:.8rem;color:var(--sub);margin:10px 2px 8px}
+.count b{color:var(--accent)}
+
+/* 仮データ告知 */
+.demo-note{background:var(--orange-soft);color:var(--orange);font-size:.78rem;border-radius:10px;padding:8px 12px;margin-top:10px}
+
+/* カード */
+.list{display:flex;flex-direction:column;gap:10px;padding-bottom:90px}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;text-decoration:none;color:var(--ink)}
+.card:active{background:#f6f1e9}
+.card.cancelled{opacity:.75}
+.datebar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px}
+.dchip{font-size:.8rem;font-weight:800;background:var(--accent-soft);color:var(--accent);border-radius:7px;padding:2px 9px}
+.dchip.today{background:var(--accent);color:#fff}
+.dchip.dist{background:var(--blue-soft);color:var(--blue)}
+.st{font-size:.78rem;font-weight:800;border-radius:7px;padding:2px 9px}
+.st.cancel{background:#3c3c3c;color:#fff}
+.st.post{background:var(--orange);color:#fff}
+.card h2{font-size:1.02rem;line-height:1.45;margin:1px 0 3px}
+.place{font-size:.85rem;color:var(--sub)}
+.rain{font-size:.78rem;color:var(--blue);margin-top:2px}
+.trust{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:7px;border-top:1px dashed var(--line);font-size:.72rem;color:var(--sub)}
+.ptype{font-weight:800;border-radius:6px;padding:1px 7px}
+.ptype.admin{background:var(--green-soft);color:var(--green)}
+.ptype.organizer{background:var(--blue-soft);color:var(--blue)}
+.ptype.resident{background:var(--orange-soft);color:var(--orange)}
+.ptype.sample{background:var(--gray-soft);color:var(--sub)}
+
+.empty{text-align:center;color:var(--sub);padding:50px 16px;font-size:.9rem}
+
+/* 投稿ボタン（固定） */
+.post-cta{position:fixed;left:0;right:0;bottom:0;z-index:20;background:linear-gradient(transparent,rgba(250,247,242,.95) 40%);padding:18px 12px 14px;pointer-events:none}
+.post-cta a{pointer-events:auto;display:block;max-width:640px;margin:0 auto;text-align:center;background:var(--accent);color:#fff;font-weight:800;font-size:1rem;border-radius:12px;padding:14px;text-decoration:none;box-shadow:0 4px 14px rgba(192,57,43,.35)}
+
+footer{background:#2b2621;color:#c9beb1;font-size:.75rem;padding:22px 14px 110px;text-align:center;line-height:2}
+footer a{color:#e8d9a0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>🏮 盆踊りナビ愛知</h1>
+    <div class="sub">町内会・学区・神社・公園の小さな盆踊りを、今週末の近所で見つける</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="filters">
+    <div class="tabrow">
+      <button class="tab on" data-mode="all">すべて</button>
+      <button class="tab" data-mode="today">今日開催</button>
+      <button class="tab" data-mode="weekend">今週末</button>
+    </div>
+    <div class="subrow">
+      <select id="city"><option value="">市町村：すべて</option></select>
+      <button id="btnNear">📍 近い順</button>
+    </div>
+  </div>
+
+  <div class="demo-note" id="demoNote" style="display:none">
+    ⚠️ 現在は<b>表示確認用の仮データ</b>を掲載しています。実際のイベント情報ではありません。
+  </div>
+
+  <div class="count"><b id="cnt">0</b> 件（開催日順）<span id="geoNote"></span></div>
+
+  <div class="list" id="list"></div>
+  <div class="empty" id="empty" style="display:none">
+    条件に合う盆踊りが見つかりませんでした。<br>
+    ご存じの盆踊りがあれば、ぜひ投稿してください。
+  </div>
+
+</div>
+
+<div class="post-cta">
+  <a href="submit.html">＋ 盆踊り情報を投稿する（チラシ歓迎）</a>
+</div>
+
+<footer>
+  掲載情報は主催者・自治体等の公式発表と投稿に基づく参考情報です。<br>
+  開催有無は各イベントページ記載の情報元でご確認ください。<br>
+  <a href="submit.html">情報を投稿する</a> ／ <a href="support.html">寄付で応援・チラシ作成（有料）</a>
+</footer>
+
+<script>
+"use strict";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const WD=["日","月","火","水","木","金","土"];
+
+let EVENTS=[], mode="all", cityFilter="", nearMode=false, geo=null;
+
+const today=new Date(); today.setHours(0,0,0,0);
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const TODAY=ymd(today);
+// 今週末 = 直近の土日（金曜なら明日あさって、土曜なら今日明日、日曜なら今日）
+const sunOffset=(7-today.getDay())%7;
+const thisSunday=new Date(today); thisSunday.setDate(today.getDate()+sunOffset);
+const weekendDates=new Set();
+for(let d=new Date(today); d<=thisSunday; d.setDate(d.getDate()+1)){
+  if(d.getDay()===0||d.getDay()===6) weekendDates.add(ymd(d));
+}
+
+function parseD(s){const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)}
+function fmtD(s){const d=parseD(s);return `${d.getMonth()+1}/${d.getDate()}(${WD[d.getDay()]})`}
+
+function upcoming(ev){ // 今日以降の開催日
+  return (ev.dates||[]).filter(x=>x.date>=TODAY).sort((a,b)=>a.date<b.date?-1:1);
+}
+function dist(ev){
+  if(!geo||ev.lat==null) return null;
+  const R=6371,r=x=>x*Math.PI/180;
+  const dLat=r(ev.lat-geo.lat),dLng=r(ev.lng-geo.lng);
+  const a=Math.sin(dLat/2)**2+Math.cos(r(geo.lat))*Math.cos(r(ev.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+const PT={admin:["admin","運営確認済み"],organizer:["organizer","主催者投稿"],resident:["resident","住民投稿・未確認"]};
+
+function render(){
+  let list=EVENTS.filter(ev=>{
+    const up=upcoming(ev);
+    if(!up.length) return false;                 // 開催終了は非表示
+    if(mode==="today" && !up.some(x=>x.date===TODAY)) return false;
+    if(mode==="weekend" && !up.some(x=>weekendDates.has(x.date))) return false;
+    if(cityFilter && ev.city!==cityFilter) return false;
+    return true;
+  });
+  list.sort((a,b)=>{
+    if(nearMode&&geo){const da=dist(a)??1e9,db=dist(b)??1e9;if(da!==db)return da-db}
+    const ua=upcoming(a)[0].date, ub=upcoming(b)[0].date;
+    return ua<ub?-1:ua>ub?1:0;
+  });
+  $("#cnt").textContent=list.length;
+  $("#list").innerHTML=list.map(ev=>{
+    const up=upcoming(ev);
+    const next=up[0];
+    const isToday=up.some(x=>x.date===TODAY);
+    const dtxt=up.slice(0,2).map(x=>fmtD(x.date)).join("・")+(up.length>2?" ほか":"");
+    const time=next.start?`${next.start}${next.end?"〜"+next.end:""}`:"";
+    const km=dist(ev);
+    const pt=PT[ev.posterType]||PT.resident;
+    return `<a class="card ${ev.eventStatus==="cancelled"?"cancelled":""}" href="e/${esc(ev.id)}.html">
+      <div class="datebar">
+        <span class="dchip ${isToday?"today":""}">${isToday?"今日 ":""}${dtxt}${time?" "+time:""}</span>
+        ${ev.eventStatus==="cancelled"?'<span class="st cancel">中止</span>':""}
+        ${ev.eventStatus==="postponed"?'<span class="st post">延期</span>':""}
+        ${km!=null?`<span class="dchip dist">約${km<10?km.toFixed(1):Math.round(km)}km</span>`:""}
+      </div>
+      <h2>${esc(ev.name)}</h2>
+      <div class="place">📍 ${esc(ev.city)}・${esc(ev.venue)}</div>
+      ${ev.rain?`<div class="rain">☔ ${esc(ev.rain)}</div>`:""}
+      <div class="trust">
+        <span class="ptype ${pt[0]}">${pt[1]}</span>
+        ${ev.sample?'<span class="ptype sample">仮データ</span>':""}
+        <span>情報元: ${esc(ev.source&&ev.source.name||"—")}</span>
+        <span>最終確認: ${esc(ev.lastVerified||"—")}</span>
+      </div>
+    </a>`;
+  }).join("");
+  $("#empty").style.display=list.length?"none":"block";
+}
+
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on"); mode=t.dataset.mode; render();
+}));
+$("#city").addEventListener("change",e=>{cityFilter=e.target.value;render()});
+$("#btnNear").addEventListener("click",()=>{
+  if(nearMode){nearMode=false;$("#btnNear").classList.remove("on");$("#geoNote").textContent="";render();return}
+  if(!navigator.geolocation){$("#geoNote").textContent=" ／ この端末では現在地を取得できません";return}
+  $("#geoNote").textContent=" ／ 現在地を取得中…";
+  navigator.geolocation.getCurrentPosition(pos=>{
+    geo={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    nearMode=true;$("#btnNear").classList.add("on");
+    $("#geoNote").textContent=" ／ 現在地に近い順";
+    render();
+  },()=>{$("#geoNote").textContent=" ／ 現在地を取得できませんでした（位置情報の許可をご確認ください）"});
+});
+
+fetch("events.json")
+  .then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
+  .then(data=>{
+    EVENTS=(data.events||[]).filter(ev=>ev.status==="published");
+    if(EVENTS.some(ev=>ev.sample)) $("#demoNote").style.display="block";
+    const cities=[...new Set(EVENTS.map(ev=>ev.city))].sort((a,b)=>a.localeCompare(b,"ja"));
+    $("#city").insertAdjacentHTML("beforeend",cities.map(c=>`<option>${esc(c)}</option>`).join(""));
+    render();
+  })
+  .catch(()=>{
+    $("#empty").style.display="block";
+    $("#empty").innerHTML="イベントデータを読み込めませんでした。<br>通信環境をご確認のうえ再読み込みしてください。";
+  });
+</script>
+</body>
+</html>
