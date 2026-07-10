@@ -1,0 +1,52 @@
+{
+  "_note": "将来の対象拡大用の掲載候補メモ（岐阜・三重・静岡、2026年夏）。現在のサイトは愛知県のみ対象のため未使用。掲載時は一次情報の再確認と desc の書き直しが必須。",
+  "collectedAt": "2026-07-10",
+  "gifu": [
+    { "name": "郡上おどり", "city": "郡上市", "dateText": "2026年7月11日〜9月5日（全30夜）、徹夜おどり8月13日〜16日", "sourceUrl": "https://www.gujohachiman.com/kanko/odori_schedule.html", "sourceName": "郡上八幡観光協会", "confidence": "high" },
+    { "name": "白鳥おどり", "city": "郡上市", "dateText": "2026年7月18日〜9月20日（全21夜）、徹夜おどり8月13日〜15日", "sourceUrl": "https://www.city.gujo.gifu.jp/admin/info/4-20.html", "sourceName": "郡上市公式サイト", "confidence": "high" },
+    { "name": "岐阜公園盆踊り大会", "city": "岐阜市", "dateText": "例年8月上旬（2026年未確認）", "sourceUrl": "https://www.city.gifu.lg.jp/kankoubunka/kankou/1005049/1034277.html", "sourceName": "岐阜市公式", "confidence": "medium" },
+    { "name": "市民盆踊り大会（飛騨やんさ）", "city": "高山市", "dateText": "2026年8月23日 18:00〜20:30", "sourceUrl": "https://www.hidatakayama.or.jp/event/detail_2129.html", "sourceName": "飛騨高山旅ガイド", "confidence": "high" },
+    { "name": "にゅうかわ夏まつり", "city": "高山市丹生川町", "dateText": "2026年8月1日 17:45〜21:00", "sourceUrl": "https://www.kankou-gifu.jp/event/detail_6080.html", "sourceName": "岐阜の旅ガイド", "confidence": "high" },
+    { "name": "おん祭MINOKAMO盆踊り", "city": "美濃加茂市", "dateText": "2026年8月8日", "sourceUrl": "https://www.city.minokamo.lg.jp/soshiki/12/16223.html", "sourceName": "美濃加茂市公式", "confidence": "high" },
+    { "name": "下呂温泉まつり（下呂おどり）", "city": "下呂市", "dateText": "2026年8月1日〜4日", "sourceUrl": "https://www.gero-spa.or.jp/event/index2.html", "sourceName": "下呂温泉旅館協同組合", "confidence": "high" },
+    { "name": "水都まつり（大垣おどり大会）", "city": "大垣市", "dateText": "2026年7月31日〜8月2日", "sourceUrl": "https://www.ogakikanko.jp/event/suitomaturi/", "sourceName": "大垣観光協会", "confidence": "high" },
+    { "name": "中津川おいでん祭（風流おどり）", "city": "中津川市", "dateText": "2026年8月12日〜13日", "sourceUrl": "https://nakatsugawa.town/event/", "sourceName": "中津川観光協会", "confidence": "medium" },
+    { "name": "恵那納涼夏祭りと盆踊りの夕べ", "city": "恵那市", "dateText": "例年8月14日頃（2026年未確認）", "sourceUrl": "https://www.kankou-ena.jp/event/2160.php", "sourceName": "恵那市観光協会", "confidence": "medium" },
+    { "name": "くしはら盆踊り", "city": "恵那市串原", "dateText": "例年8月中旬（2026年未確認）", "sourceUrl": "https://www.kankou-ena.jp/event/2199.php", "sourceName": "恵那市観光協会", "confidence": "medium" },
+    { "name": "関市ふるさと夏まつり", "city": "関市", "dateText": "例年7月下旬の土曜（2026年未確認）", "sourceUrl": "https://seki-akindo.com/event/detail/28/", "sourceName": "関市商店街", "confidence": "medium" },
+    { "name": "航空自衛隊岐阜基地 納涼祭", "city": "各務原市", "dateText": "2026年7月30日（一次確認推奨）", "sourceUrl": "https://rikuzi-chousadan.com/2014karenda/2026summer/asdf20260730gifubasematsuri.html", "sourceName": "陸自調査団（一次確認推奨）", "confidence": "medium" },
+    { "name": "虎渓用水広場で踊る夏祭り", "city": "多治見市", "dateText": "例年7月下旬（2026年未確認）", "sourceUrl": "https://a2tajimi.jp/c-event/17908/", "sourceName": "a2（地域情報サイト・一次確認未了）", "confidence": "low" },
+    { "name": "ひだ神岡夏まつり（船津盆踊り）", "city": "飛騨市神岡町", "dateText": "例年8月13日〜15日（2026年未確認）", "sourceUrl": "https://www.hida-tourism.com/summer-festival", "sourceName": "飛騨市観光協会", "confidence": "medium" },
+    { "name": "みやま川祭り", "city": "山県市", "dateText": "例年8月中旬（2026年未確認・一次確認未了）", "sourceUrl": "https://hanabi.walkerplus.com/detail/ar0621e00639/", "sourceName": "まとめサイト（掲載時は一次情報必須）", "confidence": "low" }
+  ],
+  "mie": [
+    { "name": "大四日市まつり（市民盆踊り）", "city": "四日市市", "dateText": "2026年8月1日〜2日（盆踊りは1日）", "sourceUrl": "https://kankou43yokkaichi.com/matsuri/", "sourceName": "大四日市まつり公式", "confidence": "high" },
+    { "name": "四日市まんなか盆踊り", "city": "四日市市", "dateText": "例年8月下旬（2026年未発表）", "sourceUrl": "https://y-shoren.com/event/3209/", "sourceName": "四日市商店連合会", "confidence": "medium" },
+    { "name": "四日市徹夜踊りの祭典 よんてつ", "city": "四日市市", "dateText": "2026年9月26日〜27日（予定）", "sourceUrl": "https://xn--k9jd5hwb.com/wp/", "sourceName": "よんてつ公式サイト", "confidence": "medium" },
+    { "name": "三滝川燈火まつり＆菰野町民盆踊り大会", "city": "菰野町", "dateText": "2026年8月22日 16:00〜21:00", "sourceUrl": "https://www.town.komono.mie.jp/oshirase/e694.html", "sourceName": "菰野町公式サイト", "confidence": "high" },
+    { "name": "亀山市納涼大会", "city": "亀山市", "dateText": "2026年8月8日 17:00〜20:45", "sourceUrl": "https://www.city.kameyama.mie.jp/kosodate_yuyu/events/2026060100038/", "sourceName": "亀山市公式サイト", "confidence": "high" },
+    { "name": "猟師かんこ踊り", "city": "松阪市", "dateText": "例年8月13日〜16日", "sourceUrl": "https://www.matsusaka-kanko.com/information/information/ryoushi-kanko-odori/", "sourceName": "松阪市観光協会", "confidence": "medium" },
+    { "name": "松ヶ崎かんこ踊り", "city": "松阪市", "dateText": "例年8月14日〜16日", "sourceUrl": "https://www.matsusaka-kanko.com/information/information/matsugasaki-kanko-odori/", "sourceName": "松阪市観光協会", "confidence": "medium" },
+    { "name": "円座町かんこ踊り", "city": "伊勢市", "dateText": "例年8月15日", "sourceUrl": "https://www.city.ise.mie.jp/kyouiku/culture/bunkazai_shiseki/bunkazai/minzoku/1002212.html", "sourceName": "伊勢市公式", "confidence": "medium" },
+    { "name": "佐八町かんこ踊り", "city": "伊勢市", "dateText": "例年8月16日（2025年中止・2026年未確認）", "sourceUrl": "https://www.kankomie.or.jp/event/38094", "sourceName": "観光三重", "confidence": "low" },
+    { "name": "おわせ港まつり（尾鷲節）", "city": "尾鷲市", "dateText": "2026年8月1日", "sourceUrl": "https://www.city.owase.lg.jp/owatabi/0000017471.html", "sourceName": "尾鷲市公式", "confidence": "high" },
+    { "name": "加太のかんこ踊り", "city": "亀山市加太地区", "dateText": "例年8月14日〜15日", "sourceUrl": "https://kabutomachi.jimdofree.com/", "sourceName": "加太地区まちづくり協議会", "confidence": "medium" }
+  ],
+  "shizuoka": [
+    { "name": "有東木の盆踊", "city": "静岡市葵区", "dateText": "毎年8月14日・15日", "sourceUrl": "https://www.city.shizuoka.lg.jp/s6725/s013072.html", "sourceName": "静岡市公式", "confidence": "medium" },
+    { "name": "徳山の盆踊（鹿ん舞・ヒーヤイ）", "city": "川根本町", "dateText": "毎年8月15日夜", "sourceUrl": "https://www.town.kawanehon.shizuoka.jp/soshiki/degital/7/3045.html", "sourceName": "川根本町公式", "confidence": "medium" },
+    { "name": "遠州大念仏（犀ヶ崖の供養）", "city": "浜松市中央区", "dateText": "毎年7月15日", "sourceUrl": "https://www.city.hamamatsu.shizuoka.jp/c-machi/culture_art/saigagake/s-dainenbutu.html", "sourceName": "浜松市公式", "confidence": "medium" },
+    { "name": "踊夏祭", "city": "焼津市", "dateText": "2026年7月19日", "sourceUrl": "https://www.yaizu.gr.jp/news/8888", "sourceName": "焼津市観光協会", "confidence": "high" },
+    { "name": "富士まつり（市民総おどり）", "city": "富士市", "dateText": "2026年7月26日", "sourceUrl": "https://www.city.fuji.shizuoka.jp/1005330000/p008678.html", "sourceName": "富士市公式", "confidence": "high" },
+    { "name": "清水みなと祭り（港かっぽれ総おどり）", "city": "静岡市清水区", "dateText": "2026年7月31日〜8月2日", "sourceUrl": "https://www.minatokappore.jp/yotei.html", "sourceName": "清水みなと祭り公式", "confidence": "high" },
+    { "name": "掛川納涼まつり", "city": "掛川市", "dateText": "例年8月上旬の土日（2026年未確認）", "sourceUrl": "https://www.city.kakegawa.shizuoka.jp/kanko/docs/7926.html", "sourceName": "掛川市公式観光サイト", "confidence": "medium" },
+    { "name": "三嶋大祭り 大盆踊り大会", "city": "三島市", "dateText": "2026年8月15日〜17日（盆踊りは17日）", "sourceUrl": "https://www.mishima-cci.com/maturi/", "sourceName": "三島商工会議所", "confidence": "medium" },
+    { "name": "三島盆踊り祭り", "city": "三島市", "dateText": "例年8月下旬（2026年未確認）", "sourceUrl": "https://mishima-event.com/events/01K1V7XYBYH8046KVEBZYBX84D", "sourceName": "三島市イベント情報サイト", "confidence": "medium" },
+    { "name": "戸田盆踊り・海上花火大会", "city": "沼津市戸田", "dateText": "例年8月中旬（2026年未確認）", "sourceUrl": "https://numazukanko.jp/event/40080", "sourceName": "沼津観光ポータル", "confidence": "medium" },
+    { "name": "富士山御神火まつり（宮おどり）", "city": "富士宮市", "dateText": "2026年8月1日", "sourceUrl": "https://www.city.fujinomiya.lg.jp/1025200000/event/p000031.html", "sourceName": "富士宮市公式", "confidence": "medium" },
+    { "name": "網代温泉ふるさと祭り・盆おどり大会", "city": "熱海市網代", "dateText": "例年8月14日・15日", "sourceUrl": "https://ajirospa.com/annual-event/", "sourceName": "網代温泉観光協会", "confidence": "medium" },
+    { "name": "伊東温泉 夢の納涼 大盆踊り大会", "city": "伊東市", "dateText": "例年8月下旬（2026年未確認）", "sourceUrl": "https://itospa.com/event/index.html", "sourceName": "伊東観光協会", "confidence": "low" },
+    { "name": "野守まつり", "city": "島田市川根町", "dateText": "例年8月15日", "sourceUrl": "https://www.city.shimada.shizuoka.jp/kanko-docs/kankouevent-nomorimatsuri_2.html", "sourceName": "島田市公式", "confidence": "medium" },
+    { "name": "駿府城夏まつり", "city": "静岡市葵区", "dateText": "2026年9月12日・13日", "sourceUrl": "https://sumpujo-natsumatsuri.com/", "sourceName": "駿府城夏まつり公式", "confidence": "high" }
+  ]
+}

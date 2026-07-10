@@ -3,167 +3,74 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>盆踊りナビ 東海版｜愛知・岐阜・三重・静岡の盆踊り、町内会の小さなお祭りまで</title>
-<meta name="description" content="東海4県（愛知・岐阜・三重・静岡）の盆踊り情報サイト。郡上おどりなどの有名どころから、商店街・神社・町内会の小さな盆踊りまで。都道府県・日程・規模で絞り込み。自分の地域のイベントも登録できます。">
+<title>盆踊りナビ愛知｜今週末、近所の小さな盆踊りを探す（町内会・学区・神社・公園）</title>
+<meta name="description" content="愛知県内の町内会・学区・神社・公園レベルのローカルな盆踊りを探せるサイト。今日開催・今週末開催・市町村・現在地に近い順で検索。情報元と最終確認日つきで、中止・延期・雨天時の情報も分かります。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>">
+<link rel="canonical" href="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/">
 <style>
 :root{
-  --bg:#fdf8f0;
-  --card:#ffffff;
-  --ink:#3a2e2a;
-  --sub:#8a7a6e;
-  --accent:#c0392b;
-  --accent-soft:#fbe9e5;
-  --indigo:#2c3e6b;
-  --indigo-soft:#e8ecf5;
-  --gold:#c8952f;
-  --line:#eadfd2;
-  --radius:14px;
-  --shadow:0 2px 10px rgba(58,46,42,.08);
+  --bg:#faf7f2;--card:#fff;--ink:#33291f;--sub:#7d7264;--line:#e7ddd0;
+  --accent:#c0392b;--accent-soft:#fbe9e5;
+  --green:#2e7d4f;--green-soft:#e6f2ea;
+  --blue:#2c5282;--blue-soft:#e8eef7;
+  --orange:#b45309;--orange-soft:#fdf0dd;
+  --gray-soft:#efece7;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
-  background:var(--bg);color:var(--ink);line-height:1.7;
-}
-a{color:var(--indigo)}
-.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+html{-webkit-text-size-adjust:100%}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:var(--bg);color:var(--ink);line-height:1.65;font-size:15px}
+a{color:var(--blue)}
+.wrap{max-width:640px;margin:0 auto;padding:0 12px}
 
-/* ===== header ===== */
-header{
-  background:
-    radial-gradient(circle at 15% 20%, rgba(255,255,255,.10) 0 34px, transparent 35px),
-    radial-gradient(circle at 85% 60%, rgba(255,255,255,.08) 0 46px, transparent 47px),
-    radial-gradient(circle at 60% 10%, rgba(255,255,255,.07) 0 26px, transparent 27px),
-    linear-gradient(160deg,#2c3e6b 0%,#3a4f85 55%,#563a6b 100%);
-  color:#fff;padding:34px 0 26px;
-}
-header .wrap{display:flex;flex-direction:column;gap:6px}
-.logo{font-size:1.7rem;font-weight:800;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
-.logo .lantern{font-size:1.5rem}
-.tagline{font-size:.92rem;opacity:.92}
-.tagline b{color:#ffd98a}
+header{background:#2c3e6b;color:#fff;padding:14px 0 12px}
+header h1{font-size:1.15rem;display:flex;align-items:center;gap:7px}
+header .sub{font-size:.78rem;opacity:.9;margin-top:2px}
 
-/* ===== search panel ===== */
-.panel{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  box-shadow:var(--shadow);padding:16px;margin-top:-18px;position:relative;z-index:2;
-}
-.panel .row{display:flex;flex-wrap:wrap;gap:10px}
-.panel input[type=search]{
-  flex:1 1 220px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;
-  font-size:1rem;background:#fffdf9;
-}
-.panel select{
-  flex:0 1 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
-  font-size:.95rem;background:#fffdf9;color:var(--ink);
-}
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-.chip{
-  border:1px solid var(--line);background:#fffdf9;border-radius:999px;
-  padding:5px 14px;font-size:.85rem;cursor:pointer;user-select:none;color:var(--sub);
-  transition:.15s;
-}
-.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
-.chip:hover{border-color:var(--accent)}
+/* クイックフィルタ（スティッキー） */
+.filters{position:sticky;top:0;z-index:10;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--line)}
+.tabrow{display:flex;gap:6px}
+.tab{flex:1;text-align:center;padding:10px 4px;border-radius:10px;border:1px solid var(--line);background:#fff;font-size:.9rem;font-weight:700;color:var(--sub);cursor:pointer}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.subrow{display:flex;gap:6px;margin-top:7px}
+.subrow select{flex:1;padding:10px;border:1px solid var(--line);border-radius:10px;font-size:.9rem;background:#fff;color:var(--ink)}
+#btnNear{flex:0 0 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:.9rem;font-weight:700;color:var(--sub);cursor:pointer}
+#btnNear.on{background:var(--blue);border-color:var(--blue);color:#fff}
 
-/* ===== toolbar ===== */
-.toolbar{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px;flex-wrap:wrap;gap:8px}
-.count{font-size:.9rem;color:var(--sub)}
-.count b{color:var(--accent);font-size:1.05rem}
-.toolbar .actions{display:flex;gap:8px}
-.btn{
-  border:none;border-radius:10px;padding:9px 16px;font-size:.9rem;cursor:pointer;
-  font-weight:700;transition:.15s;
-}
-.btn-primary{background:var(--accent);color:#fff}
-.btn-primary:hover{background:#a53125}
-.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.count{font-size:.8rem;color:var(--sub);margin:10px 2px 8px}
+.count b{color:var(--accent)}
 
-/* ===== cards ===== */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding-bottom:30px}
-.card{
-  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-  box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:.15s;
-  display:flex;flex-direction:column;
-}
-.card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(58,46,42,.14)}
-.card .band{height:6px;background:linear-gradient(90deg,var(--accent),var(--gold))}
-.card.scale-small .band{background:linear-gradient(90deg,#4a8f5d,#a9c94f)}
-.card.scale-mid .band{background:linear-gradient(90deg,var(--indigo),#6f86c4)}
-.card .body{padding:14px 16px 12px;flex:1;display:flex;flex-direction:column;gap:6px}
-.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-.card h3{font-size:1.02rem;line-height:1.45}
-.fav{background:none;border:none;font-size:1.25rem;cursor:pointer;line-height:1;color:#d8cbbb;flex-shrink:0}
-.fav.on{color:#e6b422}
-.badges{display:flex;flex-wrap:wrap;gap:5px}
-.badge{font-size:.72rem;padding:2px 9px;border-radius:999px;font-weight:700}
-.badge.scale-large{background:var(--accent-soft);color:var(--accent)}
-.badge.scale-mid{background:var(--indigo-soft);color:var(--indigo)}
-.badge.scale-small{background:#e7f3ea;color:#3c7a4e}
-.badge.user{background:#fff3d6;color:#a2701c}
-.badge.conf-high{background:#e7f3ea;color:#3c7a4e}
-.badge.conf-med{background:#f0ece5;color:#8a7a6e}
-.meta{font-size:.85rem;color:var(--sub);display:flex;flex-direction:column;gap:2px}
-.meta .date{color:var(--ink);font-weight:700}
-.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:8px}
-.tag{font-size:.72rem;background:#f5efe6;color:var(--sub);border-radius:6px;padding:2px 7px}
+/* 仮データ告知 */
+.demo-note{background:var(--orange-soft);color:var(--orange);font-size:.78rem;border-radius:10px;padding:8px 12px;margin-top:10px}
 
-.empty{
-  text-align:center;color:var(--sub);padding:60px 20px;background:var(--card);
-  border:1px dashed var(--line);border-radius:var(--radius);margin-bottom:30px;
-}
-.empty .big{font-size:2rem;margin-bottom:8px}
+/* カード */
+.list{display:flex;flex-direction:column;gap:10px;padding-bottom:90px}
+.card{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;text-decoration:none;color:var(--ink)}
+.card:active{background:#f6f1e9}
+.card.cancelled{opacity:.75}
+.datebar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px}
+.dchip{font-size:.8rem;font-weight:800;background:var(--accent-soft);color:var(--accent);border-radius:7px;padding:2px 9px}
+.dchip.today{background:var(--accent);color:#fff}
+.dchip.dist{background:var(--blue-soft);color:var(--blue)}
+.st{font-size:.78rem;font-weight:800;border-radius:7px;padding:2px 9px}
+.st.cancel{background:#3c3c3c;color:#fff}
+.st.post{background:var(--orange);color:#fff}
+.card h2{font-size:1.02rem;line-height:1.45;margin:1px 0 3px}
+.place{font-size:.85rem;color:var(--sub)}
+.rain{font-size:.78rem;color:var(--blue);margin-top:2px}
+.trust{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:7px;border-top:1px dashed var(--line);font-size:.72rem;color:var(--sub)}
+.ptype{font-weight:800;border-radius:6px;padding:1px 7px}
+.ptype.admin{background:var(--green-soft);color:var(--green)}
+.ptype.organizer{background:var(--blue-soft);color:var(--blue)}
+.ptype.resident{background:var(--orange-soft);color:var(--orange)}
+.ptype.sample{background:var(--gray-soft);color:var(--sub)}
 
-/* ===== modal ===== */
-.overlay{
-  position:fixed;inset:0;background:rgba(30,22,18,.55);display:none;
-  align-items:flex-end;justify-content:center;z-index:50;padding:0;
-}
-.overlay.open{display:flex}
-.modal{
-  background:var(--card);width:100%;max-width:640px;max-height:88vh;overflow-y:auto;
-  border-radius:18px 18px 0 0;padding:22px 20px 30px;position:relative;
-  animation:up .2s ease;
-}
-@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
-@media(min-width:700px){
-  .overlay{align-items:center;padding:20px}
-  .modal{border-radius:18px}
-}
-.modal .close{
-  position:absolute;top:12px;right:14px;background:#f5efe6;border:none;width:34px;height:34px;
-  border-radius:50%;font-size:1rem;cursor:pointer;color:var(--sub);
-}
-.modal h2{font-size:1.25rem;margin:4px 0 10px;padding-right:40px;line-height:1.4}
-.dl{display:grid;grid-template-columns:96px 1fr;gap:6px 12px;font-size:.93rem;margin:14px 0}
-.dl dt{color:var(--sub);font-weight:700}
-.dl dd{word-break:break-word}
-.modal .desc{font-size:.93rem;background:#faf5ec;border-radius:10px;padding:12px 14px;margin-top:6px}
-.modal .linkrow{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-.note-user{font-size:.8rem;color:#a2701c;background:#fff3d6;border-radius:8px;padding:6px 10px;margin-top:12px}
+.empty{text-align:center;color:var(--sub);padding:50px 16px;font-size:.9rem}
 
-/* ===== form modal ===== */
-.form-grid{display:flex;flex-direction:column;gap:12px;margin-top:10px}
-.form-grid label{font-size:.85rem;font-weight:700;color:var(--sub);display:block;margin-bottom:3px}
-.form-grid input,.form-grid select,.form-grid textarea{
-  width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:9px;font-size:.95rem;
-  background:#fffdf9;font-family:inherit;
-}
-.form-grid textarea{min-height:70px;resize:vertical}
-.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.req{color:var(--accent)}
-.form-note{font-size:.78rem;color:var(--sub)}
+/* 投稿ボタン（固定） */
+.post-cta{position:fixed;left:0;right:0;bottom:0;z-index:20;background:linear-gradient(transparent,rgba(250,247,242,.95) 40%);padding:18px 12px 14px;pointer-events:none}
+.post-cta a{pointer-events:auto;display:block;max-width:640px;margin:0 auto;text-align:center;background:var(--accent);color:#fff;font-weight:800;font-size:1rem;border-radius:12px;padding:14px;text-decoration:none;box-shadow:0 4px 14px rgba(192,57,43,.35)}
 
-/* ===== sections ===== */
-.notice{
-  font-size:.82rem;color:var(--sub);background:#f7f1e7;border-radius:10px;
-  padding:10px 14px;margin:6px 0 26px;
-}
-footer{
-  background:#2b2320;color:#cbbfb4;font-size:.8rem;text-align:center;
-  padding:26px 16px;line-height:2;
-}
+footer{background:#2b2621;color:#c9beb1;font-size:.75rem;padding:22px 14px 110px;text-align:center;line-height:2}
 footer a{color:#e8d9a0}
 </style>
 </head>
@@ -171,332 +78,157 @@ footer a{color:#e8d9a0}
 
 <header>
   <div class="wrap">
-    <div class="logo"><span class="lantern">🏮</span>盆踊りナビ <span style="font-size:.95rem;background:rgba(255,255,255,.18);border-radius:8px;padding:2px 10px;letter-spacing:.1em">東海版</span></div>
-    <div class="tagline">愛知・岐阜・三重・静岡の盆踊りを、有名どころから<b>商店街・神社・町内会の小さな盆踊り</b>まで。今年の夏、近くのやぐらを見つけよう。</div>
+    <h1>🏮 盆踊りナビ愛知</h1>
+    <div class="sub">町内会・学区・神社・公園の小さな盆踊りを、今週末の近所で見つける</div>
   </div>
 </header>
 
 <div class="wrap">
 
-  <div class="panel">
-    <div class="row">
-      <input type="search" id="q" placeholder="🔍 名前・地名で検索（例：郡上、名古屋、音頭）">
-      <select id="pref"><option value="">都道府県：すべて</option></select>
-      <select id="month">
-        <option value="">時期：すべて</option>
-        <option value="7">7月</option>
-        <option value="8">8月</option>
-        <option value="9">9月</option>
-      </select>
-      <select id="scale">
-        <option value="">規模：すべて</option>
-        <option value="large">大規模（全国的に有名）</option>
-        <option value="mid">中規模（地域の祭り）</option>
-        <option value="small">小規模（町内会・商店街）</option>
-      </select>
+  <div class="filters">
+    <div class="tabrow">
+      <button class="tab on" data-mode="all">すべて</button>
+      <button class="tab" data-mode="today">今日開催</button>
+      <button class="tab" data-mode="weekend">今週末</button>
     </div>
-    <div class="chips" id="chips">
-      <span class="chip" data-tag="屋台あり">🍧 屋台あり</span>
-      <span class="chip" data-tag="飛び入り参加OK">💃 飛び入り参加OK</span>
-      <span class="chip" data-tag="子ども向け">🎈 子ども向け</span>
-      <span class="chip" data-tag="入場無料">🆓 入場無料</span>
-      <span class="chip" data-tag="浴衣歓迎">👘 浴衣歓迎</span>
-      <span class="chip" id="chipFav">⭐ お気に入りのみ</span>
+    <div class="subrow">
+      <select id="city"><option value="">市町村：すべて</option></select>
+      <button id="btnNear">📍 近い順</button>
     </div>
   </div>
 
-  <div class="toolbar">
-    <div class="count"><b id="cnt">0</b> 件の盆踊りが見つかりました</div>
-    <div class="actions">
-      <button class="btn btn-ghost" id="btnReset">条件クリア</button>
-      <button class="btn btn-primary" id="btnAdd">＋ 地域の盆踊りを登録</button>
-    </div>
+  <div class="demo-note" id="demoNote" style="display:none">
+    ⚠️ 現在は<b>表示確認用の仮データ</b>を掲載しています。実際のイベント情報ではありません。
   </div>
 
-  <div class="grid" id="grid"></div>
+  <div class="count"><b id="cnt">0</b> 件（開催日順）<span id="geoNote"></span></div>
+
+  <div class="list" id="list"></div>
   <div class="empty" id="empty" style="display:none">
-    <div class="big">🏮</div>
     条件に合う盆踊りが見つかりませんでした。<br>
-    条件を変えるか、「＋ 地域の盆踊りを登録」からあなたの町の盆踊りを追加してください。
-  </div>
-
-  <div class="notice">
-    ※ 掲載情報は自治体・観光協会・主催者等の公開情報をもとに作成した<b>参考情報</b>です。日時・場所は変更・中止になることがあります。お出かけ前に必ず各イベントの詳細に記載の情報源（公式サイト・広報等）で最新情報をご確認ください。「じぶんで登録」したイベントは、この端末（ブラウザ）内にのみ保存されます。
+    ご存じの盆踊りがあれば、ぜひ投稿してください。
   </div>
 
 </div>
 
-<!-- 詳細モーダル -->
-<div class="overlay" id="ovDetail">
-  <div class="modal" id="mdDetail"></div>
-</div>
-
-<!-- 登録モーダル -->
-<div class="overlay" id="ovForm">
-  <div class="modal">
-    <button class="close" data-close>✕</button>
-    <h2>🏮 地域の盆踊りを登録</h2>
-    <p style="font-size:.85rem;color:var(--sub)">町内会・自治会・商店街など、あなたの知っている小さな盆踊りを登録できます（この端末内に保存されます）。</p>
-    <div class="form-grid">
-      <div>
-        <label>イベント名 <span class="req">*</span></label>
-        <input id="fName" placeholder="例：ひばりが丘団地 納涼盆踊り大会">
-      </div>
-      <div class="form-2col">
-        <div>
-          <label>都道府県 <span class="req">*</span></label>
-          <select id="fPref"></select>
-        </div>
-        <div>
-          <label>市区町村 <span class="req">*</span></label>
-          <input id="fCity" placeholder="例：西東京市">
-        </div>
-      </div>
-      <div>
-        <label>会場</label>
-        <input id="fVenue" placeholder="例：ひばりが丘団地 中央広場">
-      </div>
-      <div class="form-2col">
-        <div>
-          <label>開始日 <span class="req">*</span></label>
-          <input type="date" id="fDateFrom">
-        </div>
-        <div>
-          <label>終了日（1日のみなら空欄）</label>
-          <input type="date" id="fDateTo">
-        </div>
-      </div>
-      <div>
-        <label>時間</label>
-        <input id="fTime" placeholder="例：18:00〜20:30">
-      </div>
-      <div>
-        <label>特徴（当てはまるものをタップ）</label>
-        <div class="chips" id="fTags" style="margin-top:4px">
-          <span class="chip" data-tag="屋台あり">🍧 屋台あり</span>
-          <span class="chip" data-tag="飛び入り参加OK">💃 飛び入り参加OK</span>
-          <span class="chip" data-tag="子ども向け">🎈 子ども向け</span>
-          <span class="chip" data-tag="入場無料">🆓 入場無料</span>
-          <span class="chip" data-tag="浴衣歓迎">👘 浴衣歓迎</span>
-          <span class="chip" data-tag="雨天中止">☔ 雨天中止</span>
-        </div>
-      </div>
-      <div>
-        <label>メモ・見どころ</label>
-        <textarea id="fDesc" placeholder="例：19時からは子ども向けのお菓子まき。曲は炭坑節と東京音頭が中心。"></textarea>
-      </div>
-      <div class="form-note">※ 個人情報（電話番号など）は入力しないでください。</div>
-      <button class="btn btn-primary" id="btnSave" style="width:100%;padding:12px">登録する</button>
-    </div>
-  </div>
+<div class="post-cta">
+  <a href="submit.html">＋ 盆踊り情報を投稿する（チラシ歓迎）</a>
 </div>
 
 <footer>
-  🏮 盆踊りナビ — 全国の盆踊り・地域の小さなお祭り情報<br>
-  掲載情報の正確性は保証されません。最新情報は各主催者にご確認ください。<br>
-  <a href="../index.html">運営サイトトップ</a>
+  掲載情報は主催者・自治体等の公式発表と投稿に基づく参考情報です。<br>
+  開催有無は各イベントページ記載の情報元でご確認ください。<br>
+  <a href="submit.html">情報を投稿する</a>
 </footer>
 
 <script>
 "use strict";
-
-/* ============ データ ============
-   イベントデータは events.json に分離（編集・追加はそちら）。
-   scale: large=全国的に有名 / mid=市・地域規模 / small=町内会・商店街・神社レベル
-   confidence: high=2026年日程を一次情報で確認 / medium=例年開催は確認 / low=詳細未確認
-================================= */
-const PREFS=["愛知県","岐阜県","三重県","静岡県"];
-let EVENTS=[];
-
-/* ============ 状態 ============ */
-const LS_USER="bon_user_events_v1";
-const LS_FAV="bon_favs_v1";
-let userEvents=load(LS_USER,[]);
-let favs=new Set(load(LS_FAV,[]));
-let activeTags=new Set();
-let favOnly=false;
-
-function load(k,def){try{const v=JSON.parse(localStorage.getItem(k));return v??def}catch(e){return def}}
-function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-
-/* ============ 初期化 ============ */
 const $=s=>document.querySelector(s);
-const prefSel=$("#pref"),fPref=$("#fPref");
-PREFS.forEach(p=>{
-  prefSel.insertAdjacentHTML("beforeend",`<option>${p}</option>`);
-  fPref.insertAdjacentHTML("beforeend",`<option>${p}</option>`);
-});
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const WD=["日","月","火","水","木","金","土"];
 
-const SCALE_LABEL={large:"大規模",mid:"地域の祭り",small:"町内会・小規模"};
+let EVENTS=[], mode="all", cityFilter="", nearMode=false, geo=null;
 
-function allEvents(){return [...EVENTS,...userEvents]}
-
-/* ============ 絞り込み＆描画 ============ */
-function filtered(){
-  const q=$("#q").value.trim().toLowerCase();
-  const pref=prefSel.value, month=$("#month").value, scale=$("#scale").value;
-  return allEvents().filter(ev=>{
-    if(pref && ev.pref!==pref) return false;
-    if(month && !(ev.month||[]).includes(+month)) return false;
-    if(scale && ev.scale!==scale) return false;
-    if(favOnly && !favs.has(ev.id)) return false;
-    for(const t of activeTags) if(!(ev.tags||[]).includes(t)) return false;
-    if(q){
-      const hay=`${ev.name} ${ev.pref} ${ev.city} ${ev.venue||""} ${ev.desc||""} ${(ev.tags||[]).join(" ")}`.toLowerCase();
-      if(!hay.includes(q)) return false;
-    }
-    return true;
-  });
+const today=new Date(); today.setHours(0,0,0,0);
+const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+const TODAY=ymd(today);
+// 今週末 = 直近の土日（金曜なら明日あさって、土曜なら今日明日、日曜なら今日）
+const sunOffset=(7-today.getDay())%7;
+const thisSunday=new Date(today); thisSunday.setDate(today.getDate()+sunOffset);
+const weekendDates=new Set();
+for(let d=new Date(today); d<=thisSunday; d.setDate(d.getDate()+1)){
+  if(d.getDay()===0||d.getDay()===6) weekendDates.add(ymd(d));
 }
 
-function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function parseD(s){const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)}
+function fmtD(s){const d=parseD(s);return `${d.getMonth()+1}/${d.getDate()}(${WD[d.getDay()]})`}
+
+function upcoming(ev){ // 今日以降の開催日
+  return (ev.dates||[]).filter(x=>x.date>=TODAY).sort((a,b)=>a.date<b.date?-1:1);
+}
+function dist(ev){
+  if(!geo||ev.lat==null) return null;
+  const R=6371,r=x=>x*Math.PI/180;
+  const dLat=r(ev.lat-geo.lat),dLng=r(ev.lng-geo.lng);
+  const a=Math.sin(dLat/2)**2+Math.cos(r(geo.lat))*Math.cos(r(ev.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+const PT={admin:["admin","運営確認済み"],organizer:["organizer","主催者投稿"],resident:["resident","住民投稿・未確認"]};
 
 function render(){
-  const list=filtered();
+  let list=EVENTS.filter(ev=>{
+    const up=upcoming(ev);
+    if(!up.length) return false;                 // 開催終了は非表示
+    if(mode==="today" && !up.some(x=>x.date===TODAY)) return false;
+    if(mode==="weekend" && !up.some(x=>weekendDates.has(x.date))) return false;
+    if(cityFilter && ev.city!==cityFilter) return false;
+    return true;
+  });
+  list.sort((a,b)=>{
+    if(nearMode&&geo){const da=dist(a)??1e9,db=dist(b)??1e9;if(da!==db)return da-db}
+    const ua=upcoming(a)[0].date, ub=upcoming(b)[0].date;
+    return ua<ub?-1:ua>ub?1:0;
+  });
   $("#cnt").textContent=list.length;
-  const grid=$("#grid");
-  grid.innerHTML=list.map(ev=>`
-    <div class="card scale-${ev.scale}" data-id="${esc(ev.id)}">
-      <div class="band"></div>
-      <div class="body">
-        <div class="top">
-          <h3>${esc(ev.name)}</h3>
-          <button class="fav ${favs.has(ev.id)?"on":""}" data-fav="${esc(ev.id)}" title="お気に入り">★</button>
-        </div>
-        <div class="badges">
-          <span class="badge scale-${ev.scale}">${SCALE_LABEL[ev.scale]||""}</span>
-          ${ev.user?'<span class="badge user">じぶんで登録</span>':""}
-          ${ev.confidence==="high"?'<span class="badge conf-high">2026年日程 確認済み</span>':""}
-          ${ev.confidence==="medium"?'<span class="badge conf-med">日程は例年情報</span>':""}
-        </div>
-        <div class="meta">
-          <span class="date">📅 ${esc(ev.dateText)}</span>
-          <span>📍 ${esc(ev.pref)} ${esc(ev.city)}</span>
-          ${ev.time?`<span>🕗 ${esc(ev.time)}</span>`:""}
-        </div>
-        <div class="tags">${(ev.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+  $("#list").innerHTML=list.map(ev=>{
+    const up=upcoming(ev);
+    const next=up[0];
+    const isToday=up.some(x=>x.date===TODAY);
+    const dtxt=up.slice(0,2).map(x=>fmtD(x.date)).join("・")+(up.length>2?" ほか":"");
+    const time=next.start?`${next.start}${next.end?"〜"+next.end:""}`:"";
+    const km=dist(ev);
+    const pt=PT[ev.posterType]||PT.resident;
+    return `<a class="card ${ev.eventStatus==="cancelled"?"cancelled":""}" href="e/${esc(ev.id)}.html">
+      <div class="datebar">
+        <span class="dchip ${isToday?"today":""}">${isToday?"今日 ":""}${dtxt}${time?" "+time:""}</span>
+        ${ev.eventStatus==="cancelled"?'<span class="st cancel">中止</span>':""}
+        ${ev.eventStatus==="postponed"?'<span class="st post">延期</span>':""}
+        ${km!=null?`<span class="dchip dist">約${km<10?km.toFixed(1):Math.round(km)}km</span>`:""}
       </div>
-    </div>`).join("");
+      <h2>${esc(ev.name)}</h2>
+      <div class="place">📍 ${esc(ev.city)}・${esc(ev.venue)}</div>
+      ${ev.rain?`<div class="rain">☔ ${esc(ev.rain)}</div>`:""}
+      <div class="trust">
+        <span class="ptype ${pt[0]}">${pt[1]}</span>
+        ${ev.sample?'<span class="ptype sample">仮データ</span>':""}
+        <span>情報元: ${esc(ev.source&&ev.source.name||"—")}</span>
+        <span>最終確認: ${esc(ev.lastVerified||"—")}</span>
+      </div>
+    </a>`;
+  }).join("");
   $("#empty").style.display=list.length?"none":"block";
 }
 
-/* ============ 詳細 ============ */
-function openDetail(id){
-  const ev=allEvents().find(e=>e.id===id); if(!ev)return;
-  $("#mdDetail").innerHTML=`
-    <button class="close" data-close>✕</button>
-    <div class="badges" style="margin-bottom:4px">
-      <span class="badge scale-${ev.scale}">${SCALE_LABEL[ev.scale]||""}</span>
-      ${ev.user?'<span class="badge user">じぶんで登録</span>':""}
-      ${ev.confidence==="high"?'<span class="badge conf-high">2026年日程 確認済み</span>':""}
-      ${ev.confidence==="medium"?'<span class="badge conf-med">日程は例年情報</span>':""}
-    </div>
-    <h2>🏮 ${esc(ev.name)}</h2>
-    <dl class="dl">
-      <dt>開催時期</dt><dd>${esc(ev.dateText)}</dd>
-      ${ev.time?`<dt>時間</dt><dd>${esc(ev.time)}</dd>`:""}
-      <dt>場所</dt><dd>${esc(ev.pref)} ${esc(ev.city)}${ev.venue?`<br>${esc(ev.venue)}`:""}</dd>
-      ${(ev.tags||[]).length?`<dt>特徴</dt><dd>${ev.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join(" ")}</dd>`:""}
-    </dl>
-    ${ev.desc?`<div class="desc">${esc(ev.desc)}</div>`:""}
-    ${ev.dateNote?`<div class="note-user">📌 ${esc(ev.dateNote)}</div>`:""}
-    ${ev.sourceUrl?`<div class="note-user" style="background:#eef2f8;color:#2c3e6b">ℹ️ 情報源：<a href="${esc(ev.sourceUrl)}" target="_blank" rel="noopener">${esc(ev.sourceName||"公式情報")}</a>（お出かけ前に最新情報をご確認ください）</div>`:""}
-    ${ev.user?`<div class="note-user">この情報はあなたがこの端末で登録したものです。</div>
-      <div class="linkrow"><button class="btn btn-ghost" data-del="${esc(ev.id)}">🗑 この登録を削除</button></div>`:""}
-    <div class="linkrow">
-      <a class="btn btn-ghost" style="text-decoration:none" target="_blank" rel="noopener"
-         href="https://www.google.com/maps/search/${encodeURIComponent(ev.pref+" "+ev.city+" "+(ev.venue||""))}">🗺 地図で見る</a>
-      <a class="btn btn-ghost" style="text-decoration:none" target="_blank" rel="noopener"
-         href="https://www.google.com/search?q=${encodeURIComponent(ev.name+" "+ev.pref+" 盆踊り 開催")}">🔎 最新情報を検索</a>
-    </div>`;
-  $("#ovDetail").classList.add("open");
-}
-
-/* ============ 登録 ============ */
-$("#btnSave").addEventListener("click",()=>{
-  const name=$("#fName").value.trim(), pref=$("#fPref").value, city=$("#fCity").value.trim();
-  const from=$("#fDateFrom").value, to=$("#fDateTo").value;
-  if(!name||!pref||!city||!from){alert("「イベント名・都道府県・市区町村・開始日」は必須です");return}
-  const d1=new Date(from+"T00:00:00"), d2=to?new Date(to+"T00:00:00"):null;
-  const fmt=d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-  const months=new Set([d1.getMonth()+1]); if(d2)months.add(d2.getMonth()+1);
-  const tags=[...document.querySelectorAll("#fTags .chip.on")].map(c=>c.dataset.tag);
-  userEvents.push({
-    id:"u"+Date.now(), user:true, scale:"small",
-    name, pref, city, venue:$("#fVenue").value.trim(),
-    month:[...months], dateText:d2&&to!==from?`${fmt(d1)}〜${fmt(d2)}`:fmt(d1),
-    time:$("#fTime").value.trim(), tags, desc:$("#fDesc").value.trim()
-  });
-  save(LS_USER,userEvents);
-  ["fName","fCity","fVenue","fDateFrom","fDateTo","fTime","fDesc"].forEach(i=>$("#"+i).value="");
-  document.querySelectorAll("#fTags .chip.on").forEach(c=>c.classList.remove("on"));
-  $("#ovForm").classList.remove("open");
-  render();
-});
-
-/* ============ イベントハンドラ ============ */
-["q","pref","month","scale"].forEach(id=>{
-  $("#"+id).addEventListener("input",render);
-});
-$("#btnReset").addEventListener("click",()=>{
-  $("#q").value="";prefSel.value="";$("#month").value="";$("#scale").value="";
-  activeTags.clear();favOnly=false;
-  document.querySelectorAll("#chips .chip").forEach(c=>c.classList.remove("on"));
-  render();
-});
-$("#btnAdd").addEventListener("click",()=>$("#ovForm").classList.add("open"));
-
-$("#chips").addEventListener("click",e=>{
-  const chip=e.target.closest(".chip"); if(!chip)return;
-  chip.classList.toggle("on");
-  if(chip.id==="chipFav"){favOnly=chip.classList.contains("on")}
-  else{
-    const t=chip.dataset.tag;
-    chip.classList.contains("on")?activeTags.add(t):activeTags.delete(t);
-  }
-  render();
-});
-$("#fTags").addEventListener("click",e=>{
-  const chip=e.target.closest(".chip"); if(chip)chip.classList.toggle("on");
-});
-
-$("#grid").addEventListener("click",e=>{
-  const fav=e.target.closest("[data-fav]");
-  if(fav){
-    const id=fav.dataset.fav;
-    favs.has(id)?favs.delete(id):favs.add(id);
-    save(LS_FAV,[...favs]);
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
+  document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+  t.classList.add("on"); mode=t.dataset.mode; render();
+}));
+$("#city").addEventListener("change",e=>{cityFilter=e.target.value;render()});
+$("#btnNear").addEventListener("click",()=>{
+  if(nearMode){nearMode=false;$("#btnNear").classList.remove("on");$("#geoNote").textContent="";render();return}
+  if(!navigator.geolocation){$("#geoNote").textContent=" ／ この端末では現在地を取得できません";return}
+  $("#geoNote").textContent=" ／ 現在地を取得中…";
+  navigator.geolocation.getCurrentPosition(pos=>{
+    geo={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    nearMode=true;$("#btnNear").classList.add("on");
+    $("#geoNote").textContent=" ／ 現在地に近い順";
     render();
-    return;
-  }
-  const card=e.target.closest(".card");
-  if(card)openDetail(card.dataset.id);
+  },()=>{$("#geoNote").textContent=" ／ 現在地を取得できませんでした（位置情報の許可をご確認ください）"});
 });
 
-document.addEventListener("click",e=>{
-  if(e.target.matches("[data-close]")||e.target.classList.contains("overlay")){
-    document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("open"));
-  }
-  const del=e.target.closest("[data-del]");
-  if(del && confirm("この登録を削除しますか？")){
-    userEvents=userEvents.filter(ev=>ev.id!==del.dataset.del);
-    save(LS_USER,userEvents);
-    document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("open"));
-    render();
-  }
-});
-
-/* ============ データ読み込み ============ */
-render();
 fetch("events.json")
   .then(r=>{if(!r.ok)throw new Error(r.status);return r.json()})
-  .then(data=>{EVENTS=Array.isArray(data)?data:(data.events||[]);render();})
+  .then(data=>{
+    EVENTS=(data.events||[]).filter(ev=>ev.status==="published");
+    if(EVENTS.some(ev=>ev.sample)) $("#demoNote").style.display="block";
+    const cities=[...new Set(EVENTS.map(ev=>ev.city))].sort((a,b)=>a.localeCompare(b,"ja"));
+    $("#city").insertAdjacentHTML("beforeend",cities.map(c=>`<option>${esc(c)}</option>`).join(""));
+    render();
+  })
   .catch(()=>{
-    const empty=$("#empty");
-    if(!allEvents().length){
-      empty.style.display="block";
-      empty.innerHTML='<div class="big">🏮</div>イベントデータ（events.json）を読み込めませんでした。<br>通信環境をご確認のうえ、再読み込みしてください。';
-    }
+    $("#empty").style.display="block";
+    $("#empty").innerHTML="イベントデータを読み込めませんでした。<br>通信環境をご確認のうえ再読み込みしてください。";
   });
 </script>
 </body>

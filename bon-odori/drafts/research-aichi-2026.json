@@ -1,0 +1,29 @@
+{
+  "_note": "掲載候補メモ（愛知県・2026年夏）。公式サイト・自治体サイト等をもとに収集。掲載前に必ず sourceUrl の一次情報を再確認し、desc は公式発表に基づき自分の言葉で書き直すこと。サイトには未掲載。",
+  "collectedAt": "2026-07-10",
+  "candidates": [
+    { "name": "万場盆おどり大会", "city": "名古屋市中川区", "venue": "万場川東公園", "dateText": "2026年7月31日〜8月1日", "time": "18:00〜21:00（踊りは19:00開始）", "scale": "small", "sourceUrl": "https://www.city.nagoya.jp/nakagawa/miryoku/1051186/1051189.html", "sourceName": "名古屋市中川区公式ウェブサイト", "confidence": "high", "memo": "地域の盆踊り。模擬店あり・小雨決行・周辺車両通行止め" },
+    { "name": "名東区 各学区盆踊り大会・夏祭り（日程一覧）", "city": "名古屋市名東区", "venue": "区内各学区の小学校・公園など", "dateText": "例年7月下旬〜8月（令和8年度日程は区役所より案内）", "scale": "small", "sourceUrl": "https://www.city.nagoya.jp/meito/page/0000187983.html", "sourceName": "名古屋市名東区公式ウェブサイト", "confidence": "medium", "memo": "★重要：区役所が学区単位の盆踊り日程一覧を毎年公開。ローカル情報の宝庫。他区にも同種ページがないか要調査" },
+    { "name": "今伊勢連区 盆踊り大会", "city": "一宮市", "venue": "今伊勢連区内", "dateText": "例年夏（2026年日程未確認）", "scale": "small", "sourceUrl": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1056049/1056236.html", "sourceName": "一宮市公式サイト（連区回覧情報）", "confidence": "low", "memo": "市公式の回覧板情報。問い合わせは今伊勢公民館" },
+    { "name": "本地ヶ原連合自治会 盆踊り大会", "city": "尾張旭市", "venue": "本地ヶ原地区内", "dateText": "例年8月（2026年日程未確認）", "scale": "small", "sourceUrl": "https://www.city.owariasahi.lg.jp/page/2300.html", "sourceName": "尾張旭市公式ホームページ", "confidence": "low", "memo": "★重要：尾張旭市は市内各地区の盆踊り情報を市公式サイトで取りまとめ。令和8年度分は情報が入り次第更新予定" },
+    { "name": "大須夏まつり（大盆踊り大会）", "city": "名古屋市中区", "venue": "大須商店街一帯・大須観音境内", "dateText": "2026年8月1日〜2日", "scale": "mid", "sourceUrl": "https://www.nagoya-info.jp/event/detail/116/", "sourceName": "名古屋コンシェルジュ（名古屋市観光情報）", "confidence": "high", "memo": "商店街の盆踊り。ローカル寄りだが規模は中" },
+    { "name": "名古屋おもてなし武将隊 盆踊り大会2026", "city": "名古屋市西区", "venue": "なごのキャンパス", "dateText": "2026年7月31日〜8月2日", "time": "18:00〜20:00", "scale": "mid", "sourceUrl": "https://nagono-campus.jp/eventinfo/eventinfo-29669/", "sourceName": "なごのキャンパス公式サイト", "confidence": "medium" },
+    { "name": "東別院まつり（盆踊り）", "city": "名古屋市中区", "venue": "東別院境内", "dateText": "例年9月下旬（2026年日程未確認）", "scale": "mid", "sourceUrl": "https://www.ohigashi.net/news/matsuri2025/", "sourceName": "真宗大谷派名古屋別院公式サイト", "confidence": "medium" },
+    { "name": "セントレア盆踊り", "city": "常滑市", "venue": "中部国際空港スカイデッキ", "dateText": "2026年7月18日〜19日（一次情報未確認）", "scale": "mid", "sourceUrl": "https://www.centrair.jp/corporate/sustainability/community/event/index.html", "sourceName": "中部国際空港セントレア公式サイト", "confidence": "medium" },
+    { "name": "海の日名古屋みなと祭 市民総おどり", "city": "名古屋市港区", "venue": "ガーデンふ頭交差点北特設スペース", "dateText": "2026年7月20日", "time": "18:20〜20:00", "scale": "mid", "sourceUrl": "https://www.nagoya-info.jp/event/detail/129/", "sourceName": "名古屋コンシェルジュ", "confidence": "high" },
+    { "name": "刈谷わんさか祭り（かりや盆フェス）", "city": "刈谷市", "venue": "刈谷市総合運動公園", "dateText": "2026年8月14日（前夜祭）", "scale": "mid", "sourceUrl": "https://www.kariya-wansaka.jp/", "sourceName": "刈谷わんさか祭り公式サイト", "confidence": "high" },
+    { "name": "春日井市民納涼まつり", "city": "春日井市", "venue": "落合公園", "dateText": "2026年7月25日", "time": "18:00〜20:30", "scale": "mid", "sourceUrl": "https://www.city.kasugai.lg.jp/bunka/event/event/n_matsuri/index.html", "sourceName": "春日井市公式ホームページ", "confidence": "high" },
+    { "name": "稲沢夏まつり", "city": "稲沢市", "venue": "サリオパーク祖父江", "dateText": "2026年8月22日", "time": "盆踊り17:50〜18:50", "scale": "mid", "sourceUrl": "https://ina-natsu.gonna.jp/", "sourceName": "稲沢夏まつり公式サイト", "confidence": "high" },
+    { "name": "豊田おいでんまつり おいでん総踊り", "city": "豊田市", "venue": "名鉄豊田市駅東側一帯", "dateText": "2026年7月25日", "time": "18:00〜21:00", "scale": "large", "sourceUrl": "https://www.oidenmaturi.com/", "sourceName": "豊田おいでんまつり公式サイト", "confidence": "high", "memo": "総踊り系。ローカル盆踊りではないため掲載可否は方針次第" },
+    { "name": "岡崎城下家康公夏まつり（盆踊り）", "city": "岡崎市", "venue": "市内複数会場", "dateText": "例年8月上旬〜中旬（2026年日程未確認）", "scale": "mid", "sourceUrl": "https://okazaki-kanko.jp/event/674", "sourceName": "岡崎市観光協会公式サイト", "confidence": "medium" },
+    { "name": "岡崎盆おどりフェス", "city": "岡崎市", "venue": "岡崎城公園", "dateText": "例年9月中旬〜下旬（2026年日程未確認）", "scale": "mid", "sourceUrl": "https://okazaki-kanko.jp/okazaki-park/program/4847", "sourceName": "岡崎市観光協会公式サイト", "confidence": "medium" },
+    { "name": "一宮七夕まつり 盆踊り大会", "city": "一宮市", "venue": "本町商店街・真清田神社周辺", "dateText": "2026年7月23日〜26日の期間中", "scale": "mid", "sourceUrl": "https://www.138ss.com/tanabata/event/detail/32/", "sourceName": "一宮七夕まつり公式サイト", "confidence": "high" },
+    { "name": "一宮市びさい夏まつり", "city": "一宮市", "venue": "尾西地区会場", "dateText": "2026年8月8日（要一次確認）", "scale": "mid", "sourceUrl": "https://www.138ss.com/event/detail/8/", "sourceName": "IchinomiyaNAVI", "confidence": "medium" },
+    { "name": "にっぽんど真ん中祭り", "city": "名古屋市", "venue": "久屋大通公園ほか", "dateText": "2026年8月28日〜30日", "scale": "large", "sourceUrl": "https://www.domatsuri.com/", "sourceName": "にっぽんど真ん中祭り公式サイト", "confidence": "high", "memo": "盆踊りではなく演舞祭。本サイトの趣旨（ローカル盆踊り）とは異なるため掲載しない想定" }
+  ],
+  "surveyTips": [
+    "名古屋市の各区役所サイトに「学区の盆踊り・夏祭り日程一覧」ページがある区が複数ある（名東区で確認済み）。全16区を調べると学区レベルの情報が大量に取れる",
+    "尾張旭市のように市が地区盆踊りをとりまとめて公開している自治体がある",
+    "市の広報紙（7月号・8月号）のイベント欄・回覧板コーナーが小規模盆踊りの主な公開場所"
+  ]
+}
