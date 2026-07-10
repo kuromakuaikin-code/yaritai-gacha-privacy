@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>応援する・チラシ作成サービス｜盆踊りナビ愛知</title>
+<meta name="description" content="盆踊りナビ愛知を寄付で応援できます。町内会・自治会向けに、盆踊り・夏祭りのチラシをAIを活用して有料で作成するサービスも承っています。">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>">
+<link rel="canonical" href="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/support.html">
+<style>
+:root{--bg:#faf7f2;--ink:#33291f;--sub:#7d7264;--line:#e7ddd0;--accent:#c0392b;--blue:#2c5282;--green:#2e7d4f;--green-soft:#e6f2ea;--orange:#b45309;--orange-soft:#fdf0dd}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;background:var(--bg);color:var(--ink);line-height:1.8;font-size:15px}
+a{color:var(--blue)}
+.wrap{max-width:640px;margin:0 auto;padding:0 14px 50px}
+header{background:#2c3e6b;color:#fff;padding:10px 0}
+header .wrap{padding-bottom:0}
+header a{color:#fff;text-decoration:none;font-weight:800;font-size:.95rem}
+h1{font-size:1.3rem;margin:18px 0 8px}
+h2{font-size:1.1rem;margin:6px 0 8px}
+p.lead{font-size:.92rem;color:var(--sub)}
+.box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 16px;margin:16px 0}
+.btn{display:block;text-align:center;background:var(--accent);color:#fff;border-radius:12px;padding:15px;margin:12px 0 4px;text-decoration:none;font-weight:800;font-size:1rem}
+.btn.green{background:var(--green)}
+.prep{background:var(--orange-soft);color:var(--orange);border-radius:10px;padding:12px 14px;font-size:.88rem;font-weight:700;text-align:center;margin:12px 0 4px}
+ul.feat{padding-left:1.3em;font-size:.92rem}
+ul.feat li{padding:2px 0}
+.price{font-size:1.05rem;font-weight:800;color:var(--accent)}
+.note{font-size:.78rem;color:var(--sub);margin-top:10px}
+.ai-note{background:var(--green-soft);color:var(--green);border-radius:10px;padding:10px 14px;font-size:.85rem;margin:10px 0}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a href="index.html">← 🏮 盆踊りナビ愛知</a></div></header>
+<div class="wrap">
+
+  <h1>🏮 このサイトを応援する</h1>
+  <p class="lead">盆踊りナビ愛知は、地域の小さな盆踊りが誰にでも見つかるように、個人が運営している非営利のサイトです。運営を続けるための応援を歓迎しています。</p>
+
+  <div class="box">
+    <h2>☕ 寄付で応援する</h2>
+    <p style="font-size:.92rem">いただいた寄付は、サイトの維持（ドメイン代など）と情報確認の活動に使わせていただきます。金額は自由です。</p>
+    <script>
+      const DONATE_URL = ""; // ← OFUSE / Ko-fi / Buy Me a Coffee 等のURLをここに貼る
+    </script>
+    <div id="donateArea"></div>
+    <script>
+      document.getElementById("donateArea").innerHTML = DONATE_URL
+        ? '<a class="btn" href="' + DONATE_URL + '" target="_blank" rel="noopener">寄付で応援する</a>'
+        : '<div class="prep">寄付の受付は現在準備中です。</div>';
+    </script>
+  </div>
+
+  <div class="box">
+    <h2>📄 盆踊りのチラシ、お作りします（有料）</h2>
+    <p style="font-size:.92rem">町内会・自治会・子ども会のみなさまへ。盆踊り・夏祭りの<b>チラシ（A4・印刷用データ）</b>を制作します。「毎年チラシを作る人がいなくて困っている」「手書きから卒業したい」という地域の声にお応えするサービスです。</p>
+    <ul class="feat">
+      <li>日時・場所・プログラムをお伝えいただくだけでOK</li>
+      <li>A4カラー／モノクロ（印刷用PDF・画像データで納品）</li>
+      <li>修正2回まで無料</li>
+      <li>回覧板用・掲示板用のサイズ違いにも対応</li>
+    </ul>
+    <div class="ai-note">🤖 制作にはAI（画像生成・デザイン支援）を活用し、その分お手頃な価格でご提供しています。AIを使って制作することを事前に明示しています。</div>
+    <p class="price">料金：1件 3,000円〜（内容により）</p>
+    <script>
+      const FLYER_CONTACT_URL = ""; // ← 申込用フォーム（Googleフォーム等）のURLをここに貼る
+    </script>
+    <div id="flyerArea"></div>
+    <script>
+      document.getElementById("flyerArea").innerHTML = FLYER_CONTACT_URL
+        ? '<a class="btn green" href="' + FLYER_CONTACT_URL + '" target="_blank" rel="noopener">チラシ作成の相談・申し込み</a>'
+        : '<div class="prep">お申し込み窓口は現在準備中です。</div>';
+    </script>
+    <p class="note">※ お支払い方法・納期はご相談時にご案内します。チラシ制作をご依頼いただいたイベントは、ご希望により当サイトへ「主催者投稿」として無料掲載できます。</p>
+  </div>
+
+  <p class="note">※ 掲載イベントの情報掲載は今後も無料です（掲載料はいただきません）。</p>
+
+</div>
+</body>
+</html>

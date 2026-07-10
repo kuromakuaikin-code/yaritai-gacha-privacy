@@ -237,7 +237,7 @@ def main():
         print(f"生成: e/{ev['id']}.html")
 
     # sitemap.xml
-    urls = [BASE_URL, BASE_URL + "submit.html"] + [BASE_URL + f"e/{ev['id']}.html" for ev in events]
+    urls = [BASE_URL, BASE_URL + "submit.html", BASE_URL + "support.html"] + [BASE_URL + f"e/{ev['id']}.html" for ev in events]
     sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     sitemap += "".join(f"  <url><loc>{html.escape(u)}</loc></url>\n" for u in urls)
     sitemap += "</urlset>\n"
