@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>盆踊りナビ｜全国の盆踊り・町内会の小さなお祭りまで</title>
+<meta name="description" content="全国の有名な盆踊りから、町内会・商店街・団地の小さな盆踊りまで探せる情報サイト。都道府県・日程・規模で絞り込み。自分の地域のイベントも登録できます。">
+<style>
+:root{
+  --bg:#fdf8f0;
+  --card:#ffffff;
+  --ink:#3a2e2a;
+  --sub:#8a7a6e;
+  --accent:#c0392b;
+  --accent-soft:#fbe9e5;
+  --indigo:#2c3e6b;
+  --indigo-soft:#e8ecf5;
+  --gold:#c8952f;
+  --line:#eadfd2;
+  --radius:14px;
+  --shadow:0 2px 10px rgba(58,46,42,.08);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.7;
+}
+a{color:var(--indigo)}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+
+/* ===== header ===== */
+header{
+  background:
+    radial-gradient(circle at 15% 20%, rgba(255,255,255,.10) 0 34px, transparent 35px),
+    radial-gradient(circle at 85% 60%, rgba(255,255,255,.08) 0 46px, transparent 47px),
+    radial-gradient(circle at 60% 10%, rgba(255,255,255,.07) 0 26px, transparent 27px),
+    linear-gradient(160deg,#2c3e6b 0%,#3a4f85 55%,#563a6b 100%);
+  color:#fff;padding:34px 0 26px;
+}
+header .wrap{display:flex;flex-direction:column;gap:6px}
+.logo{font-size:1.7rem;font-weight:800;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.logo .lantern{font-size:1.5rem}
+.tagline{font-size:.92rem;opacity:.92}
+.tagline b{color:#ffd98a}
+
+/* ===== search panel ===== */
+.panel{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:16px;margin-top:-18px;position:relative;z-index:2;
+}
+.panel .row{display:flex;flex-wrap:wrap;gap:10px}
+.panel input[type=search]{
+  flex:1 1 220px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;
+  font-size:1rem;background:#fffdf9;
+}
+.panel select{
+  flex:0 1 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+  font-size:.95rem;background:#fffdf9;color:var(--ink);
+}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.chip{
+  border:1px solid var(--line);background:#fffdf9;border-radius:999px;
+  padding:5px 14px;font-size:.85rem;cursor:pointer;user-select:none;color:var(--sub);
+  transition:.15s;
+}
+.chip.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip:hover{border-color:var(--accent)}
+
+/* ===== toolbar ===== */
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px;flex-wrap:wrap;gap:8px}
+.count{font-size:.9rem;color:var(--sub)}
+.count b{color:var(--accent);font-size:1.05rem}
+.toolbar .actions{display:flex;gap:8px}
+.btn{
+  border:none;border-radius:10px;padding:9px 16px;font-size:.9rem;cursor:pointer;
+  font-weight:700;transition:.15s;
+}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#a53125}
+.btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+/* ===== cards ===== */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding-bottom:30px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:.15s;
+  display:flex;flex-direction:column;
+}
+.card:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(58,46,42,.14)}
+.card .band{height:6px;background:linear-gradient(90deg,var(--accent),var(--gold))}
+.card.scale-small .band{background:linear-gradient(90deg,#4a8f5d,#a9c94f)}
+.card.scale-mid .band{background:linear-gradient(90deg,var(--indigo),#6f86c4)}
+.card .body{padding:14px 16px 12px;flex:1;display:flex;flex-direction:column;gap:6px}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card h3{font-size:1.02rem;line-height:1.45}
+.fav{background:none;border:none;font-size:1.25rem;cursor:pointer;line-height:1;color:#d8cbbb;flex-shrink:0}
+.fav.on{color:#e6b422}
+.badges{display:flex;flex-wrap:wrap;gap:5px}
+.badge{font-size:.72rem;padding:2px 9px;border-radius:999px;font-weight:700}
+.badge.scale-large{background:var(--accent-soft);color:var(--accent)}
+.badge.scale-mid{background:var(--indigo-soft);color:var(--indigo)}
+.badge.scale-small{background:#e7f3ea;color:#3c7a4e}
+.badge.user{background:#fff3d6;color:#a2701c}
+.meta{font-size:.85rem;color:var(--sub);display:flex;flex-direction:column;gap:2px}
+.meta .date{color:var(--ink);font-weight:700}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto;padding-top:8px}
+.tag{font-size:.72rem;background:#f5efe6;color:var(--sub);border-radius:6px;padding:2px 7px}
+
+.empty{
+  text-align:center;color:var(--sub);padding:60px 20px;background:var(--card);
+  border:1px dashed var(--line);border-radius:var(--radius);margin-bottom:30px;
+}
+.empty .big{font-size:2rem;margin-bottom:8px}
+
+/* ===== modal ===== */
+.overlay{
+  position:fixed;inset:0;background:rgba(30,22,18,.55);display:none;
+  align-items:flex-end;justify-content:center;z-index:50;padding:0;
+}
+.overlay.open{display:flex}
+.modal{
+  background:var(--card);width:100%;max-width:640px;max-height:88vh;overflow-y:auto;
+  border-radius:18px 18px 0 0;padding:22px 20px 30px;position:relative;
+  animation:up .2s ease;
+}
+@keyframes up{from{transform:translateY(30px);opacity:.5}to{transform:none;opacity:1}}
+@media(min-width:700px){
+  .overlay{align-items:center;padding:20px}
+  .modal{border-radius:18px}
+}
+.modal .close{
+  position:absolute;top:12px;right:14px;background:#f5efe6;border:none;width:34px;height:34px;
+  border-radius:50%;font-size:1rem;cursor:pointer;color:var(--sub);
+}
+.modal h2{font-size:1.25rem;margin:4px 0 10px;padding-right:40px;line-height:1.4}
+.dl{display:grid;grid-template-columns:96px 1fr;gap:6px 12px;font-size:.93rem;margin:14px 0}
+.dl dt{color:var(--sub);font-weight:700}
+.dl dd{word-break:break-word}
+.modal .desc{font-size:.93rem;background:#faf5ec;border-radius:10px;padding:12px 14px;margin-top:6px}
+.modal .linkrow{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+.note-user{font-size:.8rem;color:#a2701c;background:#fff3d6;border-radius:8px;padding:6px 10px;margin-top:12px}
+
+/* ===== form modal ===== */
+.form-grid{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.form-grid label{font-size:.85rem;font-weight:700;color:var(--sub);display:block;margin-bottom:3px}
+.form-grid input,.form-grid select,.form-grid textarea{
+  width:100%;padding:9px 12px;border:1px solid var(--line);border-radius:9px;font-size:.95rem;
+  background:#fffdf9;font-family:inherit;
+}
+.form-grid textarea{min-height:70px;resize:vertical}
+.form-2col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.req{color:var(--accent)}
+.form-note{font-size:.78rem;color:var(--sub)}
+
+/* ===== sections ===== */
+.notice{
+  font-size:.82rem;color:var(--sub);background:#f7f1e7;border-radius:10px;
+  padding:10px 14px;margin:6px 0 26px;
+}
+footer{
+  background:#2b2320;color:#cbbfb4;font-size:.8rem;text-align:center;
+  padding:26px 16px;line-height:2;
+}
+footer a{color:#e8d9a0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="logo"><span class="lantern">🏮</span>盆踊りナビ</div>
+    <div class="tagline">全国の有名な盆踊りから、<b>町内会・商店街・団地の小さな盆踊り</b>まで。今年の夏、近くのやぐらを見つけよう。</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="panel">
+    <div class="row">
+      <input type="search" id="q" placeholder="🔍 名前・地名で検索（例：中野、団地、音頭）">
+      <select id="pref"><option value="">都道府県：すべて</option></select>
+      <select id="month">
+        <option value="">時期：すべて</option>
+        <option value="7">7月</option>
+        <option value="8">8月</option>
+        <option value="9">9月</option>
+      </select>
+      <select id="scale">
+        <option value="">規模：すべて</option>
+        <option value="large">大規模（全国的に有名）</option>
+        <option value="mid">中規模（地域の祭り）</option>
+        <option value="small">小規模（町内会・商店街）</option>
+      </select>
+    </div>
+    <div class="chips" id="chips">
+      <span class="chip" data-tag="屋台あり">🍧 屋台あり</span>
+      <span class="chip" data-tag="飛び入り参加OK">💃 飛び入り参加OK</span>
+      <span class="chip" data-tag="子ども向け">🎈 子ども向け</span>
+      <span class="chip" data-tag="入場無料">🆓 入場無料</span>
+      <span class="chip" data-tag="浴衣歓迎">👘 浴衣歓迎</span>
+      <span class="chip" id="chipFav">⭐ お気に入りのみ</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="count"><b id="cnt">0</b> 件の盆踊りが見つかりました</div>
+    <div class="actions">
+      <button class="btn btn-ghost" id="btnReset">条件クリア</button>
+      <button class="btn btn-primary" id="btnAdd">＋ 地域の盆踊りを登録</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">
+    <div class="big">🏮</div>
+    条件に合う盆踊りが見つかりませんでした。<br>
+    条件を変えるか、「＋ 地域の盆踊りを登録」からあなたの町の盆踊りを追加してください。
+  </div>
+
+  <div class="notice">
+    ※ 掲載されている日程・内容は<b>参考情報（一部はサンプル）</b>です。開催日時・場所は毎年変わることがあります。お出かけ前に必ず主催者の公式サイト・自治体の広報等で最新情報をご確認ください。「じぶんで登録」したイベントは、この端末（ブラウザ）内にのみ保存されます。
+  </div>
+
+</div>
+
+<!-- 詳細モーダル -->
+<div class="overlay" id="ovDetail">
+  <div class="modal" id="mdDetail"></div>
+</div>
+
+<!-- 登録モーダル -->
+<div class="overlay" id="ovForm">
+  <div class="modal">
+    <button class="close" data-close>✕</button>
+    <h2>🏮 地域の盆踊りを登録</h2>
+    <p style="font-size:.85rem;color:var(--sub)">町内会・自治会・商店街など、あなたの知っている小さな盆踊りを登録できます（この端末内に保存されます）。</p>
+    <div class="form-grid">
+      <div>
+        <label>イベント名 <span class="req">*</span></label>
+        <input id="fName" placeholder="例：ひばりが丘団地 納涼盆踊り大会">
+      </div>
+      <div class="form-2col">
+        <div>
+          <label>都道府県 <span class="req">*</span></label>
+          <select id="fPref"></select>
+        </div>
+        <div>
+          <label>市区町村 <span class="req">*</span></label>
+          <input id="fCity" placeholder="例：西東京市">
+        </div>
+      </div>
+      <div>
+        <label>会場</label>
+        <input id="fVenue" placeholder="例：ひばりが丘団地 中央広場">
+      </div>
+      <div class="form-2col">
+        <div>
+          <label>開始日 <span class="req">*</span></label>
+          <input type="date" id="fDateFrom">
+        </div>
+        <div>
+          <label>終了日（1日のみなら空欄）</label>
+          <input type="date" id="fDateTo">
+        </div>
+      </div>
+      <div>
+        <label>時間</label>
+        <input id="fTime" placeholder="例：18:00〜20:30">
+      </div>
+      <div>
+        <label>特徴（当てはまるものをタップ）</label>
+        <div class="chips" id="fTags" style="margin-top:4px">
+          <span class="chip" data-tag="屋台あり">🍧 屋台あり</span>
+          <span class="chip" data-tag="飛び入り参加OK">💃 飛び入り参加OK</span>
+          <span class="chip" data-tag="子ども向け">🎈 子ども向け</span>
+          <span class="chip" data-tag="入場無料">🆓 入場無料</span>
+          <span class="chip" data-tag="浴衣歓迎">👘 浴衣歓迎</span>
+          <span class="chip" data-tag="雨天中止">☔ 雨天中止</span>
+        </div>
+      </div>
+      <div>
+        <label>メモ・見どころ</label>
+        <textarea id="fDesc" placeholder="例：19時からは子ども向けのお菓子まき。曲は炭坑節と東京音頭が中心。"></textarea>
+      </div>
+      <div class="form-note">※ 個人情報（電話番号など）は入力しないでください。</div>
+      <button class="btn btn-primary" id="btnSave" style="width:100%;padding:12px">登録する</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  🏮 盆踊りナビ — 全国の盆踊り・地域の小さなお祭り情報<br>
+  掲載情報の正確性は保証されません。最新情報は各主催者にご確認ください。<br>
+  <a href="../index.html">運営サイトトップ</a>
+</footer>
+
+<script>
+"use strict";
+
+/* ============ データ ============
+   scale: large=全国的に有名 / mid=地域の祭り / small=町内会・商店街レベル
+   dateNote: 日程が毎年変動するものの注記
+   sample: true のものは「こういう小さな盆踊りが載る」ことを示すサンプル
+================================= */
+const PREFS=["北海道","青森県","岩手県","宮城県","秋田県","山形県","福島県","茨城県","栃木県","群馬県","埼玉県","千葉県","東京都","神奈川県","新潟県","富山県","石川県","福井県","山梨県","長野県","岐阜県","静岡県","愛知県","三重県","滋賀県","京都府","大阪府","兵庫県","奈良県","和歌山県","鳥取県","島根県","岡山県","広島県","山口県","徳島県","香川県","愛媛県","高知県","福岡県","佐賀県","長崎県","熊本県","大分県","宮崎県","鹿児島県","沖縄県"];
+
+const EVENTS=[
+  {id:"gujo",name:"郡上おどり",pref:"岐阜県",city:"郡上市八幡町",venue:"郡上八幡市街地（会場は日ごとに移動）",
+   month:[7,8,9],dateText:"7月中旬〜9月上旬の約30夜（徹夜おどりは8月13〜16日頃）",time:"20:00頃〜（徹夜おどりは明け方まで)",
+   scale:"large",tags:["飛び入り参加OK","入場無料","浴衣歓迎"],
+   desc:"400年以上続く日本三大盆踊りのひとつ。約30夜にわたり開催され、誰でも輪に入って踊れるのが最大の魅力。お盆の「徹夜おどり」は夜通し踊り明かす。国指定重要無形民俗文化財・ユネスコ無形文化遺産（風流踊）。",
+   dateNote:"開催日程は毎年変わります。郡上八幡観光協会の公式発表をご確認ください。"},
+  {id:"nishimonai",name:"西馬音内の盆踊",pref:"秋田県",city:"雄勝郡羽後町",venue:"西馬音内本町通り",
+   month:[8],dateText:"毎年8月16日〜18日",time:"19:00頃〜",
+   scale:"large",tags:["入場無料"],
+   desc:"約700年の歴史を持つ日本三大盆踊りのひとつ。編み笠や黒い彦三頭巾で顔を隠して踊る幻想的な姿と、篝火に照らされる「亡者踊り」とも呼ばれる独特の情緒が有名。国指定重要無形民俗文化財・ユネスコ無形文化遺産（風流踊）。",
+   dateNote:"観覧席等の詳細は羽後町の公式情報をご確認ください。"},
+  {id:"awa",name:"阿波おどり",pref:"徳島県",city:"徳島市",venue:"徳島市中心部の演舞場ほか",
+   month:[8],dateText:"毎年8月中旬（例年8月12日〜15日）",time:"夕方〜夜",
+   scale:"large",tags:["浴衣歓迎"],
+   desc:"「踊る阿呆に見る阿呆」で知られる日本最大級の踊りの祭典。厳密には盆踊りを起源とする阿波踊りで、街全体が連（れん）の踊りで埋め尽くされる。にわか連に参加すれば観光客も踊れる。",
+   dateNote:"演舞場のチケット・日程は公式サイトをご確認ください。"},
+  {id:"tsukiji",name:"築地本願寺納涼盆踊り大会",pref:"東京都",city:"中央区",venue:"築地本願寺 境内",
+   month:[7,8],dateText:"例年7月下旬〜8月上旬の数日間",time:"19:00頃〜21:00頃",
+   scale:"mid",tags:["屋台あり","飛び入り参加OK","入場無料","浴衣歓迎"],
+   desc:"「日本一おいしい盆踊り」と呼ばれるほど、築地場外市場の名店が屋台を出すことで有名。寺の境内にやぐらが組まれ、誰でも踊りの輪に参加できる都心の人気盆踊り。",
+   dateNote:"開催日は毎年異なります。築地本願寺公式サイトをご確認ください。"},
+  {id:"nakano",name:"中野駅前大盆踊り大会",pref:"東京都",city:"中野区",venue:"中野駅前・中野サンプラザ周辺",
+   month:[8],dateText:"例年8月上旬の週末",time:"夕方〜21:00頃",
+   scale:"mid",tags:["飛び入り参加OK","入場無料","浴衣歓迎"],
+   desc:"駅前広場で開催される都市型の大型盆踊り。DJ盆踊りなど新しいスタイルも取り入れ、若い世代にも人気。定番の音頭からポップスまで幅広い選曲で踊れる。",
+   dateNote:"開催有無・日程は実行委員会の公式発表をご確認ください。"},
+  {id:"kawara",name:"河原町ふるさと夏まつり盆踊り",pref:"宮城県",city:"（サンプル）仙台市",venue:"河川敷特設会場",
+   month:[8],dateText:"例年8月中旬の週末",time:"18:30〜21:00",
+   scale:"mid",tags:["屋台あり","入場無料","飛び入り参加OK"],sample:true,
+   desc:"地域の郷土芸能の披露と盆踊りが一度に楽しめる、市民参加型の夏祭り。フィナーレには小規模な打ち上げ花火も。",
+   dateNote:"（サンプル掲載）実際の開催情報は自治体広報をご確認ください。"},
+  {id:"sapporo",name:"すすきの・北海盆踊り（さっぽろ夏まつり）",pref:"北海道",city:"札幌市中央区",venue:"大通公園",
+   month:[8],dateText:"例年8月中旬（さっぽろ夏まつり期間中）",time:"18:00頃〜",
+   scale:"mid",tags:["飛び入り参加OK","入場無料","子ども向け"],
+   desc:"「北海盆唄」に合わせて大通公園で踊る札幌の夏の風物詩。前半は子ども盆踊り、後半は大人の部という二部構成が特徴。",
+   dateNote:"さっぽろ夏まつり公式サイトをご確認ください。"},
+  {id:"kawachi",name:"河内音頭まつり（八尾河内音頭まつり）",pref:"大阪府",city:"八尾市",venue:"久宝寺緑地ほか",
+   month:[8,9],dateText:"例年8月下旬〜9月上旬",time:"夕方〜夜",
+   scale:"mid",tags:["屋台あり","飛び入り参加OK","入場無料"],
+   desc:"河内地方に伝わる「河内音頭」の本場の祭り。生の音頭取りと楽団の演奏に合わせて何重もの踊りの輪ができる。テンポの良い音頭は初めてでも見よう見まねで踊れる。",
+   dateNote:"開催日程は公式サイトをご確認ください。"},
+  {id:"eisa",name:"沖縄全島エイサーまつり",pref:"沖縄県",city:"沖縄市",venue:"コザ運動公園ほか",
+   month:[8,9],dateText:"例年旧盆明けの最初の週末",time:"夕方〜夜",
+   scale:"large",tags:["屋台あり"],
+   desc:"沖縄の旧盆に祖先を送る念仏踊りを起源とする「エイサー」の最大の祭典。各地の青年会が太鼓と踊りを披露する。本土の盆踊りとはひと味違う迫力。",
+   dateNote:"旧盆の日程により毎年変動します。公式サイトをご確認ください。"},
+
+  /* ---- 地域密着（小規模）サンプル：町内会・商店街・団地レベル ---- */
+  {id:"s1",name:"みどり町三丁目 町内会盆踊り",pref:"東京都",city:"（サンプル）練馬区",venue:"みどり町第二公園",
+   month:[7],dateText:"7月最終土曜 1日のみ",time:"18:00〜20:30",
+   scale:"small",tags:["屋台あり","子ども向け","入場無料","雨天中止"],sample:true,
+   desc:"町内会青年部による手作りの盆踊り。炭坑節・東京音頭・アンパンマン音頭の定番3曲を繰り返すアットホームな会。19時からは子ども向けのお菓子まきあり。焼きそば・かき氷の模擬店は売り切れ御免。"},
+  {id:"s2",name:"さくら台団地 納涼盆踊り大会",pref:"神奈川県",city:"（サンプル）横浜市",venue:"団地中央広場",
+   month:[8],dateText:"8月第1金・土曜の2日間",time:"18:30〜21:00",
+   scale:"small",tags:["屋台あり","飛び入り参加OK","入場無料","浴衣歓迎"],sample:true,
+   desc:"団地自治会主催、50年続く納涼大会。やぐらを囲んで住民もOB・OGも一緒に踊る。2日目最後の「ダンシング・ヒーロー」が名物。"},
+  {id:"s3",name:"本町商店街 サマー盆踊りナイト",pref:"埼玉県",city:"（サンプル）川越市",venue:"商店街特設会場（歩行者天国）",
+   month:[8],dateText:"8月中旬の土曜",time:"17:00〜21:00",
+   scale:"small",tags:["屋台あり","入場無料","子ども向け"],sample:true,
+   desc:"商店街の店先がそのまま夜店になる盆踊り。スタンプラリーや店主たちによる生バンド演奏の音頭もあり、買い物ついでに立ち寄れる。"},
+  {id:"s4",name:"八幡神社 例祭奉納盆踊り",pref:"長野県",city:"（サンプル）松本市",venue:"八幡神社 境内",
+   month:[8],dateText:"8月14日・15日",time:"19:00〜21:30",
+   scale:"small",tags:["入場無料","浴衣歓迎"],sample:true,
+   desc:"神社の境内で提灯の灯りに包まれて踊る、昔ながらの奉納盆踊り。保存会のお囃子と生歌が自慢。地区外からの参加も歓迎。"},
+  {id:"s5",name:"ひまわり保育園・地域交流 夕涼み盆踊り",pref:"大阪府",city:"（サンプル）豊中市",venue:"園庭",
+   month:[7],dateText:"7月中旬の土曜",time:"16:30〜19:00",
+   scale:"small",tags:["子ども向け","入場無料","雨天中止"],sample:true,
+   desc:"園児と地域の親子向けの小さな夕涼み会。ちびっこ音頭中心で、未就園児も参加OK。ヨーヨー釣り・輪投げコーナーあり。"},
+  {id:"s6",name:"港町ふれあい盆踊りと灯籠流し",pref:"広島県",city:"（サンプル）尾道市",venue:"港前広場",
+   month:[8],dateText:"8月15日",time:"18:00〜21:00",
+   scale:"small",tags:["屋台あり","入場無料"],sample:true,
+   desc:"盆踊りのあとに灯籠流しでご先祖様を送る、お盆らしい地域の行事。海辺の夕景と提灯が美しい。"}
+];
+
+/* ============ 状態 ============ */
+const LS_USER="bon_user_events_v1";
+const LS_FAV="bon_favs_v1";
+let userEvents=load(LS_USER,[]);
+let favs=new Set(load(LS_FAV,[]));
+let activeTags=new Set();
+let favOnly=false;
+
+function load(k,def){try{const v=JSON.parse(localStorage.getItem(k));return v??def}catch(e){return def}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+/* ============ 初期化 ============ */
+const $=s=>document.querySelector(s);
+const prefSel=$("#pref"),fPref=$("#fPref");
+PREFS.forEach(p=>{
+  prefSel.insertAdjacentHTML("beforeend",`<option>${p}</option>`);
+  fPref.insertAdjacentHTML("beforeend",`<option>${p}</option>`);
+});
+
+const SCALE_LABEL={large:"大規模",mid:"地域の祭り",small:"町内会・小規模"};
+
+function allEvents(){return [...EVENTS,...userEvents]}
+
+/* ============ 絞り込み＆描画 ============ */
+function filtered(){
+  const q=$("#q").value.trim().toLowerCase();
+  const pref=prefSel.value, month=$("#month").value, scale=$("#scale").value;
+  return allEvents().filter(ev=>{
+    if(pref && ev.pref!==pref) return false;
+    if(month && !(ev.month||[]).includes(+month)) return false;
+    if(scale && ev.scale!==scale) return false;
+    if(favOnly && !favs.has(ev.id)) return false;
+    for(const t of activeTags) if(!(ev.tags||[]).includes(t)) return false;
+    if(q){
+      const hay=`${ev.name} ${ev.pref} ${ev.city} ${ev.venue||""} ${ev.desc||""} ${(ev.tags||[]).join(" ")}`.toLowerCase();
+      if(!hay.includes(q)) return false;
+    }
+    return true;
+  });
+}
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+
+function render(){
+  const list=filtered();
+  $("#cnt").textContent=list.length;
+  const grid=$("#grid");
+  grid.innerHTML=list.map(ev=>`
+    <div class="card scale-${ev.scale}" data-id="${esc(ev.id)}">
+      <div class="band"></div>
+      <div class="body">
+        <div class="top">
+          <h3>${esc(ev.name)}</h3>
+          <button class="fav ${favs.has(ev.id)?"on":""}" data-fav="${esc(ev.id)}" title="お気に入り">★</button>
+        </div>
+        <div class="badges">
+          <span class="badge scale-${ev.scale}">${SCALE_LABEL[ev.scale]||""}</span>
+          ${ev.user?'<span class="badge user">じぶんで登録</span>':""}
+          ${ev.sample?'<span class="badge user">サンプル</span>':""}
+        </div>
+        <div class="meta">
+          <span class="date">📅 ${esc(ev.dateText)}</span>
+          <span>📍 ${esc(ev.pref)} ${esc(ev.city)}</span>
+          ${ev.time?`<span>🕗 ${esc(ev.time)}</span>`:""}
+        </div>
+        <div class="tags">${(ev.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div>
+      </div>
+    </div>`).join("");
+  $("#empty").style.display=list.length?"none":"block";
+}
+
+/* ============ 詳細 ============ */
+function openDetail(id){
+  const ev=allEvents().find(e=>e.id===id); if(!ev)return;
+  $("#mdDetail").innerHTML=`
+    <button class="close" data-close>✕</button>
+    <div class="badges" style="margin-bottom:4px">
+      <span class="badge scale-${ev.scale}">${SCALE_LABEL[ev.scale]||""}</span>
+      ${ev.user?'<span class="badge user">じぶんで登録</span>':""}
+      ${ev.sample?'<span class="badge user">サンプル</span>':""}
+    </div>
+    <h2>🏮 ${esc(ev.name)}</h2>
+    <dl class="dl">
+      <dt>開催時期</dt><dd>${esc(ev.dateText)}</dd>
+      ${ev.time?`<dt>時間</dt><dd>${esc(ev.time)}</dd>`:""}
+      <dt>場所</dt><dd>${esc(ev.pref)} ${esc(ev.city)}${ev.venue?`<br>${esc(ev.venue)}`:""}</dd>
+      ${(ev.tags||[]).length?`<dt>特徴</dt><dd>${ev.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join(" ")}</dd>`:""}
+    </dl>
+    ${ev.desc?`<div class="desc">${esc(ev.desc)}</div>`:""}
+    ${ev.dateNote?`<div class="note-user">📌 ${esc(ev.dateNote)}</div>`:""}
+    ${ev.user?`<div class="note-user">この情報はあなたがこの端末で登録したものです。</div>
+      <div class="linkrow"><button class="btn btn-ghost" data-del="${esc(ev.id)}">🗑 この登録を削除</button></div>`:""}
+    <div class="linkrow">
+      <a class="btn btn-ghost" style="text-decoration:none" target="_blank" rel="noopener"
+         href="https://www.google.com/maps/search/${encodeURIComponent(ev.pref+" "+ev.city.replace(/（サンプル）/,"")+" "+(ev.venue||""))}">🗺 地図で見る</a>
+      <a class="btn btn-ghost" style="text-decoration:none" target="_blank" rel="noopener"
+         href="https://www.google.com/search?q=${encodeURIComponent(ev.name+" "+ev.pref+" 盆踊り 開催")}">🔎 最新情報を検索</a>
+    </div>`;
+  $("#ovDetail").classList.add("open");
+}
+
+/* ============ 登録 ============ */
+$("#btnSave").addEventListener("click",()=>{
+  const name=$("#fName").value.trim(), pref=$("#fPref").value, city=$("#fCity").value.trim();
+  const from=$("#fDateFrom").value, to=$("#fDateTo").value;
+  if(!name||!pref||!city||!from){alert("「イベント名・都道府県・市区町村・開始日」は必須です");return}
+  const d1=new Date(from+"T00:00:00"), d2=to?new Date(to+"T00:00:00"):null;
+  const fmt=d=>`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+  const months=new Set([d1.getMonth()+1]); if(d2)months.add(d2.getMonth()+1);
+  const tags=[...document.querySelectorAll("#fTags .chip.on")].map(c=>c.dataset.tag);
+  userEvents.push({
+    id:"u"+Date.now(), user:true, scale:"small",
+    name, pref, city, venue:$("#fVenue").value.trim(),
+    month:[...months], dateText:d2&&to!==from?`${fmt(d1)}〜${fmt(d2)}`:fmt(d1),
+    time:$("#fTime").value.trim(), tags, desc:$("#fDesc").value.trim()
+  });
+  save(LS_USER,userEvents);
+  ["fName","fCity","fVenue","fDateFrom","fDateTo","fTime","fDesc"].forEach(i=>$("#"+i).value="");
+  document.querySelectorAll("#fTags .chip.on").forEach(c=>c.classList.remove("on"));
+  $("#ovForm").classList.remove("open");
+  render();
+});
+
+/* ============ イベントハンドラ ============ */
+["q","pref","month","scale"].forEach(id=>{
+  $("#"+id).addEventListener("input",render);
+});
+$("#btnReset").addEventListener("click",()=>{
+  $("#q").value="";prefSel.value="";$("#month").value="";$("#scale").value="";
+  activeTags.clear();favOnly=false;
+  document.querySelectorAll("#chips .chip").forEach(c=>c.classList.remove("on"));
+  render();
+});
+$("#btnAdd").addEventListener("click",()=>$("#ovForm").classList.add("open"));
+
+$("#chips").addEventListener("click",e=>{
+  const chip=e.target.closest(".chip"); if(!chip)return;
+  chip.classList.toggle("on");
+  if(chip.id==="chipFav"){favOnly=chip.classList.contains("on")}
+  else{
+    const t=chip.dataset.tag;
+    chip.classList.contains("on")?activeTags.add(t):activeTags.delete(t);
+  }
+  render();
+});
+$("#fTags").addEventListener("click",e=>{
+  const chip=e.target.closest(".chip"); if(chip)chip.classList.toggle("on");
+});
+
+$("#grid").addEventListener("click",e=>{
+  const fav=e.target.closest("[data-fav]");
+  if(fav){
+    const id=fav.dataset.fav;
+    favs.has(id)?favs.delete(id):favs.add(id);
+    save(LS_FAV,[...favs]);
+    render();
+    return;
+  }
+  const card=e.target.closest(".card");
+  if(card)openDetail(card.dataset.id);
+});
+
+document.addEventListener("click",e=>{
+  if(e.target.matches("[data-close]")||e.target.classList.contains("overlay")){
+    document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("open"));
+  }
+  const del=e.target.closest("[data-del]");
+  if(del && confirm("この登録を削除しますか？")){
+    userEvents=userEvents.filter(ev=>ev.id!==del.dataset.del);
+    save(LS_USER,userEvents);
+    document.querySelectorAll(".overlay").forEach(o=>o.classList.remove("open"));
+    render();
+  }
+});
+
+render();
+</script>
+</body>
+</html>

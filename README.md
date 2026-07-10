@@ -1,6 +1,15 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
+## 盆踊りナビ
+
+全国の盆踊り（町内会・商店街レベルの小さなものまで）を探せる情報サイト。
+
+- サイト本体: `bon-odori/index.html`
+- 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/
+- 機能: キーワード検索／都道府県・時期（月）・規模での絞り込み／特徴タグ（屋台・飛び入りOKなど）／お気に入り／「地域の盆踊りを登録」（端末内 localStorage に保存）
+- イベントデータは `index.html` 内の `EVENTS` 配列に記載。追加・修正はそこを編集する
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
