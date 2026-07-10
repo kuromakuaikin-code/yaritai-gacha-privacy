@@ -19,9 +19,11 @@ bon-odori/
 
 ## 日常の運用（イベントの追加・修正・非公開）
 
-1. `events.json` の `events` 配列を編集する（書式は同ファイル冒頭の `_schema` 参照）
-2. `cd bon-odori && python3 build.py` を実行（個別ページと sitemap を再生成）
-3. コミットしてプッシュ（GitHub Pages に反映）
+**`events.json` を編集してコミットするだけ**（書式は同ファイル冒頭の `_schema` 参照）。
+
+- 編集はスマホ・PCの GitHub Web 画面からでもOK（リポジトリで events.json を開く → ✏️ → Commit changes）
+- コミットすると GitHub Actions（`.github/workflows/build-bon-odori.yml`）が個別ページと sitemap を**自動で再生成**する
+- ローカルで確認したい場合のみ `cd bon-odori && python3 build.py` を手動実行
 
 - **追加**: 配列に1件足す。`id` は英数字とハイフン（例 `nagoya-midori-narumi-gakku`）。URLになるので後から変えない
 - **修正**: 該当項目を直し、`lastVerified` を今日の日付に更新
