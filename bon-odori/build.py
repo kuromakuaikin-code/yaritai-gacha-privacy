@@ -16,10 +16,14 @@ import re
 import sys
 from datetime import date
 
-BASE_URL = "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/"
-SITE_NAME = "盆踊り・地域祭りナビ東海"
-CONTACT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor"
 HERE = os.path.dirname(os.path.abspath(__file__))
+with open(os.path.join(HERE, "site-config.json"), encoding="utf-8") as f:
+    SITE_CONFIG = json.load(f)
+SITE_NAME = SITE_CONFIG["siteName"]
+PUBLIC_BASE_URL = SITE_CONFIG.get("publicBaseUrl", "").strip().rstrip("/")
+if PUBLIC_BASE_URL:
+    PUBLIC_BASE_URL += "/"
+CONTACT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor"
 OUT_DIR = os.path.join(HERE, "e")
 
 WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
@@ -135,7 +139,9 @@ def page_html(ev):
         f"<br><small>{e(ev.get('statusNote'))}</small>" if ev.get("statusNote") else "") + "</div>" if status_banner else ""
 
     # schema.org Event 構造化データ（Google検索対策）
-    offers_free = {"@type": "Offer", "price": "0", "priceCurrency": "JPY", "availability": "https://schema.org/InStock", "url": BASE_URL + f"e/{ev['id']}.html"}
+    offers_free = {"@type": "Offer", "price": "0", "priceCurrency": "JPY", "availability": "https://schema.org/InStock"}
+    if PUBLIC_BASE_URL:
+        offers_free["url"] = PUBLIC_BASE_URL + f"e/{ev['id']}.html"
     ld = {
         "@context": "https://schema.org",
         "@type": "Event",
@@ -175,8 +181,18 @@ def page_html(ev):
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc_meta)}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{e(SITE_NAME)}">
+<meta property="og:title" content="{e(title)}">
+<meta property="og:description" content="{e(desc_meta)}">
+<meta property="og:image" content="../og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{e(title)}">
+<meta name="twitter:description" content="{e(desc_meta)}">
+<meta name="twitter:image" content="../og-image.png">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>">
-<link rel="canonical" href="{BASE_URL}e/{e(ev['id'])}.html">
+<link rel="manifest" href="../manifest.json">
+<link rel="canonical" href="{PUBLIC_BASE_URL + 'e/' + e(ev['id']) + '.html' if PUBLIC_BASE_URL else './' + e(ev['id']) + '.html'}">
 <script type="application/ld+json">
 {json.dumps(ld, ensure_ascii=False, indent=1)}
 </script>
@@ -301,14 +317,19 @@ def main():
             f.write(page_html(ev))
         print(f"生成: e/{ev['id']}.html")
 
-    # sitemap.xml
-    urls = [BASE_URL, BASE_URL + "submit.html", BASE_URL + "support.html", BASE_URL + "policy.html"] + [BASE_URL + f"e/{ev['id']}.html" for ev in events]
-    sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-    sitemap += "".join(f"  <url><loc>{html.escape(u)}</loc></url>\n" for u in urls)
-    sitemap += "</urlset>\n"
-    with open(os.path.join(HERE, "sitemap.xml"), "w", encoding="utf-8") as f:
-        f.write(sitemap)
-    print(f"生成: sitemap.xml（{len(urls)} URL）")
+    # sitemap.xml は独自の公開URLを設定した場合だけ生成する。
+    sitemap_path = os.path.join(HERE, "sitemap.xml")
+    if PUBLIC_BASE_URL:
+        urls = [PUBLIC_BASE_URL, PUBLIC_BASE_URL + "submit.html", PUBLIC_BASE_URL + "support.html", PUBLIC_BASE_URL + "policy.html"] + [PUBLIC_BASE_URL + f"e/{ev['id']}.html" for ev in events]
+        sitemap = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+        sitemap += "".join(f"  <url><loc>{html.escape(u)}</loc></url>\n" for u in urls)
+        sitemap += "</urlset>\n"
+        with open(sitemap_path, "w", encoding="utf-8") as f:
+            f.write(sitemap)
+        print(f"生成: sitemap.xml（{len(urls)} URL）")
+    elif os.path.exists(sitemap_path):
+        os.remove(sitemap_path)
+        print("削除: sitemap.xml（独自の公開URL設定後に再生成します）")
 
     # file:// で開く確認用ページにも公開データと地域確認状況を同期する。
     preview_path = os.path.join(HERE, "preview.html")

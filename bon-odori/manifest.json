@@ -1,0 +1,11 @@
+{
+  "name": "盆踊り・地域祭りナビ東海",
+  "short_name": "祭りナビ東海",
+  "description": "東海地方の盆踊りと地域のお祭りを探せる情報サイト",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf7f2",
+  "theme_color": "#2c3e6b"
+}
