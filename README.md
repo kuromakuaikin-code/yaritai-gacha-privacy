@@ -14,6 +14,14 @@ Privacy policy for やりたいガチャ
 - 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
 - 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
 
+## 見習い魔女の村まもり大作戦（タワーディフェンス）
+
+村に立ち寄った見習い魔女が、魔王軍に狙われた村を魔法の塔で守り抜くブラウザゲーム。
+
+- 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/witch-td/
+- 本体: `witch-td/index.html`（単一HTML・依存なし・スマホ対応）
+- 遊び方: 草地をタップして塔（🔥❄️⚡🌟）を建設 → 全10ウェーブを防衛。強化・売却・必殺技「流星」あり
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`

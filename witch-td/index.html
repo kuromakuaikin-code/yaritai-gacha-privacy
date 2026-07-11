@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>見習い魔女の村まもり大作戦 - タワーディフェンス</title>
+<meta name="description" content="村に立ち寄った見習い魔女が、魔王軍に狙われた村を魔法で守り抜くタワーディフェンスゲーム。無料・インストール不要でブラウザで遊べます。">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  html,body {
+    background:#1a1230; color:#fff;
+    font-family:'Hiragino Maru Gothic ProN','BIZ UDGothic','Yu Gothic',sans-serif;
+    height:100%; overscroll-behavior:none;
+  }
+  body { display:flex; flex-direction:column; align-items:center; }
+  #wrap { width:100%; max-width:660px; padding:6px; user-select:none; }
+  h1 { font-size:16px; text-align:center; padding:4px 0 6px; color:#ffd6f6; letter-spacing:1px; }
+
+  #hud {
+    display:flex; justify-content:space-between; align-items:center;
+    background:#2c2150; border-radius:10px; padding:6px 10px; margin-bottom:6px;
+    font-size:14px; gap:6px;
+  }
+  #hud .stat { white-space:nowrap; }
+  #hud button {
+    background:#4a3a86; color:#fff; border:none; border-radius:8px;
+    padding:6px 10px; font-size:13px; font-family:inherit; cursor:pointer;
+  }
+  #hud button:active { transform:scale(.95); }
+  #btnWave { background:#c94f7c; font-weight:bold; }
+  #btnWave.pulse { animation:pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(255,120,180,.7);} 50%{box-shadow:0 0 0 8px rgba(255,120,180,0);} }
+  #btnSpecial { background:#7a5cff; }
+  #btnSpecial:disabled { background:#3a3355; color:#887fb0; }
+  #btnSpecial.aiming { background:#ffb02e; color:#402800; }
+
+  #stage { position:relative; width:100%; }
+  canvas {
+    display:block; width:100%; border-radius:10px;
+    background:#3f7d3a; touch-action:none;
+  }
+
+  #panel {
+    margin-top:6px; background:#2c2150; border-radius:10px; padding:8px;
+    min-height:86px; font-size:13px;
+  }
+  #panel .hint { color:#b8aee0; text-align:center; padding:18px 4px; }
+  .towerBtns { display:flex; gap:6px; }
+  .towerBtns button {
+    flex:1; background:#3d3170; border:2px solid transparent; border-radius:10px;
+    color:#fff; padding:6px 2px; font-family:inherit; font-size:12px; cursor:pointer;
+    line-height:1.35;
+  }
+  .towerBtns button:disabled { opacity:.4; }
+  .towerBtns button:active { transform:scale(.96); }
+  .towerBtns .em { font-size:20px; display:block; }
+  .towerBtns .cost { color:#ffd23e; }
+  .selRow { display:flex; gap:8px; align-items:center; }
+  .selRow .info { flex:1; line-height:1.5; }
+  .selRow button {
+    background:#4a3a86; border:none; border-radius:8px; color:#fff;
+    padding:10px 12px; font-family:inherit; font-size:13px; cursor:pointer;
+  }
+  .selRow .up { background:#2f9e63; font-weight:bold; }
+  .selRow .up:disabled { background:#3a3355; color:#887fb0; }
+  .selRow .sell { background:#a5533a; }
+
+  .overlay {
+    position:absolute; inset:0; background:rgba(20,12,40,.88);
+    border-radius:10px; display:flex; flex-direction:column;
+    justify-content:center; align-items:center; text-align:center;
+    padding:20px; gap:14px; z-index:5;
+  }
+  .overlay h2 { color:#ffd6f6; font-size:22px; }
+  .overlay p { font-size:14px; line-height:1.9; color:#e8e2ff; }
+  .overlay button {
+    background:#c94f7c; color:#fff; border:none; border-radius:12px;
+    padding:12px 30px; font-size:17px; font-family:inherit; font-weight:bold; cursor:pointer;
+    box-shadow:0 4px 0 #8d3357;
+  }
+  .overlay button:active { transform:translateY(3px); box-shadow:none; }
+  .overlay .small { font-size:12px; color:#b8aee0; }
+  #foot { text-align:center; font-size:11px; color:#8f85b8; padding:8px 0 14px; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>🧙‍♀️ 見習い魔女の村まもり大作戦 🏡</h1>
+  <div id="hud">
+    <span class="stat">💰 <span id="gold">0</span></span>
+    <span class="stat">❤️ <span id="lives">0</span></span>
+    <span class="stat">🌊 <span id="wave">0</span>/<span id="waveMax">10</span></span>
+    <button id="btnSpecial">☄️ 流星</button>
+    <button id="btnSpeed">▶ x1</button>
+    <button id="btnWave">ウェーブ開始</button>
+  </div>
+  <div id="stage">
+    <canvas id="cv"></canvas>
+    <div class="overlay" id="ovIntro">
+      <h2>🧙‍♀️ 見習い魔女の村まもり大作戦</h2>
+      <p>旅の途中で村に立ち寄った見習い魔女リコ。<br>
+      その夜、村が<b>魔王軍</b>に狙われていることを知ってしまう——。<br>
+      「お世話になったこの村、わたしが守ってみせる！」</p>
+      <p class="small">草地をタップして魔法の塔を建てよう。<br>
+      敵が村（🏡）に着くとハートが減るよ。<br>
+      困ったら「☄️ 流星」で一発逆転！</p>
+      <button id="btnStart">むらをまもる！</button>
+    </div>
+    <div class="overlay" id="ovEnd" style="display:none">
+      <h2 id="endTitle"></h2>
+      <p id="endMsg"></p>
+      <button id="btnRetry">もういちど</button>
+    </div>
+  </div>
+  <div id="panel"><div class="hint">草地をタップすると魔法の塔を建てられるよ</div></div>
+  <div id="foot">音：<span id="sndState">ON</span>（タップで切替）</div>
+</div>
+
+<script>
+(() => {
+'use strict';
+
+/* ================= 基本設定 ================= */
+const TILE = 48, COLS = 13, ROWS = 9;
+const W = COLS * TILE, H = ROWS * TILE;
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
+const dpr = Math.min(window.devicePixelRatio || 1, 2);
+cv.width = W * dpr; cv.height = H * dpr;
+ctx.scale(dpr, dpr);
+
+/* 経路（タイル座標） */
+const WPT_TILES = [[-1,1],[9,1],[9,3],[2,3],[2,6],[12,6]];
+const WPTS = WPT_TILES.map(([c,r]) => ({ x: c*TILE + TILE/2, y: r*TILE + TILE/2 }));
+const pathTiles = new Set();
+for (let i = 0; i < WPT_TILES.length-1; i++) {
+  let [c1,r1] = WPT_TILES[i], [c2,r2] = WPT_TILES[i+1];
+  const dc = Math.sign(c2-c1), dr = Math.sign(r2-r1);
+  let c = c1, r = r1;
+  pathTiles.add(c+','+r);
+  while (c !== c2 || r !== r2) { c += dc; r += dr; pathTiles.add(c+','+r); }
+}
+const VILLAGE = { x: 12*TILE + TILE/2, y: 6*TILE + TILE/2 };
+
+/* 塔の種類 */
+const TOWER_TYPES = {
+  fire:    { name:'ほのお', em:'🔥', cost:60,  dmg:24, range:95,  rate:0.85, color:'#ff6b3d', desc:'ふつうに強い' },
+  ice:     { name:'こおり', em:'❄️', cost:50,  dmg:8,  range:85,  rate:1.0,  color:'#6fd8ff', slow:2.0, desc:'敵を遅くする' },
+  thunder: { name:'かみなり', em:'⚡', cost:40, dmg:9,  range:105, rate:0.38, color:'#ffd23e', desc:'連射が速い' },
+  star:    { name:'スター', em:'🌟', cost:110, dmg:34, range:115, rate:1.5,  color:'#d98cff', aoe:50, desc:'範囲こうげき' },
+};
+const UP_COST = t => Math.round(TOWER_TYPES[t.type].cost * 0.8) * t.lv;
+const SELL_GAIN = t => Math.round(t.spent * 0.6);
+
+/* 敵の種類 */
+const ENEMY_TYPES = {
+  gob:  { hp:30,   spd:55, bounty:8,   r:10, color:'#69b34c', name:'ゴブリン' },
+  wolf: { hp:46,   spd:92, bounty:11,  r:11, color:'#8a8fa3', name:'魔狼' },
+  orc:  { hp:170,  spd:36, bounty:24,  r:14, color:'#a34c4c', name:'オーク' },
+  boss: { hp:2800, spd:26, bounty:300, r:21, color:'#5b2a86', name:'魔王' },
+};
+
+/* ウェーブ構成 */
+const WAVES = [
+  [ {t:'gob', n:8,  gap:1.1} ],
+  [ {t:'gob', n:12, gap:0.85} ],
+  [ {t:'gob', n:8,  gap:0.8}, {t:'orc', n:3, gap:1.6} ],
+  [ {t:'wolf',n:12, gap:0.7} ],
+  [ {t:'gob', n:10, gap:0.6}, {t:'orc', n:6, gap:1.4} ],
+  [ {t:'wolf',n:14, gap:0.55},{t:'orc', n:4, gap:1.3} ],
+  [ {t:'gob', n:22, gap:0.45} ],
+  [ {t:'orc', n:10, gap:1.0}, {t:'wolf',n:8, gap:0.5} ],
+  [ {t:'gob', n:14, gap:0.5}, {t:'wolf',n:10,gap:0.5}, {t:'orc',n:6,gap:1.1} ],
+  [ {t:'orc', n:6,  gap:1.2}, {t:'wolf',n:8, gap:0.6}, {t:'boss',n:1,gap:1} ],
+];
+const hpMult = w => 1 + (w-1) * 0.18;
+
+/* ================= 状態 ================= */
+let gold, lives, waveNo, towers, enemies, projs, fx, spawnQueue, spawnT;
+let waveActive, gameOver, speed, selTile, selTower, aiming, specialCD, time;
+const SPECIAL_MAX = 25;
+
+function reset() {
+  gold = 130; lives = 10; waveNo = 0;
+  towers = []; enemies = []; projs = []; fx = [];
+  spawnQueue = []; spawnT = 0;
+  waveActive = false; gameOver = false; speed = 1;
+  selTile = null; selTower = null; aiming = false;
+  specialCD = 0; time = 0;
+  updateHUD(); renderPanel();
+}
+
+/* ================= サウンド ================= */
+let AC = null, muted = false;
+function beep(freq, dur, type='sine', vol=0.12) {
+  if (muted) return;
+  try {
+    if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+    if (AC.state === 'suspended') AC.resume();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, AC.currentTime + dur);
+    o.connect(g).connect(AC.destination);
+    o.start(); o.stop(AC.currentTime + dur);
+  } catch (e) {}
+}
+const snd = {
+  build: () => beep(660, .12, 'triangle'),
+  kill:  () => beep(880, .08, 'square', .05),
+  leak:  () => beep(160, .35, 'sawtooth', .15),
+  wave:  () => { beep(440, .12); setTimeout(()=>beep(660,.12), 120); },
+  spec:  () => beep(220, .5, 'sawtooth', .18),
+  win:   () => { [523,659,784,1047].forEach((f,i)=>setTimeout(()=>beep(f,.25,'triangle'),i*160)); },
+  lose:  () => { [392,330,262].forEach((f,i)=>setTimeout(()=>beep(f,.3,'sawtooth',.12),i*220)); },
+};
+document.getElementById('foot').addEventListener('click', () => {
+  muted = !muted;
+  document.getElementById('sndState').textContent = muted ? 'OFF' : 'ON';
+});
+
+/* ================= HUD / パネル ================= */
+const $ = id => document.getElementById(id);
+function updateHUD() {
+  $('gold').textContent = gold;
+  $('lives').textContent = lives;
+  $('wave').textContent = waveNo;
+  $('waveMax').textContent = WAVES.length;
+  const b = $('btnWave');
+  b.disabled = waveActive || gameOver || waveNo >= WAVES.length;
+  b.textContent = waveActive ? 'ウェーブ中…' : (waveNo >= WAVES.length ? 'クリア！' : `ウェーブ ${waveNo+1} 開始`);
+  b.classList.toggle('pulse', !waveActive && !gameOver && waveNo < WAVES.length);
+  const s = $('btnSpecial');
+  s.disabled = specialCD > 0 || gameOver;
+  s.textContent = specialCD > 0 ? `☄️ ${Math.ceil(specialCD)}s` : (aiming ? '☄️ 場所をタップ' : '☄️ 流星');
+  s.classList.toggle('aiming', aiming);
+}
+function renderPanel() {
+  const p = $('panel');
+  if (selTower) {
+    const tt = TOWER_TYPES[selTower.type];
+    const cost = UP_COST(selTower), maxed = selTower.lv >= 3;
+    p.innerHTML = `<div class="selRow">
+      <div class="info">${tt.em} <b>${tt.name}の塔</b> Lv.${selTower.lv}${maxed?'（最大）':''}<br>
+      攻撃 ${Math.round(selTower.dmg)} ／ 射程 ${Math.round(selTower.range)}</div>
+      <button class="up" id="pUp" ${maxed || gold < cost ? 'disabled' : ''}>${maxed ? '最大Lv' : `強化 💰${cost}`}</button>
+      <button class="sell" id="pSell">売却 💰${SELL_GAIN(selTower)}</button>
+    </div>`;
+    if (!maxed) $('pUp').onclick = () => {
+      const c = UP_COST(selTower);
+      if (gold < c) return;
+      gold -= c; selTower.spent += c; selTower.lv++;
+      selTower.dmg *= 1.6; selTower.range += 8;
+      snd.build(); updateHUD(); renderPanel();
+    };
+    $('pSell').onclick = () => {
+      gold += SELL_GAIN(selTower);
+      towers = towers.filter(t => t !== selTower);
+      selTower = null; selTile = null;
+      updateHUD(); renderPanel();
+    };
+  } else if (selTile) {
+    p.innerHTML = `<div class="towerBtns">` + Object.entries(TOWER_TYPES).map(([k,t]) =>
+      `<button data-t="${k}" ${gold < t.cost ? 'disabled' : ''}>
+        <span class="em">${t.em}</span>${t.name}<br><span class="cost">💰${t.cost}</span><br>${t.desc}</button>`
+    ).join('') + `</div>`;
+    p.querySelectorAll('button[data-t]').forEach(b => b.onclick = () => {
+      const k = b.dataset.t, tt = TOWER_TYPES[k];
+      if (gold < tt.cost || !selTile) return;
+      gold -= tt.cost;
+      towers.push({
+        type:k, c:selTile.c, r:selTile.r,
+        x:selTile.c*TILE + TILE/2, y:selTile.r*TILE + TILE/2,
+        dmg:tt.dmg, range:tt.range, rate:tt.rate, cd:0, lv:1, spent:tt.cost,
+      });
+      snd.build();
+      selTower = towers[towers.length-1]; selTile = null;
+      updateHUD(); renderPanel();
+    });
+  } else {
+    p.innerHTML = `<div class="hint">草地をタップすると魔法の塔を建てられるよ／塔をタップで強化・売却</div>`;
+  }
+}
+
+/* ================= 入力 ================= */
+function canvasPos(e) {
+  const rect = cv.getBoundingClientRect();
+  return { x: (e.clientX - rect.left) * W / rect.width,
+           y: (e.clientY - rect.top) * H / rect.height };
+}
+cv.addEventListener('pointerdown', e => {
+  e.preventDefault();
+  if (gameOver) return;
+  const { x, y } = canvasPos(e);
+  if (aiming) {
+    aiming = false; specialCD = SPECIAL_MAX;
+    castSpecial(x, y);
+    updateHUD(); return;
+  }
+  const c = Math.floor(x / TILE), r = Math.floor(y / TILE);
+  const hit = towers.find(t => t.c === c && t.r === r);
+  if (hit) { selTower = hit; selTile = null; }
+  else if (c >= 0 && c < COLS && r >= 0 && r < ROWS && !pathTiles.has(c+','+r)) {
+    selTile = { c, r }; selTower = null;
+  } else { selTile = null; selTower = null; }
+  renderPanel();
+});
+
+$('btnStart').onclick = () => { $('ovIntro').style.display = 'none'; snd.wave(); };
+$('btnRetry').onclick = () => { $('ovEnd').style.display = 'none'; reset(); };
+$('btnWave').onclick = startWave;
+$('btnSpeed').onclick = () => {
+  speed = speed === 1 ? 2 : 1;
+  $('btnSpeed').textContent = speed === 1 ? '▶ x1' : '▶▶ x2';
+};
+$('btnSpecial').onclick = () => {
+  if (specialCD > 0 || gameOver) return;
+  aiming = !aiming; updateHUD();
+};
+
+/* ================= ゲームロジック ================= */
+function startWave() {
+  if (waveActive || gameOver || waveNo >= WAVES.length) return;
+  waveNo++;
+  const mult = hpMult(waveNo);
+  spawnQueue = [];
+  let t = 0.5;
+  for (const g of WAVES[waveNo-1]) {
+    for (let i = 0; i < g.n; i++) {
+      spawnQueue.push({ at:t, type:g.t, mult });
+      t += g.gap;
+    }
+    t += 1.2;
+  }
+  spawnT = 0; waveActive = true;
+  snd.wave(); updateHUD();
+  fx.push({ kind:'banner', text:`ウェーブ ${waveNo}${waveNo===WAVES.length?'（最終決戦！）':''}`, t:2.2 });
+}
+
+function spawnEnemy(type, mult) {
+  const et = ENEMY_TYPES[type];
+  const hp = Math.round(et.hp * (type === 'boss' ? 1 : mult));
+  enemies.push({
+    type, hp, maxHp:hp, spd:et.spd, r:et.r, bounty:et.bounty,
+    wp:0, x:WPTS[0].x, y:WPTS[0].y, slowT:0, dist:0, wob:Math.random()*6.28,
+  });
+}
+
+function castSpecial(x, y) {
+  snd.spec();
+  fx.push({ kind:'meteor', x, y, t:0.9 });
+  for (const en of enemies) {
+    if (Math.hypot(en.x - x, en.y - y) <= 80) damage(en, 170);
+  }
+}
+
+function damage(en, d) {
+  en.hp -= d;
+  if (en.hp <= 0 && !en.dead) {
+    en.dead = true;
+    gold += en.bounty;
+    snd.kill();
+    fx.push({ kind:'coin', x:en.x, y:en.y, t:0.7, text:'+'+en.bounty });
+    updateHUD();
+  }
+}
+
+function update(dt) {
+  time += dt;
+  if (specialCD > 0) { specialCD = Math.max(0, specialCD - dt); if (specialCD === 0 || Math.ceil(specialCD+dt) !== Math.ceil(specialCD)) updateHUD(); }
+
+  /* 出現 */
+  if (waveActive) {
+    spawnT += dt;
+    while (spawnQueue.length && spawnQueue[0].at <= spawnT) {
+      const s = spawnQueue.shift();
+      spawnEnemy(s.type, s.mult);
+    }
+  }
+
+  /* 敵の移動 */
+  for (const en of enemies) {
+    if (en.dead) continue;
+    if (en.slowT > 0) en.slowT -= dt;
+    const spd = en.spd * (en.slowT > 0 ? 0.5 : 1);
+    let move = spd * dt;
+    while (move > 0 && en.wp < WPTS.length - 1) {
+      const tgt = WPTS[en.wp + 1];
+      const dx = tgt.x - en.x, dy = tgt.y - en.y;
+      const d = Math.hypot(dx, dy);
+      if (d <= move) { en.x = tgt.x; en.y = tgt.y; en.wp++; move -= d; en.dist += d; }
+      else { en.x += dx / d * move; en.y += dy / d * move; en.dist += move; move = 0; }
+    }
+    if (en.wp >= WPTS.length - 1) {
+      en.dead = true;
+      lives -= en.type === 'boss' ? 5 : 1;
+      snd.leak();
+      fx.push({ kind:'leak', t:0.5 });
+      updateHUD();
+      if (lives <= 0) return endGame(false);
+    }
+  }
+  enemies = enemies.filter(en => !en.dead);
+
+  /* 塔の攻撃 */
+  for (const t of towers) {
+    t.cd -= dt;
+    if (t.cd > 0) continue;
+    let best = null;
+    for (const en of enemies) {
+      if (Math.hypot(en.x - t.x, en.y - t.y) <= t.range) {
+        if (!best || en.dist > best.dist) best = en;
+      }
+    }
+    if (best) {
+      t.cd = t.rate;
+      const tt = TOWER_TYPES[t.type];
+      projs.push({
+        x:t.x, y:t.y - 14, tgt:best, spd:340, dmg:t.dmg,
+        color:tt.color, slow:tt.slow, aoe:tt.aoe,
+      });
+    }
+  }
+
+  /* 弾 */
+  for (const p of projs) {
+    if (p.done) continue;
+    if (p.tgt.dead) {
+      /* 目標が消えたら近くの敵に切替、いなければ消滅 */
+      let nb = null;
+      for (const en of enemies) {
+        const d = Math.hypot(en.x - p.x, en.y - p.y);
+        if (d < 60 && (!nb || d < nb.d)) nb = { en, d };
+      }
+      if (nb) p.tgt = nb.en; else { p.done = true; continue; }
+    }
+    const dx = p.tgt.x - p.x, dy = p.tgt.y - p.y;
+    const d = Math.hypot(dx, dy);
+    const mv = p.spd * dt;
+    if (d <= mv + p.tgt.r) {
+      p.done = true;
+      if (p.aoe) {
+        fx.push({ kind:'boom', x:p.tgt.x, y:p.tgt.y, r:p.aoe, color:p.color, t:0.35 });
+        for (const en of enemies) {
+          if (Math.hypot(en.x - p.tgt.x, en.y - p.tgt.y) <= p.aoe) damage(en, p.dmg);
+        }
+      } else {
+        if (p.slow) p.tgt.slowT = p.slow;
+        damage(p.tgt, p.dmg);
+      }
+    } else { p.x += dx / d * mv; p.y += dy / d * mv; }
+  }
+  projs = projs.filter(p => !p.done);
+  enemies = enemies.filter(en => !en.dead);
+
+  /* エフェクト */
+  for (const f of fx) f.t -= dt;
+  fx = fx.filter(f => f.t > 0);
+
+  /* ウェーブ終了判定 */
+  if (waveActive && !spawnQueue.length && !enemies.length) {
+    waveActive = false;
+    if (waveNo >= WAVES.length) return endGame(true);
+    const bonus = 25 + waveNo * 6;
+    gold += bonus;
+    fx.push({ kind:'banner', text:`ウェーブ ${waveNo} クリア！ 💰+${bonus}`, t:2.2 });
+    updateHUD();
+  }
+}
+
+function endGame(win) {
+  gameOver = true;
+  win ? snd.win() : snd.lose();
+  $('endTitle').textContent = win ? '🎉 村を守りきった！' : '💀 村が落ちてしまった…';
+  $('endMsg').innerHTML = win
+    ? '魔王軍は退散！村人たちは大喜び。<br>「リコちゃん、もう見習いじゃないね！」<br>こうして見習い魔女は、村の英雄になったのでした。'
+    : `ウェーブ ${waveNo} で力尽きた…。<br>塔の配置や強化のタイミングを変えて、もう一度挑戦しよう！`;
+  $('ovEnd').style.display = 'flex';
+  updateHUD();
+}
+
+/* ================= 描画 ================= */
+function draw() {
+  /* 地面 */
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    ctx.fillStyle = (r + c) % 2 ? '#4a8a42' : '#458040';
+    ctx.fillRect(c*TILE, r*TILE, TILE, TILE);
+  }
+  /* 道 */
+  for (const key of pathTiles) {
+    const [c, r] = key.split(',').map(Number);
+    if (c < 0 || c >= COLS) continue;
+    ctx.fillStyle = '#c9a86a';
+    ctx.fillRect(c*TILE, r*TILE, TILE, TILE);
+    ctx.fillStyle = 'rgba(0,0,0,.06)';
+    ctx.fillRect(c*TILE + 6, r*TILE + 6, TILE - 12, TILE - 12);
+  }
+  /* 選択タイル */
+  if (selTile) {
+    ctx.fillStyle = 'rgba(255,255,255,.25)';
+    ctx.fillRect(selTile.c*TILE, selTile.r*TILE, TILE, TILE);
+  }
+  /* 出現口（洞窟） */
+  ctx.fillStyle = '#3a2b4d';
+  ctx.beginPath();
+  ctx.arc(WPTS[0].x + 8, WPTS[0].y, 22, Math.PI*0.5, Math.PI*1.5);
+  ctx.fill();
+  ctx.fillStyle = '#120a1e';
+  ctx.beginPath();
+  ctx.arc(WPTS[0].x + 4, WPTS[0].y, 13, Math.PI*0.5, Math.PI*1.5);
+  ctx.fill();
+
+  /* 村 */
+  drawVillage(VILLAGE.x - 2, VILLAGE.y);
+  /* 魔女（村のそば） */
+  drawWitch(VILLAGE.x - 34, VILLAGE.y - 40 + Math.sin(time*2.4)*3);
+
+  /* 塔 */
+  for (const t of towers) drawTower(t);
+  /* 射程円 */
+  const rt = selTower;
+  if (rt) {
+    ctx.strokeStyle = 'rgba(255,255,255,.55)';
+    ctx.fillStyle = 'rgba(255,255,255,.08)';
+    ctx.beginPath(); ctx.arc(rt.x, rt.y, rt.range, 0, 6.29);
+    ctx.fill(); ctx.stroke();
+  }
+
+  /* 敵 */
+  for (const en of enemies) drawEnemy(en);
+  /* 弾 */
+  for (const p of projs) {
+    ctx.fillStyle = p.color;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.aoe ? 5 : 3.5, 0, 6.29); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.7)';
+    ctx.beginPath(); ctx.arc(p.x, p.y, 1.6, 0, 6.29); ctx.fill();
+  }
+
+  /* エフェクト */
+  for (const f of fx) drawFx(f);
+
+  /* 照準モード */
+  if (aiming) {
+    ctx.fillStyle = 'rgba(255,176,46,.15)';
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#ffb02e';
+    ctx.font = 'bold 16px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('☄️ 落としたい場所をタップ！', W/2, 26);
+  }
+}
+
+function drawVillage(x, y) {
+  ctx.fillStyle = '#8a5a33';
+  ctx.fillRect(x - 16, y - 8, 32, 22);
+  ctx.fillStyle = '#c9433a';
+  ctx.beginPath();
+  ctx.moveTo(x - 21, y - 8); ctx.lineTo(x, y - 28); ctx.lineTo(x + 21, y - 8);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#ffd23e';
+  ctx.fillRect(x - 5, y + 2, 10, 12);
+  ctx.fillStyle = '#5a3a1e';
+  ctx.fillRect(x + 8, y - 4, 6, 6);
+}
+
+function drawWitch(x, y) {
+  /* 体（ローブ） */
+  ctx.fillStyle = '#6b4fbf';
+  ctx.beginPath();
+  ctx.moveTo(x, y - 4); ctx.lineTo(x - 9, y + 16); ctx.lineTo(x + 9, y + 16);
+  ctx.closePath(); ctx.fill();
+  /* 顔 */
+  ctx.fillStyle = '#ffe3c8';
+  ctx.beginPath(); ctx.arc(x, y - 8, 7, 0, 6.29); ctx.fill();
+  ctx.fillStyle = '#40284a';
+  ctx.fillRect(x - 3, y - 9, 1.8, 1.8); ctx.fillRect(x + 1.4, y - 9, 1.8, 1.8);
+  /* 帽子 */
+  ctx.fillStyle = '#40284a';
+  ctx.beginPath(); ctx.ellipse(x, y - 13, 11, 3.2, 0, 0, 6.29); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(x - 7, y - 14); ctx.lineTo(x + 2, y - 30); ctx.lineTo(x + 7, y - 14);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = '#ffd23e';
+  ctx.beginPath(); ctx.arc(x + 2, y - 30, 2.2, 0, 6.29); ctx.fill();
+  /* 杖 */
+  ctx.strokeStyle = '#8a5a33'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.moveTo(x + 10, y + 14); ctx.lineTo(x + 14, y - 12); ctx.stroke();
+  ctx.fillStyle = '#ff8ad4';
+  ctx.beginPath(); ctx.arc(x + 14.5, y - 14, 3 + Math.sin(time*5)*0.7, 0, 6.29); ctx.fill();
+}
+
+function drawTower(t) {
+  const tt = TOWER_TYPES[t.type];
+  /* 台座 */
+  ctx.fillStyle = '#6e6a80';
+  ctx.beginPath(); ctx.ellipse(t.x, t.y + 12, 15, 6, 0, 0, 6.29); ctx.fill();
+  ctx.fillStyle = '#8d88a3';
+  ctx.fillRect(t.x - 11, t.y - 2, 22, 14);
+  /* クリスタル */
+  const g = 3 + Math.sin(time*3 + t.x)*1;
+  ctx.fillStyle = tt.color;
+  ctx.beginPath();
+  ctx.moveTo(t.x, t.y - 22 - g);
+  ctx.lineTo(t.x + 8, t.y - 6); ctx.lineTo(t.x, t.y + 2); ctx.lineTo(t.x - 8, t.y - 6);
+  ctx.closePath(); ctx.fill();
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.beginPath();
+  ctx.moveTo(t.x, t.y - 20 - g); ctx.lineTo(t.x + 3.5, t.y - 8); ctx.lineTo(t.x, t.y - 5);
+  ctx.closePath(); ctx.fill();
+  /* レベル星 */
+  ctx.fillStyle = '#ffd23e'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('★'.repeat(t.lv), t.x, t.y + 11);
+}
+
+function drawEnemy(en) {
+  const wob = Math.sin(time*8 + en.wob) * 1.5;
+  const x = en.x, y = en.y + wob;
+  /* 影 */
+  ctx.fillStyle = 'rgba(0,0,0,.2)';
+  ctx.beginPath(); ctx.ellipse(en.x, en.y + en.r*0.9, en.r*0.8, 3, 0, 0, 6.29); ctx.fill();
+  /* 体 */
+  ctx.fillStyle = en.slowT > 0 ? '#9fd4e8' : ENEMY_TYPES[en.type].color;
+  ctx.beginPath(); ctx.arc(x, y, en.r, 0, 6.29); ctx.fill();
+  if (en.type === 'orc' || en.type === 'boss') {
+    ctx.fillStyle = '#e8e2d0';
+    ctx.beginPath();
+    ctx.moveTo(x - en.r*0.7, y - en.r*0.5); ctx.lineTo(x - en.r*1.1, y - en.r*1.3); ctx.lineTo(x - en.r*0.3, y - en.r*0.8);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x + en.r*0.7, y - en.r*0.5); ctx.lineTo(x + en.r*1.1, y - en.r*1.3); ctx.lineTo(x + en.r*0.3, y - en.r*0.8);
+    ctx.closePath(); ctx.fill();
+  }
+  if (en.type === 'wolf') {
+    ctx.fillStyle = ENEMY_TYPES.wolf.color;
+    ctx.beginPath();
+    ctx.moveTo(x - en.r*0.6, y - en.r*0.6); ctx.lineTo(x - en.r*0.8, y - en.r*1.4); ctx.lineTo(x - en.r*0.1, y - en.r*0.9);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(x + en.r*0.6, y - en.r*0.6); ctx.lineTo(x + en.r*0.8, y - en.r*1.4); ctx.lineTo(x + en.r*0.1, y - en.r*0.9);
+    ctx.closePath(); ctx.fill();
+  }
+  if (en.type === 'boss') {
+    ctx.fillStyle = '#ffd23e'; ctx.font = 'bold 14px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('👑', x, y - en.r - 6);
+  }
+  /* 目 */
+  ctx.fillStyle = '#fff';
+  ctx.beginPath(); ctx.arc(x - en.r*0.35, y - 2, en.r*0.22, 0, 6.29); ctx.fill();
+  ctx.beginPath(); ctx.arc(x + en.r*0.35, y - 2, en.r*0.22, 0, 6.29); ctx.fill();
+  ctx.fillStyle = '#c92222';
+  ctx.beginPath(); ctx.arc(x - en.r*0.35, y - 2, en.r*0.1, 0, 6.29); ctx.fill();
+  ctx.beginPath(); ctx.arc(x + en.r*0.35, y - 2, en.r*0.1, 0, 6.29); ctx.fill();
+  /* HPバー */
+  if (en.hp < en.maxHp) {
+    const w = en.r * 2.2;
+    ctx.fillStyle = 'rgba(0,0,0,.5)';
+    ctx.fillRect(en.x - w/2, en.y - en.r - 9, w, 4);
+    ctx.fillStyle = '#5be05b';
+    ctx.fillRect(en.x - w/2, en.y - en.r - 9, w * Math.max(0, en.hp/en.maxHp), 4);
+  }
+}
+
+function drawFx(f) {
+  if (f.kind === 'boom') {
+    const k = 1 - f.t / 0.35;
+    ctx.strokeStyle = f.color; ctx.lineWidth = 3;
+    ctx.globalAlpha = 1 - k;
+    ctx.beginPath(); ctx.arc(f.x, f.y, f.r * k, 0, 6.29); ctx.stroke();
+    ctx.globalAlpha = 1;
+  } else if (f.kind === 'coin') {
+    ctx.fillStyle = '#ffd23e'; ctx.font = 'bold 12px sans-serif'; ctx.textAlign = 'center';
+    ctx.globalAlpha = Math.min(1, f.t * 2);
+    ctx.fillText(f.text, f.x, f.y - (0.7 - f.t) * 30 - 14);
+    ctx.globalAlpha = 1;
+  } else if (f.kind === 'banner') {
+    ctx.fillStyle = 'rgba(20,12,40,.7)';
+    ctx.font = 'bold 18px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillRect(W/2 - 130, H/2 - 40, 260, 36);
+    ctx.fillStyle = '#ffd6f6';
+    ctx.fillText(f.text, W/2, H/2 - 16);
+  } else if (f.kind === 'meteor') {
+    const k = 1 - f.t / 0.9;
+    if (k < 0.5) {
+      const mx = f.x + (1 - k*2) * 120, my = f.y - (1 - k*2) * 260;
+      ctx.fillStyle = '#ffb02e';
+      ctx.beginPath(); ctx.arc(mx, my, 10, 0, 6.29); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,176,46,.5)'; ctx.lineWidth = 5;
+      ctx.beginPath(); ctx.moveTo(mx + 30, my - 66); ctx.lineTo(mx, my); ctx.stroke();
+    } else {
+      const kk = (k - 0.5) * 2;
+      ctx.globalAlpha = 1 - kk;
+      ctx.fillStyle = '#ffb02e';
+      ctx.beginPath(); ctx.arc(f.x, f.y, 80 * kk, 0, 6.29); ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.beginPath(); ctx.arc(f.x, f.y, 40 * kk, 0, 6.29); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+  } else if (f.kind === 'leak') {
+    ctx.fillStyle = `rgba(200,30,30,${f.t * 0.5})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+}
+
+/* ================= メインループ ================= */
+let last = performance.now();
+function loop(now) {
+  let dt = Math.min((now - last) / 1000, 0.05);
+  last = now;
+  if (!gameOver) {
+    for (let i = 0; i < speed; i++) update(dt);
+  }
+  draw();
+  requestAnimationFrame(loop);
+}
+
+reset();
+requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
