@@ -1,0 +1,126 @@
+{
+  "_comment": "盆踊りの可能性があるが、2026年の日時・会場・内容または本サイト対象かを確認中の候補。確定イベントとは分けて表示する。",
+  "lastChecked": "2026-07-11",
+  "candidates": [
+    {
+      "id": "candidate-ichinomiya-imaise",
+      "name": "今伊勢連区 盆踊り大会",
+      "prefecture": "愛知県",
+      "city": "一宮市",
+      "venue": "今伊勢連区内",
+      "dateText": "例年夏・2026年日程未確認",
+      "source": {"name": "一宮市公式サイト（連区回覧情報）", "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1056049/1056236.html"},
+      "reason": "過年度の市公式情報は確認できましたが、2026年の開催日と会場を確認中です。"
+    },
+    {
+      "id": "candidate-nagoya-osu-summer",
+      "name": "大須夏まつり 大盆踊り大会",
+      "prefecture": "愛知県",
+      "city": "名古屋市中区",
+      "venue": "大須商店街一帯・大須観音境内",
+      "dateText": "2026年8月1日・2日の候補",
+      "source": {"name": "名古屋市公式観光情報", "url": "https://www.nagoya-info.jp/event/detail/116/"},
+      "reason": "2026年の盆踊り実施時間と会場を公式情報で再確認中です。"
+    },
+    {
+      "id": "candidate-nagoya-bushotai",
+      "name": "名古屋おもてなし武将隊 盆踊り大会2026",
+      "prefecture": "愛知県",
+      "city": "名古屋市西区",
+      "venue": "なごのキャンパス",
+      "dateText": "2026年7月31日から8月2日の候補",
+      "source": {"name": "なごのキャンパス公式サイト", "url": "https://nagono-campus.jp/eventinfo/eventinfo-29669/"},
+      "reason": "主催者側の最新開催要項を確認中です。"
+    },
+    {
+      "id": "candidate-nagoya-higashibetsuin",
+      "name": "東別院まつり 盆踊り",
+      "prefecture": "愛知県",
+      "city": "名古屋市中区",
+      "venue": "東別院境内",
+      "dateText": "例年9月下旬・2026年日程未確認",
+      "source": {"name": "真宗大谷派名古屋別院公式サイト", "url": "https://www.ohigashi.net/news/matsuri2025/"},
+      "reason": "2025年の公式案内は確認済みですが、2026年の発表待ちです。"
+    },
+    {
+      "id": "candidate-nagoya-minato-soodori",
+      "name": "海の日名古屋みなと祭 市民総おどり",
+      "prefecture": "愛知県",
+      "city": "名古屋市港区",
+      "venue": "ガーデンふ頭周辺",
+      "dateText": "2026年7月20日の候補",
+      "source": {"name": "名古屋市公式観光情報", "url": "https://www.nagoya-info.jp/event/detail/129/"},
+      "reason": "総おどりが本サイトで扱う盆踊りに該当するか、2026年の内容と合わせて確認中です。"
+    },
+    {
+      "id": "candidate-kariya-wansaka",
+      "name": "刈谷わんさか祭り かりや盆フェス",
+      "prefecture": "愛知県",
+      "city": "刈谷市",
+      "venue": "刈谷市総合運動公園",
+      "dateText": "2026年8月14日の候補",
+      "source": {"name": "刈谷わんさか祭り公式サイト", "url": "https://www.kariya-wansaka.jp/"},
+      "reason": "2026年の盆フェス開催時間と会場詳細を確認中です。"
+    },
+    {
+      "id": "candidate-kasugai-noryo",
+      "name": "春日井市民納涼まつり 盆踊り大会",
+      "prefecture": "愛知県",
+      "city": "春日井市",
+      "venue": "落合公園",
+      "dateText": "2026年夏・日程再確認中",
+      "source": {"name": "春日井市公式サイト", "url": "https://www.city.kasugai.lg.jp/bunka/event/event/n_matsuri/index.html"},
+      "reason": "2026年版の公式開催要項を確認中です。"
+    },
+    {
+      "id": "candidate-inazawa-summer",
+      "name": "稲沢夏まつり 盆踊り",
+      "prefecture": "愛知県",
+      "city": "稲沢市",
+      "venue": "サリオパーク祖父江",
+      "dateText": "2026年8月22日の候補",
+      "source": {"name": "稲沢夏まつり公式サイト", "url": "https://ina-natsu.gonna.jp/"},
+      "reason": "2026年の盆踊り実施時刻を公式プログラムで確認中です。"
+    },
+    {
+      "id": "candidate-toyota-oiden",
+      "name": "豊田おいでんまつり おいでん総踊り",
+      "prefecture": "愛知県",
+      "city": "豊田市",
+      "venue": "名鉄豊田市駅東側一帯",
+      "dateText": "2026年7月25日の候補",
+      "source": {"name": "豊田おいでんまつり公式サイト", "url": "https://www.oidenmaturi.com/"},
+      "reason": "総踊り形式のため、本サイトの盆踊り対象に含めるか確認中です。"
+    },
+    {
+      "id": "candidate-okazaki-ieyasu-summer",
+      "name": "岡崎城下家康公夏まつり 盆踊り",
+      "prefecture": "愛知県",
+      "city": "岡崎市",
+      "venue": "岡崎市内",
+      "dateText": "例年8月・2026年日程未確認",
+      "source": {"name": "岡崎市観光協会公式サイト", "url": "https://okazaki-kanko.jp/event/674"},
+      "reason": "2026年の盆踊り開催日と会場の公式発表待ちです。"
+    },
+    {
+      "id": "candidate-okazaki-bonodori-fes",
+      "name": "岡崎盆おどりフェス",
+      "prefecture": "愛知県",
+      "city": "岡崎市",
+      "venue": "岡崎城公園",
+      "dateText": "例年9月・2026年日程未確認",
+      "source": {"name": "岡崎市観光協会公式サイト", "url": "https://okazaki-kanko.jp/okazaki-park/program/4847"},
+      "reason": "2026年の開催告知を確認中です。"
+    },
+    {
+      "id": "candidate-domatsuri",
+      "name": "にっぽんど真ん中祭り",
+      "prefecture": "愛知県",
+      "city": "名古屋市中区",
+      "venue": "久屋大通公園ほか",
+      "dateText": "2026年8月28日から30日の候補",
+      "source": {"name": "にっぽんど真ん中祭り公式サイト", "url": "https://www.domatsuri.com/"},
+      "reason": "演舞祭であり一般的な盆踊りとは異なるため、本サイトの掲載対象か確認中です。"
+    }
+  ]
+}

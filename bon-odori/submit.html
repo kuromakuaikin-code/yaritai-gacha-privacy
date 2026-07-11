@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>盆踊り情報を投稿する｜盆踊りナビ愛知</title>
-<meta name="description" content="愛知県内の町内会・学区・神社・公園の盆踊り情報を投稿できます。チラシ画像・イベント名・日時・場所・情報元の5つだけでOK。運営が確認してから掲載します。">
+<title>盆踊り・地域祭りを投稿する｜盆踊り・地域祭りナビ東海</title>
+<meta name="description" content="東海地方（愛知・岐阜・三重・静岡）の盆踊り、神社の祭礼、山車祭、七夕祭、地域のお祭り情報を投稿できます。情報元の区分を明示して掲載します。">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏮</text></svg>">
 <link rel="canonical" href="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bon-odori/submit.html">
 <style>
@@ -24,66 +24,100 @@ ol.items{padding-left:1.4em;font-size:.95rem}
 ol.items li{padding:3px 0}
 ol.items b{color:var(--accent)}
 .btn{display:block;text-align:center;background:var(--accent);color:#fff;border-radius:12px;padding:15px;margin:14px 0;text-decoration:none;font-weight:800;font-size:1rem}
+.btn.sub{background:#fff;color:var(--accent);border:1px solid var(--accent)}
 .prep{background:var(--orange-soft);color:var(--orange);border-radius:10px;padding:12px 14px;font-size:.88rem;font-weight:700;text-align:center;margin:14px 0}
+.template{width:100%;min-height:180px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:.88rem;line-height:1.65;color:var(--ink);background:#fffdf9}
+.copied{font-size:.8rem;color:var(--sub);text-align:center;min-height:1.4em}
 ul.rules{padding-left:1.3em;font-size:.85rem;color:var(--sub)}
 ul.rules li{padding:2px 0}
 .note{font-size:.78rem;color:var(--sub);margin-top:16px}
 </style>
 </head>
 <body>
-<header><div class="wrap"><a href="index.html">← 🏮 盆踊りナビ愛知</a></div></header>
+<header><div class="wrap"><a href="index.html">← 🏮 盆踊り・地域祭りナビ東海</a></div></header>
 <div class="wrap">
 
-  <h1>🏮 盆踊り情報を投稿する</h1>
-  <p class="lead">町内会・学区・神社・公園・団地・商店街——どんなに小さな盆踊りでも歓迎です。回覧板やチラシで知った情報をぜひ教えてください。運営が内容を確認してから掲載します。</p>
+  <h1>🏮 盆踊り・地域祭りを投稿する</h1>
+  <p class="lead">愛知・岐阜・三重・静岡の盆踊り、神社・寺院の祭礼、山車祭、七夕祭、町内会や商店街のお祭りまで歓迎です。回覧板やチラシで知った情報を教えてください。情報元と確認状況を区別して掲載します。</p>
 
   <div class="box">
     <h2>📝 送っていただきたいもの（これだけでOK）</h2>
     <ol class="items">
-      <li><b>チラシの写真</b>（あれば。スマホ撮影で十分です）</li>
       <li><b>イベント名</b>（例：〇〇学区盆踊り大会）</li>
-      <li><b>日時</b>（例：8月2日(土) 18時〜21時）</li>
-      <li><b>場所</b>（例：〇〇市 △△公園）</li>
-      <li><b>情報元</b>（例：回覧板／町内掲示板／主催者本人／公式サイトのURL）</li>
+      <li><b>種類</b>（盆踊り／神社の祭礼／山車祭／七夕祭など）</li>
+      <li><b>県・市町村</b>（例：愛知県・名古屋市中区）</li>
+      <li><b>開催日・時間</b>（例：8月2日 18時〜21時）</li>
+      <li><b>会場名・場所</b>（例：〇〇公園）</li>
+      <li><b>情報元</b>（公式サイト／主催者本人／回覧板・掲示板など）</li>
+      <li><b>情報元のURL</b>（分かる場合）</li>
+      <li><b>規模感</b>（例：大きめの夏まつり／地域イベント／町内会・学区）</li>
+      <li><b>補足・雨天時の案内</b>（分かる場合）</li>
+      <li><b>投稿者の立場</b>（主催者・関係者／地域住民／一般の来場者など）</li>
     </ol>
   </div>
 
   <!-- 投稿フォームのURLを設定すると下のボタンが有効になります（設定方法は ADMIN.md 参照） -->
   <script>
-    const FORM_URL = ""; // ← GoogleフォームのURLをここに貼る
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfkcB8KFWX86ROU8fIseZbJTnxt1cA_Dz1VfgSpwuj4hELjKg/viewform?usp=publish-editor";
+    const CONTACT_EMAIL = ""; // ← メール受付する場合はここにメールアドレスを貼る
   </script>
   <div id="formArea"></div>
   <script>
+    const templateText = `【盆踊り・地域祭り情報】
+イベント名：
+種類（盆踊り／神社の祭礼／山車祭／七夕祭など）：
+県：
+市町村：
+開催日・時間：
+会場名・場所：
+情報元（公式サイト／主催者本人／回覧板・掲示板など）：
+情報元のURL：
+規模感（大きめ／地域イベント／町内会・学区など）：
+補足・雨天時の案内：
+投稿者の立場：`;
+    const mailHref = CONTACT_EMAIL
+      ? `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("盆踊り・地域祭り情報の投稿")}&body=${encodeURIComponent(templateText)}`
+      : "";
     document.getElementById("formArea").innerHTML = FORM_URL
       ? '<a class="btn" href="' + FORM_URL + '" target="_blank" rel="noopener">投稿フォームを開く（1〜2分で完了）</a>'
-      : '<div class="prep">投稿フォームは現在準備中です。<br>公開までもうしばらくお待ちください。</div>';
+      : '<div class="box"><h2>📮 投稿フォーム準備中の送信用メモ</h2><p style="font-size:.88rem;color:var(--sub);margin-bottom:8px">フォーム公開前は、下の項目をコピーして運営へ送ってください。</p><textarea class="template" id="postTemplate">' + templateText + '</textarea><a class="btn sub" href="#" id="copyTemplate">投稿内容をコピー</a>' + (mailHref ? '<a class="btn" href="' + mailHref + '">メールで送る</a>' : '<div class="prep">送信先は準備中です。フォームURLまたはメールアドレスを設定すると、投稿ボタンが有効になります。</div>') + '<div class="copied" id="copied"></div></div>';
+    const copyBtn = document.getElementById("copyTemplate");
+    if(copyBtn){
+      copyBtn.addEventListener("click", async e=>{
+        e.preventDefault();
+        const text = document.getElementById("postTemplate").value;
+        try{
+          await navigator.clipboard.writeText(text);
+          document.getElementById("copied").textContent = "コピーしました";
+        }catch{
+          document.getElementById("postTemplate").select();
+          document.getElementById("copied").textContent = "選択した内容をコピーしてください";
+        }
+      });
+    }
   </script>
 
   <div class="box">
-    <h2>🖼 チラシ・写真について</h2>
+    <h2>投稿前のお願い</h2>
     <ul class="rules">
-      <li>チラシ画像は、<b>主催者の方ご本人</b>か、<b>主催者から掲載の了承を得た方</b>のみお送りください。</li>
-      <li>了承が確認できない画像は掲載せず、文字情報のみ掲載します。</li>
-      <li>他のウェブサイトに載っている画像・写真の転送はご遠慮ください。</li>
+      <li>氏名・電話番号・メールアドレスなどの個人情報は入力しないでください。</li>
+      <li>他サイトの紹介文をコピーせず、日時・会場など確認できた事実と情報元のURLを送ってください。</li>
+      <li>現在、写真やチラシ画像のアップロードは受け付けていません。</li>
     </ul>
   </div>
 
   <div class="box">
     <h2>ℹ️ 掲載までの流れ</h2>
     <ul class="rules">
-      <li>いただいた情報は、運営が主催者・自治体などの公式情報と照合してから掲載します。</li>
-      <li>公式情報が確認できない場合は「住民投稿・未確認」として区別して掲載するか、確認できるまで掲載を見合わせます。</li>
+      <li>公式ページがある場合はリンクを情報元として掲載し、「公式情報あり」と表示します。これは開催保証を意味しません。</li>
+      <li>公式情報を確認できない場合は「住民からの情報」として区別するか、「掲載準備中」として情報を整理します。</li>
       <li>中止・延期・内容の間違いのご連絡も、同じフォームからお願いします。</li>
     </ul>
   </div>
 
-  <div class="box">
-    <h2>📄 主催者のみなさまへ：チラシ作成も承ります</h2>
-    <p style="font-size:.9rem">「チラシを作る人がいない」という町内会・自治会向けに、盆踊りチラシの制作（有料・AI活用）を行っています。詳しくは<a href="support.html">こちら</a>。</p>
-  </div>
-
   <p class="note">※ 個人情報（電話番号・氏名など）はチラシに記載のある主催者連絡先を除き、サイトには掲載しません。<br>
-  ※ 当サイトは他のイベント情報サイトからの転載・自動取得は行っていません。掲載情報はすべて公式発表・投稿・運営の独自確認に基づきます。</p>
+  ※ 当サイトは他のイベント情報サイトの本文・画像を転載しません。日時・会場等の事実を独自に整理し、公式ページへのリンクまたは投稿情報を情報元として表示します。詳しくは<a href="policy.html">掲載・著作権方針</a>をご確認ください。</p>
+  <p class="note">掲載情報の投稿以外のお問い合わせは、<a href="https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor" target="_blank" rel="noopener">運営へのお問い合わせフォーム</a>をご利用ください。</p>
 
 </div>
 </body>
