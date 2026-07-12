@@ -186,8 +186,8 @@ export function PaywallSheet({ visible, onClose, message }: {
     <Sheet visible={visible} onClose={onClose} title="⭐ プレミアム">
       {message ? <Text style={[st.subText, { marginBottom: 10 }]}>{message}</Text> : null}
       <Card>
-        <Feature text="💬 話題リスト全カテゴリを解放（距離を縮める・価値観・真剣交際前の確認）" />
-        <Feature text="🔍 各話題の「深掘りパターン」（会話の流れの例）も全て見られる" />
+        <Feature text="💬 話題リスト全カテゴリを解放（40話題を追加）" />
+        <Feature text="🌱 全話題の「反応別パターン」（盛り上がった時・薄い時・NG例）" />
         <Feature text={`👥 お相手の登録が無制限に（無料版は${FREE_PARTNER_LIMIT}人まで）`} />
         <Feature text="🚫 広告が永続的に非表示" />
         <Feature text="🔁 買い切りのみ。追加課金・サブスクなし" />

@@ -1,4 +1,4 @@
-export const APP_VERSION = '1.0.0';
+export const APP_VERSION = '1.1.0';
 
 /** テスト期間中は true（購入ボタンで無料解放）。
  *  正式リリース時に false にし、react-native-iap か RevenueCat で

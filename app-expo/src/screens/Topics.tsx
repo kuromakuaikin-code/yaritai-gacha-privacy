@@ -10,7 +10,9 @@ import { RootStackParams } from './Partners';
 
 // ---- 会話フロー表示 ----
 
-export function FlowBox({ flow }: { flow: TopicFlow }) {
+export function FlowBox({ flow, premium, onLockedTap }: {
+  flow: TopicFlow; premium: boolean; onLockedTap?: () => void;
+}) {
   return (
     <View style={{ marginTop: 8, gap: 7 }}>
       <View style={{
@@ -39,13 +41,44 @@ export function FlowBox({ flow }: { flow: TopicFlow }) {
           <Text style={{ fontSize: 14.5, color: colors.text, flex: 1 }}>{text}</Text>
         </View>
       ))}
+      {premium ? (
+        (flow.good || flow.flat || flow.ng) && (
+          <View style={{ marginTop: 4, gap: 6 }}>
+            {flow.good && <ReactionRow icon="🌱" label="盛り上がったら" text={flow.good} />}
+            {flow.flat && <ReactionRow icon="🍃" label="反応がうすい時" text={flow.flat} />}
+            {flow.ng && <ReactionRow icon="⚠" label="これは避けたい" text={flow.ng} />}
+          </View>
+      )) : (
+        <Pressable onPress={onLockedTap} style={{
+          marginTop: 4, backgroundColor: colors.accentSoft, borderRadius: 10,
+          paddingVertical: 9, paddingHorizontal: 10, alignItems: 'center',
+        }}>
+          <Text style={{ color: colors.accentDark, fontSize: 13, fontWeight: '700' }}>
+            ⭐ 反応別パターンはプレミアムで見られます
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }
 
-function TopicRow({ id, title, flow, note, checked, onToggle }: {
+function ReactionRow({ icon, label, text }: { icon: string; label: string; text: string }) {
+  return (
+    <View style={{
+      backgroundColor: colors.graySoft, borderRadius: 10, padding: 9,
+    }}>
+      <Text style={{ fontSize: 12, fontWeight: '700', color: colors.sub, marginBottom: 2 }}>
+        {icon} {label}
+      </Text>
+      <Text style={{ fontSize: 13.5, color: colors.text }}>{text}</Text>
+    </View>
+  );
+}
+
+function TopicRow({ id, title, flow, note, checked, onToggle, premium, onLockedTap }: {
   id: string; title: string; flow?: TopicFlow; note?: string;
   checked?: boolean; onToggle?: () => void;
+  premium?: boolean; onLockedTap?: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const expandable = !!flow || !!note;
@@ -74,7 +107,7 @@ function TopicRow({ id, title, flow, note, checked, onToggle }: {
           </Pressable>
         )}
       </View>
-      {open && flow && <FlowBox flow={flow} />}
+      {open && flow && <FlowBox flow={flow} premium={!!premium} onLockedTap={onLockedTap} />}
       {open && note ? (
         <View style={{
           marginTop: 8, backgroundColor: colors.accentSoft, borderRadius: 10, padding: 10,
@@ -116,6 +149,7 @@ function TopicsBody({ partnerId }: { partnerId: string | null }) {
 
   const done = partner ? talkedCount(db, partner) : 0;
   const total = allTopicCount(db);
+  const lockedCount = TOPIC_CATEGORIES.filter(c => !c.free).reduce((n, c) => n + c.topics.length, 0);
 
   return (
     <View style={st.screen}>
@@ -148,7 +182,7 @@ function TopicsBody({ partnerId }: { partnerId: string | null }) {
                 ⭐ プレミアムで話題を全種類解放
               </Text>
               <Text style={{ color: '#ffe3ec', fontSize: 13, marginTop: 2 }}>
-                残り22種の話題＋お相手無制限＋広告なしを解放｜{FREE_TRIAL ? '今なら無料' : `${PREMIUM_PRICE} 買い切り`}
+                残り{lockedCount}種の話題＋反応別パターン＋お相手無制限＋広告なしを解放｜{FREE_TRIAL ? '今なら無料' : `${PREMIUM_PRICE} 買い切り`}
               </Text>
             </Card>
           </Pressable>
@@ -189,7 +223,8 @@ function TopicsBody({ partnerId }: { partnerId: string | null }) {
                   cat.topics.map(t => (
                     <TopicRow key={t.id} id={t.id} title={t.title} flow={t.flow}
                               checked={partner ? !!partner.talked[t.id] : undefined}
-                              onToggle={partner ? () => toggle(t.id) : undefined} />
+                              onToggle={partner ? () => toggle(t.id) : undefined}
+                              premium={premium} onLockedTap={() => setPaywallOpen(true)} />
                   ))
                 ) : (
                   <Pressable onPress={() => setPaywallOpen(true)}
