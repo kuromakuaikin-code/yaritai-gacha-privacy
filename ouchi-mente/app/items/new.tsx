@@ -3,13 +3,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { Alert } from "react-native";
 import { ItemForm, type ItemFormResult } from "@/components/ItemForm";
 import { LoadingView } from "@/components/ui";
-import { insertItem, updateItem } from "@/db/items";
+import { insertItem } from "@/db/items";
 import { getSetting } from "@/db/settings";
 import { findTemplate } from "@/domain/templates";
-import {
-  cancelNotification,
-  rescheduleItemNotification,
-} from "@/notifications/notifications";
+import { syncItemNotification } from "@/notifications/notifications";
 import { checkCanAddItem } from "@/purchase/entitlement";
 
 export default function NewItemScreen() {
@@ -25,7 +22,7 @@ export default function NewItemScreen() {
   useEffect(() => {
     let active = true;
     (async () => {
-      // 登録上限（無料5件・追加購入で15件）に達していたら案内画面へ
+      // 無料版の登録上限に達していたら、無制限版の案内画面へ
       const check = await checkCanAddItem();
       if (!active) return;
       if (!check.allowed) {
@@ -61,14 +58,22 @@ export default function NewItemScreen() {
     }
     try {
       const item = await insertItem(result);
-      const notificationId = await rescheduleItemNotification(item);
-      if (notificationId) {
-        try {
-          await updateItem({ ...item, notificationId });
-        } catch (error) {
-          await cancelNotification(notificationId);
-          throw error;
-        }
+      const notification = await syncItemNotification(item);
+      if (notification.status === "permission-denied") {
+        Alert.alert(
+          "登録しました",
+          "通知が許可されていないため、リマインダーは設定されていません。",
+          [{ text: "OK", onPress: () => router.back() }],
+        );
+        return;
+      }
+      if (notification.status === "failed") {
+        Alert.alert(
+          "登録しました",
+          "通知は設定できませんでしたが、記録は保存されています。",
+          [{ text: "OK", onPress: () => router.back() }],
+        );
+        return;
       }
       router.back();
     } catch (error) {

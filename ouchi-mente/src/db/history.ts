@@ -1,6 +1,10 @@
 import { getDatabase } from "./database";
 import { newId } from "./id";
-import type { MaintenanceHistory, NewMaintenanceHistory } from "@/domain/types";
+import type {
+  MaintenanceHistory,
+  MaintenanceItem,
+  NewMaintenanceHistory,
+} from "@/domain/types";
 
 type HistoryRow = {
   id: string;
@@ -117,4 +121,57 @@ export async function deleteHistory(id: string): Promise<void> {
     "DELETE FROM maintenance_history WHERE id = ?;",
     [id],
   );
+}
+
+/** 履歴修正と、それに伴う項目の予定日修正を同時に確定する。 */
+export async function updateHistoryAndItem(
+  history: MaintenanceHistory,
+  item?: MaintenanceItem,
+): Promise<{ history: MaintenanceHistory; item?: MaintenanceItem }> {
+  const updatedHistory: MaintenanceHistory = {
+    ...history,
+    updatedAt: new Date().toISOString(),
+  };
+  const updatedItem = item
+    ? { ...item, updatedAt: new Date().toISOString() }
+    : undefined;
+
+  await getDatabase().withExclusiveTransactionAsync(async (txn) => {
+    await txn.runAsync(
+      `UPDATE maintenance_history SET
+        completed_at = ?, note = ?, image_uri = ?,
+        calculated_next_due_date = ?, updated_at = ?
+      WHERE id = ?;`,
+      [
+        updatedHistory.completedAt, updatedHistory.note ?? null,
+        updatedHistory.imageUri ?? null,
+        updatedHistory.calculatedNextDueDate ?? null, updatedHistory.updatedAt,
+        updatedHistory.id,
+      ],
+    );
+    if (updatedItem) {
+      await txn.runAsync(
+        `UPDATE maintenance_items SET
+          name = ?, category = ?, task_type = ?, location = ?, manufacturer = ?,
+          model_number = ?, note = ?, image_uri = ?, schedule_type = ?,
+          interval_value = ?, interval_unit = ?, next_due_date = ?,
+          notification_enabled = ?, notification_timing_days = ?,
+          notification_id = ?, updated_at = ?, archived_at = ?
+        WHERE id = ?;`,
+        [
+          updatedItem.name, updatedItem.category, updatedItem.taskType,
+          updatedItem.location ?? null, updatedItem.manufacturer ?? null,
+          updatedItem.modelNumber ?? null, updatedItem.note ?? null,
+          updatedItem.imageUri ?? null, updatedItem.scheduleType,
+          updatedItem.intervalValue ?? null, updatedItem.intervalUnit ?? null,
+          updatedItem.nextDueDate ?? null,
+          updatedItem.notificationEnabled ? 1 : 0,
+          updatedItem.notificationTimingDays ?? null,
+          updatedItem.notificationId ?? null, updatedItem.updatedAt,
+          updatedItem.archivedAt ?? null, updatedItem.id,
+        ],
+      );
+    }
+  });
+  return { history: updatedHistory, item: updatedItem };
 }

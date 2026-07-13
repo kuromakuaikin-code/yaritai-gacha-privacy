@@ -13,12 +13,15 @@ import { DateField, TextField } from "@/components/form";
 import { AppButton, Card, EmptyState, LoadingView } from "@/components/ui";
 import {
   deleteHistory,
+  getLatestHistoryForItem,
   listHistoryForItem,
-  updateHistory,
+  updateHistoryAndItem,
 } from "@/db/history";
-import { formatDateJa } from "@/domain/schedule";
+import { getItem } from "@/db/items";
+import { calculateNextDueDate, formatDateJa } from "@/domain/schedule";
 import type { MaintenanceHistory } from "@/domain/types";
 import { deleteStoredImageAsync, resolveImageUri } from "@/media/images";
+import { syncItemNotification } from "@/notifications/notifications";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 export default function HistoryScreen() {
@@ -53,13 +56,43 @@ export default function HistoryScreen() {
     if (!editing) return;
     setSaving(true);
     try {
-      await updateHistory({
+      const [latest, item] = await Promise.all([
+        getLatestHistoryForItem(editing.maintenanceItemId),
+        getItem(editing.maintenanceItemId),
+      ]);
+      const isLatest = latest?.id === editing.id;
+      let nextDueDate = item?.nextDueDate;
+      if (isLatest && item) {
+        if (item.scheduleType === "interval") {
+          nextDueDate = calculateNextDueDate(item, editDate);
+        } else if (
+          item.scheduleType === "fixedDate" &&
+          item.nextDueDate &&
+          editDate < item.nextDueDate
+        ) {
+          nextDueDate = item.nextDueDate;
+        } else {
+          nextDueDate = undefined;
+        }
+      }
+      const scheduledItem =
+        isLatest && item ? { ...item, nextDueDate } : undefined;
+      const saved = await updateHistoryAndItem({
         ...editing,
         completedAt: editDate,
         note: editNote.trim() || undefined,
-      });
+        calculatedNextDueDate: isLatest ? nextDueDate : editing.calculatedNextDueDate,
+      }, scheduledItem ? { ...scheduledItem, notificationId: undefined } : undefined);
+      const notification = saved.item && scheduledItem
+        ? await syncItemNotification(saved.item, item?.notificationId)
+        : undefined;
       setEditing(null);
       await reload();
+      if (notification?.status === "permission-denied") {
+        Alert.alert("保存しました", "通知が許可されていないため、リマインダーは設定されていません。");
+      } else if (notification?.status === "failed") {
+        Alert.alert("保存しました", "通知は設定できませんでしたが、変更は保存されています。");
+      }
     } catch {
       Alert.alert("保存エラー", "履歴を保存できませんでした。");
     } finally {
@@ -78,8 +111,8 @@ export default function HistoryScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              await deleteStoredImageAsync(entry.imageUri);
               await deleteHistory(entry.id);
+              await deleteStoredImageAsync(entry.imageUri);
               await reload();
             } catch {
               Alert.alert("削除エラー", "履歴を削除できませんでした。");

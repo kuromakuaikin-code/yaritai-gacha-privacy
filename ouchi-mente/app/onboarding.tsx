@@ -17,13 +17,13 @@ import { colors, fontSize, spacing } from "@/theme";
 const PAGES = [
   {
     icon: "🏠",
-    title: "掃除・交換・点検の\n「そろそろ」を忘れない",
-    body: "エアコンフィルター、洗濯槽、火災警報器の電池など、おうちのお手入れ予定をまとめて記録できます。",
+    title: "最後にいつ、次はいつ。\n家の手入れをひとまとめに",
+    body: "エアコン、換気設備、浄水器など、数か月後には忘れそうな掃除・交換・点検を記録できます。",
   },
   {
     icon: "📝",
-    title: "実施日を記録すると、\n次回の目安日を自動で計算",
-    body: "「完了」を押すだけで履歴が残り、設定した周期から次の目安日が決まります。",
+    title: "完了を記録したら、\n次回目安も自動で更新",
+    body: "前回日、メーカー、型番、場所、写真を一緒に残せます。次に必要になったとき、探し直す手間を減らします。",
   },
   {
     icon: "📖",
@@ -67,6 +67,7 @@ export default function OnboardingScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <FlatList
+        contentInsetAdjustmentBehavior="automatic"
         ref={listRef}
         data={PAGES}
         keyExtractor={(p) => p.title}

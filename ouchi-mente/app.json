@@ -1,12 +1,17 @@
 {
   "expo": {
-    "name": "おうちメンテ目安メモ",
+    "name": "家の手入れ記録",
+    "description": "家電・設備の掃除・交換・点検履歴と次回目安を記録するアプリ",
     "slug": "ouchi-mente",
     "version": "1.0.0",
     "orientation": "portrait",
     "scheme": "ouchimente",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "updates": {
+      "enabled": false,
+      "checkAutomatically": "NEVER"
+    },
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.kuromakuaikin.ouchimente",
@@ -21,6 +26,7 @@
     "plugins": [
       "expo-router",
       "expo-sqlite",
+      "expo-iap",
       [
         "expo-notifications",
         {

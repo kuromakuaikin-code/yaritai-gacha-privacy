@@ -41,7 +41,7 @@ export function ItemCard({
         </Text>
         {item.nextDueDate ? (
           <Text style={styles.due}>
-            予定日：{formatDateJa(item.nextDueDate)}（
+            次回目安：{formatDateJa(item.nextDueDate)}（
             {remainingLabel(item.nextDueDate)}）
           </Text>
         ) : (

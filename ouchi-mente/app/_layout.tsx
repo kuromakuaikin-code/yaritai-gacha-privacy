@@ -5,6 +5,8 @@ import { StyleSheet, Text, View } from "react-native";
 import { AppButton, LoadingView } from "@/components/ui";
 import { migrateDatabase } from "@/db/database";
 import { configureNotificationHandler } from "@/notifications/notifications";
+import { reconcileScheduledNotifications } from "@/notifications/reconcile";
+import { PurchaseProvider } from "@/purchase/PurchaseProvider";
 import { colors, fontSize, spacing } from "@/theme";
 
 export default function RootLayout() {
@@ -14,6 +16,7 @@ export default function RootLayout() {
   const boot = useCallback(() => {
     setFailed(false);
     migrateDatabase()
+      .then(reconcileScheduledNotifications)
       .then(() => setReady(true))
       .catch(() => setFailed(true));
   }, []);
@@ -38,7 +41,7 @@ export default function RootLayout() {
   if (!ready) return <LoadingView />;
 
   return (
-    <>
+    <PurchaseProvider>
       <StatusBar style="dark" />
       <Stack
         screenOptions={{
@@ -49,7 +52,7 @@ export default function RootLayout() {
           contentStyle: { backgroundColor: colors.background },
         }}
       >
-        <Stack.Screen name="index" options={{ title: "おうちメンテ目安メモ" }} />
+        <Stack.Screen name="index" options={{ title: "家の手入れ記録" }} />
         <Stack.Screen
           name="onboarding"
           options={{ headerShown: false, gestureEnabled: false }}
@@ -68,7 +71,7 @@ export default function RootLayout() {
         <Stack.Screen name="items/[id]/history" options={{ title: "履歴" }} />
         <Stack.Screen
           name="paywall"
-          options={{ title: "登録枠の追加", presentation: "modal" }}
+          options={{ title: "無制限版", presentation: "modal" }}
         />
         <Stack.Screen name="settings/index" options={{ title: "設定" }} />
         <Stack.Screen
@@ -85,7 +88,7 @@ export default function RootLayout() {
           options={{ title: "アプリについて" }}
         />
       </Stack>
-    </>
+    </PurchaseProvider>
   );
 }
 

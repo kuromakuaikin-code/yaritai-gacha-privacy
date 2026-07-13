@@ -1,7 +1,7 @@
 {
   "name": "ouchi-mente",
   "version": "1.0.0",
-  "description": "おうちメンテ目安メモ - 掃除・交換・点検の「そろそろ」を忘れないための記録アプリ",
+  "description": "家の手入れ記録 - 家電・設備の掃除・交換・点検履歴と次回目安を残すアプリ",
   "main": "expo-router/entry",
   "private": true,
   "scripts": {
@@ -17,6 +17,7 @@
     "expo-constants": "~18.0.13",
     "expo-crypto": "~15.0.9",
     "expo-file-system": "~19.0.23",
+    "expo-iap": "^3.4.13",
     "expo-image-picker": "~17.0.11",
     "expo-linking": "~8.0.12",
     "expo-notifications": "~0.32.17",

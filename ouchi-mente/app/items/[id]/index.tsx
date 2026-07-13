@@ -71,12 +71,12 @@ export default function ItemDetailScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              await cancelNotification(item.notificationId);
+              await deleteItem(item.id);
               await deleteStoredImageAsync(item.imageUri);
               for (const h of history) {
                 await deleteStoredImageAsync(h.imageUri);
               }
-              await deleteItem(item.id);
+              await cancelNotification(item.notificationId);
               router.back();
             } catch {
               Alert.alert("削除エラー", "削除できませんでした。もう一度お試しください。");

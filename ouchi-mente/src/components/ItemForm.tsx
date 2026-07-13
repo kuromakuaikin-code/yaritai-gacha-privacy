@@ -152,6 +152,7 @@ export function ItemForm({
   onSubmit: (result: ItemFormResult) => Promise<void>;
 }) {
   const [submitting, setSubmitting] = useState(false);
+  const submittingRef = useRef(false);
   const [detailsOpen, setDetailsOpen] = useState(
     Boolean(initial?.manufacturer || initial?.modelNumber || initial?.imageUri),
   );
@@ -223,6 +224,8 @@ export function ItemForm({
       : undefined;
 
   const submit = handleSubmit(async (values) => {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
     // 次回予定日を決定する
     let nextDueDate: string | undefined;
     if (values.scheduleType === "none") {
@@ -284,6 +287,7 @@ export function ItemForm({
     } catch {
       // 何もしない。ユーザーはフォームに留まり、やり直せる
     } finally {
+      submittingRef.current = false;
       setSubmitting(false);
     }
   });

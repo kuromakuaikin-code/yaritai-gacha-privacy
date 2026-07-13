@@ -18,10 +18,9 @@ import { NOTIFICATION_NOTE, NOTIFICATION_TIMING_OPTIONS } from "@/domain/labels"
 import { deleteAllStoredImagesAsync } from "@/media/images";
 import {
   FREE_ITEM_LIMIT,
-  PLUS_ITEM_BONUS,
   isPlusUnlocked,
 } from "@/purchase/entitlement";
-import { restorePurchases } from "@/purchase/store";
+import { usePurchase } from "@/purchase/PurchaseProvider";
 import { colors, fontSize, spacing } from "@/theme";
 
 export default function SettingsScreen() {
@@ -29,6 +28,7 @@ export default function SettingsScreen() {
   const [defaultEnabled, setDefaultEnabled] = useState(true);
   const [defaultTiming, setDefaultTiming] = useState(0);
   const [plusUnlocked, setPlusUnlocked] = useState(false);
+  const { restoreUnlimited } = usePurchase();
 
   useFocusEffect(
     useCallback(() => {
@@ -49,10 +49,10 @@ export default function SettingsScreen() {
   );
 
   const handleRestore = async () => {
-    const result = await restorePurchases();
+    const result = await restoreUnlimited();
     if (result.status === "success") {
       setPlusUnlocked(true);
-      Alert.alert("復元しました", "追加の登録枠が有効になりました。");
+      Alert.alert("復元しました", "無制限版が有効になりました。");
     } else if (result.status === "error") {
       Alert.alert("復元できませんでした", result.message);
     }
@@ -79,11 +79,11 @@ export default function SettingsScreen() {
           style: "destructive",
           onPress: async () => {
             try {
-              // 購入済みの登録枠はデータ削除後も維持する
+              // 無制限版の購入状態はデータ削除後も維持する
               const purchased = await isPlusUnlocked();
-              await Notifications.cancelAllScheduledNotificationsAsync();
-              await deleteAllStoredImagesAsync();
               await deleteAllData();
+              await deleteAllStoredImagesAsync();
+              await Notifications.cancelAllScheduledNotificationsAsync();
               if (purchased) {
                 await setSetting("plusUnlocked", "1");
               }
@@ -121,19 +121,19 @@ export default function SettingsScreen() {
         <NoteText text={NOTIFICATION_NOTE} />
       </Card>
 
-      <Text style={styles.sectionTitle}>登録枠</Text>
+      <Text style={styles.sectionTitle}>登録数</Text>
       <Card>
         <View style={styles.versionRow}>
           <Text style={styles.versionLabel}>現在のプラン</Text>
           <Text style={styles.versionValue}>
             {plusUnlocked
-              ? `追加購入済み（${FREE_ITEM_LIMIT + PLUS_ITEM_BONUS}件まで）`
+              ? "無制限版（買い切り）"
               : `無料版（${FREE_ITEM_LIMIT}件まで）`}
           </Text>
         </View>
         {plusUnlocked ? null : (
           <LinkRow
-            label={`登録枠を追加する（+${PLUS_ITEM_BONUS}件）`}
+            label="登録数を無制限にする"
             onPress={() => router.push("/paywall")}
           />
         )}
@@ -171,7 +171,7 @@ export default function SettingsScreen() {
           onPress={confirmDeleteAll}
         />
         <Text style={styles.dataNote}>
-          データはこの端末の中だけに保存されています。バックアップ・復元機能は今後のバージョンで対応予定です。
+          記録はアプリのローカル領域に保存されます。端末の設定により、OSバックアップや端末移行の対象になる場合があります。
         </Text>
       </Card>
     </ScrollView>

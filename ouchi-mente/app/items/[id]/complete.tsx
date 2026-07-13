@@ -12,8 +12,7 @@ import {
 } from "react-native";
 import { DateField, TextField } from "@/components/form";
 import { AppButton, Card, EmptyState, LoadingView, NoteText } from "@/components/ui";
-import { insertHistory } from "@/db/history";
-import { getItem, updateItem } from "@/db/items";
+import { getItem, completeItemWithHistory } from "@/db/items";
 import { GUIDANCE_NOTE, TASK_TYPE_LABELS } from "@/domain/labels";
 import { calculateNextDueDate, todayString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
@@ -22,10 +21,7 @@ import {
   pickAndStoreImageAsync,
   resolveImageUri,
 } from "@/media/images";
-import {
-  cancelNotification,
-  rescheduleItemNotification,
-} from "@/notifications/notifications";
+import { syncItemNotification } from "@/notifications/notifications";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 export default function CompleteScreen() {
@@ -99,28 +95,36 @@ export default function CompleteScreen() {
   const save = async () => {
     setSaving(true);
     try {
-      // 順序が重要:
-      // 1. 通知を再設定（失敗してもデータは無傷）
-      // 2. 項目の次回予定日を更新（失敗したら通知を破棄して中断）
-      // 3. 履歴を最後にINSERT（途中失敗しても履歴は重複せず、
-      //    写真ファイルを参照する行が残らないため、やり直しが安全）
+      // 項目更新と履歴追加を先に同一トランザクションで確定する。
+      // 通知は補助機能なので、失敗しても記録を失わない。
       const updated: MaintenanceItem = { ...item, nextDueDate };
-      const notificationId = await rescheduleItemNotification(updated);
-      try {
-        await updateItem({ ...updated, notificationId });
-        await insertHistory({
+      const saved = await completeItemWithHistory(
+        { ...updated, notificationId: undefined },
+        {
           maintenanceItemId: item.id,
           completedAt,
           note: note.trim() || undefined,
           imageUri,
           calculatedNextDueDate: nextDueDate,
-        });
-      } catch (error) {
-        await cancelNotification(notificationId);
-        throw error;
-      }
+        },
+      );
+      const notification = await syncItemNotification(saved, item.notificationId);
       savedImageRef.current = imageUri;
-      router.back();
+      if (notification.status === "permission-denied") {
+        Alert.alert(
+          "記録しました",
+          "通知が許可されていないため、リマインダーは設定されていません。",
+          [{ text: "OK", onPress: () => router.back() }],
+        );
+      } else if (notification.status === "failed") {
+        Alert.alert(
+          "記録しました",
+          "通知は設定できませんでしたが、記録は保存されています。",
+          [{ text: "OK", onPress: () => router.back() }],
+        );
+      } else {
+        router.back();
+      }
     } catch {
       Alert.alert("保存エラー", "記録を保存できませんでした。もう一度お試しください。");
     } finally {

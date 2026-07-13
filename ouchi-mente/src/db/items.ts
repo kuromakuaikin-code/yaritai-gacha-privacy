@@ -4,6 +4,7 @@ import type {
   MaintenanceCategory,
   MaintenanceItem,
   MaintenanceTaskType,
+  NewMaintenanceHistory,
   NewMaintenanceItem,
   ScheduleType,
   IntervalUnit,
@@ -163,4 +164,55 @@ export async function deleteItem(id: string): Promise<void> {
   await getDatabase().runAsync("DELETE FROM maintenance_items WHERE id = ?;", [
     id,
   ]);
+}
+
+/** 項目の次回予定日更新と完了履歴の追加を、同一トランザクションで確定する。 */
+export async function completeItemWithHistory(
+  item: MaintenanceItem,
+  historyInput: NewMaintenanceHistory,
+): Promise<MaintenanceItem> {
+  const updated: MaintenanceItem = {
+    ...item,
+    updatedAt: new Date().toISOString(),
+  };
+  const now = new Date().toISOString();
+  const history = {
+    ...historyInput,
+    id: newId(),
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  await getDatabase().withExclusiveTransactionAsync(async (txn) => {
+    await txn.runAsync(
+      `UPDATE maintenance_items SET
+        name = ?, category = ?, task_type = ?, location = ?, manufacturer = ?,
+        model_number = ?, note = ?, image_uri = ?, schedule_type = ?,
+        interval_value = ?, interval_unit = ?, next_due_date = ?,
+        notification_enabled = ?, notification_timing_days = ?,
+        notification_id = ?, updated_at = ?, archived_at = ?
+      WHERE id = ?;`,
+      [
+        updated.name, updated.category, updated.taskType, updated.location ?? null,
+        updated.manufacturer ?? null, updated.modelNumber ?? null, updated.note ?? null,
+        updated.imageUri ?? null, updated.scheduleType, updated.intervalValue ?? null,
+        updated.intervalUnit ?? null, updated.nextDueDate ?? null,
+        updated.notificationEnabled ? 1 : 0, updated.notificationTimingDays ?? null,
+        updated.notificationId ?? null, updated.updatedAt, updated.archivedAt ?? null,
+        updated.id,
+      ],
+    );
+    await txn.runAsync(
+      `INSERT INTO maintenance_history (
+        id, maintenance_item_id, completed_at, note, image_uri,
+        calculated_next_due_date, created_at, updated_at
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);`,
+      [
+        history.id, history.maintenanceItemId, history.completedAt,
+        history.note ?? null, history.imageUri ?? null,
+        history.calculatedNextDueDate ?? null, history.createdAt, history.updatedAt,
+      ],
+    );
+  });
+  return updated;
 }

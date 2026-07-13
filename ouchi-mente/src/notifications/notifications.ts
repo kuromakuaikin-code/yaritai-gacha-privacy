@@ -2,6 +2,7 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { parseDateString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
+import { updateItem } from "@/db/items";
 
 /**
  * ローカル通知のみを使用する。外部サーバー・プッシュ通知は使わない。
@@ -52,28 +53,30 @@ function notificationBody(item: MaintenanceItem, timingDays: number): string {
 
 /**
  * 項目の通知を登録し直し、新しい通知IDを返す。
- * 通知が不要（無効・予定なし・過去日・権限なし）の場合は undefined。
- * 古い通知IDの破棄も行う。
+ * 通知が不要（無効・予定なし・過去日）の場合は undefined。
  */
 export async function rescheduleItemNotification(
   item: MaintenanceItem,
 ): Promise<string | undefined> {
-  await cancelNotification(item.notificationId);
-
   if (!item.notificationEnabled || !item.nextDueDate) return undefined;
-  if (!(await isPermissionGranted())) return undefined;
+  if (!(await isPermissionGranted())) {
+    throw new Error("通知の許可が必要です");
+  }
 
   const timingDays = item.notificationTimingDays ?? 0;
   const fireAt = parseDateString(item.nextDueDate);
   fireAt.setDate(fireAt.getDate() - timingDays);
   fireAt.setHours(NOTIFY_HOUR, 0, 0, 0);
+  // 通知時刻をすでに過ぎている場合は登録しない。
+  // 直後に発火させると「あと◯日です」という本文が実際の残り日数と食い違い、
+  // 起動時照合（reconcile）の「過ぎた分は画面表示に任せる」方針とも矛盾する
   if (fireAt.getTime() <= Date.now()) return undefined;
 
   await ensureAndroidChannel();
   try {
     return await Notifications.scheduleNotificationAsync({
       content: {
-        title: "おうちメンテ目安メモ",
+        title: "家の手入れ記録",
         body: notificationBody(item, timingDays),
         data: { maintenanceItemId: item.id },
       },
@@ -87,7 +90,39 @@ export async function rescheduleItemNotification(
     });
   } catch {
     // 通知は補助機能。登録に失敗してもアプリの操作は継続できるようにする
-    return undefined;
+    throw new Error("通知を登録できませんでした");
+  }
+}
+
+export type NotificationSyncResult =
+  | { status: "scheduled"; notificationId: string }
+  | { status: "not-needed" }
+  | { status: "permission-denied" }
+  | { status: "failed" };
+
+/**
+ * 記録を先にSQLiteへ保存した後、通知を補助的に同期する。
+ * ここで失敗しても、記録・履歴・写真を失敗扱いにしない。
+ */
+export async function syncItemNotification(
+  item: MaintenanceItem,
+  previousNotificationId?: string,
+): Promise<NotificationSyncResult> {
+  await cancelNotification(previousNotificationId);
+
+  if (!item.notificationEnabled || !item.nextDueDate) {
+    return { status: "not-needed" };
+  }
+  try {
+    if (!(await isPermissionGranted())) {
+      return { status: "permission-denied" };
+    }
+    const notificationId = await rescheduleItemNotification(item);
+    if (!notificationId) return { status: "not-needed" };
+    await updateItem({ ...item, notificationId });
+    return { status: "scheduled", notificationId };
+  } catch {
+    return { status: "failed" };
   }
 }
 

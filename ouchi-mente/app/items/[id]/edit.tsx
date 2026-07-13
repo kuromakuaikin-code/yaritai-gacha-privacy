@@ -6,10 +6,7 @@ import { EmptyState, LoadingView } from "@/components/ui";
 import { getItem, updateItem } from "@/db/items";
 import type { MaintenanceItem } from "@/domain/types";
 import { deleteStoredImageAsync } from "@/media/images";
-import {
-  cancelNotification,
-  rescheduleItemNotification,
-} from "@/notifications/notifications";
+import { syncItemNotification } from "@/notifications/notifications";
 
 export default function EditItemScreen() {
   const router = useRouter();
@@ -48,20 +45,28 @@ export default function EditItemScreen() {
         ...item,
         ...result,
       };
-      // 編集時は古い通知を破棄して登録し直す。
-      // DB更新に失敗したら、登録したばかりの通知を破棄する（通知の迷子防止）
-      const notificationId = await rescheduleItemNotification(updated);
-      try {
-        await updateItem({ ...updated, notificationId });
-      } catch (error) {
-        await cancelNotification(notificationId);
-        throw error;
-      }
+      // 項目を先に確定する。通知が失敗しても編集内容は失わない。
+      const saved = await updateItem({ ...updated, notificationId: undefined });
+      const notification = await syncItemNotification(saved, item.notificationId);
       // 保存が成功してから、差し替え・削除された元の写真ファイルを片付ける
       if (item.imageUri && item.imageUri !== result.imageUri) {
         await deleteStoredImageAsync(item.imageUri);
       }
-      router.back();
+      if (notification.status === "permission-denied") {
+        Alert.alert(
+          "保存しました",
+          "通知が許可されていないため、リマインダーは設定されていません。",
+          [{ text: "OK", onPress: () => router.back() }],
+        );
+      } else if (notification.status === "failed") {
+        Alert.alert(
+          "保存しました",
+          "通知は設定できませんでしたが、変更は保存されています。",
+          [{ text: "OK", onPress: () => router.back() }],
+        );
+      } else {
+        router.back();
+      }
     } catch (error) {
       Alert.alert("保存エラー", "変更を保存できませんでした。もう一度お試しください。");
       throw error;

@@ -73,7 +73,7 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
     ],
   },
   {
-    title: "洗濯",
+    title: "洗濯機",
     templates: [
       {
         key: "washer_tub",
@@ -81,13 +81,6 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
         category: "laundry",
         taskType: "cleaning",
         interval: { value: 1, unit: "month" },
-      },
-      {
-        key: "lint_filter",
-        name: "糸くずフィルター",
-        category: "laundry",
-        taskType: "cleaning",
-        interval: { value: 7, unit: "day" },
       },
     ],
   },
@@ -100,13 +93,6 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
         category: "bathroom",
         taskType: "cleaning",
         interval: { value: 3, unit: "month" },
-      },
-      {
-        key: "bath_drain",
-        name: "排水口",
-        category: "bathroom",
-        taskType: "cleaning",
-        interval: { value: 7, unit: "day" },
       },
     ],
   },
@@ -121,11 +107,12 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
         interval: { value: 30, unit: "day" },
       },
       {
-        key: "humidifier",
-        name: "加湿器",
+        key: "ventilation_filter",
+        name: "24時間換気フィルター",
         category: "air_conditioning",
         taskType: "cleaning",
-        interval: { value: 7, unit: "day" },
+        interval: { value: 3, unit: "month" },
+        caution: "設置環境や製品によって異なります。",
       },
     ],
   },

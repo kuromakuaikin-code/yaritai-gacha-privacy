@@ -8,8 +8,8 @@ export default function AboutScreen() {
     <LegalPage
       sections={[
         {
-          heading: "おうちメンテ目安メモ",
-          body: "掃除・交換・点検の「そろそろ」を忘れないための記録アプリです。",
+          heading: "家の手入れ記録",
+          body: "家電・住宅設備・交換品の「最後にいつ」と「次はいつ」を静かに残す、個人用の履歴台帳です。",
         },
         {
           heading: "バージョン",
@@ -17,7 +17,7 @@ export default function AboutScreen() {
         },
         {
           heading: "できること",
-          body: "・メンテナンス項目の登録\n・実施記録と履歴の確認\n・次回目安日の自動計算\n・目安日前のローカル通知",
+          body: "・家電や設備のお手入れ項目の登録\n・実施記録と履歴の確認\n・メーカー、型番、場所、写真の保存\n・次回目安日の自動計算\n・目安日前のローカル通知",
         },
         {
           heading: "できないこと",

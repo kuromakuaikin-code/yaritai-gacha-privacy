@@ -43,8 +43,9 @@ export default function HomeScreen() {
   const count = (section: DueSection) =>
     items.filter((i) => dueSectionOf(i) === section).length;
   const overdueCount = count("overdue");
-  const todayCount = count("today");
-  const soonCount = count("within7");
+  const within30Count =
+    count("today") + count("within7") + count("within30");
+  const laterCount = count("later");
 
   const sections = groupItemsBySection(items).map((group) => ({
     title: SECTION_LABELS[group.section],
@@ -68,18 +69,19 @@ export default function HomeScreen() {
         }}
       />
       <View style={styles.summary}>
-        <SummaryChip label="期限切れ" value={overdueCount} highlight />
-        <SummaryChip label="今日" value={todayCount} />
-        <SummaryChip label="7日以内" value={soonCount} />
+        <SummaryChip label="目安日超過" value={overdueCount} highlight />
+        <SummaryChip label="30日以内" value={within30Count} />
+        <SummaryChip label="それ以降" value={laterCount} />
       </View>
 
       {items.length === 0 ? (
         <EmptyState
           title="まだ項目がありません"
-          description="エアコンフィルターや洗濯槽など、お手入れしたい項目を追加してみましょう。"
+          description="エアコンや換気設備など、数か月後に忘れそうなお手入れから記録してみましょう。"
         />
       ) : (
         <SectionList
+          contentInsetAdjustmentBehavior="automatic"
           sections={sections}
           keyExtractor={(item) => item.id}
           contentContainerStyle={styles.list}
@@ -105,8 +107,8 @@ export default function HomeScreen() {
             style={styles.limitRow}
           >
             <Text style={styles.limitText}>
-              登録枠 {items.length}/{itemLimit}件
-              {items.length >= itemLimit ? "・枠を追加する ›" : ""}
+              無料版 {items.length}/{itemLimit}件
+              {items.length >= itemLimit ? "・無制限にする ›" : ""}
             </Text>
           </Pressable>
         ) : null}

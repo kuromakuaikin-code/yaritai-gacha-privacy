@@ -69,7 +69,7 @@ export function addInterval(
   }
 }
 
-/** 今日から見た残り日数。負の値は期限切れ日数 */
+/** 今日から見た残り日数。負の値は目安日を過ぎた日数 */
 export function daysUntil(dateString: string, today = todayString()): number {
   const target = parseDateString(dateString).getTime();
   const base = parseDateString(today).getTime();

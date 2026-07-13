@@ -12,8 +12,12 @@ export default function TemplatesScreen() {
   return (
     <ScrollView
       style={styles.container}
+      contentInsetAdjustmentBehavior="automatic"
       contentContainerStyle={styles.content}
     >
+      <Text style={styles.intro}>
+        数か月に一度の掃除や交換など、忘れやすい項目から選べます。
+      </Text>
       <NoteText text={GUIDANCE_NOTE} />
       {TEMPLATE_GROUPS.map((group) => (
         <View key={group.title} style={styles.group}>
@@ -57,6 +61,11 @@ export default function TemplatesScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   content: { padding: spacing.lg, paddingBottom: spacing.xxl, gap: spacing.md },
+  intro: {
+    fontSize: fontSize.md,
+    color: colors.textSecondary,
+    lineHeight: 22,
+  },
   group: { gap: spacing.sm },
   groupTitle: {
     fontSize: fontSize.md,

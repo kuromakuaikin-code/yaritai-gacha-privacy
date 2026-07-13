@@ -41,7 +41,7 @@ export const INTERVAL_UNIT_LABELS: Record<IntervalUnit, string> = {
 };
 
 export const STATUS_LABELS: Record<DueStatus, string> = {
-  overdue: "期限切れ",
+  overdue: "目安日超過",
   today: "今日",
   soon: "もうすぐ",
   scheduled: "予定あり",
@@ -49,7 +49,7 @@ export const STATUS_LABELS: Record<DueStatus, string> = {
 };
 
 export const SECTION_LABELS: Record<DueSection, string> = {
-  overdue: "期限切れ",
+  overdue: "目安日を過ぎています",
   today: "今日",
   within7: "7日以内",
   within30: "30日以内",
