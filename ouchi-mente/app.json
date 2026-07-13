@@ -1,0 +1,42 @@
+{
+  "expo": {
+    "name": "おうちメンテ目安メモ",
+    "slug": "ouchi-mente",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "ouchimente",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.kuromakuaikin.ouchimente",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.kuromakuaikin.ouchimente",
+      "edgeToEdgeEnabled": true
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      [
+        "expo-notifications",
+        {
+          "defaultChannel": "default"
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "登録したメンテナンス項目や実施記録に写真を添付するために、写真ライブラリを使用します。",
+          "cameraPermission": "登録したメンテナンス項目や実施記録に写真を添付するために、カメラを使用します。"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": false
+    }
+  }
+}
