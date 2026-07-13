@@ -1,6 +1,13 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
+## 3D素材サムネ台帳（Mac用素材ビューア / プロトタイプ）
+
+TRELLIS2/ComfyUI等の出力フォルダを監視し、GLB/usdz/画像を自動サムネイル化して一覧表示するmacOSアプリ。完全ローカル・外部通信なし。
+
+- ソース・ビルド手順・検証チェックリスト: `asset-ledger/README.md`
+- 実行: `asset-ledger/Package.swift` をXcodeで開いてRun（macOS 14+）
+
 ## 盆踊りナビ愛知
 
 愛知県内の町内会・学区・神社・公園レベルのローカルな盆踊りを探せるサイト。
