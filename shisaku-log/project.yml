@@ -1,0 +1,23 @@
+# XcodeGen 用プロジェクト定義
+# `brew install xcodegen && cd shisaku-log && xcodegen` で ShisakuLog.xcodeproj が生成される。
+# XcodeGen を使わない場合は README.md の手動セットアップ手順を参照。
+name: ShisakuLog
+options:
+  bundleIdPrefix: com.kuromakuaikin
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  ShisakuLog:
+    type: application
+    platform: iOS
+    sources: [ShisakuLog]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kuromakuaikin.shisakulog
+        MARKETING_VERSION: 0.1.0
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_KEY_CFBundleDisplayName: 施策×収益ログ
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        SWIFT_VERSION: 5.9
+        TARGETED_DEVICE_FAMILY: 1
+        GENERATE_INFOPLIST_FILE: YES
