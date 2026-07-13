@@ -89,7 +89,7 @@ export function intervalLabel(value: number, unit: IntervalUnit): string {
 
 /** 目安に関する短い注意文。周期・予定日を表示する画面で必ず添える */
 export const GUIDANCE_NOTE =
-  "表示される時期は一般的な目安です。実際のお手入れ・交換・点検時期は、製品の取扱説明書やメーカーの案内を優先してください。";
+  "表示される周期は一般的な目安です。実際のお手入れ・交換・点検時期は、製品の取扱説明書やメーカーの案内を優先してください。";
 
 /** 通知に関する注意文 */
 export const NOTIFICATION_NOTE =

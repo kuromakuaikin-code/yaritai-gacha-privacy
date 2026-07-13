@@ -1,11 +1,11 @@
 import React, { useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import {
-  Dimensions,
   FlatList,
   StyleSheet,
   Text,
   View,
+  useWindowDimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AppButton } from "@/components/ui";
@@ -36,7 +36,7 @@ export default function OnboardingScreen() {
   const router = useRouter();
   const listRef = useRef<FlatList>(null);
   const [page, setPage] = useState(0);
-  const width = Dimensions.get("window").width;
+  const { width } = useWindowDimensions();
 
   const isLast = page === PAGES.length - 1;
 

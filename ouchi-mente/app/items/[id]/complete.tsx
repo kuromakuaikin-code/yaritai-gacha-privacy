@@ -99,24 +99,27 @@ export default function CompleteScreen() {
   const save = async () => {
     setSaving(true);
     try {
-      await insertHistory({
-        maintenanceItemId: item.id,
-        completedAt,
-        note: note.trim() || undefined,
-        imageUri,
-        calculatedNextDueDate: nextDueDate,
-      });
-      savedImageRef.current = imageUri;
+      // 順序が重要:
+      // 1. 通知を再設定（失敗してもデータは無傷）
+      // 2. 項目の次回予定日を更新（失敗したら通知を破棄して中断）
+      // 3. 履歴を最後にINSERT（途中失敗しても履歴は重複せず、
+      //    写真ファイルを参照する行が残らないため、やり直しが安全）
       const updated: MaintenanceItem = { ...item, nextDueDate };
-      // 完了記録に合わせて通知を再設定する。
-      // DB更新に失敗したら、登録したばかりの通知を破棄する（通知の迷子防止）
       const notificationId = await rescheduleItemNotification(updated);
       try {
         await updateItem({ ...updated, notificationId });
+        await insertHistory({
+          maintenanceItemId: item.id,
+          completedAt,
+          note: note.trim() || undefined,
+          imageUri,
+          calculatedNextDueDate: nextDueDate,
+        });
       } catch (error) {
         await cancelNotification(notificationId);
         throw error;
       }
+      savedImageRef.current = imageUri;
       router.back();
     } catch {
       Alert.alert("保存エラー", "記録を保存できませんでした。もう一度お試しください。");

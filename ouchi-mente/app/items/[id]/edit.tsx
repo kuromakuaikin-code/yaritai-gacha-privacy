@@ -41,6 +41,7 @@ export default function EditItemScreen() {
     );
   }
 
+  // 保存に至らなかった場合は throw する（ItemForm が写真の後始末を行うため）
   const handleSubmit = async (result: ItemFormResult) => {
     try {
       const updated: MaintenanceItem = {
@@ -61,8 +62,9 @@ export default function EditItemScreen() {
         await deleteStoredImageAsync(item.imageUri);
       }
       router.back();
-    } catch {
+    } catch (error) {
       Alert.alert("保存エラー", "変更を保存できませんでした。もう一度お試しください。");
+      throw error;
     }
   };
 

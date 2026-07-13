@@ -49,15 +49,27 @@ import {
 } from "@/media/images";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
+// z.custom は失敗時にパース全体を中断し superRefine が動かなくなるため、
+// 選択式のフィールドは z.enum で検証する
 const formSchema = z
   .object({
     name: z.string().trim().min(1, "項目名を入力してください"),
-    category: z.custom<MaintenanceCategory>(
-      (v) => typeof v === "string" && v.length > 0,
+    category: z.enum(
+      [
+        "air_conditioning",
+        "kitchen",
+        "laundry",
+        "bathroom",
+        "toilet",
+        "living",
+        "safety",
+        "outdoor",
+        "other",
+      ],
       "カテゴリーを選択してください",
     ),
-    taskType: z.custom<MaintenanceTaskType>(
-      (v) => typeof v === "string" && v.length > 0,
+    taskType: z.enum(
+      ["cleaning", "replacement", "inspection", "refill", "other"],
       "作業種別を選択してください",
     ),
     location: z.string(),
@@ -65,14 +77,12 @@ const formSchema = z
     baseDate: z.string().optional(),
     /** 編集時のみ使用。次回予定日の直接変更 */
     nextDueDateOverride: z.string().optional(),
-    scheduleType: z.custom<ScheduleType>(
-      (v) => v === "interval" || v === "fixedDate" || v === "none",
+    scheduleType: z.enum(
+      ["interval", "fixedDate", "none"],
       "次回目安の設定方法を選択してください",
     ),
     intervalValue: z.string(),
-    intervalUnit: z.custom<IntervalUnit>(
-      (v) => v === "day" || v === "week" || v === "month" || v === "year",
-    ),
+    intervalUnit: z.enum(["day", "week", "month", "year"]),
     fixedDate: z.string().optional(),
     notificationEnabled: z.boolean(),
     notificationTimingDays: z.number(),
@@ -138,6 +148,7 @@ export function ItemForm({
   /** テンプレート由来の注意文など */
   caution?: string;
   submitLabel: string;
+  /** 保存に失敗した場合は throw すること（エラー表示は呼び出し側が担当） */
   onSubmit: (result: ItemFormResult) => Promise<void>;
 }) {
   const [submitting, setSubmitting] = useState(false);
@@ -266,8 +277,12 @@ export function ItemForm({
 
     setSubmitting(true);
     try {
+      // onSubmit は保存に失敗したら throw する契約
+      //（エラー表示は呼び出し側が行う）。失敗時は写真を保存済み扱いにしない
       await onSubmit(result);
       savedImageRef.current = result.imageUri;
+    } catch {
+      // 何もしない。ユーザーはフォームに留まり、やり直せる
     } finally {
       setSubmitting(false);
     }

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
-import { AppButton, Card, NoteText } from "@/components/ui";
+import { AppButton, Card, LoadingView, NoteText } from "@/components/ui";
 import {
   FREE_ITEM_LIMIT,
   PLUS_ITEM_BONUS,
@@ -63,17 +63,25 @@ export default function PaywallScreen() {
     }
   };
 
-  // 購入済みで上限（15件）に達している場合は、購入の案内ではなく上限の説明を出す
-  if (check?.plusUnlocked) {
+  // 判定が終わるまでは何も出さない（購入済みユーザーに購入ボタンを見せないため）
+  if (!check) return <LoadingView />;
+
+  // 購入済みの場合は、購入の案内ではなく登録枠の説明を出す
+  if (check.plusUnlocked) {
+    const atLimit = !check.allowed;
     return (
       <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.title}>登録の上限に達しています</Text>
+          <Text style={styles.title}>
+            {atLimit ? "登録の上限に達しています" : "登録枠について"}
+          </Text>
           <Text style={styles.lead}>
             追加購入済みのため、最大{FREE_ITEM_LIMIT + PLUS_ITEM_BONUS}
             件まで登録できます（現在 {check.count}/{check.limit} 件）。
           </Text>
-          <NoteText text="使わなくなった項目を削除すると、新しい項目を登録できます。項目を削除しても、購入した登録枠はなくなりません。" />
+          {atLimit ? (
+            <NoteText text="使わなくなった項目を削除すると、新しい項目を登録できます。項目を削除しても、購入した登録枠はなくなりません。" />
+          ) : null}
         </ScrollView>
         <View style={styles.footer}>
           <AppButton title="閉じる" onPress={() => router.back()} />
@@ -87,8 +95,8 @@ export default function PaywallScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>登録枠を追加しませんか？</Text>
         <Text style={styles.lead}>
-          無料版では{FREE_ITEM_LIMIT}件まで登録できます。
-          {check ? `現在 ${check.count}/${check.limit} 件を使用中です。` : ""}
+          無料版では{FREE_ITEM_LIMIT}件まで登録できます。 現在 {check.count}/
+          {check.limit} 件を使用中です。
         </Text>
 
         <Card style={styles.offer}>

@@ -47,18 +47,19 @@ export default function NewItemScreen() {
 
   if (!defaults) return <LoadingView />;
 
+  // 保存に至らなかった場合は throw する（ItemForm が写真の後始末を行うため）
   const handleSubmit = async (result: ItemFormResult) => {
+    // 画面表示中に別の画面で登録された場合に備え、保存直前にも上限を確認する
+    const check = await checkCanAddItem();
+    if (!check.allowed) {
+      Alert.alert(
+        "登録の上限に達しています",
+        `登録できるのは${check.limit}件までです。`,
+        [{ text: "OK", onPress: () => router.replace("/paywall") }],
+      );
+      throw new Error("item limit reached");
+    }
     try {
-      // 画面表示中に別の画面で登録された場合に備え、保存直前にも上限を確認する
-      const check = await checkCanAddItem();
-      if (!check.allowed) {
-        Alert.alert(
-          "登録の上限に達しています",
-          `登録できるのは${check.limit}件までです。`,
-          [{ text: "OK", onPress: () => router.replace("/paywall") }],
-        );
-        return;
-      }
       const item = await insertItem(result);
       const notificationId = await rescheduleItemNotification(item);
       if (notificationId) {
@@ -70,8 +71,9 @@ export default function NewItemScreen() {
         }
       }
       router.back();
-    } catch {
+    } catch (error) {
       Alert.alert("保存エラー", "項目を保存できませんでした。もう一度お試しください。");
+      throw error;
     }
   };
 

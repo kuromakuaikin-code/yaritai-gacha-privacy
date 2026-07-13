@@ -80,6 +80,9 @@ export async function rescheduleItemNotification(
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
         date: fireAt,
+        // Androidで作成済みのチャンネルを使う（未指定だと内部の
+        // フォールバックチャンネル経由になり、名前・重要度の設定が効かない）
+        channelId: "default",
       },
     });
   } catch {

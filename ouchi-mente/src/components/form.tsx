@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker, {
+  type DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
 import {
   Modal,
   Platform,
@@ -157,9 +159,11 @@ export function DateField({
 }) {
   const [pickerVisible, setPickerVisible] = useState(false);
 
-  const handleChange = (date: Date | undefined) => {
+  // Androidはキャンセル時にも日付付きでonChangeが呼ばれるため、
+  // 「決定」操作（type === "set"）のときだけ値を反映する
+  const handleChange = (event: DateTimePickerEvent, date: Date | undefined) => {
     if (Platform.OS === "android") setPickerVisible(false);
-    if (date) onChange(toDateString(date));
+    if (event.type === "set" && date) onChange(toDateString(date));
   };
 
   return (
@@ -192,7 +196,7 @@ export function DateField({
           value={value ? parseDateString(value) : new Date()}
           mode="date"
           display="calendar"
-          onChange={(_, date) => handleChange(date)}
+          onChange={handleChange}
         />
       ) : null}
       {Platform.OS === "ios" ? (
@@ -212,7 +216,7 @@ export function DateField({
                 mode="date"
                 display="inline"
                 locale="ja-JP"
-                onChange={(_, date) => handleChange(date)}
+                onChange={handleChange}
               />
               <Pressable
                 accessibilityRole="button"
