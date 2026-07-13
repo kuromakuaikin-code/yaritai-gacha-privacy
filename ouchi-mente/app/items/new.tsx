@@ -7,6 +7,7 @@ import { insertItem, updateItem } from "@/db/items";
 import { getSetting } from "@/db/settings";
 import { findTemplate } from "@/domain/templates";
 import { rescheduleItemNotification } from "@/notifications/notifications";
+import { checkCanAddItem } from "@/purchase/entitlement";
 
 export default function NewItemScreen() {
   const router = useRouter();
@@ -21,6 +22,13 @@ export default function NewItemScreen() {
   useEffect(() => {
     let active = true;
     (async () => {
+      // 登録上限（無料5件・追加購入で15件）に達していたら案内画面へ
+      const check = await checkCanAddItem();
+      if (!active) return;
+      if (!check.allowed) {
+        router.replace("/paywall");
+        return;
+      }
       const enabled = await getSetting("defaultNotificationEnabled");
       const timing = await getSetting("defaultNotificationTimingDays");
       if (!active) return;
@@ -32,7 +40,7 @@ export default function NewItemScreen() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [router]);
 
   if (!defaults) return <LoadingView />;
 

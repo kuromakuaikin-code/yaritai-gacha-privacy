@@ -53,6 +53,10 @@ export default function RootLayout() {
           options={{ title: "完了として記録", presentation: "modal" }}
         />
         <Stack.Screen name="items/[id]/history" options={{ title: "履歴" }} />
+        <Stack.Screen
+          name="paywall"
+          options={{ title: "登録枠の追加", presentation: "modal" }}
+        />
         <Stack.Screen name="settings/index" options={{ title: "設定" }} />
         <Stack.Screen
           name="settings/disclaimer"

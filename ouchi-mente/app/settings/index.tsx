@@ -16,12 +16,19 @@ import { deleteAllData } from "@/db/database";
 import { getSetting, setSetting } from "@/db/settings";
 import { NOTIFICATION_NOTE, NOTIFICATION_TIMING_OPTIONS } from "@/domain/labels";
 import { deleteAllStoredImagesAsync } from "@/media/images";
+import {
+  FREE_ITEM_LIMIT,
+  PLUS_ITEM_BONUS,
+  isPlusUnlocked,
+} from "@/purchase/entitlement";
+import { restorePurchases } from "@/purchase/store";
 import { colors, fontSize, spacing } from "@/theme";
 
 export default function SettingsScreen() {
   const router = useRouter();
   const [defaultEnabled, setDefaultEnabled] = useState(true);
   const [defaultTiming, setDefaultTiming] = useState(0);
+  const [plusUnlocked, setPlusUnlocked] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -29,15 +36,27 @@ export default function SettingsScreen() {
       (async () => {
         const enabled = await getSetting("defaultNotificationEnabled");
         const timing = await getSetting("defaultNotificationTimingDays");
+        const unlocked = await isPlusUnlocked();
         if (!active) return;
         if (enabled !== null) setDefaultEnabled(enabled === "1");
         if (timing !== null) setDefaultTiming(Number(timing));
+        setPlusUnlocked(unlocked);
       })();
       return () => {
         active = false;
       };
     }, []),
   );
+
+  const handleRestore = async () => {
+    const result = await restorePurchases();
+    if (result.status === "success") {
+      setPlusUnlocked(true);
+      Alert.alert("復元しました", "追加の登録枠が有効になりました。");
+    } else if (result.status === "error") {
+      Alert.alert("復元できませんでした", result.message);
+    }
+  };
 
   const updateDefaultEnabled = async (value: boolean) => {
     setDefaultEnabled(value);
@@ -60,9 +79,14 @@ export default function SettingsScreen() {
           style: "destructive",
           onPress: async () => {
             try {
+              // 購入済みの登録枠はデータ削除後も維持する
+              const purchased = await isPlusUnlocked();
               await Notifications.cancelAllScheduledNotificationsAsync();
               await deleteAllStoredImagesAsync();
               await deleteAllData();
+              if (purchased) {
+                await setSetting("plusUnlocked", "1");
+              }
               Alert.alert("削除しました", "すべてのデータを削除しました。");
               router.back();
             } catch {
@@ -95,6 +119,25 @@ export default function SettingsScreen() {
           />
         ) : null}
         <NoteText text={NOTIFICATION_NOTE} />
+      </Card>
+
+      <Text style={styles.sectionTitle}>登録枠</Text>
+      <Card>
+        <View style={styles.versionRow}>
+          <Text style={styles.versionLabel}>現在のプラン</Text>
+          <Text style={styles.versionValue}>
+            {plusUnlocked
+              ? `追加購入済み（${FREE_ITEM_LIMIT + PLUS_ITEM_BONUS}件まで）`
+              : `無料版（${FREE_ITEM_LIMIT}件まで）`}
+          </Text>
+        </View>
+        {plusUnlocked ? null : (
+          <LinkRow
+            label={`登録枠を追加する（+${PLUS_ITEM_BONUS}件）`}
+            onPress={() => router.push("/paywall")}
+          />
+        )}
+        <LinkRow label="購入の復元" onPress={handleRestore} />
       </Card>
 
       <Text style={styles.sectionTitle}>このアプリについて</Text>

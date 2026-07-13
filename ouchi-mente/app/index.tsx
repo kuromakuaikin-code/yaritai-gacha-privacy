@@ -8,6 +8,7 @@ import { getSetting } from "@/db/settings";
 import { SECTION_LABELS } from "@/domain/labels";
 import { dueSectionOf, groupItemsBySection } from "@/domain/schedule";
 import type { DueSection, MaintenanceItem } from "@/domain/types";
+import { getItemLimit } from "@/purchase/entitlement";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 export default function HomeScreen() {
@@ -15,6 +16,7 @@ export default function HomeScreen() {
   const [loading, setLoading] = useState(true);
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
   const [items, setItems] = useState<MaintenanceItem[]>([]);
+  const [itemLimit, setItemLimit] = useState(5);
 
   useFocusEffect(
     useCallback(() => {
@@ -22,9 +24,11 @@ export default function HomeScreen() {
       (async () => {
         const onboarded = await getSetting("onboardingCompleted");
         const loaded = await listItems();
+        const limit = await getItemLimit();
         if (!active) return;
         setNeedsOnboarding(onboarded !== "1");
         setItems(loaded);
+        setItemLimit(limit);
         setLoading(false);
       })();
       return () => {
@@ -93,18 +97,32 @@ export default function HomeScreen() {
         />
       )}
 
-      <View style={styles.footer}>
-        <AppButton
-          title="テンプレートから追加"
-          variant="secondary"
-          onPress={() => router.push("/templates")}
-          style={styles.footerButton}
-        />
-        <AppButton
-          title="自分で追加"
-          onPress={() => router.push("/items/new")}
-          style={styles.footerButton}
-        />
+      <View style={styles.footerArea}>
+        {items.length >= itemLimit - 1 ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() => router.push("/paywall")}
+            style={styles.limitRow}
+          >
+            <Text style={styles.limitText}>
+              登録枠 {items.length}/{itemLimit}件
+              {items.length >= itemLimit ? "・枠を追加する ›" : ""}
+            </Text>
+          </Pressable>
+        ) : null}
+        <View style={styles.footer}>
+          <AppButton
+            title="テンプレートから追加"
+            variant="secondary"
+            onPress={() => router.push("/templates")}
+            style={styles.footerButton}
+          />
+          <AppButton
+            title="自分で追加"
+            onPress={() => router.push("/items/new")}
+            style={styles.footerButton}
+          />
+        </View>
       </View>
     </View>
   );
@@ -174,13 +192,24 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     marginBottom: spacing.sm,
   },
+  footerArea: {
+    backgroundColor: colors.surface,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+  },
+  limitRow: {
+    paddingTop: spacing.md,
+    paddingHorizontal: spacing.lg,
+    alignItems: "center",
+  },
+  limitText: {
+    fontSize: fontSize.sm,
+    color: colors.textSecondary,
+  },
   footer: {
     flexDirection: "row",
     gap: spacing.md,
     padding: spacing.lg,
-    backgroundColor: colors.surface,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
   },
   footerButton: { flex: 1 },
   settingsLinkText: {

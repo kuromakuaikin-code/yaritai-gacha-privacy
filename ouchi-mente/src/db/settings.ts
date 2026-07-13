@@ -3,7 +3,8 @@ import { getDatabase } from "./database";
 export type AppSettingKey =
   | "onboardingCompleted"
   | "defaultNotificationEnabled"
-  | "defaultNotificationTimingDays";
+  | "defaultNotificationTimingDays"
+  | "plusUnlocked";
 
 export async function getSetting(key: AppSettingKey): Promise<string | null> {
   const row = await getDatabase().getFirstAsync<{ value: string }>(
