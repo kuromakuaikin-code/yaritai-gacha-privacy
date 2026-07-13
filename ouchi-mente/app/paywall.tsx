@@ -63,6 +63,25 @@ export default function PaywallScreen() {
     }
   };
 
+  // 購入済みで上限（15件）に達している場合は、購入の案内ではなく上限の説明を出す
+  if (check?.plusUnlocked) {
+    return (
+      <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <Text style={styles.title}>登録の上限に達しています</Text>
+          <Text style={styles.lead}>
+            追加購入済みのため、最大{FREE_ITEM_LIMIT + PLUS_ITEM_BONUS}
+            件まで登録できます（現在 {check.count}/{check.limit} 件）。
+          </Text>
+          <NoteText text="使わなくなった項目を削除すると、新しい項目を登録できます。項目を削除しても、購入した登録枠はなくなりません。" />
+        </ScrollView>
+        <View style={styles.footer}>
+          <AppButton title="閉じる" onPress={() => router.back()} />
+        </View>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.content}>

@@ -31,7 +31,8 @@
         "expo-image-picker",
         {
           "photosPermission": "登録したメンテナンス項目や実施記録に写真を添付するために、写真ライブラリを使用します。",
-          "cameraPermission": "登録したメンテナンス項目や実施記録に写真を添付するために、カメラを使用します。"
+          "cameraPermission": false,
+          "microphonePermission": false
         }
       ]
     ],

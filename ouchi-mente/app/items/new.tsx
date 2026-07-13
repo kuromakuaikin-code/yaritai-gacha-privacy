@@ -6,7 +6,10 @@ import { LoadingView } from "@/components/ui";
 import { insertItem, updateItem } from "@/db/items";
 import { getSetting } from "@/db/settings";
 import { findTemplate } from "@/domain/templates";
-import { rescheduleItemNotification } from "@/notifications/notifications";
+import {
+  cancelNotification,
+  rescheduleItemNotification,
+} from "@/notifications/notifications";
 import { checkCanAddItem } from "@/purchase/entitlement";
 
 export default function NewItemScreen() {
@@ -46,10 +49,25 @@ export default function NewItemScreen() {
 
   const handleSubmit = async (result: ItemFormResult) => {
     try {
+      // 画面表示中に別の画面で登録された場合に備え、保存直前にも上限を確認する
+      const check = await checkCanAddItem();
+      if (!check.allowed) {
+        Alert.alert(
+          "登録の上限に達しています",
+          `登録できるのは${check.limit}件までです。`,
+          [{ text: "OK", onPress: () => router.replace("/paywall") }],
+        );
+        return;
+      }
       const item = await insertItem(result);
       const notificationId = await rescheduleItemNotification(item);
       if (notificationId) {
-        await updateItem({ ...item, notificationId });
+        try {
+          await updateItem({ ...item, notificationId });
+        } catch (error) {
+          await cancelNotification(notificationId);
+          throw error;
+        }
       }
       router.back();
     } catch {

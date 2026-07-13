@@ -18,7 +18,7 @@ import {
 } from "@/db/history";
 import { formatDateJa } from "@/domain/schedule";
 import type { MaintenanceHistory } from "@/domain/types";
-import { deleteStoredImageAsync } from "@/media/images";
+import { deleteStoredImageAsync, resolveImageUri } from "@/media/images";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 export default function HistoryScreen() {
@@ -111,7 +111,10 @@ export default function HistoryScreen() {
                 <Text style={styles.entryNote}>{entry.note}</Text>
               ) : null}
               {entry.imageUri ? (
-                <Image source={{ uri: entry.imageUri }} style={styles.image} />
+                <Image
+                  source={{ uri: resolveImageUri(entry.imageUri) }}
+                  style={styles.image}
+                />
               ) : null}
               {entry.calculatedNextDueDate ? (
                 <Text style={styles.entryMeta}>

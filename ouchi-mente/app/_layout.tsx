@@ -1,26 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { Alert } from "react-native";
-import { LoadingView } from "@/components/ui";
+import { StyleSheet, Text, View } from "react-native";
+import { AppButton, LoadingView } from "@/components/ui";
 import { migrateDatabase } from "@/db/database";
 import { configureNotificationHandler } from "@/notifications/notifications";
-import { colors } from "@/theme";
+import { colors, fontSize, spacing } from "@/theme";
 
 export default function RootLayout() {
   const [ready, setReady] = useState(false);
+  const [failed, setFailed] = useState(false);
+
+  const boot = useCallback(() => {
+    setFailed(false);
+    migrateDatabase()
+      .then(() => setReady(true))
+      .catch(() => setFailed(true));
+  }, []);
 
   useEffect(() => {
     configureNotificationHandler();
-    migrateDatabase()
-      .then(() => setReady(true))
-      .catch(() => {
-        Alert.alert(
-          "起動エラー",
-          "データの読み込みに失敗しました。アプリを再起動してください。",
-        );
-      });
-  }, []);
+    boot();
+  }, [boot]);
+
+  if (failed) {
+    return (
+      <View style={styles.error}>
+        <Text style={styles.errorTitle}>データを読み込めませんでした</Text>
+        <Text style={styles.errorBody}>
+          端末の空き容量を確認して、もう一度お試しください。
+        </Text>
+        <AppButton title="再試行" onPress={boot} />
+      </View>
+    );
+  }
 
   if (!ready) return <LoadingView />;
 
@@ -75,3 +88,26 @@ export default function RootLayout() {
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  error: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: colors.background,
+    padding: spacing.xxl,
+    gap: spacing.md,
+  },
+  errorTitle: {
+    fontSize: fontSize.xl,
+    fontWeight: "700",
+    color: colors.text,
+    textAlign: "center",
+  },
+  errorBody: {
+    fontSize: fontSize.md,
+    color: colors.textSecondary,
+    textAlign: "center",
+    lineHeight: 22,
+  },
+});

@@ -88,14 +88,14 @@ src/
 
 ### リリース時のIAP接続作業
 
-現在は `src/purchase/store.ts` の `IAP_TEST_MODE = true` で、
-購入ボタンがそのまま解放されるテストモード（Expo Goで動作確認可能）。
-公開前に以下を行う:
+`src/purchase/store.ts` の `IAP_TEST_MODE` は `__DEV__` に連動しており、
+開発中（Expo Go）は購入ボタンでそのまま解放されるテストモード、
+**リリースビルドでは自動的に無効**（IAP未接続のまま公開しても無償解放にはならず、
+購入不可エラーになる）。公開前に以下を行う:
 
 1. App Store Connect / Google Play Console に非消耗型商品（¥300）を登録
 2. `react-native-iap` を追加し、`purchasePlus` / `restorePurchases` を
    ストア呼び出しに差し替え（`app-expo/src/iap.ts` と同じ構成。EAS Build 必須）
-3. `IAP_TEST_MODE` を `false` にする
 
 ## MVPで実装していないもの（設計書どおり）
 

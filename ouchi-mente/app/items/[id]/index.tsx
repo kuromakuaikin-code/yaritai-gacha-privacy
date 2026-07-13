@@ -22,7 +22,7 @@ import {
 } from "@/domain/labels";
 import { dueStatusOf, formatDateJa, remainingLabel } from "@/domain/schedule";
 import type { MaintenanceHistory, MaintenanceItem } from "@/domain/types";
-import { deleteStoredImageAsync } from "@/media/images";
+import { deleteStoredImageAsync, resolveImageUri } from "@/media/images";
 import { cancelNotification } from "@/notifications/notifications";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
@@ -149,7 +149,10 @@ export default function ItemDetailScreen() {
         </Card>
 
         {item.imageUri ? (
-          <Image source={{ uri: item.imageUri }} style={styles.image} />
+          <Image
+            source={{ uri: resolveImageUri(item.imageUri) }}
+            style={styles.image}
+          />
         ) : null}
 
         <NoteText text={GUIDANCE_NOTE} />

@@ -11,8 +11,11 @@ import { setPlusUnlocked } from "./entitlement";
  * 3. IAP_TEST_MODE を false にする
  *
  * テストモード中は購入ボタンでそのまま解放される（開発・審査前の動作確認用）。
+ *
+ * __DEV__ に連動させているため、リリースビルドでは自動的に無効になり、
+ * IAP接続前に誤って公開しても「無償解放」にはならない（購入不可エラーになる）。
  */
-export const IAP_TEST_MODE = true;
+export const IAP_TEST_MODE: boolean = __DEV__;
 
 export type PurchaseResult =
   | { status: "success" }

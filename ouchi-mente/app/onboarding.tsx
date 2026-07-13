@@ -42,15 +42,24 @@ export default function OnboardingScreen() {
 
   const next = () => {
     if (!isLast) {
-      listRef.current?.scrollToIndex({ index: page + 1, animated: true });
+      // Androidではプログラムによるスクロールで onMomentumScrollEnd が
+      // 発火しないため、ページ状態はここで直接更新する
+      const target = page + 1;
+      listRef.current?.scrollToIndex({ index: target, animated: true });
+      setPage(target);
       return;
     }
     finish();
   };
 
   const finish = async () => {
-    // OSの許可ダイアログの前に、3ページ目までで目的を説明済み
-    await requestPermission();
+    // OSの許可ダイアログの前に、3ページ目までで目的を説明済み。
+    // 許可の取得に失敗してもアプリは開始できる（通知は補助機能）
+    try {
+      await requestPermission();
+    } catch {
+      // 何もしない
+    }
     await setSetting("onboardingCompleted", "1");
     router.replace("/");
   };
@@ -64,6 +73,11 @@ export default function OnboardingScreen() {
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
+        getItemLayout={(_, index) => ({
+          length: width,
+          offset: width * index,
+          index,
+        })}
         onMomentumScrollEnd={(e) =>
           setPage(Math.round(e.nativeEvent.contentOffset.x / width))
         }

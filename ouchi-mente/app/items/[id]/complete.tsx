@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import {
   Alert,
@@ -20,8 +20,12 @@ import type { MaintenanceItem } from "@/domain/types";
 import {
   deleteStoredImageAsync,
   pickAndStoreImageAsync,
+  resolveImageUri,
 } from "@/media/images";
-import { rescheduleItemNotification } from "@/notifications/notifications";
+import {
+  cancelNotification,
+  rescheduleItemNotification,
+} from "@/notifications/notifications";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 export default function CompleteScreen() {
@@ -51,11 +55,36 @@ export default function CompleteScreen() {
     }, [id]),
   );
 
-  // 実施日を変えたら次回目安を計算し直す（手動変更後は上書きしない）
+  // 実施日を変えたら次回目安を計算し直す（手動変更後は上書きしない）。
+  // 日付を直接指定している項目は、予定日より前の実施なら予定日を残す
+  // （中間の実施記録で、設定済みの予定と通知が消えないように）
   useEffect(() => {
     if (!item || nextDueTouched) return;
-    setNextDueDate(calculateNextDueDate(item, completedAt));
+    if (item.scheduleType === "interval") {
+      setNextDueDate(calculateNextDueDate(item, completedAt));
+    } else if (
+      item.scheduleType === "fixedDate" &&
+      item.nextDueDate &&
+      completedAt < item.nextDueDate
+    ) {
+      setNextDueDate(item.nextDueDate);
+    } else {
+      setNextDueDate(undefined);
+    }
   }, [item, completedAt, nextDueTouched]);
+
+  // 保存されずに画面を離れた場合、この画面で選んだ写真ファイルを削除する
+  const savedImageRef = useRef<string | undefined>(undefined);
+  const pickedImagesRef = useRef<string[]>([]);
+  useEffect(() => {
+    return () => {
+      for (const stored of pickedImagesRef.current) {
+        if (stored !== savedImageRef.current) {
+          void deleteStoredImageAsync(stored);
+        }
+      }
+    };
+  }, []);
 
   if (loading) return <LoadingView />;
   if (!item) {
@@ -77,10 +106,17 @@ export default function CompleteScreen() {
         imageUri,
         calculatedNextDueDate: nextDueDate,
       });
+      savedImageRef.current = imageUri;
       const updated: MaintenanceItem = { ...item, nextDueDate };
-      // 完了記録に合わせて通知を再設定する
+      // 完了記録に合わせて通知を再設定する。
+      // DB更新に失敗したら、登録したばかりの通知を破棄する（通知の迷子防止）
       const notificationId = await rescheduleItemNotification(updated);
-      await updateItem({ ...updated, notificationId });
+      try {
+        await updateItem({ ...updated, notificationId });
+      } catch (error) {
+        await cancelNotification(notificationId);
+        throw error;
+      }
       router.back();
     } catch {
       Alert.alert("保存エラー", "記録を保存できませんでした。もう一度お試しください。");
@@ -90,10 +126,11 @@ export default function CompleteScreen() {
   };
 
   const pickImage = async () => {
-    const uri = await pickAndStoreImageAsync();
-    if (!uri) return;
+    const stored = await pickAndStoreImageAsync();
+    if (!stored) return;
     await deleteStoredImageAsync(imageUri);
-    setImageUri(uri);
+    pickedImagesRef.current.push(stored);
+    setImageUri(stored);
   };
 
   return (
@@ -137,7 +174,10 @@ export default function CompleteScreen() {
           />
           {imageUri ? (
             <View style={styles.imageBlock}>
-              <Image source={{ uri: imageUri }} style={styles.image} />
+              <Image
+                source={{ uri: resolveImageUri(imageUri) }}
+                style={styles.image}
+              />
               <AppButton
                 title="写真を削除"
                 variant="ghost"

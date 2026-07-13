@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import {
@@ -42,7 +42,11 @@ import type {
   NewMaintenanceItem,
   ScheduleType,
 } from "@/domain/types";
-import { deleteStoredImageAsync, pickAndStoreImageAsync } from "@/media/images";
+import {
+  deleteStoredImageAsync,
+  pickAndStoreImageAsync,
+  resolveImageUri,
+} from "@/media/images";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 const formSchema = z
@@ -140,6 +144,19 @@ export function ItemForm({
   const [detailsOpen, setDetailsOpen] = useState(
     Boolean(initial?.manufacturer || initial?.modelNumber || initial?.imageUri),
   );
+
+  // このフォーム内で選んだ写真ファイル。保存されずに画面を離れたら削除する
+  const pickedImagesRef = useRef<string[]>([]);
+  const savedImageRef = useRef<string | undefined>(initial?.imageUri);
+  useEffect(() => {
+    return () => {
+      for (const stored of pickedImagesRef.current) {
+        if (stored !== savedImageRef.current) {
+          void deleteStoredImageAsync(stored);
+        }
+      }
+    };
+  }, []);
 
   const {
     control,
@@ -250,6 +267,7 @@ export function ItemForm({
     setSubmitting(true);
     try {
       await onSubmit(result);
+      savedImageRef.current = result.imageUri;
     } finally {
       setSubmitting(false);
     }
@@ -258,12 +276,13 @@ export function ItemForm({
   // 元の写真ファイルの削除は保存時に呼び出し側で行う
   // （保存せずに戻った場合に登録済みの写真が消えないようにするため）
   const pickImage = async () => {
-    const uri = await pickAndStoreImageAsync();
-    if (!uri) return;
+    const stored = await pickAndStoreImageAsync();
+    if (!stored) return;
     if (imageUri && imageUri !== initial?.imageUri) {
       await deleteStoredImageAsync(imageUri);
     }
-    setValue("imageUri", uri);
+    pickedImagesRef.current.push(stored);
+    setValue("imageUri", stored);
   };
 
   const removeImage = async () => {
@@ -531,7 +550,10 @@ export function ItemForm({
             />
             {imageUri ? (
               <View style={styles.imageBlock}>
-                <Image source={{ uri: imageUri }} style={styles.image} />
+                <Image
+                  source={{ uri: resolveImageUri(imageUri) }}
+                  style={styles.image}
+                />
                 <AppButton
                   title="写真を削除"
                   variant="ghost"
