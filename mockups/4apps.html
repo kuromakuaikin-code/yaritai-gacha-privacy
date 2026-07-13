@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4アプリ 画面モック</title>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --ink:#e8eaf0; --sub:#8b93a3;
+    --diy:#d9a441; --plamo:#e8503a; --asset:#4fd1c5; --metric:#5dd47a;
+    --line:#262b36;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,"Hiragino Sans","Noto Sans JP",sans-serif;padding:28px 16px 60px}
+  .head{max-width:420px;margin:0 auto 30px}
+  .head .eyebrow{font-size:11px;letter-spacing:.18em;color:var(--sub);text-transform:uppercase}
+  .head h1{font-size:26px;font-weight:800;margin-top:6px;line-height:1.3}
+  .head p{font-size:13px;color:var(--sub);margin-top:8px;line-height:1.7}
+  .section{max-width:420px;margin:0 auto 48px}
+  .app-label{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+  .dot{width:10px;height:10px;border-radius:3px}
+  .app-label h2{font-size:15px;font-weight:700}
+  .app-label span{font-size:11px;color:var(--sub);margin-left:auto}
+  /* phone frame */
+  .phone{background:#000;border-radius:38px;padding:10px;border:1px solid #2a2f3a;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  .screen{background:var(--panel);border-radius:30px;overflow:hidden;position:relative}
+  .notch{height:28px;display:flex;justify-content:center;align-items:flex-start;padding-top:8px}
+  .notch::after{content:"";width:90px;height:16px;background:#000;border-radius:10px}
+  .nav{padding:6px 18px 10px;font-size:17px;font-weight:800}
+  .nav small{display:block;font-size:11px;font-weight:400;color:var(--sub);margin-top:2px}
+  .content{padding:0 14px 12px}
+  .tabbar{display:flex;border-top:1px solid var(--line);padding:10px 6px 18px;background:rgba(0,0,0,.25)}
+  .tabbar div{flex:1;text-align:center;font-size:10px;color:var(--sub)}
+  .tabbar .on{font-weight:700}
+  .card{background:#1e2330;border-radius:14px;padding:12px;margin-bottom:10px}
+  .row{display:flex;justify-content:space-between;align-items:center;font-size:13px}
+  .chip{font-size:10px;padding:3px 8px;border-radius:99px;font-weight:700}
+  .thumb{border-radius:10px;background:linear-gradient(135deg,#2a3040,#1b202c);display:flex;align-items:center;justify-content:center;font-size:22px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .grid3 .thumb{aspect-ratio:1}
+  .grid3 p{font-size:10px;color:var(--sub);margin-top:4px;text-align:center}
+  .btn{display:block;text-align:center;font-size:13px;font-weight:700;padding:10px;border-radius:12px;margin-top:4px}
+
+  /* DIY */
+  .diy .tabbar .on{color:var(--diy)}
+  .need{display:flex;align-items:center;gap:8px;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .need:last-child{border:none}
+  .ok{color:var(--metric);font-size:11px;font-weight:700}
+  .ng{color:var(--plamo);font-size:11px;font-weight:700}
+  .shoplist{background:rgba(217,164,65,.12);border:1px solid rgba(217,164,65,.4)}
+  .shoplist h4{font-size:12px;color:var(--diy);margin-bottom:6px}
+  .shoplist li{font-size:13px;list-style:none;padding:3px 0}
+  .diy .btn{background:var(--diy);color:#1a1405}
+
+  /* Plamo */
+  .plamo .tabbar .on{color:var(--plamo)}
+  .hero{padding:14px;border-radius:14px;background:linear-gradient(135deg,rgba(232,80,58,.25),rgba(232,80,58,.08));border:1px solid rgba(232,80,58,.35);margin-bottom:10px}
+  .hero .big{font-size:26px;font-weight:800;letter-spacing:-.02em}
+  .hero .sub{font-size:11px;color:var(--sub);margin-top:2px}
+  .hero .meter{height:6px;border-radius:99px;background:#2a2f3a;margin-top:10px;overflow:hidden}
+  .hero .meter i{display:block;height:100%;width:26%;background:var(--plamo);border-radius:99px}
+
+  /* Asset viewer (mac window) */
+  .mac{background:#12151c;border:1px solid #2a2f3a;border-radius:14px;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.5)}
+  .macbar{display:flex;align-items:center;gap:6px;padding:10px 12px;background:#1a1e28;border-bottom:1px solid var(--line)}
+  .macbar b{width:11px;height:11px;border-radius:99px;display:inline-block}
+  .macbar .t{font-size:11px;color:var(--sub);margin-left:8px}
+  .macbody{padding:12px}
+  .toolrow{display:flex;gap:6px;margin-bottom:10px}
+  .toolrow span{font-size:10px;padding:4px 10px;border-radius:99px;background:#1e2330;color:var(--sub)}
+  .toolrow .sel{background:rgba(79,209,197,.15);color:var(--asset);font-weight:700}
+  .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .grid4 .thumb{aspect-ratio:1;position:relative;font-size:18px}
+  .new{position:absolute;top:4px;right:4px;font-size:8px;font-weight:800;background:var(--asset);color:#062522;padding:2px 5px;border-radius:6px}
+
+  /* Metrics */
+  .metric .tabbar .on{color:var(--metric)}
+  .chart{position:relative;height:150px;background:#1e2330;border-radius:14px;padding:10px;margin-bottom:10px}
+  .chart svg{width:100%;height:100%}
+  .legend{display:flex;gap:10px;font-size:10px;color:var(--sub);margin-bottom:8px}
+  .legend i{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:4px;vertical-align:middle}
+  .compare{background:rgba(93,212,122,.1);border:1px solid rgba(93,212,122,.35)}
+  .compare h4{font-size:12px;color:var(--metric);margin-bottom:6px}
+  .compare .row{font-size:13px}
+  .up{color:var(--metric);font-weight:800}
+  .quick{display:flex;gap:8px;margin-bottom:10px}
+  .quick input{flex:1;background:#12151c;border:1px solid var(--line);border-radius:10px;color:var(--ink);font-size:13px;padding:9px 10px}
+  .quick .save{background:var(--metric);color:#06180b;border:none;font-weight:800;border-radius:10px;padding:0 16px;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="head">
+  <div class="eyebrow">Prototype Mockups</div>
+  <h1>4アプリ 主要画面モック</h1>
+  <p>各アプリの「核」になる1画面だけを起こしています。DIYは不足材料の自動抽出、プラモは積み総額、3Dビューアは監視グリッド、施策ログはグラフの施策オーバーレイです。</p>
+</div>
+
+<!-- DIY -->
+<div class="section diy">
+  <div class="app-label"><span class="dot" style="background:var(--diy)"></span><h2>DIY記録</h2><span>アイデア詳細 / 不足材料</span></div>
+  <div class="phone"><div class="screen">
+    <div class="notch"></div>
+    <div class="nav">スパイスラック<small>構想中・必要材料 5点</small></div>
+    <div class="content">
+      <div class="card">
+        <div class="need"><span>1×4材 910mm ×3</span><span class="ok" style="margin-left:auto">在庫あり</span></div>
+        <div class="need"><span>木ネジ 35mm</span><span class="ok" style="margin-left:auto">在庫あり（残り約20本）</span></div>
+        <div class="need"><span>ワトコオイル ダークウォルナット</span><span class="ng" style="margin-left:auto">未所持</span></div>
+        <div class="need"><span>L字金具 ×4</span><span class="ng" style="margin-left:auto">未所持</span></div>
+        <div class="need"><span>紙やすり #240</span><span class="ok" style="margin-left:auto">在庫あり</span></div>
+      </div>
+      <div class="card shoplist">
+        <h4>買い物リスト（不足 2点）</h4>
+        <li>・ワトコオイル ダークウォルナット</li>
+        <li>・L字金具 ×4</li>
+      </div>
+      <a class="btn">制作を開始する</a>
+    </div>
+    <div class="tabbar"><div>在庫</div><div class="on">アイデア</div><div>作品</div></div>
+  </div></div>
+</div>
+
+<!-- Plamo -->
+<div class="section plamo">
+  <div class="app-label"><span class="dot" style="background:var(--plamo)"></span><h2>プラモ積み管理</h2><span>積みタブ / 総額ヘッダー</span></div>
+  <div class="phone"><div class="screen">
+    <div class="notch"></div>
+    <div class="nav">積み<small>購入日順</small></div>
+    <div class="content">
+      <div class="hero">
+        <div class="big">¥128,400 <span style="font-size:14px;color:var(--sub)">/ 23箱</span></div>
+        <div class="sub">消化率 26%（完成 8 / 全 31）</div>
+        <div class="meter"><i></i></div>
+      </div>
+      <div class="grid3">
+        <div><div class="thumb">📦</div><p>MG フリーダム<br>積み 412日</p></div>
+        <div><div class="thumb">📦</div><p>HG グフ<br>積み 96日</p></div>
+        <div><div class="thumb">📦</div><p>RG サザビー<br>積み 31日</p></div>
+        <div><div class="thumb">📦</div><p>1/12 バイク<br>積み 240日</p></div>
+        <div><div class="thumb">📦</div><p>MG Ex-S<br>積み 780日</p></div>
+        <div><div class="thumb">📦</div><p>HG ズゴック<br>積み 12日</p></div>
+      </div>
+    </div>
+    <div class="tabbar"><div class="on">積み</div><div>制作中</div><div>完成</div></div>
+  </div></div>
+</div>
+
+<!-- Asset viewer -->
+<div class="section">
+  <div class="app-label"><span class="dot" style="background:var(--asset)"></span><h2>3D素材サムネ台帳（Mac）</h2><span>監視グリッド</span></div>
+  <div class="mac">
+    <div class="macbar"><b style="background:#ff5f57"></b><b style="background:#febc2e"></b><b style="background:#28c840"></b><span class="t">AssetShelf — 監視中: ComfyUI/output ほか1</span></div>
+    <div class="macbody">
+      <div class="toolrow"><span class="sel">すべて</span><span>GLB</span><span>画像</span><span>★</span><span>NEW 3</span></div>
+      <div class="grid4">
+        <div class="thumb">🗿<span class="new">NEW</span></div>
+        <div class="thumb">🗿<span class="new">NEW</span></div>
+        <div class="thumb">🖼️<span class="new">NEW</span></div>
+        <div class="thumb">🗿</div>
+        <div class="thumb">🖼️</div>
+        <div class="thumb">🗿</div>
+        <div class="thumb">🖼️</div>
+        <div class="thumb">🗿</div>
+      </div>
+      <p style="font-size:11px;color:var(--sub);margin-top:10px">trellis_out_0712.glb — 24.6MB・2分前に検出・クリックで回転プレビュー</p>
+    </div>
+  </div>
+</div>
+
+<!-- Metrics -->
+<div class="section metric">
+  <div class="app-label"><span class="dot" style="background:var(--metric)"></span><h2>施策×収益ログ</h2><span>グラフ / 施策オーバーレイ</span></div>
+  <div class="phone"><div class="screen">
+    <div class="notch"></div>
+    <div class="nav">婚活デートメモ<small>直近30日</small></div>
+    <div class="content">
+      <div class="quick"><input value="今日の収益 ¥420" readonly><input value="DL 31" readonly style="max-width:80px"><button class="save">保存</button></div>
+      <div class="legend"><span><i style="background:var(--metric)"></i>収益</span><span style="margin-left:auto">縦線 = 施策</span></div>
+      <div class="chart">
+        <svg viewBox="0 0 300 130" preserveAspectRatio="none">
+          <line x1="150" y1="8" x2="150" y2="122" stroke="#e8503a" stroke-width="1.5" stroke-dasharray="4 3"/>
+          <text x="154" y="18" font-size="9" fill="#e8503a">ASOキーワード変更</text>
+          <polyline fill="none" stroke="#5dd47a" stroke-width="2.5" stroke-linecap="round"
+            points="10,95 40,98 70,90 100,96 130,88 150,86 170,72 200,66 230,58 260,62 290,48"/>
+        </svg>
+      </div>
+      <div class="card compare">
+        <h4>施策の前後比較（7日平均）</h4>
+        <div class="row"><span>前: ¥320 / 日</span><span>後: ¥410 / 日</span><span class="up">+28%</span></div>
+      </div>
+    </div>
+    <div class="tabbar"><div>記録</div><div class="on">グラフ</div><div>施策ノート</div></div>
+  </div></div>
+</div>
+
+</body>
+</html>
