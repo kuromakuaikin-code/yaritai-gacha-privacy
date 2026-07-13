@@ -1,6 +1,14 @@
 # yaritai-gacha-privacy
 Privacy policy for やりたいガチャ
 
+## おうちメンテ目安メモ
+
+掃除・交換・点検の「そろそろ」を忘れないための記録アプリ（Expo / React Native / TypeScript）。
+
+- アプリ本体: `ouchi-mente/`（開発手順・設計は `ouchi-mente/README.md`）
+- データは端末内SQLiteのみ。サーバー・外部API・ログインなし
+- ローカル通知で目安日をお知らせ（診断・安全性判定は行わない補助ツール）
+
 ## 盆踊りナビ愛知
 
 愛知県内の町内会・学区・神社・公園レベルのローカルな盆踊りを探せるサイト。
