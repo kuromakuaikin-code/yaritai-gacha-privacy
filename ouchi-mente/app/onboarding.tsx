@@ -36,6 +36,7 @@ export default function OnboardingScreen() {
   const router = useRouter();
   const listRef = useRef<FlatList>(null);
   const [page, setPage] = useState(0);
+  const [finishing, setFinishing] = useState(false);
   const { width } = useWindowDimensions();
 
   const isLast = page === PAGES.length - 1;
@@ -53,14 +54,25 @@ export default function OnboardingScreen() {
   };
 
   const finish = async () => {
+    if (finishing) return;
+    setFinishing(true);
     // OSの許可ダイアログの前に、3ページ目までで目的を説明済み。
-    // 許可の取得に失敗してもアプリは開始できる（通知は補助機能）
+    // 許可の取得に失敗・応答なし（Expo Go等）でもアプリは必ず開始できる。
+    // ダイアログ表示中はユーザー応答を待つが、応答なしで固まる環境に備えて
+    // 8秒で見切りをつける（通知は補助機能）
     try {
-      await requestPermission();
+      await Promise.race([
+        requestPermission(),
+        new Promise((resolve) => setTimeout(resolve, 8000)),
+      ]);
     } catch {
       // 何もしない
     }
-    await setSetting("onboardingCompleted", "1");
+    try {
+      await setSetting("onboardingCompleted", "1");
+    } catch {
+      // 保存に失敗しても先へ進む（ホーム側で再度オンボーディングに戻る）
+    }
     router.replace("/");
   };
 
@@ -104,9 +116,18 @@ export default function OnboardingScreen() {
         ))}
       </View>
       <View style={styles.footer}>
-        <AppButton title={isLast ? "通知を設定してはじめる" : "次へ"} onPress={next} />
+        <AppButton
+          title={isLast ? "通知を設定してはじめる" : "次へ"}
+          onPress={next}
+          loading={finishing}
+        />
         {isLast ? null : (
-          <AppButton title="スキップ" variant="ghost" onPress={finish} />
+          <AppButton
+            title="スキップ"
+            variant="ghost"
+            onPress={finish}
+            disabled={finishing}
+          />
         )}
       </View>
     </SafeAreaView>

@@ -25,10 +25,14 @@ export function configureNotificationHandler(): void {
 
 async function ensureAndroidChannel(): Promise<void> {
   if (Platform.OS !== "android") return;
-  await Notifications.setNotificationChannelAsync("default", {
-    name: "メンテナンス目安のお知らせ",
-    importance: Notifications.AndroidImportance.DEFAULT,
-  });
+  try {
+    await Notifications.setNotificationChannelAsync("default", {
+      name: "メンテナンス目安のお知らせ",
+      importance: Notifications.AndroidImportance.DEFAULT,
+    });
+  } catch {
+    // Expo Go 等でチャンネルを作れなくても、許可の確認・取得は続行する
+  }
 }
 
 export async function isPermissionGranted(): Promise<boolean> {
