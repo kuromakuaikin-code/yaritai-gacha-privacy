@@ -16,7 +16,12 @@ import { deleteAllData } from "@/db/database";
 import { getSetting, setSetting } from "@/db/settings";
 import { NOTIFICATION_NOTE, NOTIFICATION_TIMING_OPTIONS } from "@/domain/labels";
 import { deleteAllStoredImagesAsync } from "@/media/images";
-import { requestPermission } from "@/notifications/notifications";
+import {
+  DEFAULT_NOTIFY_HOUR,
+  getNotifyHour,
+  requestPermission,
+  rescheduleAllNotifications,
+} from "@/notifications/notifications";
 import {
   FREE_ITEM_LIMIT,
   isPlusUnlocked,
@@ -24,10 +29,16 @@ import {
 import { usePurchase } from "@/purchase/PurchaseProvider";
 import { colors, fontSize, spacing } from "@/theme";
 
+const NOTIFY_HOUR_OPTIONS = [7, 8, 9, 12, 18, 20, 21].map((hour) => ({
+  value: hour,
+  label: `${hour}時`,
+}));
+
 export default function SettingsScreen() {
   const router = useRouter();
   const [defaultEnabled, setDefaultEnabled] = useState(true);
   const [defaultTiming, setDefaultTiming] = useState(0);
+  const [notifyHour, setNotifyHour] = useState(DEFAULT_NOTIFY_HOUR);
   const [plusUnlocked, setPlusUnlocked] = useState(false);
   const { restoreUnlimited } = usePurchase();
 
@@ -37,10 +48,12 @@ export default function SettingsScreen() {
       (async () => {
         const enabled = await getSetting("defaultNotificationEnabled");
         const timing = await getSetting("defaultNotificationTimingDays");
+        const hour = await getNotifyHour();
         const unlocked = await isPlusUnlocked();
         if (!active) return;
         if (enabled !== null) setDefaultEnabled(enabled === "1");
         if (timing !== null) setDefaultTiming(Number(timing));
+        setNotifyHour(hour);
         setPlusUnlocked(unlocked);
       })();
       return () => {
@@ -67,6 +80,13 @@ export default function SettingsScreen() {
   const updateDefaultTiming = async (value: number) => {
     setDefaultTiming(value);
     await setSetting("defaultNotificationTimingDays", String(value));
+  };
+
+  const updateNotifyHour = async (hour: number) => {
+    setNotifyHour(hour);
+    await setSetting("notificationHour", String(hour));
+    // 登録済みの通知も新しい時刻で張り替える
+    await rescheduleAllNotifications();
   };
 
   // 通知が端末で実際に表示されるかを確認する開発用ボタン。
@@ -154,6 +174,12 @@ export default function SettingsScreen() {
             onChange={updateDefaultTiming}
           />
         ) : null}
+        <ChipSelect
+          label="通知する時刻（すべての項目に反映）"
+          options={NOTIFY_HOUR_OPTIONS}
+          value={notifyHour}
+          onChange={updateNotifyHour}
+        />
         <NoteText text={NOTIFICATION_NOTE} />
         {__DEV__ ? (
           <AppButton

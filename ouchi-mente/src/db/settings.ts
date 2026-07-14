@@ -4,6 +4,7 @@ export type AppSettingKey =
   | "onboardingCompleted"
   | "defaultNotificationEnabled"
   | "defaultNotificationTimingDays"
+  | "notificationHour"
   | "plusUnlocked"
   | "plusEntitlementState"
   | "plusProductId"

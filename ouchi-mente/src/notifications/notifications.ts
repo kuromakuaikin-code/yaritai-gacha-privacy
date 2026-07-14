@@ -2,7 +2,8 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { parseDateString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
-import { updateItem } from "@/db/items";
+import { listItems, updateItem } from "@/db/items";
+import { getSetting } from "@/db/settings";
 
 /**
  * ローカル通知のみを使用する。外部サーバー・プッシュ通知は使わない。
@@ -10,7 +11,16 @@ import { updateItem } from "@/db/items";
  * 削除のたびに古い通知を破棄して登録し直す。
  */
 
-const NOTIFY_HOUR = 9; // 通知は目安日の朝9時に表示する
+export const DEFAULT_NOTIFY_HOUR = 9;
+
+/** 通知を表示する時刻（0〜23時）。設定画面で変更できる */
+export async function getNotifyHour(): Promise<number> {
+  const stored = await getSetting("notificationHour");
+  const hour = stored === null ? NaN : Number(stored);
+  return Number.isInteger(hour) && hour >= 0 && hour <= 23
+    ? hour
+    : DEFAULT_NOTIFY_HOUR;
+}
 
 export function configureNotificationHandler(): void {
   Notifications.setNotificationHandler({
@@ -70,7 +80,7 @@ export async function rescheduleItemNotification(
   const timingDays = item.notificationTimingDays ?? 0;
   const fireAt = parseDateString(item.nextDueDate);
   fireAt.setDate(fireAt.getDate() - timingDays);
-  fireAt.setHours(NOTIFY_HOUR, 0, 0, 0);
+  fireAt.setHours(await getNotifyHour(), 0, 0, 0);
   // 通知時刻をすでに過ぎている場合は登録しない。
   // 直後に発火させると「あと◯日です」という本文が実際の残り日数と食い違い、
   // 起動時照合（reconcile）の「過ぎた分は画面表示に任せる」方針とも矛盾する
@@ -138,5 +148,21 @@ export async function cancelNotification(
     await Notifications.cancelScheduledNotificationAsync(notificationId);
   } catch {
     // すでに存在しない通知IDは無視する
+  }
+}
+
+/**
+ * 全項目の通知を現在の設定（通知時刻など）で登録し直す。
+ * 通知時刻を変更したときに呼ぶ。失敗した項目があっても続行する。
+ */
+export async function rescheduleAllNotifications(): Promise<void> {
+  const items = await listItems();
+  for (const item of items) {
+    if (!item.notificationEnabled || !item.nextDueDate) continue;
+    try {
+      await syncItemNotification(item, item.notificationId);
+    } catch {
+      // 個別の失敗は無視して次の項目へ
+    }
   }
 }

@@ -4,17 +4,16 @@ import { parseDateString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
 import {
   cancelNotification,
+  getNotifyHour,
   isPermissionGranted,
   rescheduleItemNotification,
 } from "./notifications";
 
-const NOTIFY_HOUR = 9;
-
-function plannedFireAt(item: MaintenanceItem): Date | undefined {
+function plannedFireAt(item: MaintenanceItem, notifyHour: number): Date | undefined {
   if (!item.notificationEnabled || !item.nextDueDate) return undefined;
   const fireAt = parseDateString(item.nextDueDate);
   fireAt.setDate(fireAt.getDate() - (item.notificationTimingDays ?? 0));
-  fireAt.setHours(NOTIFY_HOUR, 0, 0, 0);
+  fireAt.setHours(notifyHour, 0, 0, 0);
   return fireAt;
 }
 
@@ -29,9 +28,10 @@ export async function reconcileScheduledNotifications(): Promise<void> {
   if (!(await isPermissionGranted())) return;
 
   try {
-    const [items, requests] = await Promise.all([
+    const [items, requests, notifyHour] = await Promise.all([
       listItems(),
       Notifications.getAllScheduledNotificationsAsync(),
+      getNotifyHour(),
     ]);
     const itemsById = new Map(items.map((item) => [item.id, item]));
     const requestsById = new Map(
@@ -50,7 +50,7 @@ export async function reconcileScheduledNotifications(): Promise<void> {
     }
 
     for (const item of items) {
-      const fireAt = plannedFireAt(item);
+      const fireAt = plannedFireAt(item, notifyHour);
       const hasPendingRequest =
         !!item.notificationId && requestsById.has(item.notificationId);
 
