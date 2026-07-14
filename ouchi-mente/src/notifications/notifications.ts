@@ -1,5 +1,6 @@
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
+import { TASK_TYPE_LABELS } from "@/domain/labels";
 import { parseDateString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
 import { listItems, updateItemNotificationId } from "@/db/items";
@@ -63,8 +64,12 @@ export async function requestPermission(): Promise<boolean> {
 
 function notificationBody(item: MaintenanceItem, timingDays: number): string {
   const target = item.location ? `${item.location}の${item.name}` : item.name;
-  if (timingDays <= 0) return `「${target}」のお手入れ目安日です。`;
-  return `「${target}」のお手入れ目安日まであと${timingDays}日です。`;
+  // 作業種別を入れて「何をする日か」が通知だけで分かるようにする。
+  // 「その他」は文になじまないため汎用の「お手入れ」で表す
+  const task =
+    item.taskType === "other" ? "お手入れ" : TASK_TYPE_LABELS[item.taskType];
+  if (timingDays <= 0) return `「${target}」の${task}の目安日です。`;
+  return `「${target}」の${task}の目安日まであと${timingDays}日です。`;
 }
 
 /**
