@@ -211,16 +211,24 @@ export function DateField({
             onPress={() => setPickerVisible(false)}
           >
             <Pressable style={styles.modalSheet} onPress={() => {}}>
-              <DateTimePicker
-                value={value ? parseDateString(value) : new Date()}
-                mode="date"
-                display="inline"
-                locale="ja-JP"
-                onChange={handleChange}
-              />
+              <Text style={styles.modalTitle}>日付を選択</Text>
+              <View style={styles.calendarWrap}>
+                <DateTimePicker
+                  value={value ? parseDateString(value) : new Date()}
+                  mode="date"
+                  display="inline"
+                  locale="ja-JP"
+                  accentColor={colors.primary}
+                  themeVariant="light"
+                  onChange={handleChange}
+                />
+              </View>
               <Pressable
                 accessibilityRole="button"
-                style={styles.modalDone}
+                style={({ pressed }) => [
+                  styles.modalDone,
+                  pressed && styles.modalDonePressed,
+                ]}
                 onPress={() => setPickerVisible(false)}
               >
                 <Text style={styles.modalDoneText}>決定</Text>
@@ -372,7 +380,7 @@ const styles = StyleSheet.create({
   },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(20,35,32,0.55)",
     justifyContent: "center",
     padding: spacing.xl,
   },
@@ -380,13 +388,31 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     borderRadius: radius.lg,
     padding: spacing.lg,
+    gap: spacing.md,
+  },
+  modalTitle: {
+    fontSize: fontSize.lg,
+    fontWeight: "700",
+    color: colors.text,
+  },
+  calendarWrap: {
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.md,
+    paddingVertical: spacing.xs,
+    backgroundColor: colors.background,
   },
   modalDone: {
     alignItems: "center",
     paddingVertical: spacing.md,
+    backgroundColor: colors.primary,
+    borderRadius: radius.md,
+  },
+  modalDonePressed: {
+    opacity: 0.8,
   },
   modalDoneText: {
-    color: colors.primary,
+    color: "#FFFFFF",
     fontSize: fontSize.lg,
     fontWeight: "600",
   },
