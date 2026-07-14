@@ -57,7 +57,7 @@ export function ItemCard({
           pressed && styles.cardPressed,
         ]}
       >
-        <Text style={styles.completeButtonText}>完了</Text>
+        <Text style={styles.completeButtonText}>完了を{"\n"}記録</Text>
       </Pressable>
     </Pressable>
   );
@@ -109,13 +109,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.primary,
     borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     backgroundColor: colors.primarySoft,
   },
   completeButtonText: {
     color: colors.primary,
-    fontSize: fontSize.md,
+    fontSize: fontSize.sm,
     fontWeight: "700",
+    textAlign: "center",
+    lineHeight: 18,
   },
 });
