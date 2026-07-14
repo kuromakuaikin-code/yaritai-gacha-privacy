@@ -7,20 +7,30 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  fetchProducts,
-  finishTransaction,
-  getAvailablePurchases,
-  restorePurchases as restoreStorePurchases,
-  useIAP,
-  type Product,
-  type Purchase,
-} from "expo-iap";
+import Constants from "expo-constants";
+import type { Product, Purchase } from "expo-iap";
 import {
   PLUS_PRODUCT_ID,
   PLUS_PRODUCT_IDS,
   saveStorePurchaseEntitlement,
 } from "./entitlement";
+
+type IapModule = typeof import("expo-iap");
+
+/**
+ * expo-iap はネイティブモジュールのため、Expo Go では import した時点で
+ * 例外になる。実行環境を確認してから読み込み、使えない環境（Expo Go）では
+ * スタブの Provider に切り替える。型だけの import は実行時に消えるので安全。
+ */
+const isExpoGo = Constants.executionEnvironment === "storeClient";
+const Iap: IapModule | null = (() => {
+  if (isExpoGo) return null;
+  try {
+    return require("expo-iap") as IapModule;
+  } catch {
+    return null;
+  }
+})();
 
 type PurchaseResult =
   | { status: "success" }
@@ -63,7 +73,8 @@ function userMessage(error: unknown): string {
   return "ストアに接続できませんでした。通信環境を確認して、もう一度お試しください。";
 }
 
-export function PurchaseProvider({ children }: { children: React.ReactNode }) {
+function NativePurchaseProvider({ children }: { children: React.ReactNode }) {
+  const iap = Iap!;
   const processedPurchaseIds = useRef(new Set<string>());
   const [product, setProduct] = useState<Product>();
   const [loadingProduct, setLoadingProduct] = useState(true);
@@ -102,7 +113,7 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
     if (!alreadyAcknowledged) {
       try {
         // Google Playでは acknowledge、App Storeでは transaction finish になる
-        await finishTransaction({ purchase, isConsumable: false });
+        await iap.finishTransaction({ purchase, isConsumable: false });
       } catch {
         // 権利は保存済みのため、購入としては成功扱いにする。
         // acknowledge が本当に未完了なら次回起動時の syncStore が再試行する
@@ -110,13 +121,13 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
       }
     }
     return true;
-  }, []);
+  }, [iap]);
 
   const {
     connected,
     requestPurchase,
     reconnect,
-  } = useIAP({
+  } = iap.useIAP({
     onPurchaseSuccess: (purchase) => {
       void applyPurchase(purchase);
     },
@@ -127,7 +138,7 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
     setLoadingProduct(true);
     setProductError(undefined);
     try {
-      const products = await fetchProducts({
+      const products = await iap.fetchProducts({
         skus: [PLUS_PRODUCT_ID],
         type: "in-app",
       });
@@ -142,7 +153,7 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
       }
 
       // 購入済みの人を、通信エラーや一時的な空配列だけで無料へ戻さない。
-      const purchases = await getAvailablePurchases({
+      const purchases = await iap.getAvailablePurchases({
         onlyIncludeActiveItemsIOS: true,
       });
       const owned = purchases.find(
@@ -154,7 +165,7 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoadingProduct(false);
     }
-  }, [applyPurchase, connected]);
+  }, [applyPurchase, connected, iap]);
 
   useEffect(() => {
     void syncStore();
@@ -197,8 +208,8 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
       return { status: "error", message: "ストアに接続中です。少し待ってからお試しください。" };
     }
     try {
-      await restoreStorePurchases();
-      const purchases = await getAvailablePurchases({
+      await iap.restorePurchases();
+      const purchases = await iap.getAvailablePurchases({
         onlyIncludeActiveItemsIOS: true,
       });
       const owned = purchases.find(
@@ -215,7 +226,7 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       return { status: "error", message: userMessage(error) };
     }
-  }, [applyPurchase, connected]);
+  }, [applyPurchase, connected, iap]);
 
   const retryStoreConnection = useCallback(async () => {
     if (!connected) await reconnect();
@@ -244,6 +255,50 @@ export function PurchaseProvider({ children }: { children: React.ReactNode }) {
   );
 
   return <PurchaseContext.Provider value={value}>{children}</PurchaseContext.Provider>;
+}
+
+const STUB_NOTE =
+  "この実行環境（Expo Go）ではストア決済を利用できません。実際の購入・復元は Development Build の実機で確認してください。";
+
+/**
+ * Expo Go 用のスタブ。開発中（__DEV__）は疑似購入で無制限を解放でき、
+ * ペイウォール→解放→無制限登録の一連のフローを Expo Go でも確認できる。
+ * リリースビルドでネイティブモジュールが欠けていた場合はエラーを返すだけで、
+ * 無償解放は起きない。
+ */
+function StubPurchaseProvider({ children }: { children: React.ReactNode }) {
+  const value = useMemo<PurchaseContextValue>(() => {
+    const stubProduct = __DEV__
+      ? ({
+          id: PLUS_PRODUCT_ID,
+          displayPrice: "¥300（テスト）",
+        } as unknown as Product)
+      : undefined;
+    const purchase = async (): Promise<PurchaseResult> => {
+      if (!__DEV__) return { status: "error", message: STUB_NOTE };
+      await saveStorePurchaseEntitlement({
+        productId: PLUS_PRODUCT_ID,
+        transactionId: "expo-go-dev-stub",
+        store: "dev-stub",
+      });
+      return { status: "success" };
+    };
+    return {
+      connected: false,
+      loadingProduct: false,
+      product: stubProduct,
+      productError: STUB_NOTE,
+      purchaseUnlimited: purchase,
+      restoreUnlimited: purchase,
+      retryStoreConnection: async () => {},
+    };
+  }, []);
+  return <PurchaseContext.Provider value={value}>{children}</PurchaseContext.Provider>;
+}
+
+export function PurchaseProvider({ children }: { children: React.ReactNode }) {
+  if (!Iap) return <StubPurchaseProvider>{children}</StubPurchaseProvider>;
+  return <NativePurchaseProvider>{children}</NativePurchaseProvider>;
 }
 
 export function usePurchase(): PurchaseContextValue {

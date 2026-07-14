@@ -23,9 +23,21 @@
 ```bash
 cd ouchi-mente
 npm install
-npx expo start        # Expo Go で実機確認（SQLite/通知は Expo Go でも動作）
+npx expo start        # QRコードをExpo Goで読むと実機で動く
 npm run typecheck     # 型チェック
 ```
+
+### Expo Go でできること / できないこと
+
+- ✅ 登録・一覧・詳細・編集・完了記録・履歴・写真・テンプレート・設定（SQLite・ローカル通知はExpo Goでも動作）
+- ✅ 無料3件の上限 → ペイウォール → 解放 → 無制限登録の一連のフロー
+  （Expo Goではストア決済が使えないため、購入ボタンは**開発用の疑似購入**として動作。
+  画面に「この実行環境ではストア決済を利用できません」と表示される）
+- ❌ 実際のApp Store / Google Play決済 — `eas build --profile development` の
+  Development Build 実機でのみ確認可能（expo-iapはネイティブモジュールのため）
+
+expo-iap は実行環境を判定して読み込むため、Expo Go でもクラッシュしない
+（`src/purchase/PurchaseProvider.tsx` のスタブ切り替え）。
 
 ## フォルダ構成
 
