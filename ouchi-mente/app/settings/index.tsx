@@ -16,6 +16,7 @@ import { deleteAllData } from "@/db/database";
 import { getSetting, setSetting } from "@/db/settings";
 import { NOTIFICATION_NOTE, NOTIFICATION_TIMING_OPTIONS } from "@/domain/labels";
 import { deleteAllStoredImagesAsync } from "@/media/images";
+import { requestPermission } from "@/notifications/notifications";
 import {
   FREE_ITEM_LIMIT,
   isPlusUnlocked,
@@ -66,6 +67,41 @@ export default function SettingsScreen() {
   const updateDefaultTiming = async (value: number) => {
     setDefaultTiming(value);
     await setSetting("defaultNotificationTimingDays", String(value));
+  };
+
+  // 通知が端末で実際に表示されるかを確認する開発用ボタン。
+  // リリースビルドでは表示されない
+  const sendTestNotification = async () => {
+    try {
+      const granted = await requestPermission();
+      if (!granted) {
+        Alert.alert(
+          "通知が許可されていません",
+          "端末の設定でこのアプリ（Expo Goの場合はExpo Go）の通知を許可してください。",
+        );
+        return;
+      }
+      await Notifications.scheduleNotificationAsync({
+        content: {
+          title: "家の手入れ記録",
+          body: "テスト通知です。本番では目安日の朝9時に届きます。",
+        },
+        trigger: {
+          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+          seconds: 10,
+          channelId: "default",
+        },
+      });
+      Alert.alert(
+        "10秒後に通知が届きます",
+        "ホーム画面に戻る（アプリを閉じる）と確実に確認できます。",
+      );
+    } catch {
+      Alert.alert(
+        "テスト通知を登録できませんでした",
+        "この実行環境では通知を利用できない可能性があります。Development Buildで確認してください。",
+      );
+    }
   };
 
   const confirmDeleteAll = () => {
@@ -119,6 +155,13 @@ export default function SettingsScreen() {
           />
         ) : null}
         <NoteText text={NOTIFICATION_NOTE} />
+        {__DEV__ ? (
+          <AppButton
+            title="テスト通知を送る（10秒後・開発中のみ表示）"
+            variant="secondary"
+            onPress={sendTestNotification}
+          />
+        ) : null}
       </Card>
 
       <Text style={styles.sectionTitle}>登録数</Text>
