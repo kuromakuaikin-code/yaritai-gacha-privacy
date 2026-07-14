@@ -35,6 +35,18 @@ export default function PaywallScreen() {
     }, []),
   );
 
+  // 誤タップでストアの決済フローに入らないよう、先に一度確認する
+  const confirmPurchase = () => {
+    Alert.alert(
+      "無制限版を購入しますか？",
+      `${product?.displayPrice ?? "¥300"}の買い切りです。月額料金はありません。このあとApp Store / Google Playの購入手続きに進みます。`,
+      [
+        { text: "キャンセル", style: "cancel" },
+        { text: "購入する", onPress: () => void handlePurchase() },
+      ],
+    );
+  };
+
   const handlePurchase = async () => {
     setBusy(true);
     try {
@@ -145,7 +157,7 @@ export default function PaywallScreen() {
       <View style={styles.footer}>
         <AppButton
           title={product ? `${product.displayPrice}で無制限にする` : "商品情報を読み込み中"}
-          onPress={handlePurchase}
+          onPress={confirmPurchase}
           loading={busy}
           disabled={!product || loadingProduct}
         />

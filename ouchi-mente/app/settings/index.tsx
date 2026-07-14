@@ -19,7 +19,6 @@ import { deleteAllStoredImagesAsync } from "@/media/images";
 import {
   DEFAULT_NOTIFY_HOUR,
   getNotifyHour,
-  requestPermission,
   setNotifyHourAndReschedule,
 } from "@/notifications/notifications";
 import {
@@ -101,39 +100,12 @@ export default function SettingsScreen() {
     }
   };
 
-  // 通知が端末で実際に表示されるかを確認する開発用ボタン。
-  // リリースビルドでは表示されない
-  const sendTestNotification = async () => {
-    try {
-      const granted = await requestPermission();
-      if (!granted) {
-        Alert.alert(
-          "通知が許可されていません",
-          "端末の設定でこのアプリ（Expo Goの場合はExpo Go）の通知を許可してください。",
-        );
-        return;
-      }
-      await Notifications.scheduleNotificationAsync({
-        content: {
-          title: "家の手入れ記録",
-          body: `テスト通知です。本番では目安日の${notifyHour}時に届きます。`,
-        },
-        trigger: {
-          type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-          seconds: 10,
-          channelId: "default",
-        },
-      });
-      Alert.alert(
-        "10秒後に通知が届きます",
-        "ホーム画面に戻る（アプリを閉じる）と確実に確認できます。",
-      );
-    } catch {
-      Alert.alert(
-        "テスト通知を登録できませんでした",
-        "この実行環境では通知を利用できない可能性があります。Development Buildで確認してください。",
-      );
-    }
+  // テスト購入で解放した状態を元に戻す開発用ボタン。リリース版には表示されない
+  const resetPurchaseForDev = async () => {
+    await setSetting("plusUnlocked", "0");
+    await setSetting("plusEntitlementState", "free");
+    setPlusUnlocked(false);
+    Alert.alert("リセットしました", "無料版（3件まで）に戻りました。");
   };
 
   const confirmDeleteAll = () => {
@@ -193,13 +165,6 @@ export default function SettingsScreen() {
           onChange={updateNotifyHour}
         />
         <NoteText text={NOTIFICATION_NOTE} />
-        {__DEV__ ? (
-          <AppButton
-            title="テスト通知を送る（10秒後・開発中のみ表示）"
-            variant="secondary"
-            onPress={sendTestNotification}
-          />
-        ) : null}
       </Card>
 
       <Text style={styles.sectionTitle}>登録数</Text>
@@ -219,6 +184,12 @@ export default function SettingsScreen() {
           />
         )}
         <LinkRow label="購入の復元" onPress={handleRestore} />
+        {__DEV__ ? (
+          <LinkRow
+            label="購入状態をリセット（開発用）"
+            onPress={() => void resetPurchaseForDev()}
+          />
+        ) : null}
       </Card>
 
       <Text style={styles.sectionTitle}>このアプリについて</Text>
