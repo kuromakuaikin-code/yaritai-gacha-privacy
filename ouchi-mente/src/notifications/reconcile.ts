@@ -1,12 +1,12 @@
 import * as Notifications from "expo-notifications";
-import { listItems, updateItem } from "@/db/items";
+import { listItems, updateItemNotificationId } from "@/db/items";
 import { parseDateString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
 import {
   cancelNotification,
   getNotifyHour,
   isPermissionGranted,
-  rescheduleItemNotification,
+  syncItemNotification,
 } from "./notifications";
 
 function plannedFireAt(item: MaintenanceItem, notifyHour: number): Date | undefined {
@@ -15,6 +15,17 @@ function plannedFireAt(item: MaintenanceItem, notifyHour: number): Date | undefi
   fireAt.setDate(fireAt.getDate() - (item.notificationTimingDays ?? 0));
   fireAt.setHours(notifyHour, 0, 0, 0);
   return fireAt;
+}
+
+function isScheduledFor(
+  request: Notifications.NotificationRequest | undefined,
+  fireAt: Date,
+): boolean {
+  const scheduledFor = request?.content.data?.scheduledFor;
+  return (
+    typeof scheduledFor === "string" &&
+    Date.parse(scheduledFor) === fireAt.getTime()
+  );
 }
 
 /**
@@ -51,34 +62,39 @@ export async function reconcileScheduledNotifications(): Promise<void> {
 
     for (const item of items) {
       const fireAt = plannedFireAt(item, notifyHour);
-      const hasPendingRequest =
-        !!item.notificationId && requestsById.has(item.notificationId);
+      const pendingRequest = item.notificationId
+        ? requestsById.get(item.notificationId)
+        : undefined;
 
       if (!fireAt) {
         if (item.notificationId) {
           await cancelNotification(item.notificationId);
-          await updateItem({ ...item, notificationId: undefined });
+          await updateItemNotificationId(item.id, undefined);
         }
         continue;
       }
 
-      if (hasPendingRequest) continue;
+      // IDが存在しても、設定変更前の時刻で予約された通知なら張り替える。
+      if (isScheduledFor(pendingRequest, fireAt)) continue;
 
       if (fireAt.getTime() <= Date.now()) {
         if (item.notificationId) {
-          await updateItem({ ...item, notificationId: undefined });
+          await cancelNotification(item.notificationId);
+          await updateItemNotificationId(item.id, undefined);
         }
         continue;
       }
 
       try {
-        const notificationId = await rescheduleItemNotification({
-          ...item,
-          notificationId: undefined,
-        });
-        if (notificationId) {
-          await updateItem({ ...item, notificationId });
-        }
+        await syncItemNotification(
+          item,
+          item.notificationId,
+          {
+            notifyHour,
+            // 古い予約が残っている場合、新しい予約とDB保存が成功するまで保持する。
+            preservePreviousOnFailure: true,
+          },
+        );
       } catch {
         // 通知は補助機能。起動を妨げず、次回起動時にもう一度照合する。
       }

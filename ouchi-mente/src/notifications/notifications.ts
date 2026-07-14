@@ -2,8 +2,8 @@ import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 import { parseDateString } from "@/domain/schedule";
 import type { MaintenanceItem } from "@/domain/types";
-import { listItems, updateItem } from "@/db/items";
-import { getSetting } from "@/db/settings";
+import { listItems, updateItemNotificationId } from "@/db/items";
+import { getSetting, setSetting } from "@/db/settings";
 
 /**
  * ローカル通知のみを使用する。外部サーバー・プッシュ通知は使わない。
@@ -12,6 +12,8 @@ import { getSetting } from "@/db/settings";
  */
 
 export const DEFAULT_NOTIFY_HOUR = 9;
+
+let allNotificationUpdateQueue: Promise<void> = Promise.resolve();
 
 /** 通知を表示する時刻（0〜23時）。設定画面で変更できる */
 export async function getNotifyHour(): Promise<number> {
@@ -71,6 +73,7 @@ function notificationBody(item: MaintenanceItem, timingDays: number): string {
  */
 export async function rescheduleItemNotification(
   item: MaintenanceItem,
+  notifyHour?: number,
 ): Promise<string | undefined> {
   if (!item.notificationEnabled || !item.nextDueDate) return undefined;
   if (!(await isPermissionGranted())) {
@@ -80,7 +83,7 @@ export async function rescheduleItemNotification(
   const timingDays = item.notificationTimingDays ?? 0;
   const fireAt = parseDateString(item.nextDueDate);
   fireAt.setDate(fireAt.getDate() - timingDays);
-  fireAt.setHours(await getNotifyHour(), 0, 0, 0);
+  fireAt.setHours(notifyHour ?? await getNotifyHour(), 0, 0, 0);
   // 通知時刻をすでに過ぎている場合は登録しない。
   // 直後に発火させると「あと◯日です」という本文が実際の残り日数と食い違い、
   // 起動時照合（reconcile）の「過ぎた分は画面表示に任せる」方針とも矛盾する
@@ -92,7 +95,11 @@ export async function rescheduleItemNotification(
       content: {
         title: "家の手入れ記録",
         body: notificationBody(item, timingDays),
-        data: { maintenanceItemId: item.id },
+        // 起動時照合で、現在の通知時刻設定と一致する予約か確認する。
+        data: {
+          maintenanceItemId: item.id,
+          scheduledFor: fireAt.toISOString(),
+        },
       },
       trigger: {
         type: Notifications.SchedulableTriggerInputTypes.DATE,
@@ -121,19 +128,48 @@ export type NotificationSyncResult =
 export async function syncItemNotification(
   item: MaintenanceItem,
   previousNotificationId?: string,
+  options?: {
+    notifyHour?: number;
+    preservePreviousOnFailure?: boolean;
+  },
 ): Promise<NotificationSyncResult> {
-  await cancelNotification(previousNotificationId);
-
   if (!item.notificationEnabled || !item.nextDueDate) {
+    await cancelNotification(previousNotificationId);
+    if (item.notificationId) {
+      await updateItemNotificationId(item.id, undefined);
+    }
     return { status: "not-needed" };
   }
+
+  if (!options?.preservePreviousOnFailure) {
+    await cancelNotification(previousNotificationId);
+  }
+
   try {
     if (!(await isPermissionGranted())) {
       return { status: "permission-denied" };
     }
-    const notificationId = await rescheduleItemNotification(item);
-    if (!notificationId) return { status: "not-needed" };
-    await updateItem({ ...item, notificationId });
+    const notificationId = await rescheduleItemNotification(
+      item,
+      options?.notifyHour,
+    );
+    if (!notificationId) {
+      await cancelNotification(previousNotificationId);
+      if (item.notificationId) {
+        await updateItemNotificationId(item.id, undefined);
+      }
+      return { status: "not-needed" };
+    }
+    try {
+      await updateItemNotificationId(item.id, notificationId);
+    } catch {
+      // DBが新しいIDを保持できなければ、参照不能な通知をOS側に残さない。
+      await cancelNotification(notificationId);
+      throw new Error("通知IDを保存できませんでした");
+    }
+    if (options?.preservePreviousOnFailure) {
+      await cancelNotification(previousNotificationId);
+    }
     return { status: "scheduled", notificationId };
   } catch {
     return { status: "failed" };
@@ -155,14 +191,38 @@ export async function cancelNotification(
  * 全項目の通知を現在の設定（通知時刻など）で登録し直す。
  * 通知時刻を変更したときに呼ぶ。失敗した項目があっても続行する。
  */
-export async function rescheduleAllNotifications(): Promise<void> {
+async function rescheduleAllNotificationsAtHour(notifyHour: number): Promise<void> {
   const items = await listItems();
   for (const item of items) {
-    if (!item.notificationEnabled || !item.nextDueDate) continue;
-    try {
-      await syncItemNotification(item, item.notificationId);
-    } catch {
-      // 個別の失敗は無視して次の項目へ
-    }
+    await syncItemNotification(item, item.notificationId, {
+      notifyHour,
+      // 時刻変更の張り替えに失敗した場合は、通知自体を失うより古い予約を残す。
+      preservePreviousOnFailure: true,
+    });
   }
+}
+
+function enqueueAllNotificationUpdate(operation: () => Promise<void>): Promise<void> {
+  const task = allNotificationUpdateQueue.then(operation, operation);
+  allNotificationUpdateQueue = task.catch(() => {
+    // 1回の失敗で、後から並んだ時刻変更まで止めない。
+  });
+  return task;
+}
+
+export function rescheduleAllNotifications(): Promise<void> {
+  return enqueueAllNotificationUpdate(async () => {
+    await rescheduleAllNotificationsAtHour(await getNotifyHour());
+  });
+}
+
+/** 通知時刻の保存と全通知の張り替えを、他の時刻変更と重ならないよう実行する。 */
+export function setNotifyHourAndReschedule(notifyHour: number): Promise<void> {
+  if (!Number.isInteger(notifyHour) || notifyHour < 0 || notifyHour > 23) {
+    return Promise.reject(new Error("通知時刻が不正です"));
+  }
+  return enqueueAllNotificationUpdate(async () => {
+    await setSetting("notificationHour", String(notifyHour));
+    await rescheduleAllNotificationsAtHour(notifyHour);
+  });
 }

@@ -159,6 +159,21 @@ export async function updateItem(item: MaintenanceItem): Promise<MaintenanceItem
   return updated;
 }
 
+/**
+ * 通知IDだけを更新する。通知の同期処理はこの関数を使い、
+ * 項目の他のフィールドには触れない（古いスナップショットで
+ * ユーザーの編集内容を巻き戻さないため）。
+ */
+export async function updateItemNotificationId(
+  id: string,
+  notificationId: string | undefined,
+): Promise<void> {
+  await getDatabase().runAsync(
+    "UPDATE maintenance_items SET notification_id = ?, updated_at = ? WHERE id = ?;",
+    [notificationId ?? null, new Date().toISOString(), id],
+  );
+}
+
 /** 項目削除。履歴は ON DELETE CASCADE でまとめて削除される */
 export async function deleteItem(id: string): Promise<void> {
   await getDatabase().runAsync("DELETE FROM maintenance_items WHERE id = ?;", [

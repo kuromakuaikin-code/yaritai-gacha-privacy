@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -20,7 +20,7 @@ import {
   DEFAULT_NOTIFY_HOUR,
   getNotifyHour,
   requestPermission,
-  rescheduleAllNotifications,
+  setNotifyHourAndReschedule,
 } from "@/notifications/notifications";
 import {
   FREE_ITEM_LIMIT,
@@ -40,6 +40,7 @@ export default function SettingsScreen() {
   const [defaultTiming, setDefaultTiming] = useState(0);
   const [notifyHour, setNotifyHour] = useState(DEFAULT_NOTIFY_HOUR);
   const [plusUnlocked, setPlusUnlocked] = useState(false);
+  const notifyHourChangeId = useRef(0);
   const { restoreUnlimited } = usePurchase();
 
   useFocusEffect(
@@ -83,10 +84,21 @@ export default function SettingsScreen() {
   };
 
   const updateNotifyHour = async (hour: number) => {
+    const changeId = ++notifyHourChangeId.current;
     setNotifyHour(hour);
-    await setSetting("notificationHour", String(hour));
-    // 登録済みの通知も新しい時刻で張り替える
-    await rescheduleAllNotifications();
+    try {
+      // 保存と全通知の張り替えを順番待ちにし、連打時の二重登録を防ぐ。
+      await setNotifyHourAndReschedule(hour);
+    } catch {
+      // 後から選ばれた時刻の表示を、先に失敗した処理で巻き戻さない。
+      if (notifyHourChangeId.current !== changeId) return;
+      // 保存自体に失敗した場合は、DBに残っている時刻へ表示を戻す。
+      setNotifyHour(await getNotifyHour());
+      Alert.alert(
+        "通知時刻を変更できませんでした",
+        "もう一度お試しください。",
+      );
+    }
   };
 
   // 通知が端末で実際に表示されるかを確認する開発用ボタン。
@@ -104,7 +116,7 @@ export default function SettingsScreen() {
       await Notifications.scheduleNotificationAsync({
         content: {
           title: "家の手入れ記録",
-          body: "テスト通知です。本番では目安日の朝9時に届きます。",
+          body: `テスト通知です。本番では目安日の${notifyHour}時に届きます。`,
         },
         trigger: {
           type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,

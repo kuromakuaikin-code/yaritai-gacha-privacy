@@ -75,24 +75,29 @@ function userMessage(error: unknown): string {
 
 function NativePurchaseProvider({ children }: { children: React.ReactNode }) {
   const iap = Iap!;
-  const processedPurchaseIds = useRef(new Set<string>());
+  const completedPurchaseIds = useRef(new Set<string>());
+  const inFlightPurchaseTasks = useRef(new Map<string, Promise<boolean>>());
   const [product, setProduct] = useState<Product>();
   const [loadingProduct, setLoadingProduct] = useState(true);
   const [productError, setProductError] = useState<string>();
 
-  const applyPurchase = useCallback(async (purchase: Purchase): Promise<boolean> => {
+  const applyPurchase = useCallback((purchase: Purchase): Promise<boolean> => {
     if (!isOurPurchase(purchase) || purchase.purchaseState !== "purchased") {
-      return false;
+      return Promise.resolve(false);
     }
 
     // 同一トランザクションはセッション内で一度だけ処理する。
     // iOSでは購入イベントと requestPurchase の戻り値の両方から同じ購入が
-    // 届くため、成功後もキーを保持して finish/acknowledge の二重実行を防ぐ。
+    // 届く。処理中なら同じPromiseを返して保存完了を待ち、完了後はキーを
+    // 保持して finish/acknowledge の二重実行を防ぐ。
     const purchaseKey = purchase.transactionId ?? purchase.id;
-    if (processedPurchaseIds.current.has(purchaseKey)) return true;
-    processedPurchaseIds.current.add(purchaseKey);
+    if (completedPurchaseIds.current.has(purchaseKey)) {
+      return Promise.resolve(true);
+    }
+    const existingTask = inFlightPurchaseTasks.current.get(purchaseKey);
+    if (existingTask) return existingTask;
 
-    try {
+    const task = (async (): Promise<boolean> => {
       // 権利を先に保存する。finish/acknowledge に失敗しても購入者の権利は
       // 失われず、未完了のトランザクションは次回起動時の syncStore が再処理する。
       await saveStorePurchaseEntitlement({
@@ -100,27 +105,37 @@ function NativePurchaseProvider({ children }: { children: React.ReactNode }) {
         transactionId: purchase.transactionId,
         store: purchase.store,
       });
-    } catch (error) {
-      // 権利を保存できなかった場合だけ、次の配信で再処理できるようキーを外す
-      processedPurchaseIds.current.delete(purchaseKey);
-      throw error;
-    }
 
-    // Androidで acknowledge 済みの購入を再度 acknowledge しない
-    const alreadyAcknowledged =
-      "isAcknowledgedAndroid" in purchase &&
-      purchase.isAcknowledgedAndroid === true;
-    if (!alreadyAcknowledged) {
-      try {
-        // Google Playでは acknowledge、App Storeでは transaction finish になる
-        await iap.finishTransaction({ purchase, isConsumable: false });
-      } catch {
-        // 権利は保存済みのため、購入としては成功扱いにする。
-        // acknowledge が本当に未完了なら次回起動時の syncStore が再試行する
-        processedPurchaseIds.current.delete(purchaseKey);
+      // Androidで acknowledge 済みの購入を再度 acknowledge しない
+      const alreadyAcknowledged =
+        "isAcknowledgedAndroid" in purchase &&
+        purchase.isAcknowledgedAndroid === true;
+      if (!alreadyAcknowledged) {
+        try {
+          // Google Playでは acknowledge、App Storeでは transaction finish になる
+          await iap.finishTransaction({ purchase, isConsumable: false });
+        } catch {
+          // 権利は保存済みのため、購入としては成功扱いにする。
+          // 完了キーは残さず、次回配信時に finish/acknowledge だけ再試行する。
+          return true;
+        }
       }
-    }
-    return true;
+
+      completedPurchaseIds.current.add(purchaseKey);
+      return true;
+    })();
+
+    inFlightPurchaseTasks.current.set(purchaseKey, task);
+    void task
+      .finally(() => {
+        if (inFlightPurchaseTasks.current.get(purchaseKey) === task) {
+          inFlightPurchaseTasks.current.delete(purchaseKey);
+        }
+      })
+      .catch(() => {
+        // 呼び出し元が元のtaskを処理する。finallyが作るPromiseの未処理化だけ防ぐ。
+      });
+    return task;
   }, [iap]);
 
   const {
@@ -129,7 +144,9 @@ function NativePurchaseProvider({ children }: { children: React.ReactNode }) {
     reconnect,
   } = iap.useIAP({
     onPurchaseSuccess: (purchase) => {
-      void applyPurchase(purchase);
+      void applyPurchase(purchase).catch(() => {
+        // 権利保存に失敗した購入は、ストアからの次回配信時に再処理する。
+      });
     },
   });
 
