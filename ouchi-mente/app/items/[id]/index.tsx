@@ -193,8 +193,8 @@ export default function ItemDetailScreen() {
 
         {__DEV__ ? (
           <AppButton
-            title="この項目の通知を今すぐ試す（開発用）"
-            variant="ghost"
+            title="🔔 この項目の通知を今すぐ試す（開発用）"
+            variant="secondary"
             onPress={async () => {
               const sent = await sendTestNotificationForItem(item);
               Alert.alert(
