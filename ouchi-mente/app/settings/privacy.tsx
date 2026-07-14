@@ -1,5 +1,6 @@
 import React from "react";
 import { LegalPage } from "@/components/LegalPage";
+import { OS_VENDOR, STORE_NAME } from "@/domain/labels";
 
 export default function PrivacyScreen() {
   return (
@@ -7,7 +8,7 @@ export default function PrivacyScreen() {
       sections={[
         {
           heading: "データの保存場所",
-          body: "本アプリで登録した項目、履歴、メモ、写真などは、アプリのローカル領域に保存します。本アプリは、それらを開発者のサーバー、広告サービス、解析サービスへ送信しません。ただし、端末の設定により、AppleまたはGoogleが提供するOSバックアップや端末移行の対象となる場合があります。",
+          body: `本アプリで登録した項目、履歴、メモ、写真などは、アプリのローカル領域に保存します。本アプリは、それらを開発者のサーバー、広告サービス、解析サービスへ送信しません。ただし、端末の設定により、${OS_VENDOR}が提供するOSバックアップや端末移行の対象となる場合があります。`,
         },
         {
           heading: "アカウント登録",
@@ -27,7 +28,7 @@ export default function PrivacyScreen() {
         },
         {
           heading: "アプリ内購入",
-          body: "無制限版を購入または復元する場合、決済処理はApp StoreまたはGoogle Playが行います。開発者が支払い情報を取得・保存することはありません。",
+          body: `無制限版を購入または復元する場合、決済処理は${STORE_NAME}が行います。開発者が支払い情報を取得・保存することはありません。`,
         },
         {
           heading: "データの削除",

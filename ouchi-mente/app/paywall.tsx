@@ -2,6 +2,7 @@ import React, { useCallback, useState } from "react";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { AppButton, Card, LoadingView, NoteText } from "@/components/ui";
+import { STORE_NAME } from "@/domain/labels";
 import {
   FREE_ITEM_LIMIT,
   checkCanAddItem,
@@ -39,7 +40,7 @@ export default function PaywallScreen() {
   const confirmPurchase = () => {
     Alert.alert(
       "無制限版を購入しますか？",
-      `${product?.displayPrice ?? "¥300"}の買い切りです。月額料金はありません。このあとApp Store / Google Playの購入手続きに進みます。`,
+      `${product?.displayPrice ?? "¥300"}の買い切りです。月額料金はありません。このあと${STORE_NAME}の購入手続きに進みます。`,
       [
         { text: "キャンセル", style: "cancel" },
         { text: "購入する", onPress: () => void handlePurchase() },
@@ -151,7 +152,9 @@ export default function PaywallScreen() {
           </View>
         ) : null}
 
-        <NoteText text="アカウント登録は不要です。記録はアプリのローカル領域に保存され、開発者のサーバー、広告、解析サービスへ送信しません。購入はApp StoreまたはGoogle Playで処理され、iPhoneとAndroidの間では購入を共有できません。" />
+        <NoteText
+          text={`アカウント登録は不要です。記録はアプリのローカル領域に保存され、開発者のサーバー、広告、解析サービスへ送信しません。購入は${STORE_NAME}で処理され、異なるOSの端末へは引き継げません。`}
+        />
       </ScrollView>
 
       <View style={styles.footer}>
