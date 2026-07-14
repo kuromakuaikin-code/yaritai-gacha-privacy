@@ -1,0 +1,12 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;
+  background:#F7F9F8;color:#26332F;line-height:1.8}
+.wrap{max-width:720px;margin:0 auto;padding:32px 20px 64px}
+header{padding:24px 0;border-bottom:1px solid #E3E8E6;margin-bottom:28px}
+header .app{font-weight:700;color:#2E8B84;text-decoration:none;font-size:18px}
+h1{font-size:26px;margin-bottom:20px}
+h2{font-size:19px;margin:28px 0 10px;color:#26332F}
+p,li{color:#5F6E69;font-size:16px}
+ul{padding-left:22px;margin:8px 0}
+.updated{color:#8A9691;font-size:14px;margin-top:32px}
+nav a{color:#2E8B84;margin-right:16px;text-decoration:none;font-size:15px}

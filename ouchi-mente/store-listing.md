@@ -47,7 +47,7 @@
 
 ### プライバシーポリシー URL
 
-https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/ouchi-mente/privacy.html
+https://ienoteire.netlify.app/privacy.html
 （※公開前に `docs` として書き出し・配置すること）
 
 ## App Privacy（プライバシー栄養表示）の回答
@@ -69,7 +69,7 @@ https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/ouchi-mente/privacy.h
 
 ## 審査メモ
 
-- IAP: 非消耗型 `com.kuromakuaikin.ouchimente.unlimited`（¥300）
+- IAP: 非消耗型 `com.ienoteire.app.unlimited`（¥300）
   - 「購入の復元」ボタンあり（設定・購入画面）
   - 購入前に確認ダイアログを表示
 - 通知: ローカル通知のみ。初回オンボーディングで目的説明後に許可ダイアログ表示
@@ -84,6 +84,6 @@ https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/ouchi-mente/privacy.h
       `expo-iap@3.4.13` を含む実機ビルド＋サンドボックスで購入・復元を確認
       （未購入アカウントで復元→「見つかりません」になることも確認）
 - [ ] **配信地域を日本のみに設定**（住所公開の回避）
-- [ ] プライバシーポリシーHTMLをGitHub Pagesに配置
+- [ ] プライバシーポリシー（site/）をNetlify等の中立ホスティングに配置し、URLをストアに設定
 - [ ] iOS実機で通知の発火を確認（当日・N日前）
 - [ ] App Store / J-PlatPatで名称「家の手入れ記録」の同名・類似を確認

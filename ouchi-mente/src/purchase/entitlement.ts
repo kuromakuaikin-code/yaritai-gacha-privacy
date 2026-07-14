@@ -10,8 +10,8 @@ import { getSetting, setSetting } from "@/db/settings";
 export const UNLIMITED_ITEM_LIMIT = Number.MAX_SAFE_INTEGER;
 export const FREE_ITEM_LIMIT = 3;
 export const PLUS_PRODUCT_IDS = {
-  ios: "com.kuromakuaikin.ouchimente.unlimited",
-  android: "com.kuromakuaikin.ouchimente.unlimited",
+  ios: "com.ienoteire.app.unlimited",
+  android: "com.ienoteire.app.unlimited",
 } as const;
 export const PLUS_PRODUCT_ID = PLUS_PRODUCT_IDS.ios;
 
