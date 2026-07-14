@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Redirect, Stack, useFocusEffect, useRouter } from "expo-router";
 import { Pressable, SectionList, StyleSheet, Text, View } from "react-native";
+import { AdBanner } from "@/ads/AdBanner";
 import { ItemCard } from "@/components/ItemCard";
 import { AppButton, EmptyState, LoadingView } from "@/components/ui";
 import { listItems } from "@/db/items";
@@ -99,6 +100,7 @@ export default function HomeScreen() {
         />
       )}
 
+      <AdBanner />
       <View style={styles.footerArea}>
         {items.length >= itemLimit - 1 ? (
           <Pressable
