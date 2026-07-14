@@ -288,7 +288,7 @@ function StubPurchaseProvider({ children }: { children: React.ReactNode }) {
     const stubProduct = __DEV__
       ? ({
           id: PLUS_PRODUCT_ID,
-          displayPrice: "¥300（テスト）",
+          displayPrice: "¥300",
         } as unknown as Product)
       : undefined;
     const purchase = async (): Promise<PurchaseResult> => {

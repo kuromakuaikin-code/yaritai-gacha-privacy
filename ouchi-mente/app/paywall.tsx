@@ -11,6 +11,13 @@ import {
 import { usePurchase } from "@/purchase/PurchaseProvider";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
+/** ストアの価格表記（¥300）を日本語の「300円」に整える。他通貨はそのまま */
+function displayPriceJa(displayPrice: string | undefined): string | undefined {
+  if (!displayPrice) return undefined;
+  const match = displayPrice.match(/^[¥￥]\s?([\d,]+)$/);
+  return match ? `${match[1]}円` : displayPrice;
+}
+
 export default function PaywallScreen() {
   const router = useRouter();
   const [check, setCheck] = useState<AddItemCheck | null>(null);
@@ -36,11 +43,13 @@ export default function PaywallScreen() {
     }, []),
   );
 
+  const price = displayPriceJa(product?.displayPrice);
+
   // 誤タップでストアの決済フローに入らないよう、先に一度確認する
   const confirmPurchase = () => {
     Alert.alert(
       "無制限版を購入しますか？",
-      `${product?.displayPrice ?? "¥300"}の買い切りです。月額料金はありません。このあと${STORE_NAME}の購入手続きに進みます。`,
+      `${price ?? "300円"}の買い切りです。月額料金はありません。このあと${STORE_NAME}の購入手続きに進みます。`,
       [
         { text: "キャンセル", style: "cancel" },
         { text: "購入する", onPress: () => void handlePurchase() },
@@ -126,9 +135,7 @@ export default function PaywallScreen() {
         <Card style={styles.offer}>
           <Text style={styles.offerBadge}>買い切り・月額なし</Text>
           <Text style={styles.offerTitle}>登録数を無制限に</Text>
-          <Text style={styles.offerPrice}>
-            {product?.displayPrice ?? "ストアに接続中"}
-          </Text>
+          <Text style={styles.offerPrice}>{price ?? "ストアに接続中"}</Text>
           <Text style={styles.offerDetail}>
             一度購入すれば、今後追加する家電・設備・交換品も件数を気にせず記録できます。
           </Text>
@@ -136,7 +143,7 @@ export default function PaywallScreen() {
 
         <View style={styles.featureList}>
           <Text style={styles.feature}>✓ エアコンや換気扇が複数台あっても安心</Text>
-          <Text style={styles.feature}>✓ 月額料金なし・広告なし</Text>
+          <Text style={styles.feature}>✓ 月額料金や追加の課金はありません</Text>
           <Text style={styles.feature}>✓ 機種変更時はストアの「購入の復元」で引き継ぎ</Text>
         </View>
 
@@ -159,7 +166,7 @@ export default function PaywallScreen() {
 
       <View style={styles.footer}>
         <AppButton
-          title={product ? `${product.displayPrice}で無制限にする` : "商品情報を読み込み中"}
+          title={price ? `${price}で無制限にする` : "商品情報を読み込み中"}
           onPress={confirmPurchase}
           loading={busy}
           disabled={!product || loadingProduct}
