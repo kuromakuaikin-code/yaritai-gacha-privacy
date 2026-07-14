@@ -8,7 +8,10 @@
     "start": "expo start",
     "ios": "expo start --ios",
     "android": "expo start --android",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:ios-dev": "eas build --profile development --platform ios",
+    "build:ios-prod": "eas build --profile production --platform ios",
+    "submit:ios": "eas submit --platform ios"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.4.0",
@@ -16,6 +19,7 @@
     "expo": "~54.0.0",
     "expo-constants": "~18.0.13",
     "expo-crypto": "~15.0.9",
+    "expo-dev-client": "~6.0.21",
     "expo-file-system": "~19.0.23",
     "expo-iap": "^3.4.13",
     "expo-image-picker": "~17.0.11",

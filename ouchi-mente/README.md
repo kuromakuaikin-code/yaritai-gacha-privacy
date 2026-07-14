@@ -35,6 +35,44 @@ npx license-checker --production --json --excludePrivatePackages \
   | node -e "const d=JSON.parse(require('fs').readFileSync(0));const es=Object.entries(d).map(([k,i])=>{const a=k.lastIndexOf('@');const e={n:k.slice(0,a),v:k.slice(a+1),l:String(i.licenses)};if(i.publisher)e.p=String(i.publisher);return e}).sort((x,y)=>x.n.localeCompare(y.n));require('fs').writeFileSync('src/legal/oss-licenses.json',JSON.stringify(es))"
 ```
 
+## 実機ビルド（iOS）
+
+前提: Apple Developer Program（年12,980円）加入、Expoアカウント。
+
+```bash
+npm install -g eas-cli
+eas login
+eas init                      # プロジェクトIDを作成しapp.jsonに書き込む（初回のみ）
+eas device:create             # テストに使うiPhoneを登録（URLをiPhoneで開く・初回のみ）
+
+npm run build:ios-dev         # Development Build（クラウドでビルド）
+# 完了後に表示されるURLをiPhoneで開いてインストール
+npx expo start                # PCで起動し、ビルド済みアプリから接続して動作確認
+```
+
+Development Build では expo-iap が本物のStoreKitに接続する。
+IAPを試すには先に App Store Connect 側の準備が必要:
+
+1. App Store Connect でアプリを作成（Bundle ID: `com.kuromakuaikin.ouchimente`）
+2. 「App内課金」で非消耗型 `com.kuromakuaikin.ouchimente.unlimited`（¥300）を作成
+3. 「ユーザとアクセス」→ Sandboxテスターを作成し、iPhoneの
+   設定 → App Store → サンドボックスアカウント にサインイン
+4. アプリ内で購入 → 削除 → 再インストール → 「購入の復元」を確認
+   （未購入のサンドボックスアカウントで復元→「見つかりません」も確認）
+
+開発用機能（設定の「購入状態をリセット」）は `__DEV__` ゲートのため、
+開発サーバー接続中のみ表示され、TestFlight・本番ビルドには含まれない。
+
+提出:
+
+```bash
+npm run build:ios-prod        # 本番ビルド（buildNumber自動インクリメント）
+npm run submit:ios            # App Store Connect へアップロード
+```
+
+提出前チェックリストは `store-listing.md` を参照
+（配信地域を日本のみにする、を忘れずに）。
+
 ### Expo Go でできること / できないこと
 
 - ✅ 登録・一覧・詳細・編集・完了記録・履歴・写真・テンプレート・設定（SQLite・ローカル通知はExpo Goでも動作）
