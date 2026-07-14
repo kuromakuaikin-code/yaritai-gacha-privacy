@@ -23,10 +23,7 @@ import {
 import { dueStatusOf, formatDateJa, remainingLabel } from "@/domain/schedule";
 import type { MaintenanceHistory, MaintenanceItem } from "@/domain/types";
 import { deleteStoredImageAsync, resolveImageUri } from "@/media/images";
-import {
-  cancelNotification,
-  sendTestNotificationForItem,
-} from "@/notifications/notifications";
+import { cancelNotification } from "@/notifications/notifications";
 import { colors, fontSize, radius, spacing } from "@/theme";
 
 export default function ItemDetailScreen() {
@@ -190,22 +187,6 @@ export default function ItemDetailScreen() {
           />
           <AppButton title="削除" variant="danger" onPress={confirmDelete} />
         </View>
-
-        {__DEV__ ? (
-          <AppButton
-            title="🔔 この項目の通知を今すぐ試す（開発用）"
-            variant="secondary"
-            onPress={async () => {
-              const sent = await sendTestNotificationForItem(item);
-              Alert.alert(
-                sent ? "5秒後に届きます" : "通知が許可されていません",
-                sent
-                  ? "本番と同じ文面です。ホーム画面に戻って確認してください。"
-                  : "端末の設定で通知を許可してください。",
-              );
-            }}
-          />
-        ) : null}
       </ScrollView>
 
       <View style={styles.footer}>

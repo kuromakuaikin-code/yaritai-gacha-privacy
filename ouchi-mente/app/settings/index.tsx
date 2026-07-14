@@ -100,14 +100,6 @@ export default function SettingsScreen() {
     }
   };
 
-  // テスト購入で解放した状態を元に戻す開発用ボタン。リリース版には表示されない
-  const resetPurchaseForDev = async () => {
-    await setSetting("plusUnlocked", "0");
-    await setSetting("plusEntitlementState", "free");
-    setPlusUnlocked(false);
-    Alert.alert("リセットしました", "無料版（3件まで）に戻りました。");
-  };
-
   const confirmDeleteAll = () => {
     Alert.alert(
       "すべてのデータを削除しますか？",
@@ -184,12 +176,6 @@ export default function SettingsScreen() {
           />
         )}
         <LinkRow label="購入の復元" onPress={handleRestore} />
-        {__DEV__ ? (
-          <LinkRow
-            label="購入状態をリセット（開発用）"
-            onPress={() => void resetPurchaseForDev()}
-          />
-        ) : null}
       </Card>
 
       <Text style={styles.sectionTitle}>このアプリについて</Text>
