@@ -231,3 +231,25 @@ export function setNotifyHourAndReschedule(notifyHour: number): Promise<void> {
     await rescheduleAllNotificationsAtHour(notifyHour);
   });
 }
+
+/**
+ * 開発用: この項目の通知を「本番と同じ文面」で5秒後に配信する。
+ * OSの予約やDBの通知IDには触れない。リリースビルドのUIからは呼ばれない。
+ */
+export async function sendTestNotificationForItem(
+  item: MaintenanceItem,
+): Promise<boolean> {
+  if (!(await requestPermission())) return false;
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "家の手入れ記録",
+      body: notificationBody(item, item.notificationTimingDays ?? 0),
+    },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: 5,
+      channelId: "default",
+    },
+  });
+  return true;
+}
