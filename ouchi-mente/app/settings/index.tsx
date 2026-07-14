@@ -155,6 +155,10 @@ export default function SettingsScreen() {
           label="アプリについて"
           onPress={() => router.push("/settings/about")}
         />
+        <LinkRow
+          label="オープンソースライセンス"
+          onPress={() => router.push("/settings/licenses")}
+        />
         <View style={styles.versionRow}>
           <Text style={styles.versionLabel}>バージョン</Text>
           <Text style={styles.versionValue}>

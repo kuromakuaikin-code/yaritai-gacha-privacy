@@ -27,6 +27,14 @@ npx expo start        # QRコードをExpo Goで読むと実機で動く
 npm run typecheck     # 型チェック
 ```
 
+依存パッケージを追加・更新したら、アプリ内のオープンソースライセンス一覧
+（`src/legal/oss-licenses.json`）を再生成する:
+
+```bash
+npx license-checker --production --json --excludePrivatePackages \
+  | node -e "const d=JSON.parse(require('fs').readFileSync(0));const es=Object.entries(d).map(([k,i])=>{const a=k.lastIndexOf('@');const e={n:k.slice(0,a),v:k.slice(a+1),l:String(i.licenses)};if(i.publisher)e.p=String(i.publisher);return e}).sort((x,y)=>x.n.localeCompare(y.n));require('fs').writeFileSync('src/legal/oss-licenses.json',JSON.stringify(es))"
+```
+
 ### Expo Go でできること / できないこと
 
 - ✅ 登録・一覧・詳細・編集・完了記録・履歴・写真・テンプレート・設定（SQLite・ローカル通知はExpo Goでも動作）

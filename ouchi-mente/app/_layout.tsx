@@ -87,6 +87,10 @@ export default function RootLayout() {
           name="settings/about"
           options={{ title: "アプリについて" }}
         />
+        <Stack.Screen
+          name="settings/licenses"
+          options={{ title: "オープンソースライセンス" }}
+        />
       </Stack>
     </PurchaseProvider>
   );
