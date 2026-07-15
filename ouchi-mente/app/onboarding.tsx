@@ -138,14 +138,22 @@ export default function OnboardingScreen() {
         ) : null}
         <AppButton
           title={isLast ? "通知を設定してはじめる" : "次へ"}
-          onPress={next}
+          onPressIn={() => setStep("メイン押下検知")}
+          onPress={() => {
+            setStep(`onPress発火 isLast=${isLast}`);
+            next();
+          }}
           loading={finishing}
         />
         {isLast ? null : (
           <AppButton
             title="スキップ"
             variant="ghost"
-            onPress={finish}
+            onPressIn={() => setStep("スキップ押下検知")}
+            onPress={() => {
+              setStep("スキップonPress発火");
+              void finish();
+            }}
             disabled={finishing}
           />
         )}
