@@ -15,7 +15,6 @@ type ButtonVariant = "primary" | "secondary" | "danger" | "ghost";
 export function AppButton({
   title,
   onPress,
-  onPressIn,
   variant = "primary",
   disabled,
   loading,
@@ -23,7 +22,6 @@ export function AppButton({
 }: {
   title: string;
   onPress: () => void;
-  onPressIn?: () => void;
   variant?: ButtonVariant;
   disabled?: boolean;
   loading?: boolean;
@@ -34,7 +32,6 @@ export function AppButton({
     <Pressable
       accessibilityRole="button"
       onPress={onPress}
-      onPressIn={onPressIn}
       disabled={disabled || loading}
       style={({ pressed }) => [
         styles.button,
