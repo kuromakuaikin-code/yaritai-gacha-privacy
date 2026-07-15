@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "expo-router";
 import {
   FlatList,
@@ -39,6 +39,17 @@ export default function OnboardingScreen() {
   const [finishing, setFinishing] = useState(false);
   const { width } = useWindowDimensions();
 
+  // ---- 開発用診断（__DEV__のみ表示・リリースには出ない）----
+  // heartbeat: JSスレッドが生きていれば毎秒カウントが進む
+  // step: finish() がどこまで進んだか
+  const [heartbeat, setHeartbeat] = useState(0);
+  const [step, setStep] = useState("待機中");
+  useEffect(() => {
+    if (!__DEV__) return;
+    const timer = setInterval(() => setHeartbeat((n) => n + 1), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const isLast = page === PAGES.length - 1;
 
   const next = () => {
@@ -54,8 +65,10 @@ export default function OnboardingScreen() {
   };
 
   const finish = async () => {
+    setStep("finish開始");
     if (finishing) return;
     setFinishing(true);
+    setStep("通知許可を要求中");
     // OSの許可ダイアログの前に、3ページ目までで目的を説明済み。
     // 許可の取得に失敗・応答なし（Expo Go等）でもアプリは必ず開始できる。
     // ダイアログ表示中はユーザー応答を待つが、応答なしで固まる環境に備えて
@@ -68,11 +81,13 @@ export default function OnboardingScreen() {
     } catch {
       // 何もしない
     }
+    setStep("設定を保存中");
     try {
       await setSetting("onboardingCompleted", "1");
     } catch {
       // 保存に失敗しても先へ進む（ホーム側で再度オンボーディングに戻る）
     }
+    setStep("ホームへ移動");
     router.replace("/");
   };
 
@@ -116,6 +131,11 @@ export default function OnboardingScreen() {
         ))}
       </View>
       <View style={styles.footer}>
+        {__DEV__ ? (
+          <Text style={styles.debugStrip}>
+            {`診断: 鼓動=${heartbeat} / 段階=${step} / ページ=${page}`}
+          </Text>
+        ) : null}
         <AppButton
           title={isLast ? "通知を設定してはじめる" : "次へ"}
           onPress={next}
@@ -179,5 +199,11 @@ const styles = StyleSheet.create({
   footer: {
     padding: spacing.lg,
     gap: spacing.xs,
+  },
+  debugStrip: {
+    fontSize: fontSize.sm,
+    color: colors.textMuted,
+    textAlign: "center",
+    paddingBottom: spacing.xs,
   },
 });
