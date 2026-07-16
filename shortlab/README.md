@@ -8,13 +8,29 @@ SwiftUI + AVFoundation の縦動画(9:16)編集アプリ MVP。
 かんたんモードは明るい配色・大ボタン・専門用語なし(トリム→切る、書き出し→ほぞん)で、
 「前後を切る / 文字を上・まんなか・下に入れる / 音楽をつける / 写真に保存 / LINEで送る」だけに絞っている。
 
-## セットアップ(Mac側)
+## セットアップ
+
+### 方法A: XcodeGen(推奨・Info.plist設定込み)
+
+```bash
+brew install xcodegen
+cd shortlab
+xcodegen
+open ShortLab.xcodeproj
+```
+
+### 方法B: 手動
 
 1. Xcode で新規プロジェクト作成: iOS App / SwiftUI / プロダクト名 `ShortLab` / iOS 17.0+
 2. 自動生成された `ContentView.swift` と `ShortLabApp.swift` を削除し、この `ShortLab/` 以下の .swift を全てプロジェクトに追加
 3. Info.plist に追加:
    - `NSPhotoLibraryUsageDescription` = 「編集する動画を選ぶために使用します」
    - `NSPhotoLibraryAddUsageDescription` = 「作った動画を写真に保存するために使用します」(かんたんモードの「写真に ほぞんする」で必要)
+
+### Macが手元にない場合
+
+- **ビルド確認**: push のたびに GitHub Actions のMacランナーが署名なしビルドを実行する(`.github/workflows/shortlab-build.yml`)。コンパイルエラーはActionsタブで確認できる
+- **実機テスト・提出**: Actions 上で fastlane による署名付きビルド → TestFlight 配信が可能(証明書と App Store Connect API キーを Secrets に登録して組む。Expo の `eas build` に相当する手作り版)。もしくは中古 Mac mini / クラウドMac(月数千円)が現実的
 4. (任意)BGM: `Resources/BGM/` に mp3 を追加してターゲットに含める
    - ファイル名: `summer_bgm.mp3`, `lofi_chill.mp3`, `upbeat_pop.mp3`, `acoustic_morning.mp3`
    - フリー素材の商用利用・アプリ同梱条件を必ず確認すること
