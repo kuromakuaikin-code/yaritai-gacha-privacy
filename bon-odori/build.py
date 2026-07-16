@@ -24,6 +24,9 @@ PUBLIC_BASE_URL = SITE_CONFIG.get("publicBaseUrl", "").strip().rstrip("/")
 if PUBLIC_BASE_URL:
     PUBLIC_BASE_URL += "/"
 CONTACT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor"
+ANALYTICS_SNIPPET = """<!-- Cloudflare Web Analytics -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"b0553bddca524bb7816ae0fbe97fcab1"}'></script>
+<!-- End Cloudflare Web Analytics -->"""
 OUT_DIR = os.path.join(HERE, "e")
 
 WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
@@ -235,6 +238,7 @@ ul.dates li{{font-size:1.05rem;padding:2px 0}}
 .btn.primary{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .note{{font-size:.78rem;color:var(--sub);margin-top:14px}}
 </style>
+{ANALYTICS_SNIPPET}
 </head>
 <body>
 <header><div class="wrap"><a href="../index.html">← 🏮 {SITE_NAME}</a></div></header>
