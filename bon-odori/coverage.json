@@ -1,6 +1,6 @@
 {
   "_comment": "地域ごとの2026年公式情報確認状況。イベントが公開済みの地域は画面上で自動的に公式情報ありとなる。",
-  "lastChecked": "2026-07-11",
+  "lastChecked": "2026-07-16",
   "areas": [
     {"prefecture":"愛知県","city":"名古屋市千種区","region":"名古屋市","status":"unknown"},
     {"prefecture":"愛知県","city":"名古屋市東区","region":"名古屋市","status":"unknown"},

@@ -1,6 +1,6 @@
 {
   "_comment": "盆踊りの可能性があるが、2026年の日時・会場・内容または本サイト対象かを確認中の候補。確定イベントとは分けて表示する。",
-  "lastChecked": "2026-07-11",
+  "lastChecked": "2026-07-16",
   "candidates": [
     {
       "id": "candidate-ichinomiya-imaise",
@@ -13,26 +13,6 @@
       "reason": "過年度の市公式情報は確認できましたが、2026年の開催日と会場を確認中です。"
     },
     {
-      "id": "candidate-nagoya-osu-summer",
-      "name": "大須夏まつり 大盆踊り大会",
-      "prefecture": "愛知県",
-      "city": "名古屋市中区",
-      "venue": "大須商店街一帯・大須観音境内",
-      "dateText": "2026年8月1日・2日の候補",
-      "source": {"name": "名古屋市公式観光情報", "url": "https://www.nagoya-info.jp/event/detail/116/"},
-      "reason": "2026年の盆踊り実施時間と会場を公式情報で再確認中です。"
-    },
-    {
-      "id": "candidate-nagoya-bushotai",
-      "name": "名古屋おもてなし武将隊 盆踊り大会2026",
-      "prefecture": "愛知県",
-      "city": "名古屋市西区",
-      "venue": "なごのキャンパス",
-      "dateText": "2026年7月31日から8月2日の候補",
-      "source": {"name": "なごのキャンパス公式サイト", "url": "https://nagono-campus.jp/eventinfo/eventinfo-29669/"},
-      "reason": "主催者側の最新開催要項を確認中です。"
-    },
-    {
       "id": "candidate-nagoya-higashibetsuin",
       "name": "東別院まつり 盆踊り",
       "prefecture": "愛知県",
@@ -41,36 +21,6 @@
       "dateText": "例年9月下旬・2026年日程未確認",
       "source": {"name": "真宗大谷派名古屋別院公式サイト", "url": "https://www.ohigashi.net/news/matsuri2025/"},
       "reason": "2025年の公式案内は確認済みですが、2026年の発表待ちです。"
-    },
-    {
-      "id": "candidate-nagoya-minato-soodori",
-      "name": "海の日名古屋みなと祭 市民総おどり",
-      "prefecture": "愛知県",
-      "city": "名古屋市港区",
-      "venue": "ガーデンふ頭周辺",
-      "dateText": "2026年7月20日の候補",
-      "source": {"name": "名古屋市公式観光情報", "url": "https://www.nagoya-info.jp/event/detail/129/"},
-      "reason": "総おどりが本サイトで扱う盆踊りに該当するか、2026年の内容と合わせて確認中です。"
-    },
-    {
-      "id": "candidate-kariya-wansaka",
-      "name": "刈谷わんさか祭り かりや盆フェス",
-      "prefecture": "愛知県",
-      "city": "刈谷市",
-      "venue": "刈谷市総合運動公園",
-      "dateText": "2026年8月14日の候補",
-      "source": {"name": "刈谷わんさか祭り公式サイト", "url": "https://www.kariya-wansaka.jp/"},
-      "reason": "2026年の盆フェス開催時間と会場詳細を確認中です。"
-    },
-    {
-      "id": "candidate-kasugai-noryo",
-      "name": "春日井市民納涼まつり 盆踊り大会",
-      "prefecture": "愛知県",
-      "city": "春日井市",
-      "venue": "落合公園",
-      "dateText": "2026年夏・日程再確認中",
-      "source": {"name": "春日井市公式サイト", "url": "https://www.city.kasugai.lg.jp/bunka/event/event/n_matsuri/index.html"},
-      "reason": "2026年版の公式開催要項を確認中です。"
     },
     {
       "id": "candidate-inazawa-summer",
@@ -83,26 +33,6 @@
       "reason": "2026年の盆踊り実施時刻を公式プログラムで確認中です。"
     },
     {
-      "id": "candidate-toyota-oiden",
-      "name": "豊田おいでんまつり おいでん総踊り",
-      "prefecture": "愛知県",
-      "city": "豊田市",
-      "venue": "名鉄豊田市駅東側一帯",
-      "dateText": "2026年7月25日の候補",
-      "source": {"name": "豊田おいでんまつり公式サイト", "url": "https://www.oidenmaturi.com/"},
-      "reason": "総踊り形式のため、本サイトの盆踊り対象に含めるか確認中です。"
-    },
-    {
-      "id": "candidate-okazaki-ieyasu-summer",
-      "name": "岡崎城下家康公夏まつり 盆踊り",
-      "prefecture": "愛知県",
-      "city": "岡崎市",
-      "venue": "岡崎市内",
-      "dateText": "例年8月・2026年日程未確認",
-      "source": {"name": "岡崎市観光協会公式サイト", "url": "https://okazaki-kanko.jp/event/674"},
-      "reason": "2026年の盆踊り開催日と会場の公式発表待ちです。"
-    },
-    {
       "id": "candidate-okazaki-bonodori-fes",
       "name": "岡崎盆おどりフェス",
       "prefecture": "愛知県",
@@ -111,6 +41,36 @@
       "dateText": "例年9月・2026年日程未確認",
       "source": {"name": "岡崎市観光協会公式サイト", "url": "https://okazaki-kanko.jp/okazaki-park/program/4847"},
       "reason": "2026年の開催告知を確認中です。"
+    },
+    {
+      "id": "candidate-kitagata-summer-bonodori",
+      "name": "（仮称）北方夏まつり盆踊り大会",
+      "prefecture": "岐阜県",
+      "city": "北方町",
+      "venue": "会場詳細を確認中",
+      "dateText": "2026年8月17日開催予定",
+      "source": {"name": "岐阜県商工会連合会公式サイト", "url": "https://www.gifushoko.or.jp/%EF%BC%88%E5%8C%97%E6%96%B9%E7%94%BA%E5%95%86%E5%B7%A5%E4%BC%9A%E3%81%8B%E3%82%89%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%89%E6%AD%A9%E8%A1%8C%E8%80%85%E5%A4%A9%E5%9B%BD%E4%BB%A3%E6%9B%BF/"},
+      "reason": "商工会の出店者募集で開催日は確認できましたが、正式名称・会場・時間の一般向け発表を確認中です。"
+    },
+    {
+      "id": "candidate-shuzenji-bonodori",
+      "name": "修禅寺盆踊り",
+      "prefecture": "静岡県",
+      "city": "伊豆市",
+      "venue": "修禅寺境内",
+      "dateText": "2026年8月1日の案内候補",
+      "source": {"name": "伊豆市観光情報サイト", "url": "https://kanko.city.izu.shizuoka.jp/events/shuzenjibonodori/"},
+      "reason": "検索案内には2026年情報がありますが、表示ページ本文が2025年版のため更新確定を待っています。"
+    },
+    {
+      "id": "candidate-hida-kuguno-summer",
+      "name": "ひだ桃源郷くぐの納涼夏まつり 盆踊り",
+      "prefecture": "岐阜県",
+      "city": "高山市",
+      "venue": "高山市久々野支所前広場周辺",
+      "dateText": "2026年8月11日開催予定",
+      "source": {"name": "岐阜県観光公式サイト", "url": "https://www.kankou-gifu.jp/event/detail_4994.html"},
+      "reason": "祭りの日程は確認できましたが、2026年の盆踊り実施時間を確認中です。"
     },
     {
       "id": "candidate-domatsuri",

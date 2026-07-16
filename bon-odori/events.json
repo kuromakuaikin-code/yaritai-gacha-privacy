@@ -2421,6 +2421,389 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-nakagawa-sukemitsu",
+      "status": "published",
+      "name": "助光納涼盆踊り大会",
+      "city": "名古屋市中川区",
+      "venue": "助光公園",
+      "address": "名古屋市中川区助光",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-18", "start": "18:30", "end": "20:30"},
+        {"date": "2026-07-19", "start": "18:30", "end": "20:30"}
+      ],
+      "rain": "最新の開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市中川区公式サイト",
+        "url": "https://www.city.nagoya.jp/nakagawa/miryoku/1051186/1051449.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "助光公園で2日間行われる地域の盆踊り大会。主催者と開催日時が中川区の公式ページで案内されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-showa-ikatsu",
+      "status": "published",
+      "name": "伊勝盆踊り大会",
+      "city": "名古屋市昭和区",
+      "venue": "伊勝小学校運動場",
+      "address": "名古屋市昭和区伊勝町二丁目100",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "18:30", "end": "20:00"}
+      ],
+      "rain": "雨天時は7月26日に順延。両日雨天の場合は中止",
+      "eventStatus": "scheduled",
+      "statusNote": "2026年度は屋台の出店はありません。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市昭和区公式サイト",
+        "url": "https://www.city.nagoya.jp/showa/profile/1021338/1021341.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "伊勝小学校のやぐらを囲んで踊る学区の盆踊り大会。開催日時と雨天時の対応が公式に案内されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-midori-odaka",
+      "status": "published",
+      "name": "夏祭り盆踊り（大高学区・大高北学区）",
+      "city": "名古屋市緑区",
+      "venue": "大高北小学校",
+      "address": "名古屋市緑区大高町町屋川1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "17:00", "end": "20:00"}
+      ],
+      "rain": "最新の開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市緑区公式サイト",
+        "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "大高・大高北の両学区が大高北小学校で開く夏祭り盆踊り。緑区の公式日程一覧に掲載されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-midori-midori",
+      "status": "published",
+      "name": "緑学区納涼盆踊り大会",
+      "city": "名古屋市緑区",
+      "venue": "緑小学校",
+      "address": "名古屋市緑区鳴海町前之輪24",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "17:30", "end": "20:10"}
+      ],
+      "rain": "雨天時は7月26日に順延予定",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市緑区公式サイト",
+        "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "緑小学校で行われる学区の納涼盆踊り大会。予備日を含む日程が緑区から案内されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-midori-oshimizu",
+      "status": "published",
+      "name": "ふれあい納涼盆踊り大会（大清水学区）",
+      "city": "名古屋市緑区",
+      "venue": "平手南公園",
+      "address": "名古屋市緑区平手南一丁目",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "17:30", "end": "20:30"}
+      ],
+      "rain": "最新の開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市緑区公式サイト",
+        "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "平手南公園で開かれる大清水学区の納涼盆踊り大会。緑区の公式日程一覧に掲載されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-midori-kosaka",
+      "status": "published",
+      "name": "盆踊り（小坂学区）",
+      "city": "名古屋市緑区",
+      "venue": "小坂小学校",
+      "address": "名古屋市緑区小坂一丁目1001-2",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "18:00", "end": "20:30"}
+      ],
+      "rain": "最新の開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市緑区公式サイト",
+        "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "小坂小学校で行われる学区の盆踊り。開催日時と会場が緑区の公式ページで案内されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-midori-takohata",
+      "status": "published",
+      "name": "盆踊り大会（蛸畑自治会）",
+      "city": "名古屋市緑区",
+      "venue": "蛸畑公園",
+      "address": "名古屋市緑区鳴海町大清水",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "18:00", "end": "21:00"}
+      ],
+      "rain": "最新の開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市緑区公式サイト",
+        "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "蛸畑公園で行われる自治会の盆踊り大会。地域の小さな行事として緑区の公式一覧に掲載されています。",
+      "scale": "neighborhood",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-osu-summer-bonodori",
+      "status": "published",
+      "name": "第75回 大須夏まつり 大盆踊り大会",
+      "city": "名古屋市中区",
+      "venue": "大須商店街一帯・大須観音境内",
+      "address": "名古屋市中区大須",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "", "end": ""},
+        {"date": "2026-08-02", "start": "", "end": ""}
+      ],
+      "rain": "最新の実施時間と開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "祭り全体は両日14時から21時。盆踊りの詳しい時間は公式案内をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市公式観光情報",
+        "url": "https://www.nagoya-info.jp/event/detail/116/"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "大須商店街一帯で2日間開催される夏まつり。公式案内で大盆踊り大会の実施が告知されています。",
+      "scale": "major",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-bushotai-bonodori",
+      "status": "published",
+      "name": "名古屋おもてなし武将隊 盆踊り大会2026",
+      "city": "名古屋市西区",
+      "venue": "なごのキャンパス グラウンド",
+      "address": "名古屋市西区那古野二丁目14-1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-31", "start": "18:00", "end": "20:00"},
+        {"date": "2026-08-01", "start": "18:00", "end": "20:00"},
+        {"date": "2026-08-02", "start": "18:00", "end": "20:00"}
+      ],
+      "rain": "雨天中止。中止時は主催者の公式SNSで当日13時までに案内予定",
+      "eventStatus": "scheduled",
+      "statusNote": "参加無料",
+      "posterType": "organizer",
+      "source": {
+        "name": "なごのキャンパス公式サイト",
+        "url": "https://nagono-campus.jp/eventinfo/eventinfo-38549/"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "円頓寺七夕まつりのサテライト行事として、なごのキャンパスで3日間行われる参加型の盆踊り大会です。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-minato-soodori",
+      "status": "published",
+      "name": "第80回 海の日名古屋みなと祭 総おどり",
+      "city": "名古屋市港区",
+      "venue": "ガーデンふ頭交差点北特設スペース",
+      "address": "名古屋市港区港町",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-20", "start": "18:20", "end": "20:00"}
+      ],
+      "rain": "雨天決行、荒天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "2026年は花火大会とパレード等を中止し、山車と総おどりを実施予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "海の日名古屋みなと祭公式サイト",
+        "url": "https://www.nagoya-port-festival.com/"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "海の日名古屋みなと祭で行われる地元住民による総おどり。2026年は会場を変更して実施されます。",
+      "scale": "major",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "kasugai-shimin-noryo",
+      "status": "published",
+      "name": "第50回 春日井市民納涼まつり 盆踊り大会",
+      "city": "春日井市",
+      "venue": "落合公園",
+      "address": "春日井市東野町字落合池1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "18:00", "end": "20:30"}
+      ],
+      "rain": "荒天時は7月26日に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "開催可否は当日15時30分以降に公式ページで案内されます。",
+      "posterType": "admin",
+      "source": {
+        "name": "春日井市公式サイト",
+        "url": "https://www.city.kasugai.lg.jp/bunka/event/event/n_matsuri/"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "落合公園で開かれる市民納涼まつり。公式パンフレットで盆踊り大会が案内されています。",
+      "scale": "major",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "toyota-oiden-soodori",
+      "status": "published",
+      "name": "第58回 豊田おいでんまつり おいでん総踊り",
+      "city": "豊田市",
+      "venue": "名鉄豊田市駅東側一帯",
+      "address": "豊田市西町・喜多町周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "18:00", "end": "21:00"}
+      ],
+      "rain": "小雨決行。開催可否は当日正午までに決定",
+      "eventStatus": "scheduled",
+      "statusNote": "総踊りは19時10分から20時45分の予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "豊田市公式サイト",
+        "url": "https://www.city.toyota.aichi.jp/event/event/1077501.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "豊田市駅東側一帯で行われる大規模な総踊り。公式ページで当日の時間と雨天時の判断方法が案内されています。",
+      "scale": "major",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "okazaki-ieyasu-summer-odori",
+      "status": "published",
+      "name": "岡崎城下家康公夏まつり 岡崎おどり",
+      "city": "岡崎市",
+      "venue": "三井アウトレットパーク岡崎・伝馬通会場",
+      "address": "岡崎市舞木町・伝馬通周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "18:10", "end": "20:00"},
+        {"date": "2026-08-09", "start": "17:40", "end": "20:25"}
+      ],
+      "rain": "最新の開催状況は公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "7月25日と8月9日で会場と進行内容が異なります。",
+      "posterType": "organizer",
+      "source": {
+        "name": "岡崎まつり公式サイト",
+        "url": "https://www.okazakimatsuri.jp/Summer/entry-321.html"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "岡崎城下家康公夏まつりの踊り行事。7月はアウトレット会場、8月は伝馬通会場で岡崎おどりなどが行われます。",
+      "scale": "major",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "gifu-de-bonodori",
+      "status": "published",
+      "name": "#岐阜de盆踊り",
+      "city": "岐阜市",
+      "venue": "岐阜市文化センター催し広場・金公園",
+      "address": "岐阜市金町五丁目7-2周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-09", "start": "14:30", "end": "19:00"}
+      ],
+      "rain": "屋内を中心に開催。変更時は主催者情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "参加無料",
+      "posterType": "organizer",
+      "source": {
+        "name": "岐阜青年会議所公式サイト",
+        "url": "https://www.gifujc.or.jp/2026jcof/archives/info/3602"
+      },
+      "lastVerified": "2026-07-16",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "岐阜市文化センターを中心に行われる参加無料の盆踊りイベント。暑さ対策として屋内会場も使われます。",
+      "scale": "regional",
+      "prefecture": "岐阜県"
     }
   ]
 }
