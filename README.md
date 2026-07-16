@@ -14,6 +14,15 @@ Privacy policy for やりたいガチャ
 - 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
 - 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
 
+## ShortLab（かんたん動画編集 / iOS）
+
+SwiftUI + AVFoundation の縦動画（9:16）編集アプリ MVP。
+
+- ソース・セットアップ手順: `shortlab/`（`shortlab/README.md` 参照。Xcode で新規プロジェクトを作り .swift を追加）
+- 実装済み: 取り込み / カット・結合 / トリム / 分割 / 速度変更 / テキスト焼き込み / BGM / 1080p書き出し（透かし対応）/ undo
+- 開発ルール・受け入れ条件: `shortlab/CLAUDE.md`
+- 未実装（意図的にMVP外）: AdMob / StoreKit（買い切り¥600）/ スタンプ / プロジェクト永続化
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
