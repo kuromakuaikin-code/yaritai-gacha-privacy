@@ -3,12 +3,18 @@
 SwiftUI + AVFoundation の縦動画(9:16)編集アプリ MVP。
 実装済み: 動画取り込み / カット・結合 / トリム / 分割 / 速度変更 / テキストオーバーレイ(焼き込み) / BGM / 1080p書き出し(透かし対応) / undo
 
+**既定はかんたんモード**(シニア・非クリエイター向けの3画面一本道: えらぶ → ととのえる → ほぞん)。
+右上「しっかり編集」で従来のフル編集画面に切替でき、編集内容は両モードで共有される。
+かんたんモードは明るい配色・大ボタン・専門用語なし(トリム→切る、書き出し→ほぞん)で、
+「前後を切る / 文字を上・まんなか・下に入れる / 音楽をつける / 写真に保存 / LINEで送る」だけに絞っている。
+
 ## セットアップ(Mac側)
 
 1. Xcode で新規プロジェクト作成: iOS App / SwiftUI / プロダクト名 `ShortLab` / iOS 17.0+
 2. 自動生成された `ContentView.swift` と `ShortLabApp.swift` を削除し、この `ShortLab/` 以下の .swift を全てプロジェクトに追加
 3. Info.plist に追加:
    - `NSPhotoLibraryUsageDescription` = 「編集する動画を選ぶために使用します」
+   - `NSPhotoLibraryAddUsageDescription` = 「作った動画を写真に保存するために使用します」(かんたんモードの「写真に ほぞんする」で必要)
 4. (任意)BGM: `Resources/BGM/` に mp3 を追加してターゲットに含める
    - ファイル名: `summer_bgm.mp3`, `lofi_chill.mp3`, `upbeat_pop.mp3`, `acoustic_morning.mp3`
    - フリー素材の商用利用・アプリ同梱条件を必ず確認すること
@@ -32,19 +38,20 @@ ShortLab/
 ├── CLAUDE.md                     # Claude Code 用ルール・受け入れ条件
 ├── README.md
 └── ShortLab/
-    ├── ShortLabApp.swift
+    ├── ShortLabApp.swift         # RootView(かんたん⇔しっかりのモード切替、既定はかんたん)
     ├── Models/Models.swift       # VideoClip / TextOverlayItem / RenderSpec
     ├── Engine/
     │   ├── CompositionEngine.swift   # AVMutableComposition 構築(向き補正込み)
     │   ├── PlayerController.swift    # コアレスseek実装のプレビュー再生
     │   ├── ExportManager.swift       # 書き出し+透かし/テキスト焼き込み
-    │   └── EditorViewModel.swift     # 編集操作・undo・PhotosPicker取り込み
+    │   └── EditorViewModel.swift     # 編集操作・undo・PhotosPicker取り込み・前後カット
     └── Views/
-        ├── EditorView.swift          # ルート画面
+        ├── SimpleMode.swift          # かんたんモード(えらぶ→ととのえる→ほぞんの3画面)
+        ├── EditorView.swift          # しっかり編集のルート画面
         ├── PreviewView.swift         # AVPlayerLayer + ドラッグ可能テキスト
         ├── TimelineView.swift        # クリップ帯(選択/移動/削除)
         ├── ToolsGridView.swift       # ツールグリッド
-        └── Sheets.swift              # テキスト/速度/トリム/音楽/書き出しシート
+        └── Sheets.swift              # テキスト/速度/トリム/音楽/書き出しシート・BGMLibrary
 ```
 
 ## 設計上の要点

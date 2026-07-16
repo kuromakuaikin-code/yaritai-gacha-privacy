@@ -12,8 +12,10 @@
 | コンポジション構築・向き補正 | `Engine/CompositionEngine.swift` |
 | 再生・seek | `Engine/PlayerController.swift` |
 | 書き出し・透かし・テキスト焼き込み | `Engine/ExportManager.swift` |
-| 編集操作・undo・読み込み | `Engine/EditorViewModel.swift` |
-| 画面 | `Views/`(EditorView がルート) |
+| 編集操作・undo・読み込み・前後カット | `Engine/EditorViewModel.swift` |
+| モード切替(かんたん⇔しっかり) | `ShortLabApp.swift`(RootView。既定はかんたんモード) |
+| かんたんモード3画面・写真保存 | `Views/SimpleMode.swift` |
+| しっかり編集の画面 | `Views/`(EditorView がルート) |
 
 ## 判断ツリー(迷ったら)
 
@@ -23,6 +25,8 @@
 4. **縦横がおかしい/映像が回転する** → `preferredTransform` 未解決。`aspectFitTransform` を通っているか確認。naturalSize を直接使うコードは全部バグ。
 5. **seek がカクつく** → `player.seek` を直接呼んでいる箇所がないか。必ず `PlayerController.seek(to:)`(コアレス実装)経由。
 6. **新機能を足したくなった** → MVP機能5つ(取り込み/カット結合/テキスト/BGM/書き出し)の外なら実装せず提案に留める。
+7. **かんたんモードの文言を書く** → カタカナ専門語禁止(トリム→切る、書き出し→ほぞん、BGM→音楽)。ボタンは高さ60pt以上・必ずテキストラベル付き。機能は「前後カット・文字3位置・音楽択一・保存/共有」から増やさない(増やしたくなったらしっかり編集へ誘導する設計を提案)。
+8. **PlayerController/ExportManager の @Published が画面に反映されない** → ネストした ObservableObject は親経由では再描画されない。その値を使うビューで直接 `@ObservedObject` として受け取る(`PlaybackBar` / `SimpleAdjustStep` / `SimpleSaveStep` 参照)。
 
 ## タスク処理ルール
 
@@ -40,6 +44,8 @@
 5. BGM を追加すると書き出しに含まれ、動画長で正しく切れる
 6. 1080p mp4 が書き出され、無料版フラグで透かしが右下に入る
 7. 60秒素材×5クリップの書き出しでクラッシュしない(メモリ確認)
+8. かんたんモードで「えらぶ→ととのえる→ほぞん」が説明なしで完了できる: 複数本選択→前後カット(もとにもどす含む)→文字(上・まんなか・下)→音楽→動画を作る→写真に保存→LINE共有
+9. かんたんモード⇔しっかり編集を切り替えても、クリップ・文字・音楽が引きつがれる
 
 ## 機密・境界
 

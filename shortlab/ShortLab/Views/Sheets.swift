@@ -144,13 +144,11 @@ struct TrimSheet: View {
 
 // MARK: - 音楽選択
 
-struct MusicSheet: View {
-    @ObservedObject var viewModel: EditorViewModel
-    @Environment(\.dismiss) private var dismiss
-
-    /// バンドル内のフリーBGM。Resources/BGM/ に mp3 を置いてここに登録する。
-    /// TODO: フリー素材(魔王魂・DOVA-SYNDROME等、商用可・クレジット条件確認)を追加
-    private var bundledTracks: [MusicTrack] {
+/// バンドル内のフリーBGM。Resources/BGM/ に mp3 を置いてここに登録する。
+/// しっかり編集(MusicSheet)とかんたんモード(SimpleMusicSheet)で共有。
+/// TODO: フリー素材(魔王魂・DOVA-SYNDROME等、商用可・クレジット条件確認)を追加
+enum BGMLibrary {
+    static func tracks() -> [MusicTrack] {
         ["summer_bgm", "lofi_chill", "upbeat_pop", "acoustic_morning"].compactMap { name in
             guard let url = Bundle.main.url(forResource: name, withExtension: "mp3") else { return nil }
             let display: [String: String] = [
@@ -162,6 +160,13 @@ struct MusicSheet: View {
             return MusicTrack(name: display[name] ?? name, url: url)
         }
     }
+}
+
+struct MusicSheet: View {
+    @ObservedObject var viewModel: EditorViewModel
+    @Environment(\.dismiss) private var dismiss
+
+    private var bundledTracks: [MusicTrack] { BGMLibrary.tracks() }
 
     var body: some View {
         NavigationStack {
@@ -209,16 +214,23 @@ struct MusicSheet: View {
 
 struct ExportSheet: View {
     @ObservedObject var viewModel: EditorViewModel
+    /// ExportManager の @Published は viewModel 経由では再描画されないため直接 observe する
+    @ObservedObject var exporter: ExportManager
     @Environment(\.dismiss) private var dismiss
 
     /// TODO: StoreKit 導入後は課金状態と連動させる
     @State private var isPremium = false
     @State private var shareURL: URL?
 
+    init(viewModel: EditorViewModel) {
+        self.viewModel = viewModel
+        self.exporter = viewModel.exportManager
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                switch viewModel.exportManager.state {
+                switch exporter.state {
                 case .idle:
                     idleContent
                 case .exporting(let progress):
@@ -236,10 +248,10 @@ struct ExportSheet: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("閉じる") {
-                        if case .exporting = viewModel.exportManager.state {
-                            viewModel.exportManager.cancel()
+                        if case .exporting = exporter.state {
+                            exporter.cancel()
                         }
-                        viewModel.exportManager.reset()
+                        exporter.reset()
                         dismiss()
                     }
                 }
@@ -256,7 +268,7 @@ struct ExportSheet: View {
     }
 
     private var isExporting: Bool {
-        if case .exporting = viewModel.exportManager.state { return true }
+        if case .exporting = exporter.state { return true }
         return false
     }
 
@@ -275,7 +287,7 @@ struct ExportSheet: View {
             }
             Button {
                 Task {
-                    await viewModel.exportManager.export(
+                    await exporter.export(
                         project: viewModel.project,
                         showWatermark: !isPremium
                     )
@@ -298,7 +310,7 @@ struct ExportSheet: View {
             Text("\(Int(progress * 100))%")
                 .font(.title2.monospacedDigit().bold())
             Button("キャンセル", role: .destructive) {
-                viewModel.exportManager.cancel()
+                exporter.cancel()
             }
         }
     }
@@ -332,7 +344,7 @@ struct ExportSheet: View {
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
             Button("やり直す") {
-                viewModel.exportManager.reset()
+                exporter.reset()
             }
         }
     }

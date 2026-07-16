@@ -2,7 +2,9 @@ import SwiftUI
 import PhotosUI
 
 struct EditorView: View {
-    @StateObject private var viewModel = EditorViewModel()
+    @ObservedObject var viewModel: EditorViewModel
+    /// かんたんモードへ戻る(RootView から注入。nil なら戻るボタン非表示)
+    var onClose: (() -> Void)?
 
     @State private var pickerItems: [PhotosPickerItem] = []
     @State private var activeSheet: EditorSheet?
@@ -18,7 +20,11 @@ struct EditorView: View {
             PreviewView(viewModel: viewModel)
                 .padding(.horizontal, 16)
                 .padding(.top, 12)
-            playbackBar
+            PlaybackBar(
+                player: viewModel.playerController,
+                totalDuration: viewModel.project.totalDuration,
+                disabled: viewModel.project.clips.isEmpty
+            )
             TimelineView(viewModel: viewModel, pickerItems: $pickerItems)
                 .padding(.top, 12)
             ToolsGridView(
@@ -58,6 +64,17 @@ struct EditorView: View {
 
     private var header: some View {
         HStack {
+            if let onClose {
+                Button {
+                    viewModel.playerController.pause()
+                    onClose()
+                } label: {
+                    Label("かんたん", systemImage: "chevron.left")
+                        .font(.subheadline)
+                        .foregroundStyle(.green)
+                }
+                .padding(.trailing, 4)
+            }
             VStack(alignment: .leading, spacing: 2) {
                 Text("ShortLab")
                     .font(.headline.bold())
@@ -86,40 +103,6 @@ struct EditorView: View {
         .background(Color(red: 0.09, green: 0.09, blue: 0.09))
     }
 
-    private var playbackBar: some View {
-        HStack(spacing: 12) {
-            Button {
-                viewModel.playerController.togglePlay()
-            } label: {
-                Image(systemName: viewModel.playerController.isPlaying ? "pause.fill" : "play.fill")
-                    .font(.title2)
-                    .foregroundStyle(.white)
-                    .frame(width: 40, height: 40)
-            }
-            .disabled(viewModel.project.clips.isEmpty)
-
-            Text(timeString(viewModel.playerController.currentTime))
-                .font(.caption.monospaced())
-                .foregroundStyle(.secondary)
-
-            Slider(
-                value: Binding(
-                    get: { viewModel.playerController.currentTime },
-                    set: { viewModel.playerController.seek(to: $0) }
-                ),
-                in: 0...max(viewModel.playerController.duration, 0.01)
-            )
-            .tint(.green)
-            .disabled(viewModel.project.clips.isEmpty)
-
-            Text(timeString(viewModel.project.totalDuration))
-                .font(.caption.monospaced())
-                .foregroundStyle(.secondary)
-        }
-        .padding(.horizontal, 16)
-        .padding(.top, 6)
-    }
-
     private var statusBar: some View {
         HStack {
             Text("クリップ: \(viewModel.project.clips.count)")
@@ -133,13 +116,56 @@ struct EditorView: View {
         .background(Color(red: 0.09, green: 0.09, blue: 0.09))
     }
 
-    private func timeString(_ seconds: Double) -> String {
-        let total = Int(seconds.rounded())
-        return String(format: "%02d:%02d", total / 60, total % 60)
+}
+
+/// 再生バー。PlayerController の @Published は viewModel 経由の参照では
+/// 再描画が走らないため、専用ビューで直接 observe する。
+private struct PlaybackBar: View {
+    @ObservedObject var player: PlayerController
+    let totalDuration: Double
+    let disabled: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Button {
+                player.togglePlay()
+            } label: {
+                Image(systemName: player.isPlaying ? "pause.fill" : "play.fill")
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+            }
+            .disabled(disabled)
+
+            Text(timeString(player.currentTime))
+                .font(.caption.monospaced())
+                .foregroundStyle(.secondary)
+
+            Slider(
+                value: Binding(
+                    get: { player.currentTime },
+                    set: { player.seek(to: $0) }
+                ),
+                in: 0...max(player.duration, 0.01)
+            )
+            .tint(.green)
+            .disabled(disabled)
+
+            Text(timeString(totalDuration))
+                .font(.caption.monospaced())
+                .foregroundStyle(.secondary)
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 6)
     }
 }
 
+func timeString(_ seconds: Double) -> String {
+    let total = Int(seconds.rounded())
+    return String(format: "%02d:%02d", total / 60, total % 60)
+}
+
 #Preview {
-    EditorView()
+    EditorView(viewModel: EditorViewModel())
         .preferredColorScheme(.dark)
 }
