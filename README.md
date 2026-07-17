@@ -19,6 +19,8 @@ Privacy policy for やりたいガチャ
 - iOS版（SwiftUI・iOS 17+ / SwiftData / PDFKit / StoreKit 2）: `genpou/`（セットアップは `genpou/README.md`）
 - 工事現場の写真を案件ごとに整理し、日報 PDF / 完了報告 PDF を iPhone 内で生成・共有（サーバーレス MVP）
 - 課金: 月額サブスク 1 商品（`genpou.personal.monthly`・初回14日無料。価格は App Store Connect 側で設定）
+- プライバシーポリシー: `genpou/privacy.html` / 利用規約: `genpou/terms.html`
+- App Store 掲載情報（説明文・キーワード・審査メモ）: `genpou/store-listing.md`
 
 ## 婚活デートメモ
 

@@ -65,8 +65,8 @@ struct PaywallView: View {
                 .padding(.horizontal, 32)
 
                 HStack(spacing: 16) {
-                    Link("利用規約", destination: URL(string: "https://example.com/terms")!)
-                    Link("プライバシーポリシー", destination: URL(string: "https://example.com/privacy")!)
+                    Link("利用規約", destination: URL(string: "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/genpou/terms.html")!)
+                    Link("プライバシーポリシー", destination: URL(string: "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/genpou/privacy.html")!)
                 }
                 .font(.footnote)
                 .padding(.bottom, 24)

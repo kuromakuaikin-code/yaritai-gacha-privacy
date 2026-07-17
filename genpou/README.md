@@ -68,11 +68,11 @@ open Genpou.xcodeproj
 1. Bundle ID を正式なものに変更（現在は仮の `com.example.genpou`）
 2. App Store Connect でサブスク作成
    - 商品 ID `genpou.personal.monthly` / サブスクグループ / 価格 / 14 日無料の Introductory Offer
-3. 利用規約・プライバシーポリシーの URL を実 URL に差し替え
-   （`PaywallView.swift` / `SettingsView.swift` の `https://example.com/...`）
-4. `mailto:support@example.com` を実アドレスに差し替え
-5. Sandbox テスターで購入・復元を確認
-6. アプリアイコンを Assets に設定
+   - 掲載文・審査メモ・スクショ構成は `store-listing.md` にコピペ用を用意済み
+3. 規約・プライバシーポリシーは設定済み（`terms.html` / `privacy.html`、main へのマージ後に
+   GitHub Pages で公開される。アプリ内リンク・store-listing.md の URL は設定済み）
+4. Sandbox テスターで購入・復元を確認
+5. アプリアイコンを Assets に設定
 
 ## 受け入れ確認（仕様 10 章）
 

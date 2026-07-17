@@ -43,9 +43,9 @@ struct SettingsView: View {
             }
 
             Section("サポート") {
-                Link("利用規約", destination: URL(string: "https://example.com/terms")!)
-                Link("プライバシーポリシー", destination: URL(string: "https://example.com/privacy")!)
-                Link("お問い合わせ", destination: URL(string: "mailto:support@example.com")!)
+                Link("利用規約", destination: URL(string: "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/genpou/terms.html")!)
+                Link("プライバシーポリシー", destination: URL(string: "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/genpou/privacy.html")!)
+                Link("お問い合わせ", destination: URL(string: "mailto:kuromakuaikin@gmail.com")!)
             }
 
             Section("アプリ情報") {
