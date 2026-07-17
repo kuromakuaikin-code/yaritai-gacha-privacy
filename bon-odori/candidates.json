@@ -1,6 +1,6 @@
 {
   "_comment": "盆踊りの可能性があるが、2026年の日時・会場・内容または本サイト対象かを確認中の候補。確定イベントとは分けて表示する。",
-  "lastChecked": "2026-07-16",
+  "lastChecked": "2026-07-17",
   "candidates": [
     {
       "id": "candidate-ichinomiya-imaise",
@@ -51,16 +51,6 @@
       "dateText": "2026年8月17日開催予定",
       "source": {"name": "岐阜県商工会連合会公式サイト", "url": "https://www.gifushoko.or.jp/%EF%BC%88%E5%8C%97%E6%96%B9%E7%94%BA%E5%95%86%E5%B7%A5%E4%BC%9A%E3%81%8B%E3%82%89%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%89%E6%AD%A9%E8%A1%8C%E8%80%85%E5%A4%A9%E5%9B%BD%E4%BB%A3%E6%9B%BF/"},
       "reason": "商工会の出店者募集で開催日は確認できましたが、正式名称・会場・時間の一般向け発表を確認中です。"
-    },
-    {
-      "id": "candidate-shuzenji-bonodori",
-      "name": "修禅寺盆踊り",
-      "prefecture": "静岡県",
-      "city": "伊豆市",
-      "venue": "修禅寺境内",
-      "dateText": "2026年8月1日の案内候補",
-      "source": {"name": "伊豆市観光情報サイト", "url": "https://kanko.city.izu.shizuoka.jp/events/shuzenjibonodori/"},
-      "reason": "検索案内には2026年情報がありますが、表示ページ本文が2025年版のため更新確定を待っています。"
     },
     {
       "id": "candidate-hida-kuguno-summer",

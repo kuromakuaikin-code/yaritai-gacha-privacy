@@ -133,31 +133,49 @@
       "lng": 136.9,
       "dates": [
         {
-          "date": "2026-08-08"
+          "date": "2026-08-08",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-09"
+          "date": "2026-08-09",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-10"
+          "date": "2026-08-10",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-11"
+          "date": "2026-08-11",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-12"
+          "date": "2026-08-12",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-13"
+          "date": "2026-08-13",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-14"
+          "date": "2026-08-14",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-15"
+          "date": "2026-08-15",
+          "start": "18:00",
+          "end": "20:00"
         },
         {
-          "date": "2026-08-16"
+          "date": "2026-08-16",
+          "start": "18:00",
+          "end": "20:00"
         }
       ],
       "rain": "天候により中止の場合は当日15時頃までに公式サイト等で告知",
@@ -168,10 +186,10 @@
         "name": "名古屋城公式ウェブサイト",
         "url": "https://www.nagoyajo.city.nagoya.jp/event/2026/07/20260708_4897.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-07-17",
       "imageAllowed": false,
       "image": "",
-      "desc": "名古屋城夏まつり期間中（8月8日〜16日、開園9:00〜20:30）に行われる大盆踊り大会。盆踊りの開始時刻・入場料等の詳細は公式サイトでご確認ください。",
+      "desc": "名古屋城夏まつり期間中の9日間、特設の盆踊り櫓を囲んで18時から20時まで行われる大盆踊り大会。入場方法や当日の開催状況は公式サイトをご確認ください。",
       "scale": "major",
       "prefecture": "愛知県"
     },
@@ -2804,6 +2822,88 @@
       "desc": "岐阜市文化センターを中心に行われる参加無料の盆踊りイベント。暑さ対策として屋内会場も使われます。",
       "scale": "regional",
       "prefecture": "岐阜県"
+    },
+    {
+      "id": "minokamo-onsai-bonodori",
+      "status": "published",
+      "name": "おん祭MINOKAMO盆踊り2026 in ぎふ清流里山公園",
+      "city": "美濃加茂市",
+      "venue": "ぎふ清流里山公園 駐車場",
+      "address": "美濃加茂市山之上町2292-1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-08", "start": "17:30", "end": "21:30"}
+      ],
+      "rain": "小雨決行。荒天時は中止の場合があります",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは18時からと19時20分からの2部構成です。",
+      "posterType": "admin",
+      "source": {
+        "name": "美濃加茂市公式ホームページ",
+        "url": "https://www.city.minokamo.lg.jp/soshiki/12/16688.html"
+      },
+      "lastVerified": "2026-07-17",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "ぎふ清流里山公園の駐車場で行われる盆踊り。太鼓やミニライブを挟んだ2部構成で、キッチンカーや子ども向けの出店も予定されています。",
+      "scale": "major",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "izu-shuzenji-bonodori",
+      "status": "published",
+      "name": "修禅寺盆踊り",
+      "city": "伊豆市",
+      "venue": "修禅寺境内",
+      "address": "伊豆市修善寺964",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "16:00"}
+      ],
+      "rain": "雨天時は一部内容を変更する場合があります",
+      "eventStatus": "scheduled",
+      "statusNote": "露店は16時、施食会は18時、盆踊りは19時開始です。",
+      "posterType": "admin",
+      "source": {
+        "name": "伊豆市観光情報サイト",
+        "url": "https://kanko.city.izu.shizuoka.jp/events/shuzenjibonodori/"
+      },
+      "lastVerified": "2026-07-17",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "修禅寺境内で行われる地域の盆踊り。夕方から露店と施食会があり、19時から境内で盆踊りが始まります。観光客も参加できます。",
+      "scale": "regional",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "suzuka-summer-festival-2026",
+      "status": "published",
+      "name": "すずか夏祭り2026",
+      "city": "鈴鹿市",
+      "venue": "西条中央公園",
+      "address": "鈴鹿市西条六丁目",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-15", "start": "10:00", "end": "20:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りの実施は公式ページで確認できていないため、地域の祭りとして掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "鈴鹿市公式ウェブサイト",
+        "url": "https://www.city.suzuka.lg.jp/shisei/shisetsu/1010134/1012424/1012881/1015564.html"
+      },
+      "lastVerified": "2026-07-17",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "西条中央公園で開かれる地域の夏祭り。シャボン玉イベントやダンスステージなどが案内されています。詳しい内容は公式ページをご確認ください。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
     }
   ]
 }
