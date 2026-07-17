@@ -14,6 +14,12 @@ Privacy policy for やりたいガチャ
 - 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
 - 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
 
+## 現報（工事現場向け 日報・完了報告 PDF アプリ）
+
+- iOS版（SwiftUI・iOS 17+ / SwiftData / PDFKit / StoreKit 2）: `genpou/`（セットアップは `genpou/README.md`）
+- 工事現場の写真を案件ごとに整理し、日報 PDF / 完了報告 PDF を iPhone 内で生成・共有（サーバーレス MVP）
+- 課金: 月額サブスク 1 商品（`genpou.personal.monthly`・初回14日無料。価格は App Store Connect 側で設定）
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`

@@ -1,0 +1,61 @@
+{
+  "identifier" : "F4A1C0DE-0000-0000-0000-000000000001",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_failTransactionsEnabled" : false,
+    "_locale" : "ja_JP",
+    "_storefront" : "JPN",
+    "_storeKitErrors" : [
+
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21000001",
+      "localizations" : [
+
+      ],
+      "name" : "現報プラン",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "1480",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6F000001",
+          "introductoryOffer" : {
+            "internalID" : "6F000002",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P2W"
+          },
+          "localizations" : [
+            {
+              "description" : "写真整理とPDF作成が使い放題",
+              "displayName" : "個人プラン",
+              "locale" : "ja_JP"
+            }
+          ],
+          "productID" : "genpou.personal.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "個人プラン（月額）",
+          "subscriptionGroupID" : "21000001",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
