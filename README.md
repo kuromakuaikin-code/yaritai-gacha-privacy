@@ -14,6 +14,16 @@ Privacy policy for やりたいガチャ
 - 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
 - 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
 
+## 今日の許可（today_permission）
+
+自分に許可を出す習慣アプリ（Flutter / Firebase Auth + Cloud Firestore）。
+
+- プライバシーポリシー: `today-permission/privacy.html`
+  - 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/today-permission/privacy.html
+- 利用規約: `today-permission/terms.html`
+  - 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/today-permission/terms.html
+- 内容の前提: データは Firebase（Cloud Firestore）に保存・広告なし・独自解析なし。アプリ名や認証方式（匿名/メール）が変わったら文面を要更新
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
