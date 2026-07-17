@@ -22,7 +22,7 @@ Privacy policy for やりたいガチャ
   - 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/today-permission/privacy.html
 - 利用規約: `today-permission/terms.html`
   - 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/today-permission/terms.html
-- 内容の前提: データは Firebase（Cloud Firestore）に保存・広告なし・独自解析なし。アプリ名や認証方式（匿名/メール）が変わったら文面を要更新
+- 内容の前提: データは Firebase（Cloud Firestore）に保存・広告なし・独自解析なし・プレミアム（ストア課金）対応。認証方式（匿名/メール）が確定したら文面を断定形に要更新
 
 ## 婚活デートメモ
 
