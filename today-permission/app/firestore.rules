@@ -1,0 +1,9 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 匿名認証した本人だけが自分のデータを読み書きできる
+    match /users/{uid}/permissions/{permissionId} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+  }
+}

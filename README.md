@@ -16,8 +16,9 @@ Privacy policy for やりたいガチャ
 
 ## 今日の許可（today_permission）
 
-自分に許可を出す習慣アプリ（Flutter / Firebase Auth + Cloud Firestore）。
+自分に許可を出す習慣アプリ（iOS専用 / Flutter / 匿名認証 + Cloud Firestore）。
 
+- アプリ本体: `today-permission/app/`（セットアップは `today-permission/app/README.md`）
 - プライバシーポリシー: `today-permission/privacy.html`
   - 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/today-permission/privacy.html
 - 利用規約: `today-permission/terms.html`
