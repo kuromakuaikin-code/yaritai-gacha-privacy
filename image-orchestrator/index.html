@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Image Orchestrator</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✨</text></svg>">
+<style>
+:root{
+  --bg:#0d1117; --panel:#161b22; --panel2:#1f2630; --border:#30363d;
+  --text:#e6edf3; --dim:#8b949e; --accent:#4a9eff; --accent2:#2ea043;
+  --danger:#f85149; --radius:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Noto Sans JP",sans-serif;font-size:15px}
+body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+header{position:sticky;top:0;z-index:20;background:rgba(13,17,23,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:10px 14px;display:flex;align-items:center;gap:10px}
+header h1{font-size:16px;font-weight:700;flex:1}
+.conn-dot{width:10px;height:10px;border-radius:50%;background:var(--dim);flex:none}
+.conn-dot.ok{background:var(--accent2)}
+.conn-dot.ng{background:var(--danger)}
+#connLabel{font-size:12px;color:var(--dim)}
+main{max-width:860px;margin:0 auto;padding:12px}
+.tab-page{display:none}
+.tab-page.active{display:block}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:20;display:flex;background:rgba(13,17,23,.95);backdrop-filter:blur(8px);border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:none;color:var(--dim);font-size:12px;padding:9px 0 7px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button .ic{font-size:20px;line-height:1}
+nav button.active{color:var(--accent)}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:var(--radius);padding:14px;margin-bottom:12px}
+.card h2{font-size:14px;margin-bottom:10px;color:var(--text)}
+.card h2 .sub{font-weight:400;font-size:12px;color:var(--dim);margin-left:6px}
+label{display:block;font-size:12px;color:var(--dim);margin:10px 0 4px}
+input[type=text],input[type=number],input[type=url],select,textarea{
+  width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);padding:9px 10px;font-size:15px;font-family:inherit}
+textarea{resize:vertical;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.5}
+textarea.prompt-ta{font-family:inherit;font-size:15px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+button.btn{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 14px;font-size:14px;cursor:pointer}
+button.btn:active{opacity:.7}
+button.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}
+button.btn.green{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:700}
+button.btn.danger{color:var(--danger);border-color:var(--danger)}
+button.btn.small{padding:5px 10px;font-size:12px}
+button.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1}
+.row>.flex-none{flex:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hint{font-size:12px;color:var(--dim);line-height:1.6;margin-top:6px}
+.hint code{background:var(--panel2);padding:1px 5px;border-radius:4px;font-size:11px}
+#progressWrap{display:none;margin-bottom:12px}
+.pbar{height:8px;background:var(--panel2);border-radius:4px;overflow:hidden}
+.pbar>div{height:100%;background:var(--accent);width:0%;transition:width .2s}
+#progressText{font-size:12px;color:var(--dim);margin-top:4px}
+#livePreview{max-width:100%;border-radius:8px;margin-top:8px;display:none}
+#results{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+#results img,#galleryGrid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:8px;border:1px solid var(--border);cursor:pointer;background:var(--panel2)}
+#galleryGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px}
+details{border:1px solid var(--border);border-radius:8px;margin-top:10px}
+details summary{padding:9px 12px;font-size:13px;color:var(--dim);cursor:pointer;user-select:none}
+details .inner{padding:0 12px 12px}
+.node-block{border-top:1px solid var(--border);padding:8px 0}
+.node-block .nt{font-size:12px;color:var(--accent);margin-bottom:4px}
+.wf-item,.wc-item{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)}
+.wf-item:last-child,.wc-item:last-child{border-bottom:none}
+.wf-item .nm{flex:1;font-size:14px}
+.wf-item .nm .meta{font-size:11px;color:var(--dim)}
+.seed-row{display:flex;gap:8px;align-items:center}
+.seed-row input[type=text]{flex:1}
+.chip{display:inline-flex;align-items:center;gap:4px;font-size:12px;border:1px solid var(--border);border-radius:20px;padding:4px 10px;cursor:pointer;user-select:none;color:var(--dim)}
+.chip.on{border-color:var(--accent);color:var(--accent)}
+#viewer{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.94);display:none;flex-direction:column}
+#viewer.open{display:flex}
+#viewer .vimg{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:10px}
+#viewer .vimg img{max-width:100%;max-height:100%;border-radius:6px}
+#viewer .vmeta{padding:10px 14px calc(10px + env(safe-area-inset-bottom));font-size:12px;color:var(--dim);max-height:34vh;overflow:auto;border-top:1px solid var(--border)}
+#viewer .vmeta pre{white-space:pre-wrap;word-break:break-all;font-family:inherit}
+#viewer .vbtns{display:flex;gap:8px;padding:8px 14px;border-top:1px solid var(--border)}
+#toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--border);color:var(--text);padding:10px 18px;border-radius:24px;font-size:13px;z-index:60;display:none;max-width:88vw}
+#xyTableWrap{overflow-x:auto;margin-top:10px}
+#xyTableWrap table{border-collapse:collapse}
+#xyTableWrap th,#xyTableWrap td{border:1px solid var(--border);padding:4px;font-size:11px;color:var(--dim);text-align:center;vertical-align:top}
+#xyTableWrap td img{width:140px;height:auto;border-radius:4px;cursor:pointer;display:block}
+.field-label-row{display:flex;align-items:baseline;justify-content:space-between}
+.field-label-row .nid{font-size:10px;color:var(--dim)}
+.empty-note{color:var(--dim);font-size:13px;text-align:center;padding:30px 10px;line-height:1.8}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Image Orchestrator</h1>
+  <span id="connLabel">未接続</span>
+  <div class="conn-dot" id="connDot"></div>
+</header>
+
+<main>
+
+<!-- ============ 生成タブ ============ -->
+<div class="tab-page active" id="page-gen">
+  <div class="card">
+    <div class="row">
+      <select id="genWfSelect"></select>
+      <button class="btn small flex-none" id="btnReanalyze" title="ワークフローを再解析">再解析</button>
+    </div>
+    <div id="genFields"></div>
+    <details id="rawNodesDetails">
+      <summary>全ノード詳細編集</summary>
+      <div class="inner" id="rawNodes"></div>
+    </details>
+  </div>
+
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label>生成回数</label>
+        <input type="number" id="genCount" value="1" min="1" max="100">
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button class="btn primary" id="btnGenerate" style="width:100%">生成する</button>
+      </div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="btn small" id="btnInterrupt">中断</button>
+      <button class="btn small" id="btnClearResults">結果クリア</button>
+    </div>
+  </div>
+
+  <div id="progressWrap" class="card">
+    <div class="pbar"><div id="pbarFill"></div></div>
+    <div id="progressText"></div>
+    <img id="livePreview" alt="">
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<!-- ============ X/Y タブ ============ -->
+<div class="tab-page" id="page-xy">
+  <div class="card">
+    <h2>X/Y プロット<span class="sub">パラメータ総当たりで比較グリッドを生成</span></h2>
+    <label>X軸</label>
+    <select id="xyXParam"></select>
+    <label>X軸の値(カンマまたは改行区切り)</label>
+    <textarea id="xyXValues" rows="2" placeholder="例: 4, 6, 8"></textarea>
+    <label>Y軸</label>
+    <select id="xyYParam"></select>
+    <label>Y軸の値</label>
+    <textarea id="xyYValues" rows="2"></textarea>
+    <div class="hint">「プロンプトS/R」は最初の値をプロンプト内から検索し、各値に置換して比較します(例: <code>笑顔, 泣き顔, 怒り顔</code>)。</div>
+    <button class="btn primary" id="btnXY" style="width:100%;margin-top:12px">グリッド生成</button>
+    <button class="btn small" id="btnXYStop" style="margin-top:8px">中断</button>
+  </div>
+  <div id="xyProgress" class="hint"></div>
+  <div id="xyTableWrap"></div>
+</div>
+
+<!-- ============ ギャラリータブ ============ -->
+<div class="tab-page" id="page-gallery">
+  <div class="card">
+    <div class="row">
+      <span class="hint" id="galleryCount" style="margin:0"></span>
+      <button class="btn small danger flex-none" id="btnGalleryClear">全削除</button>
+    </div>
+  </div>
+  <div id="galleryGrid"></div>
+</div>
+
+<!-- ============ 設定タブ ============ -->
+<div class="tab-page" id="page-settings">
+  <div class="card">
+    <h2>接続<span class="sub">クラウド上のComfyUI</span></h2>
+    <label>ComfyUI エンドポイントURL</label>
+    <input type="url" id="setEndpoint" placeholder="https://xxxx-8188.proxy.runpod.net" autocapitalize="off">
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="btnTestConn">接続テスト</button>
+      <button class="btn green" id="btnSaveConn">保存</button>
+    </div>
+    <div class="hint">
+      ComfyUI側はCORS許可付きで起動してください:<br>
+      <code>python main.py --listen 0.0.0.0 --enable-cors-header "*"</code><br>
+      RunPodならポート8188をHTTPで公開し、プロキシURL(https://…proxy.runpod.net)を貼り付けます。
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>ワークフロー<span class="sub">ComfyUIの「API形式で保存」したJSON</span></h2>
+    <div id="wfList"></div>
+    <label>名前</label>
+    <input type="text" id="wfNewName" placeholder="例: SDXL基本">
+    <label>API形式JSON を貼り付け</label>
+    <textarea id="wfNewJson" rows="5" placeholder='{"3": {"class_type": "KSampler", ...}}'></textarea>
+    <button class="btn green" id="btnWfAdd" style="margin-top:10px;width:100%">追加</button>
+    <div class="hint">ComfyUIの設定で「Dev mode」を有効にすると「Save (API Format)」が出ます。エクスポートしたJSONをそのまま貼ればOK。</div>
+  </div>
+
+  <div class="card">
+    <h2>ワイルドカード<span class="sub">プロンプト内で __名前__ と書くと1行ランダム選択</span></h2>
+    <div id="wcList"></div>
+    <label>名前(英数字)</label>
+    <input type="text" id="wcNewName" placeholder="例: hair" autocapitalize="off">
+    <label>候補(1行1つ)</label>
+    <textarea id="wcNewBody" rows="4" placeholder="blonde hair&#10;black hair&#10;silver hair"></textarea>
+    <button class="btn green" id="btnWcAdd" style="margin-top:10px;width:100%">保存</button>
+    <div class="hint">
+      使える記法:<br>
+      <code>{a|b|c}</code> ランダムに1つ選択<br>
+      <code>__hair__</code> ワイルドカード「hair」から1行選択<br>
+      <code>${x=__hair__}</code> 選んだ結果を変数xに保存(出力にも展開)<br>
+      <code>${x}</code> 保存した値を再利用 — 同じキャラの髪色を複数箇所で一致させる等、クラスっぽい使い方ができます
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>データ</h2>
+    <div class="hint">設定・ワークフロー・ワイルドカードはこの端末のブラウザ内(localStorage)、画像はIndexedDBに保存されます。サーバーには何も送信されません(ComfyUIエンドポイントを除く)。</div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="btnExport">設定をエクスポート</button>
+      <button class="btn" id="btnImport">インポート</button>
+    </div>
+    <input type="file" id="importFile" accept="application/json" style="display:none">
+  </div>
+</div>
+
+</main>
+
+<nav>
+  <button data-tab="gen" class="active"><span class="ic">✨</span>生成</button>
+  <button data-tab="xy"><span class="ic">🔬</span>X/Y</button>
+  <button data-tab="gallery"><span class="ic">🖼</span>ギャラリー</button>
+  <button data-tab="settings"><span class="ic">⚙️</span>設定</button>
+</nav>
+
+<div id="viewer">
+  <div class="vimg" id="viewerImgWrap"><img id="viewerImg" alt=""></div>
+  <div class="vbtns">
+    <button class="btn small" id="btnViewerDownload">保存</button>
+    <button class="btn small" id="btnViewerReuse">この設定を再利用</button>
+    <button class="btn small danger" id="btnViewerDelete">削除</button>
+    <button class="btn small" id="btnViewerClose" style="margin-left:auto">閉じる</button>
+  </div>
+  <div class="vmeta"><pre id="viewerMeta"></pre></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* ============================================================
+   Image Orchestrator — ComfyUI remote frontend (single file)
+   ============================================================ */
+
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const LS = {
+  endpoint: "io.endpoint",
+  workflows: "io.workflows",
+  wildcards: "io.wildcards",
+  activeWf: "io.activeWf",
+  fieldValues: "io.fieldValues",
+};
+
+const state = {
+  endpoint: localStorage.getItem(LS.endpoint) || "",
+  workflows: JSON.parse(localStorage.getItem(LS.workflows) || "[]"),
+  wildcards: JSON.parse(localStorage.getItem(LS.wildcards) || "{}"),
+  activeWf: localStorage.getItem(LS.activeWf) || "",
+  fieldValues: JSON.parse(localStorage.getItem(LS.fieldValues) || "{}"),
+  fields: [],
+  objectInfo: null,
+  clientId: crypto.randomUUID(),
+  running: false,
+  xyRunning: false,
+};
+
+function save(key, val){ localStorage.setItem(LS[key], typeof val === "string" ? val : JSON.stringify(val)); }
+
+let toastTimer;
+function toast(msg){
+  const t = $("#toast");
+  t.textContent = msg; t.style.display = "block";
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.style.display = "none", 2600);
+}
+
+/* ---------------- tabs ---------------- */
+$$("nav button").forEach(b => b.addEventListener("click", () => {
+  $$("nav button").forEach(x => x.classList.toggle("active", x === b));
+  $$(".tab-page").forEach(p => p.classList.toggle("active", p.id === "page-" + b.dataset.tab));
+  if (b.dataset.tab === "gallery") renderGallery();
+}));
+
+/* ---------------- connection ---------------- */
+function apiBase(){ return state.endpoint.replace(/\/+$/, ""); }
+
+function setConn(ok, label){
+  $("#connDot").className = "conn-dot " + (ok === null ? "" : ok ? "ok" : "ng");
+  $("#connLabel").textContent = label;
+}
+
+async function testConnection(silent){
+  if (!state.endpoint){ setConn(null, "未接続"); return false; }
+  if (location.protocol === "https:" && state.endpoint.startsWith("http:")){
+    setConn(false, "httpは不可");
+    if (!silent) toast("このページはhttpsなので、エンドポイントもhttpsが必要です(RunPodプロキシURL等)");
+    return false;
+  }
+  try{
+    const r = await fetch(apiBase() + "/system_stats", {signal: AbortSignal.timeout(8000)});
+    if (!r.ok) throw new Error(r.status);
+    const j = await r.json();
+    const dev = j.devices && j.devices[0] ? j.devices[0].name.split(":").pop().trim() : "OK";
+    setConn(true, dev.length > 22 ? dev.slice(0, 22) + "…" : dev);
+    loadObjectInfo();
+    return true;
+  }catch(e){
+    setConn(false, "接続失敗");
+    if (!silent) toast("接続失敗: " + e.message + " — URL/CORS設定を確認してください");
+    return false;
+  }
+}
+
+async function loadObjectInfo(){
+  if (state.objectInfo) return;
+  try{
+    const r = await fetch(apiBase() + "/object_info");
+    if (r.ok){ state.objectInfo = await r.json(); renderGenFields(); }
+  }catch(e){ /* optional */ }
+}
+
+$("#btnSaveConn").addEventListener("click", () => {
+  state.endpoint = $("#setEndpoint").value.trim();
+  save("endpoint", state.endpoint);
+  state.objectInfo = null;
+  toast("保存しました");
+  testConnection(true);
+});
+$("#btnTestConn").addEventListener("click", () => {
+  state.endpoint = $("#setEndpoint").value.trim();
+  testConnection(false);
+});
+
+/* ---------------- workflows ---------------- */
+function activeWorkflow(){
+  return state.workflows.find(w => w.name === state.activeWf) || state.workflows[0] || null;
+}
+
+function renderWfList(){
+  const box = $("#wfList");
+  box.innerHTML = "";
+  if (!state.workflows.length){
+    box.innerHTML = '<div class="hint">まだワークフローがありません。下から追加してください。</div>';
+  }
+  state.workflows.forEach(w => {
+    const div = document.createElement("div");
+    div.className = "wf-item";
+    const nodes = Object.keys(w.json).length;
+    div.innerHTML = `<div class="nm">${escapeHtml(w.name)}<div class="meta">${nodes}ノード</div></div>`;
+    const del = document.createElement("button");
+    del.className = "btn small danger"; del.textContent = "削除";
+    del.addEventListener("click", () => {
+      if (!confirm(`「${w.name}」を削除しますか?`)) return;
+      state.workflows = state.workflows.filter(x => x !== w);
+      save("workflows", state.workflows);
+      if (state.activeWf === w.name){ state.activeWf = state.workflows[0]?.name || ""; save("activeWf", state.activeWf); }
+      renderWfList(); renderWfSelect(); renderGenFields();
+    });
+    div.appendChild(del);
+    box.appendChild(div);
+  });
+}
+
+function renderWfSelect(){
+  const sel = $("#genWfSelect");
+  sel.innerHTML = "";
+  state.workflows.forEach(w => {
+    const o = document.createElement("option");
+    o.value = w.name; o.textContent = w.name;
+    if (w.name === state.activeWf) o.selected = true;
+    sel.appendChild(o);
+  });
+  if (!state.workflows.length){
+    const o = document.createElement("option");
+    o.textContent = "ワークフロー未登録(設定タブで追加)";
+    sel.appendChild(o);
+  }
+}
+
+$("#genWfSelect").addEventListener("change", e => {
+  state.activeWf = e.target.value;
+  save("activeWf", state.activeWf);
+  renderGenFields();
+});
+
+$("#btnWfAdd").addEventListener("click", () => {
+  const name = $("#wfNewName").value.trim();
+  const raw = $("#wfNewJson").value.trim();
+  if (!name || !raw){ toast("名前とJSONを入力してください"); return; }
+  let json;
+  try{ json = JSON.parse(raw); }catch(e){ toast("JSONが不正です: " + e.message); return; }
+  // フルUI形式(nodes/links構造)はAPI形式ではないので弾く
+  if (json.nodes && json.links){
+    toast("これはUI形式のJSONです。「Save (API Format)」でエクスポートしたものを貼ってください");
+    return;
+  }
+  const ok = Object.values(json).every(v => v && typeof v === "object" && v.class_type);
+  if (!ok){ toast("API形式のワークフローJSONではないようです"); return; }
+  state.workflows = state.workflows.filter(w => w.name !== name);
+  state.workflows.push({name, json});
+  state.activeWf = name;
+  save("workflows", state.workflows); save("activeWf", state.activeWf);
+  $("#wfNewName").value = ""; $("#wfNewJson").value = "";
+  renderWfList(); renderWfSelect(); renderGenFields();
+  toast(`「${name}」を追加しました`);
+});
+
+/* ---------------- workflow analysis ---------------- */
+const FIELD_RULES = {
+  KSampler:            ["seed","steps","cfg","sampler_name","scheduler","denoise"],
+  KSamplerAdvanced:    ["noise_seed","steps","cfg","sampler_name","scheduler"],
+  SamplerCustom:       ["noise_seed","cfg"],
+  RandomNoise:         ["noise_seed"],
+  EmptyLatentImage:    ["width","height","batch_size"],
+  EmptySD3LatentImage: ["width","height","batch_size"],
+  EmptyLatentImageSD3: ["width","height","batch_size"],
+  CheckpointLoaderSimple: ["ckpt_name"],
+  UNETLoader:          ["unet_name"],
+  LoraLoader:          ["lora_name","strength_model","strength_clip"],
+  LoraLoaderModelOnly: ["lora_name","strength"],
+  CLIPTextEncode:      ["text"],
+};
+const JP_LABEL = {
+  seed:"シード", noise_seed:"シード", steps:"ステップ数", cfg:"CFG",
+  sampler_name:"サンプラー", scheduler:"スケジューラ", denoise:"デノイズ",
+  width:"幅", height:"高さ", batch_size:"バッチサイズ",
+  ckpt_name:"チェックポイント", unet_name:"モデル(UNET)",
+  lora_name:"LoRA", strength_model:"LoRA強度(model)", strength_clip:"LoRA強度(clip)", strength:"LoRA強度",
+  text:"プロンプト",
+};
+
+function analyzeWorkflow(wf){
+  const fields = [];
+  // KSampler系のpositive/negative入力がどのノードに繋がっているか調べる
+  const posNodes = new Set(), negNodes = new Set();
+  for (const node of Object.values(wf.json)){
+    const inp = node.inputs || {};
+    if (Array.isArray(inp.positive)) posNodes.add(String(inp.positive[0]));
+    if (Array.isArray(inp.negative)) negNodes.add(String(inp.negative[0]));
+  }
+  for (const [id, node] of Object.entries(wf.json)){
+    const rules = FIELD_RULES[node.class_type];
+    if (!rules) continue;
+    for (const name of rules){
+      const val = (node.inputs || {})[name];
+      if (val === undefined || Array.isArray(val)) continue; // リンクは対象外
+      let label = JP_LABEL[name] || name;
+      let kind = "generic";
+      if (node.class_type === "CLIPTextEncode"){
+        if (posNodes.has(id)){ label = "プロンプト"; kind = "prompt"; }
+        else if (negNodes.has(id)){ label = "ネガティブ"; kind = "negative"; }
+        else { label = "テキスト"; kind = "prompt"; }
+      }
+      if (name === "seed" || name === "noise_seed") kind = "seed";
+      fields.push({key:`${id}.${name}`, nodeId:id, input:name, classType:node.class_type, label, kind, default:val});
+    }
+  }
+  // プロンプトを先頭に、シードを後半に
+  const order = {prompt:0, negative:1, generic:2, seed:3};
+  fields.sort((a,b) => (order[a.kind]-order[b.kind]) || a.nodeId.localeCompare(b.nodeId, undefined, {numeric:true}));
+  return fields;
+}
+
+function enumOptions(classType, inputName){
+  const info = state.objectInfo?.[classType];
+  if (!info) return null;
+  const def = info.input?.required?.[inputName] || info.input?.optional?.[inputName];
+  if (def && Array.isArray(def[0]) && def[0].every(x => typeof x === "string")) return def[0];
+  return null;
+}
+
+function fieldStoreKey(wf, f){ return wf.name + "::" + f.key; }
+function getFieldValue(wf, f){
+  const k = fieldStoreKey(wf, f);
+  return (k in state.fieldValues) ? state.fieldValues[k] : f.default;
+}
+function setFieldValue(wf, f, v){
+  state.fieldValues[fieldStoreKey(wf, f)] = v;
+  save("fieldValues", state.fieldValues);
+}
+
+function renderGenFields(){
+  const wf = activeWorkflow();
+  const box = $("#genFields");
+  box.innerHTML = "";
+  $("#rawNodes").innerHTML = "";
+  state.fields = [];
+  if (!wf){ renderXyParams(); return; }
+  state.fields = analyzeWorkflow(wf);
+
+  const numRow = document.createElement("div");
+  numRow.className = "grid3";
+  for (const f of state.fields){
+    const val = getFieldValue(wf, f);
+    if (f.kind === "prompt" || f.kind === "negative"){
+      const lab = document.createElement("label");
+      lab.innerHTML = `<span class="field-label-row">${f.label}<span class="nid">#${f.nodeId}</span></span>`;
+      const ta = document.createElement("textarea");
+      ta.rows = f.kind === "prompt" ? 4 : 2;
+      ta.className = "prompt-ta";
+      ta.value = val;
+      ta.addEventListener("input", () => setFieldValue(wf, f, ta.value));
+      box.appendChild(lab); box.appendChild(ta);
+    } else if (f.kind === "seed"){
+      const lab = document.createElement("label");
+      lab.textContent = f.label;
+      const rowDiv = document.createElement("div");
+      rowDiv.className = "seed-row";
+      const inp = document.createElement("input");
+      inp.type = "text"; inp.inputMode = "numeric";
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      const randomKey = fieldStoreKey(wf, f) + "::random";
+      const isRandom = state.fieldValues[randomKey] !== false;
+      chip.textContent = "🎲 ランダム";
+      chip.classList.toggle("on", isRandom);
+      inp.value = String(val);
+      inp.disabled = isRandom;
+      chip.addEventListener("click", () => {
+        const now = !chip.classList.contains("on");
+        chip.classList.toggle("on", now);
+        inp.disabled = now;
+        state.fieldValues[randomKey] = now;
+        save("fieldValues", state.fieldValues);
+      });
+      inp.addEventListener("input", () => setFieldValue(wf, f, inp.value));
+      f._seedChip = chip; f._seedInput = inp;
+      rowDiv.appendChild(inp); rowDiv.appendChild(chip);
+      box.appendChild(lab); box.appendChild(rowDiv);
+    } else {
+      const wrap = document.createElement("div");
+      const lab = document.createElement("label");
+      lab.textContent = f.label + (f.classType === "LoraLoader" || f.classType === "LoraLoaderModelOnly" ? ` #${f.nodeId}` : "");
+      wrap.appendChild(lab);
+      const opts = enumOptions(f.classType, f.input);
+      if (opts){
+        const sel = document.createElement("select");
+        for (const o of opts){
+          const op = document.createElement("option");
+          op.value = o; op.textContent = o;
+          sel.appendChild(op);
+        }
+        sel.value = String(val);
+        if (sel.selectedIndex < 0 && opts.length){
+          const op = document.createElement("option");
+          op.value = String(val); op.textContent = val + " (現在値)";
+          sel.prepend(op); sel.value = String(val);
+        }
+        sel.addEventListener("change", () => setFieldValue(wf, f, sel.value));
+        wrap.appendChild(sel);
+      } else if (typeof f.default === "number"){
+        const inp = document.createElement("input");
+        inp.type = "number"; inp.step = "any"; inp.value = val;
+        inp.addEventListener("input", () => setFieldValue(wf, f, inp.value));
+        wrap.appendChild(inp);
+      } else {
+        const inp = document.createElement("input");
+        inp.type = "text"; inp.value = String(val);
+        inp.addEventListener("input", () => setFieldValue(wf, f, inp.value));
+        wrap.appendChild(inp);
+      }
+      numRow.appendChild(wrap);
+    }
+  }
+  if (numRow.children.length) box.appendChild(numRow);
+
+  renderRawNodes(wf);
+  renderXyParams();
+}
+
+function renderRawNodes(wf){
+  const box = $("#rawNodes");
+  const mapped = new Set(state.fields.map(f => f.key));
+  for (const [id, node] of Object.entries(wf.json)){
+    const prims = Object.entries(node.inputs || {}).filter(([k,v]) => !Array.isArray(v) && !mapped.has(`${id}.${k}`));
+    if (!prims.length) continue;
+    const blk = document.createElement("div");
+    blk.className = "node-block";
+    blk.innerHTML = `<div class="nt">#${id} ${escapeHtml(node.class_type)}</div>`;
+    for (const [k, v] of prims){
+      const lab = document.createElement("label");
+      lab.textContent = k;
+      const inp = document.createElement("input");
+      inp.type = "text"; inp.value = String(v);
+      const storeKey = wf.name + "::" + id + "." + k;
+      if (storeKey in state.fieldValues) inp.value = String(state.fieldValues[storeKey]);
+      inp.addEventListener("input", () => {
+        state.fieldValues[storeKey] = inp.value;
+        save("fieldValues", state.fieldValues);
+      });
+      blk.appendChild(lab); blk.appendChild(inp);
+    }
+    box.appendChild(blk);
+  }
+  if (!box.children.length) box.innerHTML = '<div class="hint">追加で編集できる項目はありません</div>';
+}
+
+$("#btnReanalyze").addEventListener("click", () => { renderGenFields(); toast("再解析しました"); });
+
+/* ---------------- wildcards ---------------- */
+function renderWcList(){
+  const box = $("#wcList");
+  box.innerHTML = "";
+  const names = Object.keys(state.wildcards);
+  if (!names.length){ box.innerHTML = '<div class="hint">まだワイルドカードがありません</div>'; return; }
+  names.forEach(n => {
+    const div = document.createElement("div");
+    div.className = "wc-item";
+    const cnt = state.wildcards[n].split("\n").filter(l => l.trim() && !l.trim().startsWith("#")).length;
+    div.innerHTML = `<div class="nm" style="flex:1">__${escapeHtml(n)}__ <span class="hint" style="display:inline">(${cnt}件)</span></div>`;
+    const edit = document.createElement("button");
+    edit.className = "btn small"; edit.textContent = "編集";
+    edit.addEventListener("click", () => {
+      $("#wcNewName").value = n;
+      $("#wcNewBody").value = state.wildcards[n];
+      $("#wcNewBody").focus();
+    });
+    const del = document.createElement("button");
+    del.className = "btn small danger"; del.textContent = "削除";
+    del.addEventListener("click", () => {
+      delete state.wildcards[n];
+      save("wildcards", state.wildcards);
+      renderWcList();
+    });
+    div.appendChild(edit); div.appendChild(del);
+    box.appendChild(div);
+  });
+}
+
+$("#btnWcAdd").addEventListener("click", () => {
+  const name = $("#wcNewName").value.trim().replace(/[^A-Za-z0-9_-]/g, "");
+  const body = $("#wcNewBody").value;
+  if (!name || !body.trim()){ toast("名前と候補を入力してください"); return; }
+  state.wildcards[name] = body;
+  save("wildcards", state.wildcards);
+  $("#wcNewName").value = ""; $("#wcNewBody").value = "";
+  renderWcList();
+  toast(`__${name}__ を保存しました`);
+});
+
+/* ---------------- dynamic prompt engine ----------------
+   対応記法:
+     {a|b|c}        … ランダム選択(入れ子可)
+     __name__       … ワイルドカードから1行選択
+     ${x=<expr>}    … exprを展開して変数xに保存し、その場にも出力
+     ${x}           … 変数xの値を出力
+------------------------------------------------------- */
+function expandPrompt(text, vars){
+  vars = vars || {};
+  let out = String(text);
+  for (let depth = 0; depth < 24; depth++){
+    let changed = false;
+
+    // ${x=...} 変数代入(中身を先に展開)
+    out = out.replace(/\$\{([A-Za-z0-9_]+)=((?:[^{}]|\{[^{}]*\})*?)\}/g, (m, name, expr) => {
+      changed = true;
+      vars[name] = expandPrompt(expr, vars);
+      return vars[name];
+    });
+
+    // ${x} 変数参照
+    out = out.replace(/\$\{([A-Za-z0-9_]+)\}/g, (m, name) => {
+      if (name in vars){ changed = true; return vars[name]; }
+      return m;
+    });
+
+    // __name__ ワイルドカード
+    out = out.replace(/__([A-Za-z0-9_-]+)__/g, (m, name) => {
+      const body = state.wildcards[name];
+      if (body === undefined) return m;
+      const lines = body.split("\n").map(l => l.trim()).filter(l => l && !l.startsWith("#"));
+      if (!lines.length) return "";
+      changed = true;
+      return lines[Math.floor(Math.random() * lines.length)];
+    });
+
+    // {a|b|c} 最内側から選択
+    out = out.replace(/\{([^{}]*)\}/g, (m, body) => {
+      if (!body.includes("|")) return m;
+      changed = true;
+      const parts = body.split("|");
+      return parts[Math.floor(Math.random() * parts.length)];
+    });
+
+    if (!changed) break;
+  }
+  return out;
+}
+
+/* ---------------- generation ---------------- */
+function buildPromptJson(overrides){
+  const wf = activeWorkflow();
+  if (!wf) return null;
+  const json = JSON.parse(JSON.stringify(wf.json));
+  const meta = {workflow: wf.name, prompts: {}, params: {}};
+  const vars = {};
+
+  // 詳細編集(rawNodes)の値
+  for (const [storeKey, v] of Object.entries(state.fieldValues)){
+    if (storeKey.endsWith("::random")) continue;
+    const prefix = wf.name + "::";
+    if (!storeKey.startsWith(prefix)) continue;
+    const key = storeKey.slice(prefix.length);
+    const dot = key.indexOf(".");
+    const nodeId = key.slice(0, dot), input = key.slice(dot + 1);
+    if (json[nodeId] && input in (json[nodeId].inputs || {})){
+      const orig = json[nodeId].inputs[input];
+      json[nodeId].inputs[input] = coerceType(v, orig);
+    }
+  }
+
+  // 主要フィールド(型変換・シード・ワイルドカード展開)
+  for (const f of state.fields){
+    let v = getFieldValue(wf, f);
+    if (overrides && f.key in overrides) v = overrides[f.key];
+    if (f.kind === "seed"){
+      const randomKey = fieldStoreKey(wf, f) + "::random";
+      const isRandom = state.fieldValues[randomKey] !== false;
+      if (isRandom && !(overrides && f.key in overrides)){
+        v = Math.floor(Math.random() * 0xFFFFFFFFFFFF);
+      }
+      v = Number(v) || 0;
+      if (f._seedInput) f._seedInput.value = String(v);
+      meta.params[f.label + "#" + f.nodeId] = v;
+    } else if (f.kind === "prompt" || f.kind === "negative"){
+      v = expandPrompt(String(v), vars);
+      meta.prompts[f.label + "#" + f.nodeId] = v;
+    } else {
+      v = coerceType(v, f.default);
+      meta.params[f.label + "#" + f.nodeId] = v;
+    }
+    json[f.nodeId].inputs[f.input] = v;
+  }
+  return {json, meta};
+}
+
+function coerceType(v, orig){
+  if (typeof orig === "number"){
+    const n = Number(v);
+    return isNaN(n) ? orig : n;
+  }
+  if (typeof orig === "boolean") return v === true || v === "true";
+  return String(v);
+}
+
+let ws = null;
+function ensureWs(){
+  if (ws && ws.readyState === WebSocket.OPEN) return;
+  try{
+    const url = apiBase().replace(/^http/, "ws") + "/ws?clientId=" + state.clientId;
+    ws = new WebSocket(url);
+    ws.binaryType = "arraybuffer";
+    ws.onmessage = ev => {
+      if (typeof ev.data === "string"){
+        try{ handleWsEvent(JSON.parse(ev.data)); }catch(e){}
+      } else {
+        // バイナリ = ライブプレビュー。先頭8バイトがヘッダ(event type + image type)
+        const view = new DataView(ev.data);
+        if (view.getUint32(0) === 1){
+          const blob = new Blob([ev.data.slice(8)], {type: view.getUint32(4) === 2 ? "image/png" : "image/jpeg"});
+          const img = $("#livePreview");
+          if (img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+          img.dataset.url = URL.createObjectURL(blob);
+          img.src = img.dataset.url;
+          img.style.display = "block";
+        }
+      }
+    };
+    ws.onclose = () => { ws = null; };
+  }catch(e){ ws = null; }
+}
+
+let wsProgress = {value:0, max:0};
+function handleWsEvent(msg){
+  if (msg.type === "progress"){
+    wsProgress = msg.data;
+    updateProgressBar();
+  }
+}
+function updateProgressBar(){
+  if (wsProgress.max > 0){
+    $("#pbarFill").style.width = Math.round(100 * wsProgress.value / wsProgress.max) + "%";
+    $("#progressText").textContent = `ステップ ${wsProgress.value}/${wsProgress.max}`;
+  }
+}
+
+async function queueAndWait(promptJson, signal){
+  ensureWs();
+  const r = await fetch(apiBase() + "/prompt", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({prompt: promptJson, client_id: state.clientId}),
+    signal,
+  });
+  if (!r.ok){
+    let detail = "";
+    try{
+      const j = await r.json();
+      detail = j.error?.message || JSON.stringify(j).slice(0, 300);
+    }catch(e){ detail = "HTTP " + r.status; }
+    throw new Error("キュー投入失敗: " + detail);
+  }
+  const {prompt_id} = await r.json();
+
+  // /history をポーリングして完了待ち(WSは進捗表示専用にして確実性を優先)
+  for (let i = 0; i < 1200; i++){
+    if (signal?.aborted) throw new DOMException("aborted", "AbortError");
+    await sleep(1200);
+    const hr = await fetch(apiBase() + "/history/" + prompt_id, {signal});
+    if (!hr.ok) continue;
+    const h = await hr.json();
+    const entry = h[prompt_id];
+    if (entry && entry.status && entry.status.completed === false && entry.status.status_str === "error"){
+      const msgs = (entry.status.messages || []).filter(m => m[0] === "execution_error");
+      throw new Error("実行エラー: " + (msgs[0]?.[1]?.exception_message || "不明"));
+    }
+    if (entry && entry.outputs && Object.keys(entry.outputs).length){
+      const images = [];
+      for (const out of Object.values(entry.outputs)){
+        for (const im of (out.images || [])){
+          if (im.type === "temp") continue;
+          images.push(im);
+        }
+      }
+      if (images.length) return images;
+      // outputsはあるが画像なし(動画等) → 全type回収
+      for (const out of Object.values(entry.outputs)){
+        for (const im of (out.images || out.gifs || [])) images.push(im);
+      }
+      return images;
+    }
+  }
+  throw new Error("タイムアウトしました");
+}
+
+async function fetchImage(im){
+  const q = new URLSearchParams({filename: im.filename, subfolder: im.subfolder || "", type: im.type || "output"});
+  const r = await fetch(apiBase() + "/view?" + q.toString());
+  if (!r.ok) throw new Error("画像取得失敗");
+  return await r.blob();
+}
+
+function sleep(ms){ return new Promise(res => setTimeout(res, ms)); }
+
+let genAbort = null;
+$("#btnGenerate").addEventListener("click", async () => {
+  if (state.running) return;
+  const wf = activeWorkflow();
+  if (!wf){ toast("まずは設定タブでワークフローを登録してください"); return; }
+  if (!state.endpoint){ toast("設定タブでエンドポイントを設定してください"); return; }
+  const count = Math.max(1, Math.min(100, Number($("#genCount").value) || 1));
+  state.running = true;
+  genAbort = new AbortController();
+  $("#btnGenerate").disabled = true;
+  $("#progressWrap").style.display = "block";
+  try{
+    for (let i = 0; i < count; i++){
+      $("#progressText").textContent = `${i + 1}/${count} 枚目を生成中…`;
+      $("#pbarFill").style.width = "0%";
+      const built = buildPromptJson(null);
+      const images = await queueAndWait(built.json, genAbort.signal);
+      for (const im of images){
+        const blob = await fetchImage(im);
+        const id = await galleryAdd(blob, built.meta);
+        addResultThumb(blob, id);
+      }
+    }
+    toast("完了しました");
+  }catch(e){
+    if (e.name !== "AbortError") toast(e.message);
+    else toast("中断しました");
+  }finally{
+    state.running = false;
+    genAbort = null;
+    $("#btnGenerate").disabled = false;
+    $("#progressWrap").style.display = "none";
+    $("#livePreview").style.display = "none";
+  }
+});
+
+$("#btnInterrupt").addEventListener("click", async () => {
+  genAbort?.abort();
+  try{ await fetch(apiBase() + "/interrupt", {method: "POST"}); }catch(e){}
+});
+
+function addResultThumb(blob, galleryId){
+  const img = document.createElement("img");
+  img.src = URL.createObjectURL(blob);
+  img.addEventListener("click", () => openViewerById(galleryId));
+  $("#results").prepend(img);
+}
+$("#btnClearResults").addEventListener("click", () => { $("#results").innerHTML = ""; });
+
+/* ---------------- X/Y plot ---------------- */
+function renderXyParams(){
+  for (const sel of [$("#xyXParam"), $("#xyYParam")]){
+    const prev = sel.value;
+    sel.innerHTML = "";
+    const none = document.createElement("option");
+    none.value = ""; none.textContent = sel.id === "xyYParam" ? "(なし = 1行)" : "選択してください";
+    sel.appendChild(none);
+    const sr = document.createElement("option");
+    sr.value = "__sr__"; sr.textContent = "プロンプトS/R(検索置換)";
+    sel.appendChild(sr);
+    for (const f of state.fields){
+      if (f.kind === "prompt" || f.kind === "negative") continue;
+      const o = document.createElement("option");
+      o.value = f.key; o.textContent = f.label + " #" + f.nodeId;
+      sel.appendChild(o);
+    }
+    sel.value = prev;
+    if (sel.selectedIndex < 0) sel.selectedIndex = 0;
+  }
+}
+
+function parseAxisValues(text){
+  return text.split(/[\n,]/).map(s => s.trim()).filter(s => s.length);
+}
+
+let xyAbort = null;
+$("#btnXY").addEventListener("click", async () => {
+  if (state.xyRunning) return;
+  const wf = activeWorkflow();
+  if (!wf){ toast("ワークフローを登録してください"); return; }
+  const xParam = $("#xyXParam").value;
+  const yParam = $("#xyYParam").value;
+  const xVals = parseAxisValues($("#xyXValues").value);
+  const yVals = yParam ? parseAxisValues($("#xyYValues").value) : [""];
+  if (!xParam || xVals.length < 1){ toast("X軸のパラメータと値を指定してください"); return; }
+  if (yParam && yVals.length < 1){ toast("Y軸の値を指定してください"); return; }
+  if (xParam === "__sr__" && xVals.length < 2){ toast("S/Rは2つ以上の値が必要です(1つ目が検索対象)"); return; }
+
+  state.xyRunning = true;
+  xyAbort = new AbortController();
+  $("#btnXY").disabled = true;
+
+  // 表の骨組み
+  const wrap = $("#xyTableWrap");
+  wrap.innerHTML = "";
+  const table = document.createElement("table");
+  const head = document.createElement("tr");
+  head.appendChild(document.createElement("th"));
+  for (const xv of xVals){
+    const th = document.createElement("th");
+    th.textContent = xv;
+    head.appendChild(th);
+  }
+  table.appendChild(head);
+  const cells = [];
+  for (const yv of yVals){
+    const tr = document.createElement("tr");
+    const th = document.createElement("th");
+    th.textContent = yv;
+    tr.appendChild(th);
+    const rowCells = [];
+    for (const _ of xVals){
+      const td = document.createElement("td");
+      td.textContent = "…";
+      tr.appendChild(td);
+      rowCells.push(td);
+    }
+    table.appendChild(tr);
+    cells.push(rowCells);
+  }
+  wrap.appendChild(table);
+
+  // シードを固定(ランダム設定でも1回引いて全セル共通に)
+  const seedOverrides = {};
+  for (const f of state.fields){
+    if (f.kind !== "seed") continue;
+    const randomKey = fieldStoreKey(wf, f) + "::random";
+    const isRandom = state.fieldValues[randomKey] !== false;
+    seedOverrides[f.key] = isRandom ? Math.floor(Math.random() * 0xFFFFFFFFFFFF) : Number(getFieldValue(wf, f)) || 0;
+  }
+
+  const total = xVals.length * yVals.length;
+  let done = 0;
+  try{
+    for (let yi = 0; yi < yVals.length; yi++){
+      for (let xi = 0; xi < xVals.length; xi++){
+        if (xyAbort.signal.aborted) throw new DOMException("aborted", "AbortError");
+        $("#xyProgress").textContent = `X/Y生成中: ${done + 1}/${total}`;
+        const overrides = {...seedOverrides};
+        applyAxis(overrides, xParam, xVals, xi);
+        if (yParam) applyAxis(overrides, yParam, yVals, yi);
+        const built = buildPromptJson(overrides);
+        const images = await queueAndWait(built.json, xyAbort.signal);
+        const td = cells[yi][xi];
+        td.textContent = "";
+        for (const im of images){
+          const blob = await fetchImage(im);
+          const meta = {...built.meta, xy: {x: xParam === "__sr__" ? xVals[xi] : `${xParam}=${xVals[xi]}`, y: yParam ? (yParam === "__sr__" ? yVals[yi] : `${yParam}=${yVals[yi]}`) : ""}};
+          const id = await galleryAdd(blob, meta);
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(blob);
+          img.addEventListener("click", () => openViewerById(id));
+          td.appendChild(img);
+        }
+        done++;
+      }
+    }
+    $("#xyProgress").textContent = `完了: ${total}枚`;
+  }catch(e){
+    $("#xyProgress").textContent = e.name === "AbortError" ? "中断しました" : "エラー: " + e.message;
+  }finally{
+    state.xyRunning = false;
+    xyAbort = null;
+    $("#btnXY").disabled = false;
+  }
+});
+
+function applyAxis(overrides, param, vals, idx){
+  const wf = activeWorkflow();
+  if (param === "__sr__"){
+    // プロンプトS/R: 1つ目の値を検索語とし、現在値で置換
+    const search = vals[0];
+    const replace = vals[idx];
+    for (const f of state.fields){
+      if (f.kind !== "prompt" && f.kind !== "negative") continue;
+      const cur = String(getFieldValue(wf, f));
+      if (cur.includes(search)){
+        overrides[f.key] = cur.split(search).join(replace);
+      }
+    }
+  } else {
+    overrides[param] = vals[idx];
+  }
+}
+
+$("#btnXYStop").addEventListener("click", () => xyAbort?.abort());
+
+/* ---------------- gallery (IndexedDB) ---------------- */
+let db = null;
+function openDb(){
+  return new Promise((res, rej) => {
+    if (db) return res(db);
+    const req = indexedDB.open("imageOrchestrator", 1);
+    req.onupgradeneeded = () => {
+      req.result.createObjectStore("images", {keyPath: "id", autoIncrement: true});
+    };
+    req.onsuccess = () => { db = req.result; res(db); };
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function galleryAdd(blob, meta){
+  const d = await openDb();
+  return new Promise((res, rej) => {
+    const tx = d.transaction("images", "readwrite");
+    const req = tx.objectStore("images").add({blob, meta, ts: Date.now()});
+    req.onsuccess = () => res(req.result);
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+async function galleryAll(){
+  const d = await openDb();
+  return new Promise((res, rej) => {
+    const req = d.transaction("images").objectStore("images").getAll();
+    req.onsuccess = () => res(req.result.sort((a,b) => b.ts - a.ts));
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function galleryGet(id){
+  const d = await openDb();
+  return new Promise((res, rej) => {
+    const req = d.transaction("images").objectStore("images").get(id);
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function galleryDelete(id){
+  const d = await openDb();
+  return new Promise((res, rej) => {
+    const tx = d.transaction("images", "readwrite");
+    tx.objectStore("images").delete(id);
+    tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+  });
+}
+
+async function renderGallery(){
+  const items = await galleryAll();
+  $("#galleryCount").textContent = `${items.length}枚(この端末に保存)`;
+  const grid = $("#galleryGrid");
+  grid.querySelectorAll("img").forEach(im => URL.revokeObjectURL(im.src));
+  grid.innerHTML = "";
+  if (!items.length){
+    grid.innerHTML = '<div class="empty-note" style="grid-column:1/-1">まだ画像がありません。<br>生成タブから作ってみましょう ✨</div>';
+    return;
+  }
+  for (const it of items){
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.src = URL.createObjectURL(it.blob);
+    img.addEventListener("click", () => openViewerById(it.id));
+    grid.appendChild(img);
+  }
+}
+
+$("#btnGalleryClear").addEventListener("click", async () => {
+  if (!confirm("ギャラリーの画像を全て削除しますか?")) return;
+  const d = await openDb();
+  await new Promise((res) => {
+    const tx = d.transaction("images", "readwrite");
+    tx.objectStore("images").clear();
+    tx.oncomplete = res;
+  });
+  renderGallery();
+});
+
+/* ---------------- viewer ---------------- */
+let viewerCurrent = null;
+async function openViewerById(id){
+  const it = await galleryGet(id);
+  if (!it){ toast("画像が見つかりません(削除済み?)"); return; }
+  viewerCurrent = it;
+  const img = $("#viewerImg");
+  if (img.dataset.url) URL.revokeObjectURL(img.dataset.url);
+  img.dataset.url = URL.createObjectURL(it.blob);
+  img.src = img.dataset.url;
+  const m = it.meta || {};
+  let txt = `📅 ${new Date(it.ts).toLocaleString("ja-JP")}\n🧩 ${m.workflow || "?"}\n`;
+  if (m.xy && (m.xy.x || m.xy.y)) txt += `🔬 X: ${m.xy.x}  Y: ${m.xy.y}\n`;
+  for (const [k, v] of Object.entries(m.prompts || {})) txt += `\n【${k}】\n${v}\n`;
+  const params = Object.entries(m.params || {}).map(([k,v]) => `${k}=${v}`).join(", ");
+  if (params) txt += `\n⚙️ ${params}`;
+  $("#viewerMeta").textContent = txt;
+  $("#viewer").classList.add("open");
+}
+$("#btnViewerClose").addEventListener("click", () => $("#viewer").classList.remove("open"));
+$("#viewerImgWrap").addEventListener("click", e => { if (e.target.id === "viewerImgWrap") $("#viewer").classList.remove("open"); });
+$("#btnViewerDelete").addEventListener("click", async () => {
+  if (!viewerCurrent) return;
+  await galleryDelete(viewerCurrent.id);
+  $("#viewer").classList.remove("open");
+  renderGallery();
+  toast("削除しました");
+});
+$("#btnViewerDownload").addEventListener("click", () => {
+  if (!viewerCurrent) return;
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(viewerCurrent.blob);
+  a.download = `io_${viewerCurrent.ts}.png`;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+});
+$("#btnViewerReuse").addEventListener("click", () => {
+  const m = viewerCurrent?.meta;
+  if (!m){ return; }
+  const wf = state.workflows.find(w => w.name === m.workflow);
+  if (!wf){ toast("元のワークフローが見つかりません"); return; }
+  state.activeWf = wf.name; save("activeWf", state.activeWf);
+  // プロンプトとパラメータを書き戻す(展開後の値なので再現用)
+  const fields = analyzeWorkflow(wf);
+  for (const f of fields){
+    const label = f.label + "#" + f.nodeId;
+    if ((f.kind === "prompt" || f.kind === "negative") && m.prompts && label in m.prompts){
+      setFieldValue(wf, f, m.prompts[label]);
+    } else if (m.params && label in m.params){
+      setFieldValue(wf, f, m.params[label]);
+      if (f.kind === "seed"){
+        state.fieldValues[fieldStoreKey(wf, f) + "::random"] = false;
+        save("fieldValues", state.fieldValues);
+      }
+    }
+  }
+  renderWfSelect(); renderGenFields();
+  $("#viewer").classList.remove("open");
+  $$("nav button").find(b => b.dataset.tab === "gen").click();
+  toast("設定を復元しました(シード固定)");
+});
+
+/* ---------------- export / import ---------------- */
+$("#btnExport").addEventListener("click", () => {
+  const data = {
+    endpoint: state.endpoint,
+    workflows: state.workflows,
+    wildcards: state.wildcards,
+    fieldValues: state.fieldValues,
+  };
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], {type: "application/json"}));
+  a.download = "image-orchestrator-settings.json";
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+});
+$("#btnImport").addEventListener("click", () => $("#importFile").click());
+$("#importFile").addEventListener("change", async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try{
+    const data = JSON.parse(await f.text());
+    if (data.endpoint !== undefined){ state.endpoint = data.endpoint; save("endpoint", state.endpoint); }
+    if (Array.isArray(data.workflows)){ state.workflows = data.workflows; save("workflows", state.workflows); }
+    if (data.wildcards){ state.wildcards = data.wildcards; save("wildcards", state.wildcards); }
+    if (data.fieldValues){ state.fieldValues = data.fieldValues; save("fieldValues", state.fieldValues); }
+    state.activeWf = state.workflows[0]?.name || "";
+    save("activeWf", state.activeWf);
+    initRender();
+    toast("インポートしました");
+  }catch(err){ toast("インポート失敗: " + err.message); }
+  e.target.value = "";
+});
+
+/* ---------------- misc ---------------- */
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function initRender(){
+  $("#setEndpoint").value = state.endpoint;
+  renderWfList(); renderWfSelect(); renderGenFields(); renderWcList();
+}
+
+initRender();
+if (state.endpoint) testConnection(true);
+</script>
+</body>
+</html>

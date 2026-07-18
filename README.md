@@ -14,6 +14,14 @@ Privacy policy for やりたいガチャ
 - 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
 - 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
 
+## Image Orchestrator
+
+クラウド上のComfyUIをバックエンドに、スマホ・PCのブラウザから画像生成する自分専用フロントエンド。
+
+- 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/image-orchestrator/
+- 本体: `image-orchestrator/index.html`(単一ファイル・ビルド不要)
+- セットアップ手順(RunPod等): `image-orchestrator/README.md`
+
 ## 婚活デートメモ
 
 - アプリ本体（スマホ向けWebアプリ / テスト用）: `date-memo/index.html`
