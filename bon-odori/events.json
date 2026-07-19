@@ -578,18 +578,18 @@
           "end": "21:00"
         }
       ],
-      "rain": "",
+      "rain": "雨天中止",
       "eventStatus": "scheduled",
       "statusNote": "",
       "posterType": "admin",
       "source": {
-        "name": "熱海市観光協会 公式観光サイト",
-        "url": "https://www.ataminews.gr.jp/event/189/"
+        "name": "網代温泉観光協会 公式サイト",
+        "url": "https://ajirospa.com/%E3%81%B5%E3%82%8B%E3%81%95%E3%81%A8%E7%A5%AD%E3%82%8A2026/"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-07-19",
       "imageAllowed": false,
       "image": "",
-      "desc": "網代の大縄公園で2夜開催される地域の夏祭り。盆踊りのほか夜店などが予定されています。駐車場はないため、交通案内を公式ページでご確認ください。",
+      "desc": "網代の大縄公園で2夜開催される地域の夏祭り。盆踊りのほか、スイカ割りやミニ花火、模擬店などが予定されています。",
       "scale": "regional",
       "prefecture": "静岡県"
     },
@@ -1038,7 +1038,7 @@
         "name": "焼津市観光協会 公式サイト",
         "url": "https://www.yaizu.gr.jp/news/8888"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-07-19",
       "imageAllowed": false,
       "image": "",
       "desc": "大井川港の踊夏祭で行われる盆踊り。18時20分から19時までの予定で、祭りではステージや出店、花火なども行われます。",
@@ -2904,6 +2904,250 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "三重県"
+    },
+    {
+      "id": "aisai-saya-noryo-matsuri",
+      "status": "published",
+      "name": "令和8年度 愛西市佐屋地区納涼まつり",
+      "city": "愛西市",
+      "venue": "佐屋スポーツセンター",
+      "address": "愛西市稲葉町米野281番地1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "18:30", "end": "21:00"}
+      ],
+      "rain": "雨天中止・順延なし。中止決定は当日16時",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "愛西市公式サイト",
+        "url": "https://www.city.aisai.lg.jp/0000017360.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "佐屋スポーツセンターで行われる地区の納涼まつり。盆踊りと商工会バザーが案内されています。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "aisai-hachikai-noryo-matsuri",
+      "status": "published",
+      "name": "令和8年度 愛西市八開地区納涼まつり",
+      "city": "愛西市",
+      "venue": "愛西市八開中学校運動場",
+      "address": "愛西市江西町川原11番地",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "19:00", "end": "21:00"}
+      ],
+      "rain": "雨天中止・順延なし。中止決定は当日16時",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "愛西市公式サイト",
+        "url": "https://www.city.aisai.lg.jp/0000018453.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "八開中学校運動場で行われる地区の納涼まつり。盆踊り、商工会バザー、花火が予定されています。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "aisai-tatsuta-suigo-bonodori",
+      "status": "published",
+      "name": "令和8年度 愛西市立田地区水郷盆おどり大会",
+      "city": "愛西市",
+      "venue": "愛西市立田中学校運動場",
+      "address": "愛西市石田町宮東1番地",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-02", "start": "18:00", "end": "20:30"}
+      ],
+      "rain": "雨天中止・順延なし。中止決定は当日16時",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "愛西市公式サイト",
+        "url": "https://www.city.aisai.lg.jp/0000018451.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "立田中学校運動場で行われる盆踊り大会。よみせまつり、チア、花火も予定されています。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "aisai-saori-noryo-matsuri",
+      "status": "published",
+      "name": "令和8年度 愛西市佐織地区納涼まつり",
+      "city": "愛西市",
+      "venue": "愛西市佐織中学校運動場",
+      "address": "愛西市諏訪町郷東167番地",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-02", "start": "18:30", "end": "21:00"}
+      ],
+      "rain": "雨天中止・順延なし。中止決定は当日14時",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "愛西市公式サイト",
+        "url": "https://www.city.aisai.lg.jp/0000018460.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "佐織中学校運動場で行われる地区の納涼まつり。盆踊り、商工会バザー、子ども向け機関車、抽選会が予定されています。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "owase-kumano-kodo-center-bonodori",
+      "status": "published",
+      "name": "熊野古道センター 盆踊り大会",
+      "city": "尾鷲市",
+      "venue": "三重県立熊野古道センター 芝生広場・大ホール",
+      "address": "尾鷲市向井12番地4",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-14", "start": "17:00", "end": "20:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは19時開始予定。公式ページ内に開催年の表記ゆれがあるため、来場前に最新情報をご確認ください。",
+      "posterType": "organizer",
+      "source": {
+        "name": "尾鷲観光物産協会 公式サイト",
+        "url": "https://owasekankou.com/event/bon/"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "熊野古道センターで行われる盆踊り大会。子ども太鼓、縁日、お面作り体験、最後の花火などが予定されています。",
+      "scale": "regional",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "komono-mitakigawa-toka-bonodori",
+      "status": "published",
+      "name": "三滝川燈火まつり＆菰野町民盆踊り大会",
+      "city": "菰野町",
+      "venue": "菰野町役場南側・三滝川河川敷・福祉公園",
+      "address": "三重郡菰野町大字潤田1250番地周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-22"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "開催時刻は公式発表待ちです。",
+      "posterType": "admin",
+      "source": {
+        "name": "菰野町公式ウェブサイト",
+        "url": "https://www2.town.komono.mie.jp/site/70th-komonotown/10539.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "三滝川河川敷のランタン点灯と、福祉公園の噴水を囲む町民盆踊り大会を一緒に楽しめる地域イベントです。",
+      "scale": "major",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "kitagata-summer-bonodori-2026",
+      "status": "published",
+      "name": "（仮称）北方夏まつり盆踊り大会",
+      "city": "北方町",
+      "venue": "円鏡寺公園",
+      "address": "本巣郡北方町北方",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-17", "start": "14:00", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "名称は出店者募集時点の仮称です。一般向けの詳細発表後に更新します。",
+      "posterType": "organizer",
+      "source": {
+        "name": "岐阜県商工会連合会・北方町商工会公式サイト",
+        "url": "https://www.gifushoko.or.jp/%EF%BC%88%E5%8C%97%E6%96%B9%E7%94%BA%E5%95%86%E5%B7%A5%E4%BC%9A%E3%81%8B%E3%82%89%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%89%E6%AD%A9%E8%A1%8C%E8%80%85%E5%A4%A9%E5%9B%BD%E4%BB%A3%E6%9B%BF/"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "円鏡寺公園で開催予定の夏まつり盆踊り大会。出店者募集の公式案内で日時と会場が公表されています。",
+      "scale": "regional",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "takayama-nyukawa-summer-matsuri",
+      "status": "published",
+      "name": "にゅうかわ夏まつり",
+      "city": "高山市",
+      "venue": "丹生川支所前広場",
+      "address": "高山市丹生川町坊方2000番地",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "17:45", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "花火は20時30分から20時45分の予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光公式サイト 岐阜の旅ガイド",
+        "url": "https://www.kankou-gifu.jp/event/detail_6080.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "丹生川支所前広場で行われる夏まつり。納涼盆踊り、特産品バザー、打ち上げ花火などが予定されています。",
+      "scale": "regional",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "inazawa-summer-festival-2026",
+      "status": "published",
+      "name": "稲沢夏まつり2026",
+      "city": "稲沢市",
+      "venue": "サリオパーク祖父江",
+      "address": "稲沢市祖父江町祖父江",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-22", "start": "15:00", "end": "20:30"}
+      ],
+      "rain": "少雨決行・荒天中止。中止決定は当日8時",
+      "eventStatus": "scheduled",
+      "statusNote": "2026年の盆踊り実施は公式情報で確認できていないため、地域の祭りとして掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "稲沢市公式ウェブサイト",
+        "url": "https://www.city.inazawa.aichi.jp/0000000865.html"
+      },
+      "lastVerified": "2026-07-19",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "サリオパーク祖父江で開催される市の夏まつり。会場イベントと打ち上げ花火が案内されています。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
     }
   ]
 }
