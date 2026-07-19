@@ -18,6 +18,35 @@
 
 ## バックエンド(ComfyUI)のセットアップ
 
+接続先は複数登録でき、設定タブ・生成タブのプルダウンでワンタップ切替できる(例: Mac / Windows / RunPod)。
+
+### Mac(Apple Silicon)の場合
+
+M系チップならMPS(Metal)でローカル生成できる。M5・16GBならSDXLクラスまで実用的。
+
+```bash
+# Homebrewが未導入なら https://brew.sh の手順でインストール
+brew install python@3.12 git
+git clone https://github.com/comfyanonymous/ComfyUI
+cd ComfyUI
+python3.12 -m venv venv
+source venv/bin/activate
+pip install torch torchvision torchaudio
+pip install -r requirements.txt
+python main.py --enable-cors-header "*"
+```
+
+- モデル(checkpoint)は `ComfyUI/models/checkpoints/` に置く
+- アプリの接続先には `http://127.0.0.1:8188` を登録
+- **ブラウザはChrome推奨**: httpsページ(GitHub Pages)からlocalhostのhttpへの接続はChrome系では許可されるが、Safariではブロックされることがある
+- 2回目以降の起動は `cd ComfyUI && source venv/bin/activate && python main.py --enable-cors-header "*"`
+
+### Windows(NVIDIA GPU)の場合
+
+[ComfyUI公式のポータブル版](https://github.com/comfyanonymous/ComfyUI/releases)(Windows用zip)を展開し、`run_nvidia_gpu.bat` の起動引数に `--enable-cors-header "*"` を追記して起動。接続先はそのマシン上のブラウザから `http://127.0.0.1:8188`。
+
+GPUがないWindows機の場合はローカル生成は現実的でないので、RunPod等のクラウドを使う。
+
 ### RunPodの場合
 
 1. ComfyUI入りのテンプレートでPodを起動(ポート8188をHTTPで公開)
@@ -31,7 +60,7 @@
 
 ### 注意
 
-- このページはhttpsなので、エンドポイントもhttps必須(RunPodプロキシURLはhttps)
+- このページはhttpsなので、エンドポイントはhttpsか、localhost宛のhttp(`http://127.0.0.1:8188`)のみ接続可能。LAN上の別マシン(例: スマホ→MacのIP)へのhttp接続は混在コンテンツとしてブロックされる。別端末から使いたい場合はTailscale等のhttps化か、クラウドを使う
 - `--enable-cors-header` がないとブラウザからのアクセスがCORSでブロックされる
 - ComfyUIには認証がない。RunPodのプロキシURLは推測困難だが公開状態なので、URLを人に教えない・使い終わったらPodを停止する
 

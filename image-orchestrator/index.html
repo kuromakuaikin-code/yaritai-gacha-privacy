@@ -103,6 +103,9 @@ details .inner{padding:0 12px 12px}
 <!-- ============ 生成タブ ============ -->
 <div class="tab-page active" id="page-gen">
   <div class="card">
+    <div class="row" style="margin-bottom:8px">
+      <select id="genEpSelect" title="接続先"></select>
+    </div>
     <div class="row">
       <select id="genWfSelect"></select>
       <button class="btn small flex-none" id="btnReanalyze" title="ワークフローを再解析">再解析</button>
@@ -173,17 +176,22 @@ details .inner{padding:0 12px 12px}
 <!-- ============ 設定タブ ============ -->
 <div class="tab-page" id="page-settings">
   <div class="card">
-    <h2>接続<span class="sub">クラウド上のComfyUI</span></h2>
-    <label>ComfyUI エンドポイントURL</label>
-    <input type="url" id="setEndpoint" placeholder="https://xxxx-8188.proxy.runpod.net" autocapitalize="off">
+    <h2>接続先<span class="sub">複数登録してワンタップ切替(Mac / Windows / クラウド)</span></h2>
+    <label>使用する接続先</label>
+    <select id="epSelect"></select>
+    <div id="epList" style="margin-top:8px"></div>
+    <label>名前</label>
+    <input type="text" id="epNewName" placeholder="例: Mac / RunPod" autocapitalize="off">
+    <label>URL</label>
+    <input type="url" id="epNewUrl" placeholder="http://127.0.0.1:8188 / https://xxxx-8188.proxy.runpod.net" autocapitalize="off">
     <div class="row" style="margin-top:10px">
       <button class="btn" id="btnTestConn">接続テスト</button>
-      <button class="btn green" id="btnSaveConn">保存</button>
+      <button class="btn green" id="btnEpAdd">追加/更新</button>
     </div>
     <div class="hint">
       ComfyUI側はCORS許可付きで起動してください:<br>
-      <code>python main.py --listen 0.0.0.0 --enable-cors-header "*"</code><br>
-      RunPodならポート8188をHTTPで公開し、プロキシURL(https://…proxy.runpod.net)を貼り付けます。
+      <code>python main.py --enable-cors-header "*"</code><br>
+      ローカル(このマシン上のComfyUI)は <code>http://127.0.0.1:8188</code>。SafariはlocalhostへのhttpをブロックすることがあるためChrome推奨。RunPodはポート8188のプロキシURL(https://…proxy.runpod.net)を貼り付けます。
     </div>
   </div>
 
@@ -257,7 +265,9 @@ details .inner{padding:0 12px 12px}
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const LS = {
-  endpoint: "io.endpoint",
+  endpoint: "io.endpoint",        // 旧形式(単一URL)。移行用に残す
+  endpoints: "io.endpoints",
+  activeEp: "io.activeEp",
   workflows: "io.workflows",
   wildcards: "io.wildcards",
   activeWf: "io.activeWf",
@@ -265,7 +275,8 @@ const LS = {
 };
 
 const state = {
-  endpoint: localStorage.getItem(LS.endpoint) || "",
+  endpoints: JSON.parse(localStorage.getItem(LS.endpoints) || "[]"),
+  activeEp: localStorage.getItem(LS.activeEp) || "",
   workflows: JSON.parse(localStorage.getItem(LS.workflows) || "[]"),
   wildcards: JSON.parse(localStorage.getItem(LS.wildcards) || "{}"),
   activeWf: localStorage.getItem(LS.activeWf) || "",
@@ -276,6 +287,14 @@ const state = {
   running: false,
   xyRunning: false,
 };
+
+// 旧形式(単一エンドポイント)からの移行
+if (!state.endpoints.length && localStorage.getItem(LS.endpoint)){
+  state.endpoints = [{name: "デフォルト", url: localStorage.getItem(LS.endpoint)}];
+  state.activeEp = "デフォルト";
+  localStorage.setItem(LS.endpoints, JSON.stringify(state.endpoints));
+  localStorage.setItem(LS.activeEp, state.activeEp);
+}
 
 function save(key, val){ localStorage.setItem(LS[key], typeof val === "string" ? val : JSON.stringify(val)); }
 
@@ -295,7 +314,16 @@ $$("nav button").forEach(b => b.addEventListener("click", () => {
 }));
 
 /* ---------------- connection ---------------- */
-function apiBase(){ return state.endpoint.replace(/\/+$/, ""); }
+function activeEndpoint(){
+  return state.endpoints.find(e => e.name === state.activeEp) || state.endpoints[0] || null;
+}
+function apiBase(){
+  const ep = activeEndpoint();
+  return ep ? ep.url.replace(/\/+$/, "") : "";
+}
+function isLoopback(url){
+  return /^http:\/\/(127\.0\.0\.1|localhost|\[::1\])([:/]|$)/.test(url);
+}
 
 function setConn(ok, label){
   $("#connDot").className = "conn-dot " + (ok === null ? "" : ok ? "ok" : "ng");
@@ -303,10 +331,12 @@ function setConn(ok, label){
 }
 
 async function testConnection(silent){
-  if (!state.endpoint){ setConn(null, "未接続"); return false; }
-  if (location.protocol === "https:" && state.endpoint.startsWith("http:")){
+  const ep = activeEndpoint();
+  if (!ep){ setConn(null, "未接続"); return false; }
+  // httpsページからのhttpは混在コンテンツでブロックされる(localhost宛はChrome系では許可)
+  if (location.protocol === "https:" && ep.url.startsWith("http:") && !isLoopback(ep.url)){
     setConn(false, "httpは不可");
-    if (!silent) toast("このページはhttpsなので、エンドポイントもhttpsが必要です(RunPodプロキシURL等)");
+    if (!silent) toast("httpsページからLAN上のhttpには接続できません。localhost宛か、httpsのURL(RunPodプロキシ等)を使ってください");
     return false;
   }
   try{
@@ -314,11 +344,12 @@ async function testConnection(silent){
     if (!r.ok) throw new Error(r.status);
     const j = await r.json();
     const dev = j.devices && j.devices[0] ? j.devices[0].name.split(":").pop().trim() : "OK";
-    setConn(true, dev.length > 22 ? dev.slice(0, 22) + "…" : dev);
+    const label = ep.name + " · " + dev;
+    setConn(true, label.length > 26 ? label.slice(0, 26) + "…" : label);
     loadObjectInfo();
     return true;
   }catch(e){
-    setConn(false, "接続失敗");
+    setConn(false, ep.name + " 接続失敗");
     if (!silent) toast("接続失敗: " + e.message + " — URL/CORS設定を確認してください");
     return false;
   }
@@ -332,17 +363,72 @@ async function loadObjectInfo(){
   }catch(e){ /* optional */ }
 }
 
-$("#btnSaveConn").addEventListener("click", () => {
-  state.endpoint = $("#setEndpoint").value.trim();
-  save("endpoint", state.endpoint);
+function switchEndpoint(name){
+  state.activeEp = name;
+  save("activeEp", state.activeEp);
   state.objectInfo = null;
-  toast("保存しました");
+  if (ws){ try{ ws.close(); }catch(e){} ws = null; }
+  renderEpUi();
   testConnection(true);
+}
+
+function renderEpUi(){
+  for (const sel of [$("#epSelect"), $("#genEpSelect")]){
+    sel.innerHTML = "";
+    if (!state.endpoints.length){
+      const o = document.createElement("option");
+      o.textContent = "接続先未登録(設定タブで追加)";
+      sel.appendChild(o);
+      continue;
+    }
+    state.endpoints.forEach(ep => {
+      const o = document.createElement("option");
+      o.value = ep.name;
+      o.textContent = "🔌 " + ep.name;
+      if (ep.name === (activeEndpoint()?.name)) o.selected = true;
+      sel.appendChild(o);
+    });
+  }
+  const box = $("#epList");
+  box.innerHTML = "";
+  state.endpoints.forEach(ep => {
+    const div = document.createElement("div");
+    div.className = "wc-item";
+    div.innerHTML = `<div class="nm" style="flex:1">${escapeHtml(ep.name)}<div class="hint" style="margin:0;word-break:break-all">${escapeHtml(ep.url)}</div></div>`;
+    const edit = document.createElement("button");
+    edit.className = "btn small"; edit.textContent = "編集";
+    edit.addEventListener("click", () => {
+      $("#epNewName").value = ep.name;
+      $("#epNewUrl").value = ep.url;
+    });
+    const del = document.createElement("button");
+    del.className = "btn small danger"; del.textContent = "削除";
+    del.addEventListener("click", () => {
+      state.endpoints = state.endpoints.filter(x => x !== ep);
+      save("endpoints", state.endpoints);
+      if (state.activeEp === ep.name){ state.activeEp = state.endpoints[0]?.name || ""; save("activeEp", state.activeEp); }
+      renderEpUi();
+    });
+    div.appendChild(edit); div.appendChild(del);
+    box.appendChild(div);
+  });
+}
+
+$("#epSelect").addEventListener("change", e => switchEndpoint(e.target.value));
+$("#genEpSelect").addEventListener("change", e => switchEndpoint(e.target.value));
+
+$("#btnEpAdd").addEventListener("click", () => {
+  const name = $("#epNewName").value.trim();
+  const url = $("#epNewUrl").value.trim();
+  if (!name || !url){ toast("名前とURLを入力してください"); return; }
+  state.endpoints = state.endpoints.filter(e => e.name !== name);
+  state.endpoints.push({name, url});
+  save("endpoints", state.endpoints);
+  $("#epNewName").value = ""; $("#epNewUrl").value = "";
+  switchEndpoint(name);
+  toast(`「${name}」を保存しました`);
 });
-$("#btnTestConn").addEventListener("click", () => {
-  state.endpoint = $("#setEndpoint").value.trim();
-  testConnection(false);
-});
+$("#btnTestConn").addEventListener("click", () => testConnection(false));
 
 /* ---------------- workflows ---------------- */
 function activeWorkflow(){
@@ -860,7 +946,7 @@ $("#btnGenerate").addEventListener("click", async () => {
   if (state.running) return;
   const wf = activeWorkflow();
   if (!wf){ toast("まずは設定タブでワークフローを登録してください"); return; }
-  if (!state.endpoint){ toast("設定タブでエンドポイントを設定してください"); return; }
+  if (!activeEndpoint()){ toast("設定タブで接続先を登録してください"); return; }
   const count = Math.max(1, Math.min(100, Number($("#genCount").value) || 1));
   state.running = true;
   genAbort = new AbortController();
@@ -1188,7 +1274,8 @@ $("#btnViewerReuse").addEventListener("click", () => {
 /* ---------------- export / import ---------------- */
 $("#btnExport").addEventListener("click", () => {
   const data = {
-    endpoint: state.endpoint,
+    endpoints: state.endpoints,
+    activeEp: state.activeEp,
     workflows: state.workflows,
     wildcards: state.wildcards,
     fieldValues: state.fieldValues,
@@ -1205,7 +1292,9 @@ $("#importFile").addEventListener("change", async e => {
   if (!f) return;
   try{
     const data = JSON.parse(await f.text());
-    if (data.endpoint !== undefined){ state.endpoint = data.endpoint; save("endpoint", state.endpoint); }
+    if (Array.isArray(data.endpoints)){ state.endpoints = data.endpoints; save("endpoints", state.endpoints); }
+    else if (data.endpoint){ state.endpoints = [{name: "デフォルト", url: data.endpoint}]; save("endpoints", state.endpoints); }
+    if (data.activeEp !== undefined){ state.activeEp = data.activeEp; save("activeEp", state.activeEp); }
     if (Array.isArray(data.workflows)){ state.workflows = data.workflows; save("workflows", state.workflows); }
     if (data.wildcards){ state.wildcards = data.wildcards; save("wildcards", state.wildcards); }
     if (data.fieldValues){ state.fieldValues = data.fieldValues; save("fieldValues", state.fieldValues); }
@@ -1223,12 +1312,11 @@ function escapeHtml(s){
 }
 
 function initRender(){
-  $("#setEndpoint").value = state.endpoint;
-  renderWfList(); renderWfSelect(); renderGenFields(); renderWcList();
+  renderEpUi(); renderWfList(); renderWfSelect(); renderGenFields(); renderWcList();
 }
 
 initRender();
-if (state.endpoint) testConnection(true);
+if (activeEndpoint()) testConnection(true);
 </script>
 </body>
 </html>
