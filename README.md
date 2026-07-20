@@ -249,3 +249,23 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bousai-check/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## 子どもの成長記録
+
+赤ちゃん・子どもの身長体重を記録し、グラフで成長を振り返れるアプリ。母子手帳の成長曲線ページをデジタル化したもの。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-kodomogrowth/`（セットアップ・リリース手順は `ios-kodomogrowth/README.md`）
+- プライバシーポリシー: `kodomo-growth/privacy.html`
+- 利用規約: `kodomo-growth/terms.html`
+
+### リリース手順（iOS / App Store）
+
+1. `ios-kodomogrowth/KodomoGrowth/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.kodomogrowth.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.kodomogrowth.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kodomo-growth/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
