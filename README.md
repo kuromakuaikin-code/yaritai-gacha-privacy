@@ -289,3 +289,24 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/odekake-memories/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## 学び・習い事記録帳
+
+お子さまの習い事の出席・月謝、読書記録、資格・勉強の進捗、学校行事・持ち物チェックリストをまとめて記録できるアプリ。Apple App Store Review Guideline 4.3（テンプレートアプリの乱発によるアカウント停止リスク）を避けるため、関連性の高い4つの記録機能を1つのアプリに統合している。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-manabirecord/`（セットアップ・リリース手順は `ios-manabirecord/README.md`）
+- プライバシーポリシー: `manabi-record/privacy.html`
+- 利用規約: `manabi-record/terms.html`
+- 4モジュール構成: 習い事の出席・月謝記録／読書記録／資格・勉強進捗管理／学校行事・持ち物チェックリスト（`ios-manabirecord/ManabiRecord/Models.swift`）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-manabirecord/ManabiRecord/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.manabirecord.premium` / 例 ¥160、4モジュールすべて無制限化）
+   - 広告なし（`com.kuromakuaikin.manabirecord.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/manabi-record/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）。お子さまの記録は端末内保存のみである旨を正確に申告
+6. アプリアイコン（1024×1024）を用意して Assets に設定
