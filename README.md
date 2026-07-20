@@ -269,3 +269,23 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kodomo-growth/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## おでかけ思い出手帳
+
+家族のおでかけ先を「公園・遊び場」「花見・紅葉スポット」「キャンプ・BBQ場」「観光・お城スタンプ帳」の4カテゴリで記録できるアプリ。4カテゴリは共通の`OutingVisit`モデルをカテゴリで絞り込んで使い回す設計にしており、単機能アプリの乱立を避けるため4つの記録機能を1本にまとめた構成になっている（既存の「御朱印帳ログ」とは神社・お寺の御朱印参拝記録という別スコープの別アプリ）。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-odekakememories/`（セットアップ・リリース手順は `ios-odekakememories/README.md`）
+- プライバシーポリシー: `odekake-memories/privacy.html`
+- 利用規約: `odekake-memories/terms.html`
+
+### リリース手順（iOS / App Store）
+
+1. `ios-odekakememories/OdekakeMemories/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.odekakememories.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.odekakememories.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/odekake-memories/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
