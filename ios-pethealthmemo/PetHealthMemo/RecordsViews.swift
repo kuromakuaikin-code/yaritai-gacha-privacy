@@ -165,7 +165,7 @@ struct WeightChartView: View {
                 y: .value("体重", point.weightKg ?? 0)
             )
             .foregroundStyle(AppConfig.tintColor)
-            .symbol(Circle())
+            .symbol(.circle)
             .interpolationMethod(.catmullRom)
         }
         .frame(height: 140)

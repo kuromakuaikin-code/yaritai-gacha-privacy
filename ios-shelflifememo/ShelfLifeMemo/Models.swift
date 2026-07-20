@@ -26,9 +26,9 @@ enum FoodCategory: String, CaseIterable, Identifiable, Codable {
 
     var icon: String {
         switch self {
-        case .fridge:  return "refrigerator.fill"
+        case .fridge:  return "refrigerator"
         case .freezer: return "snowflake"
-        case .pantry:  return "cabinet.fill"
+        case .pantry:  return "cabinet"
         }
     }
 
