@@ -208,3 +208,44 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/omamori-reminder/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## ペット健康手帳
+
+犬・猫などペットのワクチン接種、通院・健診、体重測定、トリミングなどの記録を管理し、次回の予定日や体重の推移を確認できるアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-pethealthmemo/`（セットアップ・リリース手順は `ios-pethealthmemo/README.md`）
+- プライバシーポリシー: `pet-health-memo/privacy.html`
+- 利用規約: `pet-health-memo/terms.html`
+
+### リリース手順（iOS / App Store）
+
+1. `ios-pethealthmemo/PetHealthMemo/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.pethealthmemo.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.pethealthmemo.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/pet-health-memo/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## 防災グッズチェックリスト
+
+家庭の防災グッズ（非常食・飲料水・衛生用品・情報収集グッズ・貴重品・子供や高齢者・ペット用品など）の準備状況をチェックリストで管理し、家族の緊急連絡先・避難時の集合場所をカード形式で記録するアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-bousaicheck/`（セットアップ・リリース手順は `ios-bousaicheck/README.md`）
+- プライバシーポリシー: `bousai-check/privacy.html`
+- 利用規約: `bousai-check/terms.html`
+- 標準チェックリストのデータ: `ios-bousaicheck/BousaiCheck/Models.swift` の `PresetChecklistData`（一般的な目安。世帯構成・地域のハザードにより過不足があるため、リリース前に見直すこと）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-bousaicheck/BousaiCheck/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.bousaicheck.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.bousaicheck.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/bousai-check/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
