@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "そなえ手帳",
+    "slug": "sonae-techo",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "bundleIdentifier": "com.kuromakuaikin.sonaetecho",
+      "buildNumber": "1",
+      "supportsTablet": false,
+      "infoPlist": {
+        "CFBundleAllowMixedLocalizations": true,
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.kuromakuaikin.sonaetecho"
+    },
+    "splash": {
+      "image": "./assets/icon.png",
+      "backgroundColor": "#faf6f2",
+      "resizeMode": "contain"
+    },
+    "owner": "aikin",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
+      [
+        "react-native-google-mobile-ads",
+        {
+          "iosAppId": "ca-app-pub-3940256099942544~1458002511",
+          "androidAppId": "ca-app-pub-3940256099942544~3347511713"
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#d95b2b"
+        }
+      ]
+    ]
+  }
+}

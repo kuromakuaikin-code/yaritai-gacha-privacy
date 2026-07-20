@@ -41,3 +41,16 @@ Privacy policy for やりたいガチャ
    （生成: `printf '%s' 'コード' | shasum -a 256`）
 4. `ADS.adsenseClient` / `adsenseSlot` に AdSense の ID を設定
 5. Stripe 販売を行う場合は特定商取引法に基づく表記ページを用意
+
+## そなえ手帳
+
+家庭の防災備蓄（水・食料・カセットボンベ・トイレットペーパー・電池など）を登録すると、
+家族人数×目標日数から算出した推奨量との過不足が見え、期限が近いものを教えてくれるアプリ。
+`婚活デートメモ` と同じ構成（Expo + 端末内保存 + 買い切りIAP + AdMob）。
+
+- アプリ本体（Expo・App Store提出用）: `sonae-techo/`（セットアップ・リリース手順は `sonae-techo/README.md` / `sonae-techo/RELEASE.md`）
+- プライバシーポリシー: `sonae-techo/privacy.html`
+- 利用規約: `sonae-techo/terms.html`
+- 無料：飲料水・主食の2カテゴリ。プレミアム（買い切り）：全カテゴリ解放＋期限が近づいたらローカル通知
+- 現状のアイコンはプレースホルダー（警告三角形の単色アイコン、`sonae-techo/assets/icon.png`）。差し替え推奨
+- 提出には Expo/EAS・Apple Developer Program・AdMob アカウントの紐付けが必要（`RELEASE.md` 参照、本リポジトリにはアカウント固有IDを含めていない）
