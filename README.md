@@ -124,3 +124,66 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/subscription-ledger/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## お薬手帳メモ
+
+ご家族一人ひとりのお薬（名前・用量・服用タイミング・処方病院・服用期間）を登録し、「今日、誰が・いつ・どのお薬を飲んだか」をチェックして記録するアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-okusurimemo/`（セットアップ・リリース手順は `ios-okusurimemo/README.md`）
+- プライバシーポリシー: `okusuri-memo/privacy.html`
+- 利用規約: `okusuri-memo/terms.html`
+
+### リリース手順（iOS / App Store）
+
+1. `ios-okusurimemo/OkusuriMemo/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.okusurimemo.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.okusurimemo.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/okusuri-memo/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
+7. 「本アプリは医学的な助言を目的としたものではない」旨の注意書き（設定タブ）は削除・改変せず維持すること
+
+## 年賀状・贈り物管理
+
+年賀状、お中元・お歳暮などの季節の贈り物について「誰に・いつ・送ったか／もらったか」を記録し、送り忘れや重複を防ぐアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-nengamemo/`（セットアップ・リリース手順は `ios-nengamemo/README.md`）
+- プライバシーポリシー: `nenga-memo/privacy.html`
+- 利用規約: `nenga-memo/terms.html`
+
+### リリース手順（iOS / App Store）
+
+1. `ios-nengamemo/NengaMemo/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.nengamemo.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.nengamemo.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/nenga-memo/privacy.html` を設定
+5. プライバシー「栄養表示」：ユーザーデータ収集なし（広告関連は AdMob の SDK 申告に従う）。宛先（第三者）の氏名・住所は端末内保存のみで外部送信なし
+6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## ゴミ出しカレンダー
+
+家庭ごとに異なるゴミ・資源の収集ルール（曜日・頻度）を登録しておき、今日・明日・今後1週間で何を出せばよいかをひと目で確認できるアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-gomicalendar/`（セットアップ・リリース手順は `ios-gomicalendar/README.md`）
+- プライバシーポリシー: `gomi-calendar/privacy.html`
+- 利用規約: `gomi-calendar/terms.html`
+- 収集ルールの判定ロジック: `ios-gomicalendar/GomiCalendar/Models.swift` の `GarbageRule.applies(on:)`（隔週・第1&3・第2&4は `Calendar` の週番号による簡易判定。地域の起算日とずれる場合はあくまで目安として利用すること）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-gomicalendar/GomiCalendar/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.gomicalendar.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.gomicalendar.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. リマインダー通知（プレミアム限定）：`SettingsViews.swift` の `NotificationService` がローカル通知を登録。初回有効化時に通知許可ダイアログが表示される（簡易実装、内容はアプリ起動・設定変更のたびに当日分へ更新）
+5. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/gomi-calendar/privacy.html` を設定
+6. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+7. アプリアイコン（1024×1024）を用意して Assets に設定
