@@ -41,3 +41,24 @@ Privacy policy for やりたいガチャ
    （生成: `printf '%s' 'コード' | shasum -a 256`）
 4. `ADS.adsenseClient` / `adsenseSlot` に AdSense の ID を設定
 5. Stripe 販売を行う場合は特定商取引法に基づく表記ページを用意
+
+## ご祝儀・香典メモ
+
+結婚式のご祝儀、お葬式の香典、出産・入学・新築祝いなどの「誰に・いくら・いつ」を記録し、相場の目安とお返し（香典返し・内祝い）の対応状況を管理するアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-shugimemo/`（セットアップ・リリース手順は `ios-shugimemo/README.md`）
+- プライバシーポリシー: `shugi-memo/privacy.html`
+- 利用規約: `shugi-memo/terms.html`
+- 相場ガイドのデータ: `ios-shugimemo/ShugiMemo/Models.swift` の `MarketRateData`（一般的な目安。リリース前に最新情報で見直すこと）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-shugimemo/ShugiMemo/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.shugimemo.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.shugimemo.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/shugi-memo/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
