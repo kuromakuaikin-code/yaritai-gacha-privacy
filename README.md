@@ -83,3 +83,44 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/goshuin-log/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## 冷蔵庫の賞味期限メモ
+
+冷蔵庫・冷凍庫・常温保存の食品の賞味期限／消費期限を記録し、期限が近い食品をひと目で確認して食品ロスを減らすアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-shelflifememo/`（セットアップ・リリース手順は `ios-shelflifememo/README.md`）
+- プライバシーポリシー: `shelf-life-memo/privacy.html`
+- 利用規約: `shelf-life-memo/terms.html`
+
+### リリース手順（iOS / App Store）
+
+1. `ios-shelflifememo/ShelfLifeMemo/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.shelflifememo.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.shelflifememo.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/shelf-life-memo/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## サブスク管理帳
+
+動画配信・音楽配信・クラウドストレージ・ニュース・フィットネス・ゲームなど、家庭で契約している複数のサブスクリプションサービスの「サービス名・料金・支払いサイクル・次回更新日」をまとめて記録し、月あたりの合計コストを一目で把握できるアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-subscriptionledger/`（セットアップ・リリース手順は `ios-subscriptionledger/README.md`）
+- プライバシーポリシー: `subscription-ledger/privacy.html`
+- 利用規約: `subscription-ledger/terms.html`
+- 次回更新日の計算ロジック: `ios-subscriptionledger/SubscriptionLedger/Models.swift` の `RenewalCalculator`（月末日のクランプ処理・年払いの繰り上げに対応）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-subscriptionledger/SubscriptionLedger/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.subscriptionledger.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.subscriptionledger.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/subscription-ledger/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
