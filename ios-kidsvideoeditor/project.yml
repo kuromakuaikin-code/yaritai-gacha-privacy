@@ -1,0 +1,25 @@
+# XcodeGen 用プロジェクト定義（任意）
+# `brew install xcodegen && cd ios-kidsvideoeditor && xcodegen` で KidsVideoEditor.xcodeproj が生成される。
+# XcodeGen を使わない場合は README.md の手動セットアップ手順を参照。
+name: KidsVideoEditor
+options:
+  bundleIdPrefix: com.kuromakuaikin
+  deploymentTarget:
+    iOS: "17.0"
+targets:
+  KidsVideoEditor:
+    type: application
+    platform: iOS
+    sources: [KidsVideoEditor]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kuromakuaikin.kidsvideoeditor
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_KEY_CFBundleDisplayName: きっず動画編集
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "動画を選んで編集するために使用します"
+        INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription: "作成した動画を保存するために使用します"
+        SWIFT_VERSION: 5.9
+        TARGETED_DEVICE_FAMILY: 1
+        GENERATE_INFOPLIST_FILE: YES

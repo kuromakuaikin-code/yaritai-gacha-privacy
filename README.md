@@ -331,3 +331,24 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kurashi-number-book/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## 暮らしの安心手帳
+
+家電の保証期限、住まいの定期メンテナンス、観葉植物の水やり、日用品の在庫という4つの家事記録機能をひとつにまとめたアプリ。単機能アプリの乱発によるApple App Store Review Guideline 4.3違反（アカウント停止）リスクを避けるため、関連性のある記録機能を1本のアプリとして提供している。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-kurashianshin/`（セットアップ・リリース手順は `ios-kurashianshin/README.md`）
+- プライバシーポリシー: `kurashi-anshin-book/privacy.html`
+- 利用規約: `kurashi-anshin-book/terms.html`
+- 標準メンテナンス項目のデータ: `ios-kurashianshin/KurashiAnshinBook/Models.swift` の `PresetMaintenanceData`（一般的な目安。住宅の設備構成・築年数により過不足があるため、リリース前に見直すこと）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-kurashianshin/KurashiAnshinBook/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.kurashianshin.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.kurashianshin.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kurashi-anshin-book/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
