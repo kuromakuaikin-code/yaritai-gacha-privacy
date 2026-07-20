@@ -352,3 +352,30 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kurashi-anshin-book/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## きっず動画編集
+
+子ども（保護者同伴）向けの動画編集アプリ。写真アプリから動画クリップを選んで並べ替え・トリミングし、テキストキャプション・絵文字スタンプ・BGMを加えて1本の動画に書き出し、写真アプリに保存できる。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-kidsvideoeditor/`（セットアップ・リリース手順は `ios-kidsvideoeditor/README.md`）
+- プライバシーポリシー: `kids-video-editor/privacy.html`
+- 利用規約: `kids-video-editor/terms.html`
+- BGM音源: `ios-kidsvideoeditor/KidsVideoEditor/Models.swift` の `BGMTrack.all` が参照するファイル名（`bgm_happy1.m4a` など）。実音源はリポジトリに含まれないため、開発者がリリース前に著作権フリーの音源を追加する必要あり（詳細は `ios-kidsvideoeditor/README.md`）
+
+⚠️ **Kids カテゴリのアプリです**：App Store の子ども向けカテゴリ審査は通常アプリより要件が厳しいため、以下を含む追加のコンプライアンス確認が必要です（詳細は `ios-kidsvideoeditor/README.md` の「Kidsカテゴリ 対応チェックリスト」参照）。
+- 保護者ゲート（購入・外部リンク・共有シートの前に簡単な計算問題）実装済み・実機での動作確認が必要
+- 広告は既定オフ。有効化する場合はAdMobの児童向けタグ設定（TFCD）＋非パーソナライズ配信のみとし、ATT許可ダイアログは表示しないこと
+- AVFoundationによる動画合成・書き出しパイプラインは実機・Xcodeでの動作確認が一度もできていないため、リリース前に実際の動画クリップで十分なテストが必須
+
+### リリース手順（iOS / App Store）
+
+1. `ios-kidsvideoeditor/KidsVideoEditor/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを1つ作成
+   - プレミアム（`com.kuromakuaikin.kidsvideoeditor.premium` / ¥360）＋「購入の復元」
+3. BGM音源ファイル（`bgm_happy1.m4a` など）を著作権フリー音源で追加（`ios-kidsvideoeditor/README.md` の「⚠️ 音源ファイルを追加してください」参照）
+4. 広告：既定オフ。有効化する場合はKidsカテゴリ対応の設定が必須（TFCD・非パーソナライズ・ATT不使用）
+5. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kids-video-editor/privacy.html` を設定
+6. プライバシー「栄養表示」：データ収集なし
+7. アプリアイコン（1024×1024）を用意して Assets に設定
+8. Kidsカテゴリ申請チェックリスト（保護者ゲート・ATT不使用・広告設定・動画エクスポート機能の実機テスト）を必ず完了してから提出
