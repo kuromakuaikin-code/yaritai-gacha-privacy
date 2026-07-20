@@ -1,6 +1,6 @@
 {
   "_comment": "盆踊りの可能性があるが、2026年の日時・会場・内容または本サイト対象かを確認中の候補。確定イベントとは分けて表示する。",
-  "lastChecked": "2026-07-19",
+  "lastChecked": "2026-07-20",
   "candidates": [
     {
       "id": "candidate-ichinomiya-imaise",
@@ -38,9 +38,9 @@
       "prefecture": "岐阜県",
       "city": "高山市",
       "venue": "高山市久々野支所前広場周辺",
-      "dateText": "2026年8月11日開催予定",
+      "dateText": "2026年8月11日 16:30～22:30（雨天時は8月22日）",
       "source": {"name": "岐阜県観光公式サイト", "url": "https://www.kankou-gifu.jp/event/detail_4994.html"},
-      "reason": "2026年8月11日の開催日時は発表済みですが、2026年の盆踊り実施内容は詳細発表待ちです。"
+      "reason": "2026年の開催日時と会場は発表済みですが、公式ページの盆踊り説明は前年情報のため、2026年の実施内容を確認中です。"
     },
     {
       "id": "candidate-domatsuri",

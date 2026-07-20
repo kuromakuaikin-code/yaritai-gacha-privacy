@@ -3148,6 +3148,262 @@
       "scale": "major",
       "category": "festival",
       "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-nakamura-park-summer-2026",
+      "status": "published",
+      "name": "第68回 中村公園夏まつり 納涼盆おどり大会",
+      "city": "名古屋市中村区",
+      "venue": "中村公園内 東園",
+      "address": "名古屋市中村区中村町高畑68",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-22", "start": "19:00", "end": "21:00"},
+        {"date": "2026-07-23", "start": "19:00", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "夏まつりは7月24日まで。24日は納涼花火観賞会が予定されています。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1587/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "中村公園の夏まつりで行われる納涼盆おどり大会。2日間とも夜に開催され、出店やステージ企画も案内されています。",
+      "scale": "major",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "tsushima-tenno-festival-2026",
+      "status": "published",
+      "name": "尾張津島天王祭",
+      "city": "津島市",
+      "venue": "津島神社・天王川公園",
+      "address": "津島市宮川町1丁目地内ほか",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "18:00"},
+        {"date": "2026-07-26", "start": "09:10"}
+      ],
+      "rain": "少雨決行。最新の開催状況は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "7月25日は宵祭、26日は朝祭です。盆踊りではなく、車楽舟で知られる神社の祭礼として掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/320/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "津島神社の祭礼として続く川祭。宵祭では提灯を掲げた巻藁船、朝祭では車楽舟の行事が行われます。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "kariya-mando-festival-2026",
+      "status": "published",
+      "name": "刈谷万燈祭（秋葉社の祭礼）",
+      "city": "刈谷市",
+      "venue": "刈谷市中心部・秋葉社周辺",
+      "address": "刈谷市銀座2-101周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25"},
+        {"date": "2026-07-26"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "25日は新楽、26日は本楽です。詳しい進行時刻は公式情報をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/93/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "竹と和紙で作られた大きな万燈を担ぎ、お囃子に合わせて舞う秋葉社の祭礼。2日目は秋葉社境内で舞が奉納されます。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-kuroiwa-gion-2026",
+      "status": "published",
+      "name": "黒岩祇園祭",
+      "city": "一宮市",
+      "venue": "石刀神社",
+      "address": "一宮市浅井町黒岩石刀塚217-1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "18:30", "end": "21:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、提灯を飾った山車を曳く地域の祇園祭として掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/3637/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "黒岩公民館と石刀神社の間を、お囃子とともに提灯で飾られた山車が往復する地域の祭礼です。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "kanie-sunari-festival-2026",
+      "status": "published",
+      "name": "須成祭",
+      "city": "蟹江町",
+      "venue": "須成神社周辺",
+      "address": "海部郡蟹江町須成門屋敷上1363周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "20:00"},
+        {"date": "2026-08-02", "start": "09:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "8月1日は宵祭、2日は朝祭です。開始時刻はいずれも目安です。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/321/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "冨吉建速神社・八劔社の祭礼として行われる川祭。宵祭と朝祭で祭船が蟹江川を進みます。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "toyokawa-mitama-festival-2026",
+      "status": "published",
+      "name": "みたま祭り 盆踊り大会",
+      "city": "豊川市",
+      "venue": "豊川閣妙厳寺（豊川稲荷）",
+      "address": "豊川市豊川町1番地",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-07", "start": "18:30", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "読経は18時30分、踊りは19時開始予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1507/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "戦争犠牲者を追悼し、みたま供養のために行われる盆踊り大会です。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "iga-hijiki-gion-2026",
+      "status": "published",
+      "name": "比自岐神社 祇園祭",
+      "city": "伊賀市",
+      "venue": "比自岐神社",
+      "address": "伊賀市比自岐683",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-26", "start": "11:30"}
+      ],
+      "rain": "小雨決行",
+      "eventStatus": "scheduled",
+      "statusNote": "祇園踊りは14時開始予定です。盆踊りではなく、かんこ踊りを奉納する祭礼として掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/42768"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "比自岐神社で祈祷や奉納行事を行い、午後に県指定無形民俗文化財の祇園踊りが披露されます。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "komaki-reiwa-summer-2026",
+      "status": "published",
+      "name": "こまき令和夏まつり",
+      "city": "小牧市",
+      "venue": "小牧駅・ラピオ周辺道路、ラピオ5階",
+      "address": "小牧市中央1丁目周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-22", "start": "15:00", "end": "21:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "一部会場は12時から19時まで。盆踊りではなく、誰でも参加できる総踊りを行う夏まつりです。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1355/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "小牧駅周辺で総踊り、手筒花火、飲食企画や子ども向け催事を楽しめる夏まつりです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "anjo-tanabata-festival-2026",
+      "status": "published",
+      "name": "第73回 安城七夕まつり",
+      "city": "安城市",
+      "venue": "JR安城駅周辺市街地",
+      "address": "安城市御幸本町周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-07", "start": "16:00", "end": "21:30"},
+        {"date": "2026-08-08", "start": "10:00", "end": "21:30"},
+        {"date": "2026-08-09", "start": "10:00", "end": "20:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "2026年の盆踊り実施は公式情報で確認できていないため、七夕祭りとして掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/136/"
+      },
+      "lastVerified": "2026-07-20",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "JR安城駅周辺の市街地を竹飾りや願いごとの企画で彩る、3日間の七夕まつりです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
     }
   ]
 }
