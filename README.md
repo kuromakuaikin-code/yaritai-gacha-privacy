@@ -310,3 +310,24 @@ Privacy policy for やりたいガチャ
    `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/manabi-record/privacy.html` を設定
 5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）。お子さまの記録は端末内保存のみである旨を正確に申告
 6. アプリアイコン（1024×1024）を用意して Assets に設定
+
+## おうちの数字管理帳
+
+光熱費（電気・ガス・水道）の記録、ポイ活残高の管理、記念日・ギフト履歴、保険・車検・免許証などの更新期限管理という、家計まわりの「数字」に関する4つの記録機能を1本にまとめたアプリ。
+
+- iOS版（SwiftUI・App Store提出用）: `ios-kurashinumbers/`（セットアップ・リリース手順は `ios-kurashinumbers/README.md`）
+- プライバシーポリシー: `kurashi-number-book/privacy.html`
+- 利用規約: `kurashi-number-book/terms.html`
+- 4モジュール構成：光熱費記録／ポイ活残高管理／記念日・ギフト履歴／更新期限管理（Apple 4.3のテンプレートアプリ規制回避のため、単機能アプリの量産をやめ1本のアプリに統合）
+
+### リリース手順（iOS / App Store）
+
+1. `ios-kurashinumbers/KurashiNumberBook/Store.swift` の `AppConfig.freeTrial` を `false` に
+2. App Store Connect で非消耗型IAPを2つ作成
+   - プレミアム（`com.kuromakuaikin.kurashinumbers.premium` / 例 ¥160）
+   - 広告なし（`com.kuromakuaikin.kurashinumbers.adfree` / 例 ¥120）＋「購入の復元」
+3. 広告：AdMob バナー（広告なし/プレミアム購入者には非表示）。ATT 対応または非パーソナライズ配信
+4. App Store Connect：プライバシーポリシー URL に
+   `https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/kurashi-number-book/privacy.html` を設定
+5. プライバシー「栄養表示」：データ収集なし（広告関連は AdMob の SDK 申告に従う）
+6. アプリアイコン（1024×1024）を用意して Assets に設定
