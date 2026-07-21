@@ -3404,6 +3404,235 @@
       "scale": "major",
       "category": "festival",
       "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-nakagawa-arako-bonodori-2026",
+      "status": "published",
+      "name": "荒子連合町内会盆踊り大会",
+      "city": "名古屋市中川区",
+      "venue": "荒子集会所広場",
+      "address": "名古屋市中川区荒子町字宮窓15番1（荒子観音寺東側駐車場）",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "19:00", "end": "21:30"},
+        {"date": "2026-08-02", "start": "19:00", "end": "21:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市中川区公式サイト",
+        "url": "https://www.city.nagoya.jp/nakagawa/miryoku/1051186/1051817.html"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "荒子連合町内会が荒子集会所広場で2日間開催する地域の盆踊り大会です。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-nakagawa-nakago-bonodori-2026",
+      "status": "published",
+      "name": "中郷地区盆踊り",
+      "city": "名古屋市中川区",
+      "venue": "もちの木公園",
+      "address": "名古屋市中川区中郷2丁目",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-11", "start": "19:00", "end": "21:00"},
+        {"date": "2026-08-12", "start": "19:00", "end": "21:00"}
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市中川区公式サイト",
+        "url": "https://www.city.nagoya.jp/nakagawa/miryoku/1051186/1051459.html"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "もちの木公園で2夜にわたって行われる、中郷地区の盆踊りです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-nakagawa-hokkenishi-summer-2026",
+      "status": "published",
+      "name": "法華西町西部夏祭り",
+      "city": "名古屋市中川区",
+      "venue": "法華西公園",
+      "address": "名古屋市中川区法華西町",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-31", "start": "16:00", "end": "21:00"},
+        {"date": "2026-08-01", "start": "16:00", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは両日19時から21時まで。売店とキッチンカーは16時から始まります。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市中川区公式サイト",
+        "url": "https://www.city.nagoya.jp/nakagawa/miryoku/1051186/1051818.html"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "法華西公園で盆踊り、売店、キッチンカーやゲームを楽しめる町内の夏祭りです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-meito-yomogi-summer-2026",
+      "status": "published",
+      "name": "よもぎ夏まつり",
+      "city": "名古屋市名東区",
+      "venue": "蓬莱小学校",
+      "address": "名古屋市名東区よもぎ台1丁目",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "16:00", "end": "20:00"}
+      ],
+      "rain": "雨天時は7月26日に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "公式案内に盆踊りの実施内容が明記されていないため、地域の夏祭りとして掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市名東区公式サイト",
+        "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "蓬莱小学校で夕方から開催される、よもぎ学区の夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-meito-hongo-takoyaki-festa-2026",
+      "status": "published",
+      "name": "NAGOYAたこ焼きFESTA 2026夏in本郷",
+      "city": "名古屋市名東区",
+      "venue": "本郷公園・本郷コミュニティセンター",
+      "address": "名古屋市名東区本郷1丁目周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "16:30", "end": "20:30"},
+        {"date": "2026-07-26", "start": "16:30", "end": "20:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "公式案内に盆踊りの実施内容が明記されていないため、地域の祭りとして掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市名東区公式サイト",
+        "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "本郷公園と本郷コミュニティセンターで2日間開催される地域イベントです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-moriyama-shidami-summer-2026",
+      "status": "published",
+      "name": "第26回 志段味納涼夏まつり 花火大会",
+      "city": "名古屋市守山区",
+      "venue": "志段味スポーツランド",
+      "address": "名古屋市守山区桜坂5丁目",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "会場ごとの詳しい時刻は公式プログラムをご確認ください。公式ページに盆踊りの明記がないため、地域の夏祭りとして掲載しています。",
+      "posterType": "organizer",
+      "source": {
+        "name": "志段味納涼夏まつり実行委員会公式サイト",
+        "url": "https://shidami.org/natsumaturi/"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "志段味スポーツランドで花火、ステージや地域の催しを行う納涼夏まつりです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "iga-ueki-jinja-gion-2026",
+      "status": "published",
+      "name": "植木神社 祇園祭",
+      "city": "伊賀市",
+      "venue": "植木神社",
+      "address": "伊賀市平田699",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25"},
+        {"date": "2026-07-26"}
+      ],
+      "rain": "小雨決行",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、神輿・だんじり・祇園花を中心とする神社の祭礼として掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/35083"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "宵宮祭と本祭の2日間、神輿やだんじりが町を巡る伊賀市平田の祇園祭です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "tajimi-teryah-summer-2026",
+      "status": "published",
+      "name": "みんなでてりゃあ夏まつり2026",
+      "city": "多治見市",
+      "venue": "虎渓用水広場・多治見駅南駅前広場ほか",
+      "address": "多治見駅周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-02"}
+      ],
+      "rain": "一部催しは雨天時に産業文化センターへ変更",
+      "eventStatus": "scheduled",
+      "statusNote": "会場と時間は催しごとに異なります。盆踊りではなく、参加型の総ござっせや千人みこしを行う夏祭りです。",
+      "posterType": "admin",
+      "source": {
+        "name": "多治見市公式サイト",
+        "url": "https://www.city.tajimi.lg.jp/kanko_bunka_sports/bunka_shogaigakushu/1006693/1010154.html"
+      },
+      "lastVerified": "2026-07-21",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "多治見駅周辺でダンス、総ござっせ、千人みこしやミニゲームを楽しめる夏まつりです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
     }
   ]
 }
