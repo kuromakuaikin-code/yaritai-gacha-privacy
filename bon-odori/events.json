@@ -3633,6 +3633,147 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "岐阜県"
+    },
+    {
+      "id": "meiwa-oyodo-gion-2026",
+      "status": "published",
+      "name": "大淀祇園祭・花火大会",
+      "city": "多気郡明和町",
+      "venue": "大淀漁港周辺",
+      "address": "多気郡明和町大淀",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-24", "start": "18:30", "end": "21:30"},
+        {"date": "2026-07-25", "start": "10:00", "end": "21:30"}
+      ],
+      "rain": "花火大会は雨天時に翌日順延予定。最新の開催状況は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、山車・神輿・海上渡御を行う祇園祭として掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/report/1545"
+      },
+      "lastVerified": "2026-07-23",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "山車や子ども神輿が地域を巡り、海上渡御と花火大会も行われる明和町大淀の祇園祭です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "kihoku-toro-festival-2026",
+      "status": "published",
+      "name": "2026 きほく燈籠祭",
+      "city": "北牟婁郡紀北町",
+      "venue": "長島港",
+      "address": "北牟婁郡紀北町長島",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "16:30", "end": "20:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、巨大燈籠と花火を中心とする地域の祭りとして掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/38011"
+      },
+      "lastVerified": "2026-07-23",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "長島港で地域の人々が制作した巨大燈籠を海に浮かべ、ステージと花火を行う紀北町の祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "fukuroi-enshu-fireworks-2026",
+      "status": "published",
+      "name": "ふくろい遠州の花火2026",
+      "city": "袋井市",
+      "venue": "原野谷川親水公園",
+      "address": "袋井市原野谷川河川敷",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "19:20", "end": "21:00"}
+      ],
+      "rain": "荒天中止・順延なし",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく花火大会として掲載しています。有料観覧席は完売しているため、チケットをお持ちでない方向けの案内を公式サイトでご確認ください。",
+      "posterType": "organizer",
+      "source": {
+        "name": "ふくろい遠州の花火実行委員会公式サイト",
+        "url": "https://www.fukuroi-hanabi.jp/"
+      },
+      "lastVerified": "2026-07-23",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "原野谷川親水公園で花火師による競技花火や音楽に合わせた演出を楽しめる袋井市の花火大会です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "atami-izuyu-fireworks-2026",
+      "status": "published",
+      "name": "伊豆湯河原温泉納涼花火大会",
+      "city": "熱海市",
+      "venue": "泉公園",
+      "address": "熱海市泉公園",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-25", "start": "19:40", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、太鼓・手筒花火・打上花火を行う納涼行事として掲載しています。会場に駐車場はありません。",
+      "posterType": "organizer",
+      "source": {
+        "name": "伊豆湯河原温泉観光協会公式サイト",
+        "url": "https://izuyu-kanko.jp/?p=621"
+      },
+      "lastVerified": "2026-07-23",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "泉公園で和太鼓、手筒花火と打上花火を間近に楽しめる伊豆湯河原温泉の納涼行事です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "toki-oribe-festival-2026",
+      "status": "published",
+      "name": "炎の祭典 第68回土岐市織部まつり",
+      "city": "土岐市",
+      "venue": "土岐川河川敷・セラトピア土岐周辺",
+      "address": "土岐市土岐津町高山4周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-02"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、花火とスカイランタンを中心とする地域の祭りとして掲載しています。開催時刻は公式情報をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光公式サイト 岐阜の旅ガイド",
+        "url": "https://www.kankou-gifu.jp/event/detail_8661.html"
+      },
+      "lastVerified": "2026-07-23",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "土岐川河川敷で多彩な花火とスカイランタンを楽しめる土岐市の夏祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
     }
   ]
 }
