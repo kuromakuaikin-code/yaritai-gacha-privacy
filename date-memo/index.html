@@ -10,7 +10,36 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="icon-192.png">
-<title>婚活デートメモ</title>
+<title>婚活デートメモ｜お相手ごとのデート記録・話題メモアプリ（登録不要・端末内保存）</title>
+<meta name="description" content="婚活のお相手ごとにデートの記録・話した話題・次回の予定をメモできる無料アプリ。会員登録不要、データは端末内にだけ保存されるので誰にも見られません。ホーム画面に追加してアプリとして使えます。">
+<link rel="canonical" href="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="婚活デートメモ">
+<meta property="og:title" content="婚活デートメモ｜デートの記録は、端末の中だけに。">
+<meta property="og:description" content="お相手ごとにデートの記録・話題・次回の予定を管理。登録不要・外部送信なしで安心して使える婚活メモアプリ。">
+<meta property="og:url" content="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/">
+<meta property="og:image" content="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="婚活デートメモ｜デートの記録は、端末の中だけに。">
+<meta name="twitter:description" content="お相手ごとにデートの記録・話題・次回の予定を管理。登録不要・外部送信なしで安心して使える婚活メモアプリ。">
+<meta name="twitter:image" content="https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/og-image.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "婚活デートメモ",
+  "operatingSystem": "iOS, Android, Web",
+  "applicationCategory": "LifestyleApplication",
+  "description": "婚活のお相手ごとにデートの記録・話題・次回の予定をメモできるアプリ。会員登録不要で、データは端末内にのみ保存されます。",
+  "url": "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/",
+  "image": "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/date-memo/icon-512.png",
+  "inLanguage": "ja",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" }
+}
+</script>
 <style>
 :root{
   --bg:#faf6f7;--card:#ffffff;--text:#2e2227;--sub:#6f5b64;--line:#eddde3;
@@ -221,6 +250,13 @@ input[type=checkbox]:checked{animation:pop .25s}
 .notice{display:flex;gap:8px;align-items:flex-start;background:var(--blue-soft);
   border:1px solid var(--line);border-radius:var(--radius);padding:11px 13px;
   margin-bottom:10px;font-size:13.5px;line-height:1.55}
+.ig-lead{font-size:14px;color:var(--sub);margin-bottom:10px}
+.ig-step{display:flex;gap:10px;align-items:flex-start;padding:10px 0;font-size:14.5px;
+  border-bottom:1px solid var(--line)}
+.ig-step:last-child{border-bottom:none}
+.ig-n{flex-shrink:0;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);
+  color:var(--accent-dark);font-size:13px;font-weight:700;display:flex;
+  align-items:center;justify-content:center;margin-top:1px}
 .notice>div{flex:1;min-width:0}
 .notice .n-x{color:var(--sub);padding:0 4px;font-size:14px;flex-shrink:0}
 .notice .hbtn{padding:0 4px}
@@ -457,13 +493,68 @@ window.addEventListener('beforeinstallprompt',e=>{
 function isStandalone(){
   return navigator.standalone===true||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
 }
+function isIOS(){ return /iPhone|iPad|iPod/.test(navigator.userAgent); }
 function installBanner(){
-  if(db.installDismissed||isStandalone()) return '';
-  if(/iPhone|iPad|iPod/.test(navigator.userAgent))
-    return `<div class="notice">📲<div>ホーム画面に追加すると、アプリとして起動できてデータも消えにくくなります。共有ボタン →<b>「ホーム画面に追加」</b></div><button class="n-x" data-nx="install">✕</button></div>`;
+  if(isStandalone()) return '';
+  if(Date.now()-(db.installNudge||0)<14*86400000) return '';
+  if(isIOS())
+    return `<div class="notice">📲<div><b>ホーム画面に追加</b>すると、1タップで起動できてデータも消えにくくなります。</div><button class="hbtn" id="nInstallBtn">手順を見る</button><button class="n-x" data-nx="install">✕</button></div>`;
   if(deferredInstall)
-    return `<div class="notice">📲<div>アプリとしてインストールできます。</div><button class="hbtn" id="nInstallBtn">インストール</button><button class="n-x" data-nx="install">✕</button></div>`;
+    return `<div class="notice">📲<div><b>アプリとしてインストール</b>すると、1タップで起動できてデータも消えにくくなります。</div><button class="hbtn" id="nInstallBtn">インストール</button><button class="n-x" data-nx="install">✕</button></div>`;
   return '';
+}
+function doInstall(){
+  if(deferredInstall){
+    const ev=deferredInstall; deferredInstall=null;
+    ev.prompt();
+    ev.userChoice.then(r=>{
+      if(r&&r.outcome==='accepted') toast('インストールしました 🎉');
+      else{ db.installNudge=Date.now(); save(); }
+      if(view.name==='list') render();
+    }).catch(()=>{});
+    return;
+  }
+  openInstallGuide();
+}
+function openInstallGuide(afterSave){
+  const ios=isIOS();
+  const steps=ios?[
+    ['1','Safariの<b>共有ボタン</b>（<b>□</b>に<b>↑</b>のアイコン）をタップ'],
+    ['2','メニューを下にスクロールして<b>「ホーム画面に追加」</b>を選ぶ'],
+    ['3','右上の<b>「追加」</b>をタップして完了'],
+  ]:[
+    ['1','ブラウザのメニュー（<b>︙</b>）を開く'],
+    ['2','<b>「アプリをインストール」</b>または<b>「ホーム画面に追加」</b>を選ぶ'],
+    ['3','<b>「インストール」</b>をタップして完了'],
+  ];
+  openSheet(`
+    <h2>📲 アプリとして使う<button class="hbtn" id="shClose">閉じる</button></h2>
+    ${afterSave?`<p class="ig-lead">記録の保存おつかれさまです。ホーム画面に追加しておくと、次のデート前にすぐ見返せます。</p>`:''}
+    <ul class="pv-feat">
+      <li>⚡ ホーム画面から<b>1タップで起動</b>（全画面のアプリ表示）</li>
+      <li>💾 ブラウザの履歴削除などで<b>データが消えにくく</b>なります</li>
+      <li>🔒 <b>登録不要・外部送信なし</b>はそのまま</li>
+    </ul>
+    <div class="sec-title">${ios?'追加のしかた（Safari）':'インストールのしかた'}</div>
+    <div class="card plain">${steps.map(([n,t])=>`<div class="ig-step"><span class="ig-n">${n}</span><div>${t}</div></div>`).join('')}</div>
+    ${ios?`<p class="set-note">※ Safari以外のブラウザで開いている場合は、このページをSafariで開いてからお試しください。</p>`:''}
+    ${deferredInstall?`<button class="btn btn-main" id="igInstall">今すぐインストール</button>`:''}
+    <button class="btn btn-sub" id="igLater">あとで</button>
+  `);
+  document.getElementById('shClose').onclick=closeSheet;
+  document.getElementById('igLater').onclick=()=>{
+    db.installNudge=Date.now(); save(); closeSheet(true);
+    if(view.name==='list') render();
+  };
+  const gi=document.getElementById('igInstall');
+  if(gi) gi.onclick=()=>{ closeSheet(true); doInstall(); };
+}
+/* 最初の保存直後＝価値を実感した瞬間に一度だけインストールを案内する */
+function maybePromptInstall(){
+  if(db.installAsked||isStandalone()) return;
+  if(!isIOS()&&!deferredInstall) return;
+  db.installAsked=Date.now(); save();
+  setTimeout(()=>openInstallGuide(true),700);
 }
 function backupBanner(){
   const now=Date.now(), D=86400000;
@@ -476,6 +567,9 @@ function backupBanner(){
 function normalize(d){
   d.partners=Array.isArray(d.partners)?d.partners:[];
   d.myTopics=Array.isArray(d.myTopics)?d.myTopics:[];
+  // 旧バージョンの「永久非表示」フラグはスヌーズ（14日後に再表示）へ移行
+  if(d.installDismissed&&!d.installNudge) d.installNudge=Date.now();
+  delete d.installDismissed;
   // 旧バージョンのカテゴリ別カスタム話題は MY話題リストへ統合
   if(Array.isArray(d.custom)&&d.custom.length){
     d.custom.forEach(c=>d.myTopics.push({id:c.id,text:c.text,note:''}));
@@ -720,12 +814,12 @@ function renderList(){
   q.oninput=()=>{query=q.value;renderListDebounced();};
   $main.querySelector('#sortSel').onchange=e=>{sortBy=e.target.value;render();};
   $main.querySelectorAll('[data-nx]').forEach(b=>b.onclick=()=>{
-    if(b.dataset.nx==='install') db.installDismissed=true;
+    if(b.dataset.nx==='install') db.installNudge=Date.now();
     else db.backupNudge=Date.now();
     save(); render();
   });
   const ib=$main.querySelector('#nInstallBtn');
-  if(ib) ib.onclick=()=>{ if(deferredInstall){ deferredInstall.prompt(); deferredInstall=null; render(); } };
+  if(ib) ib.onclick=doInstall;
   const nb=$main.querySelector('#nBackup');
   if(nb) nb.onclick=doExport;
   const smp=$main.querySelector('#addSample');
@@ -1038,6 +1132,7 @@ function openPartnerForm(p){
     if(p){ Object.assign(p,vals); }
     else{ db.partners.push({id:uid(),dates:[],createdAt:Date.now(),...vals}); }
     save(); closeSheet(true); render(); toast('保存しました');
+    if(!p) maybePromptInstall();
   };
   const del=document.getElementById('shDel');
   if(del) del.onclick=()=>{
@@ -1089,6 +1184,7 @@ function openDateForm(p,d){
     else{ p.dates.push({id:uid(),...vals}); }
     p.updatedAt=Date.now();
     save(); closeSheet(true); render(); toast('保存しました');
+    if(!d) maybePromptInstall();
   };
   const del=document.getElementById('shDel');
   if(del) del.onclick=()=>{
@@ -1253,6 +1349,7 @@ function renderSettings(){
   $fab.style.display='none';
   $main.innerHTML=`
     <div class="card plain">
+      ${isStandalone()?'':`<button class="set-item" id="setInstall">📲 ホーム画面に追加（アプリとして使う）<span class="arr">›</span></button>`}
       <button class="set-item" id="setPremium">⭐ プレミアム<span class="arr">${isPremium()?'有効':'未購入 ›'}</span></button>
       <button class="set-item" id="setCode">🎟 購入の復元（解除コード）<span class="arr">›</span></button>
       <button class="set-item" id="setLock">🔒 パスコードロック<span class="arr">${db.passcode?'オン ›':'オフ ›'}</span></button>
@@ -1271,6 +1368,8 @@ function renderSettings(){
     <input type="file" id="impFile" accept="application/json" style="display:none">
   `;
 
+  const si=document.getElementById('setInstall');
+  if(si) si.onclick=()=>openInstallGuide();
   document.getElementById('setPremium').onclick=()=>{
     if(isPremium()){
       // テスト用：解除できるようにしておく（本番では購入の復元に置き換える）
@@ -1307,7 +1406,7 @@ function renderSettings(){
     if(!confirm('すべてのお相手と記録を削除します。元に戻せません。よろしいですか？')) return;
     if(!confirm('本当に削除しますか？')) return;
     db={partners:[],passcode:null,custom:[],myTopics:[],premium:db.premium,
-        installDismissed:db.installDismissed,firstRun:db.firstRun}; save();
+        installNudge:db.installNudge,installAsked:db.installAsked,firstRun:db.firstRun}; save();
     nav({name:'list'},false); toast('削除しました');
   };
 }
