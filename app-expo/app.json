@@ -2,13 +2,13 @@
   "expo": {
     "name": "婚活デートメモ",
     "slug": "konkatsu-date-memo",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "ios": {
       "bundleIdentifier": "com.kuromakuaikin.datememo",
-      "buildNumber": "5",
+      "buildNumber": "6",
       "supportsTablet": false,
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
