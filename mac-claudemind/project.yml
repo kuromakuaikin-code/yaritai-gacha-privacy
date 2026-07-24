@@ -1,0 +1,22 @@
+# XcodeGen 用プロジェクト定義
+# `brew install xcodegen && cd mac-claudemind && xcodegen` で ClaudeMind.xcodeproj が生成される。
+name: ClaudeMind
+options:
+  bundleIdPrefix: com.kuromakuaikin
+  deploymentTarget:
+    macOS: "14.0"
+targets:
+  ClaudeMind:
+    type: application
+    platform: macOS
+    sources: [ClaudeMind]
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.kuromakuaikin.claudemind
+        MARKETING_VERSION: 1.0.0
+        CURRENT_PROJECT_VERSION: 1
+        INFOPLIST_KEY_CFBundleDisplayName: ClaudeMind
+        SWIFT_VERSION: 5.9
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGN_ENTITLEMENTS: ClaudeMind/ClaudeMind.entitlements
+        ENABLE_HARDENED_RUNTIME: YES
