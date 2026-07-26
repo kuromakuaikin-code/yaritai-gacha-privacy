@@ -31,6 +31,14 @@ const VOICEVOX = "http://localhost:50021"; // 声: VOICEVOX の窓口
 const ROOT = __dirname;
 // character.json は ai-companion/ 直下 (chat.mjs と共用)
 const CHARACTER_FILE = path.join(ROOT, "..", "character.json");
+// 返事の取り出し (思考タグ・reasoning_content の処理) も chat.mjs と共用する。
+// ESM なので require ではなく import() で読む。1 回だけ読んで使い回す。
+const REPLY_MODULE = pathToFileURL(path.join(ROOT, "..", "reply.mjs")).toString();
+let replyToolsPromise = null;
+function replyTools() {
+  if (!replyToolsPromise) replyToolsPromise = import(REPLY_MODULE);
+  return replyToolsPromise;
+}
 
 // -------------------------------------------------------------
 // 独自スキーム companion:// の登録
@@ -60,6 +68,7 @@ protocol.registerSchemesAsPrivileged([
 const DEFAULT_SETTINGS = {
   vrmPath: "", // 前回選んだ VRM の場所
   bounds: null, // 前回のウィンドウ位置とサイズ
+  fallbackMaterials: false, // MToon をやめて標準マテリアルで描くか (表示不具合の逃げ道)
 };
 
 function settingsFile() {
@@ -102,10 +111,49 @@ function loadCharacter() {
 }
 
 // -------------------------------------------------------------
+// 診断ログ
+//
+// 画面側 (renderer) の console.log は DevTools にしか出ないので、
+// 「npm start した端末に出したい」情報はここを通して main の標準出力に流す。
+// 困ったときは、この出力をそのまま貼ってもらえば原因が追える。
+// -------------------------------------------------------------
+function diag(line) {
+  console.log(`[診断] ${line}`);
+}
+
+/** 使っているライブラリの版を集める (three と three-vrm の組み合わせが要注意なので) */
+function collectVersions() {
+  const read = (name) => {
+    try {
+      const file = path.join(ROOT, "node_modules", ...name.split("/"), "package.json");
+      return JSON.parse(fs.readFileSync(file, "utf8")).version;
+    } catch {
+      return "(不明)";
+    }
+  };
+  return {
+    three: read("three"),
+    threeVrm: read("@pixiv/three-vrm"),
+    electron: process.versions.electron,
+    chrome: process.versions.chrome,
+    node: process.versions.node,
+    platform: `${process.platform} ${process.arch}`,
+  };
+}
+
+// -------------------------------------------------------------
 // ウィンドウ
 // -------------------------------------------------------------
 /** @type {BrowserWindow | null} */
 let win = null;
+
+/** DevTools を開く (画面側のエラーを見てもらうため) */
+function openDevTools() {
+  if (!win || win.isDestroyed()) return;
+  // 枠なし・透過ウィンドウなので、必ず別ウィンドウで開く
+  if (win.webContents.isDevToolsOpened()) win.webContents.closeDevTools();
+  else win.webContents.openDevTools({ mode: "detach" });
+}
 
 function createWindow() {
   const settings = loadSettings();
@@ -149,6 +197,30 @@ function createWindow() {
   if (process.platform === "darwin") {
     win.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
   }
+
+  // 画面側の console と、拾えなかった例外を端末にも流す。
+  // WebGL のシェーダーエラーはここに出るので、表示不具合の切り分けに効く。
+  win.webContents.on("console-message", (...args) => {
+    // Electron の版で引数の形が変わるので、両方に備える
+    const detail = typeof args[1] === "object" && args[1] !== null ? args[1] : null;
+    const level = detail ? detail.level : args[1];
+    const message = detail ? detail.message : args[2];
+    // 情報レベルは画面側から明示的に送ってもらう方針なので、警告以上だけ拾う
+    const noisy = level === "info" || level === 0 || level === 1;
+    if (!noisy && typeof message === "string") diag(`画面側: ${message}`);
+  });
+  win.webContents.on("render-process-gone", (_e, details) => {
+    diag(`画面プロセスが落ちました: ${details.reason}`);
+  });
+
+  // 開発用ショートカット: F12 / Ctrl(⌘)+Shift+I で DevTools
+  win.webContents.on("before-input-event", (_event, input) => {
+    if (input.type !== "keyDown") return;
+    const modifier = process.platform === "darwin" ? input.meta : input.control;
+    if (input.key === "F12" || (modifier && input.shift && input.key.toLowerCase() === "i")) {
+      openDevTools();
+    }
+  });
 
   win.loadURL("companion://local/renderer/index.html");
   win.once("ready-to-show", () => win.show());
@@ -236,6 +308,8 @@ ipcMain.handle("vrm:read", async (_e, filePath) => {
 // 画面側から直接 fetch すると CORS で弾かれるので、ここで代行する。
 // -------------------------------------------------------------
 let cachedModel = null;
+/** 一度でも思考 (reasoning) を返したモデルを覚えておき、次から枠を広く取る */
+const knownReasoningModels = new Set();
 
 async function detectModel() {
   const res = await fetch(`${LMSTUDIO}/v1/models`, {
@@ -255,6 +329,10 @@ ipcMain.handle("chat:send", async (_e, messages) => {
     cachedModel = null;
     return { ok: false, kind: "no-lmstudio" };
   }
+
+  const { extractReply, tokenBudget, describeReply } = await replyTools();
+  const maxTokens = tokenBudget(cachedModel, knownReasoningModels.has(cachedModel));
+
   try {
     const res = await fetch(`${LMSTUDIO}/v1/chat/completions`, {
       method: "POST",
@@ -263,18 +341,38 @@ ipcMain.handle("chat:send", async (_e, messages) => {
         model: cachedModel,
         messages,
         temperature: 0.8,
-        max_tokens: 300,
+        // 考えるモデル (Gemma 4 など) は思考ぶんもここから食う。
+        // 300 だと思考だけで使い切って本文が出ないため、大きめに取る
+        max_tokens: maxTokens,
       }),
-      signal: AbortSignal.timeout(120000),
+      signal: AbortSignal.timeout(180000),
     });
     if (!res.ok) {
       cachedModel = null;
       return { ok: false, kind: "server-error", status: res.status };
     }
+
     const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content?.trim();
-    if (!reply) return { ok: false, kind: "empty-reply" };
-    return { ok: true, reply };
+    const info = extractReply(data);
+    diag(`LLM: ${describeReply(info)} max_tokens=${maxTokens}`);
+
+    // 思考するモデルだと分かったら覚えておく (次回から枠を広げる)
+    if (info.thought) knownReasoningModels.add(cachedModel);
+
+    if (info.reply === "") {
+      // 無言で終わらせず、何が起きたのかを画面側に伝える
+      return {
+        ok: false,
+        kind: info.thought ? "thinking-only" : "empty-reply",
+        truncated: info.truncated,
+      };
+    }
+    return {
+      ok: true,
+      reply: info.reply,
+      source: info.source,
+      truncated: info.truncated,
+    };
   } catch (err) {
     cachedModel = null;
     return { ok: false, kind: err.name === "TimeoutError" ? "timeout" : "no-lmstudio" };
@@ -373,6 +471,13 @@ ipcMain.on("window:drag-start", () => {
 
 ipcMain.on("window:drag-end", () => stopDrag());
 
+// --- 診断 / 開発用 ---
+ipcMain.handle("app:versions", () => collectVersions());
+ipcMain.on("app:diag", (_e, line) => {
+  if (typeof line === "string") diag(line);
+});
+ipcMain.on("app:devtools", () => openDevTools());
+
 // --- その他 ---
 ipcMain.on("window:quit", () => app.quit());
 ipcMain.on("window:minimize", () => win && !win.isDestroyed() && win.minimize());
@@ -392,6 +497,13 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   app.whenReady().then(() => {
+    const versions = collectVersions();
+    diag(
+      `起動: three ${versions.three} / @pixiv/three-vrm ${versions.threeVrm} / ` +
+        `Electron ${versions.electron} (Chrome ${versions.chrome}) / ${versions.platform}`
+    );
+    diag("DevTools は F12 または Ctrl+Shift+I (Mac は ⌘+Shift+I)、右クリックメニューからも開けます");
+
     handleCompanionProtocol();
     createWindow();
 

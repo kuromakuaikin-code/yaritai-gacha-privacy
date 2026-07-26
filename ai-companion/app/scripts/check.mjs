@@ -56,6 +56,24 @@ if (!mapText) {
   notes.push(`importmap: ${Object.keys(imports).length} 件を確認`);
 }
 
+// --- 2.5 CSP が VRM のテクスチャを止めていないか ----------------
+// three.js の GLTFLoader は .vrm 内の画像を blob: URL 経由 (fetch) で読む。
+// connect-src に blob: が無いと全テクスチャが読めず、キャラが真っ白になる。
+// 一度これで丸一日溶かしたので、ここで見張る。
+const csp = html.match(/http-equiv="Content-Security-Policy"[\s\S]*?content="([^"]+)"/)?.[1];
+if (!csp) {
+  problems.push("index.html に Content-Security-Policy がありません");
+} else {
+  const connectSrc = csp.match(/connect-src ([^;"]+)/)?.[1] ?? "";
+  if (!connectSrc.includes("blob:")) {
+    problems.push(
+      "CSP の connect-src に blob: がありません " +
+        "(VRM のテクスチャが読めず、キャラが輪郭だけ・真っ白になります)"
+    );
+  }
+  notes.push(`CSP: connect-src = ${connectSrc.trim() || "(なし)"}`);
+}
+
 // --- 3. preload が公開している API と、画面側の呼び出しの照合 ---
 const preload = readFileSync(join(APP, "preload.js"), "utf8");
 const exposed = new Set([...preload.matchAll(/^\s{2}(\w+):/gm)].map((m) => m[1]));

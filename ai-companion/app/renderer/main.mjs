@@ -199,11 +199,34 @@ document.getElementById("menu-model").addEventListener("click", () => {
   closeMenu();
   openSetup("別の VRM ファイルを選んでください。");
 });
+document.getElementById("menu-fallback").addEventListener("click", () => {
+  closeMenu();
+  toggleFallback();
+});
+document.getElementById("menu-devtools").addEventListener("click", () => {
+  closeMenu();
+  api.openDevTools();
+});
 document.getElementById("menu-minimize").addEventListener("click", () => {
   closeMenu();
   api.minimize();
 });
 document.getElementById("menu-quit").addEventListener("click", () => api.quit());
+
+// =============================================================
+// 描画モードの切り替え (MToon ↔ 標準マテリアル)
+//
+// MToon で正しく映らないときの逃げ道。見た目の質は落ちるが、
+// まず「映る」ことを確かめられる。選んだモードは記憶する。
+// =============================================================
+async function toggleFallback(next) {
+  if (!stage.ready) return;
+  const on = stage.setFallback(next ?? !stage.fallback);
+  await api.saveSettings({ fallbackMaterials: on });
+  const label = on ? "代替 (MeshStandardMaterial)" : "通常 (MToon)";
+  api.diag(`描画モードを切り替えました: ${label}`);
+  talk?.show(`描画モード: ${label}`);
+}
 
 // =============================================================
 // 会話の入力欄
@@ -227,6 +250,27 @@ el.bar.addEventListener("submit", (event) => {
 });
 
 window.addEventListener("keydown", (event) => {
+  // --- 開発用ショートカット -------------------------------------
+  // F12 / Ctrl+Shift+I は main 側でも拾っているが、入力欄に
+  // 焦点があるときのために画面側でも受ける
+  if (event.key === "F12") {
+    event.preventDefault();
+    api.openDevTools();
+    return;
+  }
+  // Ctrl+Shift+M: 描画モード (MToon ↔ 標準マテリアル) の切り替え
+  if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === "m") {
+    event.preventDefault();
+    toggleFallback();
+    return;
+  }
+  // Ctrl+Shift+D: 今のモデルの診断ログをもう一度端末に出す
+  if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key.toLowerCase() === "d") {
+    event.preventDefault();
+    reportDiagnostics();
+    return;
+  }
+
   if (event.key !== "Escape") return;
   if (menuOpen) return closeMenu();
   if (!el.bar.classList.contains("hidden")) {
@@ -235,6 +279,32 @@ window.addEventListener("keydown", (event) => {
     return;
   }
   talk?.hide();
+});
+
+// =============================================================
+// 診断ログ
+//
+// 画面側の console.log は DevTools にしか出ないので、
+// 端末 (npm start したところ) に出したいものは api.diag で main に送る。
+// 表示がおかしいときは、この出力をそのまま貼ってもらえば原因を追える。
+// =============================================================
+/** @type {object|null} three などの版 */
+let versions = null;
+
+function reportDiagnostics() {
+  if (!stage.ready) {
+    api.diag("診断: まだモデルが読み込まれていません");
+    return;
+  }
+  api.diag(stage.describeDiagnostics(versions));
+}
+
+// 画面側で拾えなかったエラーも端末に出す (シェーダーのエラーなどが分かる)
+window.addEventListener("error", (event) => {
+  api.diag(`画面側のエラー: ${event.message} (${event.filename}:${event.lineno})`);
+});
+window.addEventListener("unhandledrejection", (event) => {
+  api.diag(`画面側の未処理エラー: ${event.reason?.message ?? event.reason}`);
 });
 
 // =============================================================
@@ -290,10 +360,14 @@ async function useVrm(filePath, quiet = false) {
     await stage.loadVrm(file.data);
   } catch (err) {
     const message = `VRM として読み込めませんでした。\n(${err?.message ?? "原因不明"})`;
+    api.diag(`VRM の読み込みに失敗: ${err?.stack ?? err?.message ?? err}`);
     if (!quiet) setSetupMessage(message, true);
     else openSetup(message);
     return false;
   }
+
+  // 読み込めた中身を端末に出しておく (表示不具合の切り分け用)
+  reportDiagnostics();
 
   await api.saveSettings({ vrmPath: filePath });
   hitDirty = true;
@@ -371,6 +445,10 @@ async function start() {
 
   const capabilities = await api.getCapabilities();
   const settings = await api.getSettings();
+  versions = await api.getVersions();
+
+  // 前回「代替マテリアル」で見ていたなら、その状態で読み込む
+  stage.fallback = !!settings.fallbackMaterials;
 
   requestAnimationFrame(tick);
 
@@ -396,6 +474,7 @@ async function start() {
         caution
     );
     el.bar.classList.remove("hidden");
+    if (stage.fallback) api.diag("描画モード: 代替 (MeshStandardMaterial) で起動しました");
   } else if (caution) {
     setSetupMessage(caution.trim());
   }

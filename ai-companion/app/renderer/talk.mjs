@@ -27,7 +27,17 @@ const TROUBLE = {
     "モデルがロードされているか、Developer タブで確かめてください。",
   "empty-reply": "返事が空っぽで返ってきました。もう一度話しかけてみてください。",
   "bad-request": "うまく送れませんでした。もう一度話しかけてみてください。",
+  // Gemma 4 や Qwen3 のような「考えてから答える」モデルで起きる。
+  // 思考だけで長さの上限に達し、本文が出ないまま終わった状態
+  "thinking-only":
+    "モデルが考えるだけで終わってしまいました (本文が返ってきていません)。\n\n" +
+    "・もう一度、短めに話しかけてみてください\n" +
+    "・LM Studio 側で thinking / reasoning を切れるモデルなら切ってみてください\n" +
+    "・それでも続くなら、端末に出ている [診断] LLM: の行を控えてください",
 };
+
+/** finish_reason が length のときに末尾へ足す注記 */
+const TRUNCATED_NOTE = "\n\n(※ 長さの上限に達したため、途中で切れています)";
 
 export class Talk {
   /**
@@ -92,7 +102,8 @@ export class Talk {
       // 失敗した発言は履歴に残さない (次に話しかけたとき二重にならないように)
       this.messages.pop();
       this.busy = false;
-      this.show(TROUBLE[result?.kind] ?? TROUBLE["no-lmstudio"], {
+      const guide = TROUBLE[result?.kind] ?? TROUBLE["no-lmstudio"];
+      this.show(result?.truncated ? guide + TRUNCATED_NOTE : guide, {
         kind: "trouble",
         keep: true,
       });
@@ -104,10 +115,12 @@ export class Talk {
     // 履歴が伸びすぎたら古いものから忘れる (system は残す)。chat.mjs と同じ
     if (this.messages.length > 41) this.messages.splice(1, 2);
 
-    this.show(reply);
+    // 途中で切れた場合は、黙って見せずにその旨を添える
+    this.show(result.truncated ? reply + TRUNCATED_NOTE : reply);
     this.busy = false;
 
     // VOICEVOX が起動していれば声が返る。いなければ null が返るだけ
+    // (注記は読ませない。読ませるのは本文だけ)
     this.playVoice(reply);
   }
 

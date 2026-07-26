@@ -16,6 +16,9 @@ import { spawnSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+// 返事の取り出し方は app/ (Electron 版) と同じものを使う。
+// Gemma 4 のような「考えてから答える」モデルへの対応がここに入っている
+import { extractReply, tokenBudget, describeReply } from "./reply.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -86,6 +89,10 @@ console.log("話しかけてください。終わるときは Ctrl+C か「バ�
 
 const messages = [{ role: "system", content: character.systemPrompt }];
 const rl = createInterface({ input: process.stdin, output: process.stdout });
+// 一度でも思考を返したら覚えておき、次から max_tokens の枠を広げる
+let knownReasoning = false;
+// 環境変数 COMPANION_DEBUG=1 で、返事の中身の内訳を出す
+const debug = process.env.COMPANION_DEBUG === "1";
 
 while (true) {
   const input = (await rl.question("きみ > ")).trim();
@@ -100,21 +107,37 @@ while (true) {
       model,
       messages,
       temperature: 0.8,
-      max_tokens: 300,
+      // 考えるモデルは思考ぶんもここから食うので、大きめに取る
+      max_tokens: tokenBudget(model, knownReasoning),
     }),
   });
   const data = await res.json();
-  const reply = data.choices?.[0]?.message?.content?.trim() ?? "(返事が取れませんでした)";
+  const info = extractReply(data);
+  if (info.thought) knownReasoning = true;
+  if (debug) console.log(`  [診断] ${describeReply(info)}`);
 
+  if (info.reply === "") {
+    // 無言で終わらせず、何が起きたのかを出す
+    console.log(
+      info.thought
+        ? `${character.name} > (考えるだけで終わってしまいました。もう一度、短めに話しかけてみてください)\n`
+        : `${character.name} > (返事が空でした。もう一度話しかけてみてください)\n`
+    );
+    messages.pop(); // 失敗した発言は履歴に残さない
+    if (input === "バイバイ") break;
+    continue;
+  }
+
+  const reply = info.reply;
   messages.push({ role: "assistant", content: reply });
   // 履歴が伸びすぎたら古いものから忘れる (system は残す)
   if (messages.length > 41) messages.splice(1, 2);
 
   console.log(`${character.name} > ${reply}\n`);
+  if (info.truncated) console.log("  (※ 長さの上限に達したため、途中で切れています)\n");
   if (hasVoice) await speak(reply);
 
-  if (input === "バイバイ") {
-    rl.close();
-    break;
-  }
+  if (input === "バイバイ") break;
 }
+
+rl.close();

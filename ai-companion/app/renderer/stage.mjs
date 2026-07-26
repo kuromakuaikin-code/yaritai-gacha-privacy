@@ -3,9 +3,11 @@
 //
 //   - 背景が完全に透明な three.js シーンを作る
 //   - VRM (0.x / 1.0 どちらも) を読み込んで立たせる
-//   - まばたきと呼吸のアイドルモーションを回す
+//   - 読み込み直後に自然な立ち姿 (基準姿勢) を当てる
+//   - まばたきと呼吸のアイドルモーションを、基準姿勢の上に足す
 //   - 「今マウスがキャラの上にいるか」をレイキャストで判定する
 //     ← クリック透過の切り替えに使う、このアプリの心臓部
+//   - マテリアルの診断と、MToon → 標準マテリアルの代替表示
 // =============================================================
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
@@ -16,6 +18,45 @@ import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
 const FILL_RATIO_Y = 0.74;
 const FILL_RATIO_X = 0.92;
 const LIFT_MAX = 0.16; // 身長に対する持ち上げ量の上限
+
+// -------------------------------------------------------------
+// 光の強さ (ここを間違えるとキャラが真っ白に飛ぶ)
+//
+// three r155 以降、ライトの intensity は物理単位になった。
+// MToon のシェーダーは受け取った光を BRDF_Lambert (= 1/π 倍) してから
+// テクスチャ色に掛けるので、
+//
+//     画面に出る明るさ ≒ (光の合計 intensity ÷ π) × テクスチャ色
+//
+// になる。つまり合計 intensity が π を超えると、その分だけ色が 1.0 を
+// 超えて白飛びする。MToon はトーンマッピングを通らないため、超えた分は
+// そのまま切り捨てられ、明るい肌や白い服は「真っ白な面」になってしまう。
+// (輪郭線だけは outlineColorFactor を掛けた別の色なので残る。
+//  「輪郭だけ見えて中身が白い」のはこれが原因だった)
+//
+// そこで、キーライトと環境光の合計が π を少しだけ下回るようにしてある。
+const KEY_LIGHT = Math.PI * 0.7; // 正面やや上からの主光源
+const AMBIENT_LIGHT = Math.PI * 0.32; // 影側が潰れないように足す環境光
+
+// -------------------------------------------------------------
+// 基準姿勢 (T ポーズのままにしないための、自然な立ち姿)
+//
+// VRM の正規化ボーンは 0.x / 1.0 のどちらでも同じ名前で引けるので、
+// 版の違いはここでは意識しなくてよい。
+// 向きの決まり: モデルは +Z を向き、+X がモデルから見て左。
+// したがって左腕 (+X 方向に伸びている) を下ろすには z をマイナスに回す。
+// -------------------------------------------------------------
+const REST_POSE = {
+  leftShoulder: { z: -0.06 },
+  rightShoulder: { z: 0.06 },
+  leftUpperArm: { z: -1.15 }, // 約 66 度。A ポーズよりしっかり下ろした角度
+  rightUpperArm: { z: 1.15 },
+  leftLowerArm: { y: -0.12 }, // 肘をわずかに曲げて棒立ちを避ける
+  rightLowerArm: { y: 0.12 },
+};
+
+/** アイドルモーションで動かす骨。基準姿勢からの差分として足す */
+const IDLE_BONES = ["upperChest", "chest", "spine", "leftShoulder", "rightShoulder"];
 
 // 呼吸のゆっくりさ (秒/1呼吸) と深さ (ラジアン)
 const BREATH_CYCLE = 4.5;
@@ -37,24 +78,40 @@ export class Stage {
       canvas,
       alpha: true, // 背景を透明にする (これがないと窓が黒く塗られる)
       antialias: true,
+      // three のマテリアルは既定で「色に不透明度を掛けない (ストレートアルファ)」で
+      // 書き出す。ところが WebGL の既定は「掛けた後の値が入っている」扱いなので、
+      // そのままだと半透明の画素 (輪郭のアンチエイリアス、髪や睫毛) を
+      // ブラウザが合成するときに白く浮く。透過ウィンドウでは特に目立つ。
+      // 書き出し方に合わせて false にする。不透明な画素の見え方は変わらない。
+      premultipliedAlpha: false,
     });
     this.renderer.setClearColor(0x000000, 0);
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    // テクスチャの色空間の扱い (既定のままだが、白飛びの調査で毎回見る場所なので明示する)
+    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
+    this.renderer.toneMapping = THREE.NoToneMapping; // MToon は自前で色を決めるので通さない
 
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(28, 1, 0.1, 30);
 
-    // 光。three r155 以降は物理単位なので Math.PI 倍が基準になる
-    const key = new THREE.DirectionalLight(0xffffff, Math.PI);
+    // 光。強さの決め方はファイル冒頭の KEY_LIGHT のコメントを参照
+    const key = new THREE.DirectionalLight(0xffffff, KEY_LIGHT);
     key.position.set(0.6, 1.4, 1.0).normalize();
     this.scene.add(key);
-    this.scene.add(new THREE.HemisphereLight(0xffffff, 0x556070, Math.PI * 0.45));
+    this.scene.add(new THREE.HemisphereLight(0xffffff, 0x556070, AMBIENT_LIGHT));
 
     /** @type {import("@pixiv/three-vrm").VRM | null} */
     this.vrm = null;
     /** @type {THREE.Object3D[]} レイキャストの対象にするメッシュ */
     this.meshes = [];
     this.clock = 0;
+
+    /** 基準姿勢での骨の回転 (骨名 → Euler)。アイドルはここからの差分で動かす */
+    this.rest = new Map();
+    /** MToon をやめて標準マテリアルで描いているか (見え方の切り分け用) */
+    this.fallback = false;
+    /** 直近に読み込んだモデルの診断情報 */
+    this.diagnostics = null;
 
     // まばたきの状態
     this.blinkWait = BLINK_INTERVAL_MIN;
@@ -132,6 +189,16 @@ export class Stage {
       if (obj.isMesh || obj.isSkinnedMesh) this.meshes.push(obj);
     });
 
+    // T ポーズをやめて自然な立ち姿にする。
+    // 寸法を測る前に当てないと、広げた腕のぶんカメラが引きすぎてしまう
+    this.applyRestPose();
+    vrm.update(0); // 正規化ボーンの回転を実際の骨に反映させる
+
+    // 前回まで代替マテリアルで見ていたなら、その状態を引き継ぐ
+    if (this.fallback) this.applyMaterialMode();
+
+    this.diagnostics = this.collectDiagnostics();
+
     this.measure();
     this.applyCamera();
     return vrm;
@@ -141,6 +208,16 @@ export class Stage {
   clear() {
     if (!this.vrm) return;
     this.scene.remove(this.vrm.scene);
+    // 代替マテリアルは three-vrm の後片付けの対象外なので、自分で捨てる。
+    // 先に元のマテリアルへ戻しておかないと、deepDispose が代替のほうを
+    // 片付けて、元の MToon が残ってしまう
+    for (const mesh of this.meshes) {
+      const kept = mesh.userData.companionMaterials;
+      if (!kept) continue;
+      mesh.material = kept.original;
+      for (const material of [].concat(kept.fallback ?? [])) material?.dispose?.();
+      delete mesh.userData.companionMaterials;
+    }
     try {
       VRMUtils.deepDispose(this.vrm.scene);
     } catch {
@@ -148,8 +225,170 @@ export class Stage {
     }
     this.vrm = null;
     this.meshes = [];
+    this.rest = new Map();
+    this.diagnostics = null;
     this.screenRect = null;
     this.frame = null;
+  }
+
+  // -----------------------------------------------------------
+  // 基準姿勢
+  //
+  // 正規化ボーン (getNormalizedBoneNode) に回転を入れておくと、
+  // vrm.update() のたびに実際の骨へ反映される。ここで入れた値は
+  // 消されないので、これがアイドルモーションの土台になる。
+  // -----------------------------------------------------------
+  applyRestPose() {
+    this.rest = new Map();
+    const humanoid = this.vrm?.humanoid;
+    if (!humanoid) return;
+
+    for (const [bone, angles] of Object.entries(REST_POSE)) {
+      const node = humanoid.getNormalizedBoneNode(bone);
+      // 肩など、モデルによっては無い骨がある。無ければ飛ばす
+      if (!node) continue;
+      node.rotation.set(angles.x ?? 0, angles.y ?? 0, angles.z ?? 0);
+    }
+
+    // アイドルで動かす骨の「今の値」を基準として控える。
+    // 呼吸はこの値からの差分で動かすので、基準姿勢と喧嘩しない
+    for (const bone of IDLE_BONES) {
+      const node = humanoid.getNormalizedBoneNode(bone);
+      if (node) this.rest.set(bone, node.rotation.clone());
+    }
+  }
+
+  /** アイドル用: 骨と、その基準回転をまとめて取る */
+  idleBone(name) {
+    const node = this.vrm?.humanoid?.getNormalizedBoneNode(name);
+    if (!node) return null;
+    return { node, base: this.rest.get(name) ?? { x: 0, y: 0, z: 0 } };
+  }
+
+  // -----------------------------------------------------------
+  // 診断: 読み込んだモデルの中身を数える
+  //
+  // 表示がおかしいときに、原因の当たりをつけるための情報を集める。
+  // 端末に出す文言は describeDiagnostics() で作る。
+  // -----------------------------------------------------------
+  collectDiagnostics() {
+    const info = {
+      metaVersion: this.vrm?.meta?.metaVersion ?? (this.vrm?.meta?.title ? "0.x" : "不明"),
+      name: this.vrm?.meta?.name ?? this.vrm?.meta?.title ?? "(名前なし)",
+      meshes: this.meshes.length,
+      materials: [],
+      mtoon: 0,
+      outline: 0,
+      standard: 0,
+      withTexture: 0,
+      transparent: 0,
+      bones: 0,
+      expressions: 0,
+      fallback: this.fallback,
+    };
+
+    const humanoid = this.vrm?.humanoid;
+    if (humanoid) {
+      for (const bone of Object.keys(REST_POSE)) {
+        if (humanoid.getNormalizedBoneNode(bone)) info.bones++;
+      }
+    }
+    info.expressions = Object.keys(this.vrm?.expressionManager?.expressionMap ?? {}).length;
+
+    const seen = new Set();
+    for (const mesh of this.meshes) {
+      for (const material of [].concat(mesh.material ?? [])) {
+        if (!material || seen.has(material.uuid)) continue;
+        seen.add(material.uuid);
+        const isMToon = !!material.isMToonMaterial;
+        const isOutline = !!material.isOutline;
+        if (isMToon) info.mtoon++;
+        else if (material.isMeshStandardMaterial) info.standard++;
+        if (isOutline) info.outline++;
+        if (material.map) info.withTexture++;
+        if (material.transparent) info.transparent++;
+        info.materials.push({
+          name: material.name || "(無名)",
+          type: material.type,
+          mtoon: isMToon,
+          outline: isOutline,
+          texture: material.map ? material.map.colorSpace : "なし",
+          transparent: material.transparent,
+          alphaTest: material.alphaTest,
+          side: ["前面", "背面", "両面"][material.side] ?? String(material.side),
+          visible: material.visible,
+        });
+      }
+    }
+    return info;
+  }
+
+  /** 診断情報を、端末にそのまま貼れる文字列にする */
+  describeDiagnostics(versions) {
+    const d = this.diagnostics;
+    if (!d) return "モデルが読み込まれていません";
+    const lines = [
+      `VRM 読み込み: ${d.name} (VRM ${d.metaVersion})`,
+      `  ライブラリ: three ${versions?.three ?? "?"} / @pixiv/three-vrm ${versions?.threeVrm ?? "?"}`,
+      `  メッシュ ${d.meshes} 個 / マテリアル ${d.materials.length} 個 ` +
+        `(MToon ${d.mtoon} / 標準 ${d.standard} / うち輪郭線 ${d.outline})`,
+      `  テクスチャあり ${d.withTexture} 個 / 半透明 ${d.transparent} 個 / ` +
+        `表情 ${d.expressions} 種 / 姿勢に使う骨 ${d.bones}/${Object.keys(REST_POSE).length}`,
+      `  描画モード: ${d.fallback ? "代替 (MeshStandardMaterial)" : "通常 (MToon)"}`,
+    ];
+    for (const m of d.materials) {
+      lines.push(
+        `    - ${m.name} [${m.type}${m.mtoon ? "/MToon" : ""}${m.outline ? "/輪郭" : ""}] ` +
+          `テクスチャ=${m.texture} 半透明=${m.transparent} alphaTest=${m.alphaTest} ` +
+          `面=${m.side} 表示=${m.visible}`
+      );
+    }
+    if (d.mtoon === 0 && d.standard === 0) {
+      lines.push("  ※ マテリアルを 1 つも認識できていません。VRM の変換に失敗した可能性があります");
+    }
+    if (d.materials.length > 0 && d.withTexture === 0) {
+      lines.push(
+        "  ※ テクスチャが 1 枚も読めていません。キャラは色だけ (真っ白) で描かれます。",
+        "     index.html の Content-Security-Policy から connect-src の blob: が" +
+          "抜けていないか確認してください"
+      );
+    }
+    return lines.join("\n");
+  }
+
+  // -----------------------------------------------------------
+  // 代替マテリアル (MToon → MeshStandardMaterial)
+  //
+  // MToon 側で描けない事情があったときの逃げ道。
+  // トゥーンの陰影と輪郭線は失われるが、まず「映る」ことを優先する。
+  // 元のマテリアルは捨てずに持っておくので、いつでも戻せる。
+  // -----------------------------------------------------------
+  /** @param {boolean} on */
+  setFallback(on) {
+    this.fallback = !!on;
+    this.applyMaterialMode();
+    if (this.diagnostics) this.diagnostics.fallback = this.fallback;
+    return this.fallback;
+  }
+
+  applyMaterialMode() {
+    for (const mesh of this.meshes) {
+      let kept = mesh.userData.companionMaterials;
+      if (!kept) {
+        kept = { original: mesh.material, fallback: null };
+        mesh.userData.companionMaterials = kept;
+      }
+      if (this.fallback) {
+        if (!kept.fallback) {
+          kept.fallback = Array.isArray(kept.original)
+            ? kept.original.map((m) => toStandardMaterial(m))
+            : toStandardMaterial(kept.original);
+        }
+        mesh.material = kept.fallback;
+      } else {
+        mesh.material = kept.original;
+      }
+    }
   }
 
   // -----------------------------------------------------------
@@ -315,26 +554,68 @@ export class Stage {
     expressions.setValue("blink", weight);
   }
 
-  /** ゆっくりした呼吸。胸をわずかに反らし、肩を少し上下させる */
+  /**
+   * ゆっくりした呼吸。胸をわずかに反らし、肩を少し上下させる。
+   *
+   * 値を直接入れるのではなく、必ず基準姿勢 (this.rest) からの差分にする。
+   * こうしないと、腕を下ろした基準姿勢が毎フレーム上書きされて T ポーズに戻る。
+   */
   updateBreath() {
-    const humanoid = this.vrm.humanoid;
-    if (!humanoid) return;
+    if (!this.vrm?.humanoid) return;
     const wave = Math.sin((this.clock * Math.PI * 2) / BREATH_CYCLE);
 
-    const chest =
-      humanoid.getNormalizedBoneNode("upperChest") ?? humanoid.getNormalizedBoneNode("chest");
-    if (chest) chest.rotation.x = wave * BREATH_CHEST;
+    const chest = this.idleBone("upperChest") ?? this.idleBone("chest");
+    if (chest) chest.node.rotation.x = chest.base.x + wave * BREATH_CHEST;
 
     // 胸を反らした分だけ背骨で戻す (前かがみに見えないように)
-    const spine = humanoid.getNormalizedBoneNode("spine");
-    if (spine) spine.rotation.x = -wave * BREATH_SPINE;
+    const spine = this.idleBone("spine");
+    if (spine) spine.node.rotation.x = spine.base.x - wave * BREATH_SPINE;
 
     // 肩は左右対称に。正規化された骨は回転しか効かないので位置は動かさない
-    const leftShoulder = humanoid.getNormalizedBoneNode("leftShoulder");
-    const rightShoulder = humanoid.getNormalizedBoneNode("rightShoulder");
-    if (leftShoulder) leftShoulder.rotation.z = -wave * BREATH_SHOULDER;
-    if (rightShoulder) rightShoulder.rotation.z = wave * BREATH_SHOULDER;
+    const leftShoulder = this.idleBone("leftShoulder");
+    const rightShoulder = this.idleBone("rightShoulder");
+    if (leftShoulder) leftShoulder.node.rotation.z = leftShoulder.base.z - wave * BREATH_SHOULDER;
+    if (rightShoulder) rightShoulder.node.rotation.z = rightShoulder.base.z + wave * BREATH_SHOULDER;
   }
+}
+
+/**
+ * MToon マテリアルを、three 標準の MeshStandardMaterial に置き換える。
+ *
+ * 輪郭線用のマテリアルは、標準マテリアルにすると裏返った塊が
+ * キャラを覆ってしまうので、描かないマテリアルに差し替える。
+ *
+ * @param {THREE.Material} source
+ * @returns {THREE.Material}
+ */
+function toStandardMaterial(source) {
+  if (!source) return source;
+
+  if (source.isOutline) {
+    const hidden = new THREE.MeshBasicMaterial({ name: `${source.name} (輪郭・非表示)` });
+    hidden.visible = false;
+    return hidden;
+  }
+  if (!source.isMToonMaterial) return source; // 元から標準系ならそのまま使う
+
+  const standard = new THREE.MeshStandardMaterial({
+    name: `${source.name} (代替)`,
+    map: source.map ?? null,
+    color: source.color ? source.color.clone() : new THREE.Color(0xffffff),
+    emissive: source.emissive ? source.emissive.clone() : new THREE.Color(0x000000),
+    emissiveMap: source.emissiveMap ?? null,
+    emissiveIntensity: source.emissiveIntensity ?? 1,
+    normalMap: source.normalMap ?? null,
+    // トゥーン系のテクスチャは陰影が描き込まれているので、つや消しにする
+    roughness: 1,
+    metalness: 0,
+    transparent: source.transparent,
+    opacity: source.opacity,
+    alphaTest: source.alphaTest,
+    depthWrite: source.depthWrite,
+    side: source.side,
+  });
+  return standard;
 }
 
 /** 親をたどって、本当に表示されているメッシュかどうかを確かめる */

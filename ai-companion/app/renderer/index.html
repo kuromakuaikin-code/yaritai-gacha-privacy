@@ -7,10 +7,19 @@
       外部への通信は一切しない (LM Studio / VOICEVOX との通信は main.js が代行する)。
       script-src に 'unsafe-inline' があるのは、下の importmap がインラインの
       <script> だから。LLM の返事は必ず textContent で入れるので HTML にはならない。
+
+      connect-src に blob: が必要な理由 (これが無いとキャラが真っ白になる):
+        VRM (.vrm = .glb) の中のテクスチャは、three.js の GLTFLoader が
+        いったん Blob にしてから blob: URL 経由で読み込む。今の three は
+        <img> ではなく ImageBitmapLoader (中身は fetch) を使うため、
+        img-src ではなく connect-src の許可が要る。
+        ここが 'self' だけだと全テクスチャの読み込みが CSP で止められ、
+        マテリアルが色だけ (＝真っ白) の状態で描かれてしまう。
+      外部ホストは相変わらず一切許可していないので、締まり具合は変わらない。
     -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self'"
+      content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' blob: data:"
     />
     <title>ai-companion</title>
     <link rel="stylesheet" href="./style.css" />
@@ -42,6 +51,8 @@
     <div id="menu" class="ui hidden" role="menu">
       <button id="menu-talk" type="button">入力欄を出す</button>
       <button id="menu-model" type="button">別の VRM に変える</button>
+      <button id="menu-fallback" type="button">描画モードを切り替える</button>
+      <button id="menu-devtools" type="button">開発者ツールを開く</button>
       <button id="menu-minimize" type="button">しまう</button>
       <button id="menu-quit" type="button">終了する</button>
     </div>

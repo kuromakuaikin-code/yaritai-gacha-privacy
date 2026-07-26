@@ -42,4 +42,12 @@ contextBridge.exposeInMainWorld("companion", {
   dragEnd: () => ipcRenderer.send("window:drag-end"),
   minimize: () => ipcRenderer.send("window:minimize"),
   quit: () => ipcRenderer.send("window:quit"),
+
+  // --- 診断 / 開発用 ---
+  /** three などの版を取る (診断ログに出す) */
+  getVersions: () => ipcRenderer.invoke("app:versions"),
+  /** npm start した端末に 1 行出す (画面側の console は DevTools にしか出ないため) */
+  diag: (line) => ipcRenderer.send("app:diag", line),
+  /** DevTools の開閉 */
+  openDevTools: () => ipcRenderer.send("app:devtools"),
 });
