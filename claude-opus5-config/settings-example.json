@@ -1,0 +1,16 @@
+{
+  "model": "opus",
+  "outputStyle": "kento",
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ~/.claude/hooks/respond-first.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
