@@ -1,0 +1,271 @@
+/* =============================================================
+   透過ウィンドウの見た目
+   - ページ全体は完全に透明。背景色を持つのは UI 部品だけ
+   - .ui が付いた要素だけがマウス操作を受ける (canvas は受けない)
+   ============================================================= */
+
+:root {
+  --panel: rgba(28, 30, 38, 0.86);
+  --panel-edge: rgba(255, 255, 255, 0.16);
+  --text: #f3f5f9;
+  --accent: #6fd3c7;
+  --font: system-ui, "Yu Gothic UI", "Hiragino Sans", "Noto Sans JP", "Meiryo",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent; /* ここが不透明だと窓が四角く見えてしまう */
+  font-family: var(--font);
+  color: var(--text);
+  font-size: 13px;
+  user-select: none;
+  cursor: default;
+}
+
+/* キャラの上にいるときは「掴めます」の合図を出す */
+body.interactive {
+  cursor: grab;
+}
+
+body.dragging {
+  cursor: grabbing;
+}
+
+/* --- キャラの描画面 ---------------------------------------- */
+/* マウス操作は受け取らない。キャラに当たっているかはレイキャストで判定する */
+#canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  pointer-events: none;
+}
+
+/* --- UI 部品の共通ルール ------------------------------------ */
+.ui {
+  pointer-events: auto;
+  cursor: default; /* UI の上ではキャラ用の「掴む」カーソルにしない */
+}
+
+.hidden {
+  display: none !important;
+}
+
+button {
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+button:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+button:active {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+button.ghost {
+  background: transparent;
+}
+
+/* --- 右クリックメニュー ------------------------------------- */
+/* 出していないときは display:none。当たり判定ごと消える = 透過の邪魔をしない */
+#menu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 10px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  animation: pop 0.12s ease-out;
+}
+
+#menu button {
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  text-align: left;
+  white-space: nowrap;
+  padding: 6px 12px;
+}
+
+#menu button:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* --- 吹き出し ----------------------------------------------- */
+/* 読むだけの表示なので、クリックは下へ通す */
+#bubble {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  pointer-events: none;
+  max-height: 45%;
+  overflow: hidden;
+  padding: 10px 13px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 14px 14px 14px 4px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  line-height: 1.65;
+  white-space: pre-wrap;
+  word-break: break-word;
+  animation: pop 0.18s ease-out;
+}
+
+#bubble.thinking {
+  opacity: 0.75;
+  font-style: italic;
+}
+
+#bubble.trouble {
+  border-color: rgba(255, 170, 120, 0.5);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* --- 入力欄 ------------------------------------------------- */
+#bar {
+  position: fixed;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  gap: 6px;
+  padding: 6px;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+#input {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font);
+  font-size: 13px;
+  color: var(--text);
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 6px 9px;
+  outline: none;
+  user-select: text;
+  cursor: text;
+}
+
+#input:focus {
+  border-color: var(--accent);
+}
+
+#input::placeholder {
+  color: rgba(243, 245, 249, 0.42);
+}
+
+#send {
+  background: rgba(111, 211, 199, 0.28);
+  border-color: rgba(111, 211, 199, 0.5);
+  white-space: nowrap;
+}
+
+/* --- セットアップ / モデル選択パネル ------------------------- */
+#setup {
+  position: fixed;
+  inset: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px;
+  text-align: center;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.45);
+}
+
+#setup h1 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#setup p {
+  margin: 0;
+  line-height: 1.7;
+}
+
+#setup .drop-hint {
+  padding: 22px 10px;
+  border: 2px dashed rgba(255, 255, 255, 0.28);
+  border-radius: 12px;
+  color: rgba(243, 245, 249, 0.7);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+body.dragover #setup .drop-hint {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#setup .setup-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+#setup .note {
+  font-size: 11px;
+  color: rgba(243, 245, 249, 0.6);
+}
+
+#setup .note.trouble {
+  color: #ffbb88;
+}
+
+/* ファイルをドラッグ中は、画面全体でドロップを受けられることを示す */
+body.dragover::after {
+  content: "";
+  position: fixed;
+  inset: 4px;
+  border: 2px dashed var(--accent);
+  border-radius: 14px;
+  pointer-events: none;
+}

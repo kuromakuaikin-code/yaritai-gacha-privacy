@@ -1,0 +1,5 @@
+# 依存パッケージ (npm install で入るのでコミットしない)
+node_modules/
+
+# npm のログ
+npm-debug.log*
