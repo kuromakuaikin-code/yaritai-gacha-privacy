@@ -3774,6 +3774,238 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "岐阜県"
+    },
+    {
+      "id": "okazaki-ieyasu-fireworks-2026",
+      "status": "published",
+      "name": "岡崎城下家康公夏まつり第78回花火大会",
+      "city": "岡崎市",
+      "venue": "乙川・矢作川河畔",
+      "address": "岡崎市乙川・矢作川河畔",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "19:00", "end": "20:30"}
+      ],
+      "rain": "荒天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく花火大会として掲載しています。打上会場近くに無料観覧エリアはありません。交通規制と観覧案内を公式サイトでご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "岡崎市公式サイト",
+        "url": "https://www.city.okazaki.lg.jp/kanko/event/1009636/1015779.html"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "乙川・矢作川河畔で行われる岡崎の夏の花火大会です。仕掛花火や金魚花火などを楽しめます。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "toyokawa-goyu-summer-festival-2026",
+      "status": "published",
+      "name": "御油夏まつり",
+      "city": "豊川市",
+      "venue": "御油神社・音羽川周辺",
+      "address": "豊川市御油町",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01"},
+        {"date": "2026-08-02"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、御油神社の祭礼と山車・煙火を中心とする夏祭りとして掲載しています。2026年の詳しい進行は未発表のため公式ページをご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "豊川市観光協会公式サイト",
+        "url": "https://www.toyokawa-map.net/event/000045.html"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "御油神社の祭礼にあわせ、山車の巡行や煙火が行われる豊川市御油町の夏祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "gero-onsen-festival-2026",
+      "status": "published",
+      "name": "2026年 下呂温泉まつり",
+      "city": "下呂市",
+      "venue": "下呂温泉街・白鷺橋周辺・飛騨川河川敷ほか",
+      "address": "下呂市湯之島・幸田周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "10:05", "end": "21:30"},
+        {"date": "2026-08-02"},
+        {"date": "2026-08-03"},
+        {"date": "2026-08-04", "start": "15:00", "end": "22:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りに限らず、みこし・龍神火まつり・花火・下呂おどりを行う温泉街の祭りとして掲載しています。日ごとに内容と会場が異なります。",
+      "posterType": "admin",
+      "source": {
+        "name": "下呂市公式サイト",
+        "url": "https://www.city.gero.lg.jp/site/kanko/23881.html"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "龍神火まつり、みこし、花火ミュージカル夏公演、下呂おどりなどを4日間にわたり行う温泉街の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "yokkaichi-festival-2026",
+      "status": "published",
+      "name": "第63回 大四日市まつり",
+      "city": "四日市市",
+      "venue": "三滝通り・諏訪新道・諏訪神社・市民公園周辺",
+      "address": "四日市市諏訪町周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "15:30", "end": "22:00"},
+        {"date": "2026-08-02", "start": "16:00", "end": "19:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りに限らず、市民参加の踊りと郷土芸能を行う祭りとして掲載しています。会場が広いため公式プログラムをご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "四日市観光協会公式サイト",
+        "url": "https://kanko-yokkaichi.com/news/n-1483/"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "初日は市民参加の踊り、2日目は大入道などの郷土芸能を中心に行う四日市の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "kuwana-ishidori-festival-2026",
+      "status": "published",
+      "name": "桑名石取祭",
+      "city": "桑名市",
+      "venue": "春日神社周辺",
+      "address": "桑名市本町46周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "00:00"},
+        {"date": "2026-08-02", "start": "02:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、祭車と鉦・太鼓を中心とする伝統祭礼として掲載しています。深夜・早朝の行事を含むため公式日程をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/35039"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "祭車が鉦や太鼓を打ち鳴らしながら町を進む桑名の伝統祭礼です。ユネスコ無形文化遺産の構成行事です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "owase-port-festival-2026",
+      "status": "published",
+      "name": "第73回 おわせ港まつり",
+      "city": "尾鷲市",
+      "venue": "尾鷲港一帯",
+      "address": "尾鷲市港町周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "09:00", "end": "21:00"}
+      ],
+      "rain": "雨天時は8月2日に順延予定",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りに限らず、尾鷲節踊り・ステージ・海上花火を行う港まつりとして掲載しています。雨天時は8月2日に順延予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/43190"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "尾鷲港で尾鷲節踊りやステージ、海上花火を楽しめる港まつりです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "kiwa-fire-festival-2026",
+      "status": "published",
+      "name": "紀和の火祭り",
+      "city": "熊野市",
+      "venue": "熊野市紀和町小川口",
+      "address": "熊野市紀和町小川口",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、柱まつり・太鼓・花火を中心とする火祭りとして掲載しています。開催時刻は公式情報をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/5206"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "たいまつを使う柱まつりを中心に、太鼓や花火が行われる熊野市紀和町の火祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "shimizu-port-festival-2026",
+      "status": "published",
+      "name": "第77回 清水みなと祭り",
+      "city": "静岡市清水区",
+      "venue": "さつき通り・日の出埠頭ほか",
+      "address": "静岡市清水区相生町・日の出町周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-07-31", "start": "18:30", "end": "21:00"},
+        {"date": "2026-08-01", "start": "17:50", "end": "21:00"},
+        {"date": "2026-08-02", "start": "18:15", "end": "20:30"}
+      ],
+      "rain": "海上花火大会は荒天中止・順延なし",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りに限らず、港かっぽれ総おどり・みこし・海上花火を行う港まつりとして掲載しています。8月2日の潮干狩りは中止です。各催しで会場と時間が異なります。",
+      "posterType": "organizer",
+      "source": {
+        "name": "清水みなと祭り公式サイト",
+        "url": "https://www.minatokappore.jp/yotei.html"
+      },
+      "lastVerified": "2026-07-27",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "港かっぽれ総おどり、みこし、海の行事、海上花火を3日間にわたり行う清水港の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
     }
   ]
 }
