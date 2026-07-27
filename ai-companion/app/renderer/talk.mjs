@@ -3,6 +3,11 @@
 //
 // 通信そのものは main.js が代行する。ここは「何を出すか」だけを持つ。
 // 会話の流儀 (人格・履歴の長さ) は chat.mjs と揃えてある。
+//
+// Phase 3/4 でここに増えた仕事:
+//   - 返事に付いてきた感情を Stage に渡して、表情を切り替える
+//   - VOICEVOX の音声を LipSync に渡して、口を動かす
+//     (声が返らなかったときは、本文を渡して擬似口パクにする)
 // =============================================================
 
 const api = window.companion;
@@ -44,14 +49,19 @@ export class Talk {
    * @param {object} options
    * @param {HTMLElement} options.bubble 吹き出しの要素
    * @param {object} options.character character.json の中身
+   * @param {import("./stage.mjs").Stage} options.stage 表情を入れる先
+   * @param {import("./lipsync.mjs").LipSync} options.lipSync 口を動かす係
    */
-  constructor({ bubble, character }) {
+  constructor({ bubble, character, stage, lipSync }) {
     this.bubble = bubble;
     this.character = character;
+    this.stage = stage;
+    this.lipSync = lipSync;
     this.messages = [{ role: "system", content: character.systemPrompt ?? "" }];
     this.hideTimer = null;
-    this.audio = null;
     this.busy = false;
+    /** いま表情に反映している返事の番号 (後追い判定が古い返事を上書きしないように) */
+    this.emotionId = 0;
   }
 
   // -----------------------------------------------------------
@@ -111,9 +121,14 @@ export class Talk {
     }
 
     const reply = result.reply;
-    this.messages.push({ role: "assistant", content: reply });
+    // 履歴に積むのは、感情タグが付いたままの生の返事 (main.js の raw)。
+    // タグを外したものを積むと、モデルが「タグは要らない」と思って付けなくなる
+    this.messages.push({ role: "assistant", content: result.raw ?? reply });
     // 履歴が伸びすぎたら古いものから忘れる (system は残す)。chat.mjs と同じ
     if (this.messages.length > 41) this.messages.splice(1, 2);
+
+    // 表情を先に切り替えてから吹き出しを出す (0.25 秒かけて変わる)
+    this.applyEmotion(result.emotion, result.emotionId);
 
     // 途中で切れた場合は、黙って見せずにその旨を添える
     this.show(result.truncated ? reply + TRUNCATED_NOTE : reply);
@@ -124,32 +139,52 @@ export class Talk {
     this.playVoice(reply);
   }
 
+  // -----------------------------------------------------------
+  // 表情 (Phase 3)
+  // -----------------------------------------------------------
+  /**
+   * 感情を表情に反映する。
+   * @param {string} emotion
+   * @param {number} [id] 何回目の返事か (後追い判定の取り違えを防ぐ)
+   */
+  applyEmotion(emotion, id) {
+    if (typeof id === "number") this.emotionId = id;
+    const wanted = emotion ?? "neutral";
+    const used = this.stage?.setEmotion(wanted) ?? "neutral";
+    if (used !== wanted) {
+      api.diag(`感情: ${wanted} はこのモデルに定義が無いので neutral にしました`);
+    }
+  }
+
+  /**
+   * main 側の後追い判定 (JSON 方式) が返ってきたときに呼ばれる。
+   * すでに次の返事に進んでいたら無視する。
+   * @param {{id: number, emotion: string}} payload
+   */
+  onEmotionUpdate(payload) {
+    if (!payload || payload.id !== this.emotionId) return;
+    this.applyEmotion(payload.emotion);
+  }
+
+  // -----------------------------------------------------------
+  // 声と口 (Phase 4)
+  //
+  // 音声の再生は LipSync に任せる。AnalyserNode を挟んで音量を測るため。
+  // 声が返らなくても、本文の長さから擬似的に口を動かす。
+  // -----------------------------------------------------------
   /** @param {string} text */
   async playVoice(text) {
-    let wav;
+    let wav = null;
     try {
       wav = await api.speak(text);
     } catch {
-      return;
+      wav = null; // 声が出せなくても、口だけは動かす
     }
-    if (!wav || wav.length === 0) return;
-
-    // 前の声が残っていたら止める
-    if (this.audio) {
-      this.audio.pause();
-      URL.revokeObjectURL(this.audio.src);
-      this.audio = null;
-    }
-
-    const url = URL.createObjectURL(new Blob([wav], { type: "audio/wav" }));
-    const audio = new Audio(url);
-    this.audio = audio;
-    audio.addEventListener("ended", () => {
-      URL.revokeObjectURL(url);
-      if (this.audio === audio) this.audio = null;
-    });
-    audio.play().catch(() => {
-      URL.revokeObjectURL(url);
-    });
+    if (!this.lipSync) return;
+    const report = await this.lipSync.speak(wav, text);
+    api.diag(
+      `口パク: 駆動源=${report.driver === "voice" ? "実音声 (AnalyserNode)" : "擬似 (テキスト長)"} ` +
+        `— ${report.detail}`
+    );
   }
 }

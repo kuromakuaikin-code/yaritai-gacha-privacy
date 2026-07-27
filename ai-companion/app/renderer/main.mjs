@@ -8,6 +8,7 @@
 // =============================================================
 import { Stage } from "./stage.mjs";
 import { Talk } from "./talk.mjs";
+import { LipSync } from "./lipsync.mjs";
 
 const api = window.companion;
 
@@ -24,6 +25,8 @@ const el = {
 };
 
 const stage = new Stage(el.canvas);
+// 口パク (Phase 4)。診断ログは端末に流す
+const lipSync = new LipSync((line) => api.diag(line));
 /** @type {Talk} */
 let talk;
 
@@ -119,6 +122,8 @@ document.addEventListener("mouseleave", () => {
 // キャラを掴んでウィンドウを動かす / クリックで入力欄を開閉する
 // =============================================================
 window.addEventListener("pointerdown", (event) => {
+  // ブラウザは「操作されるまで音を鳴らさない」ので、触られた合図で音の準備を起こす
+  lipSync.resume();
   if (menuOpen && !isOnUi(event.clientX, event.clientY)) closeMenu();
   if (event.button !== 0 || mode !== "live") return;
   if (isOnUi(event.clientX, event.clientY)) return;
@@ -246,6 +251,7 @@ el.bar.addEventListener("submit", (event) => {
   event.preventDefault();
   const text = el.input.value;
   el.input.value = "";
+  lipSync.resume(); // 送信も「操作された」合図として使う
   talk?.send(text);
 });
 
@@ -296,7 +302,8 @@ function reportDiagnostics() {
     api.diag("診断: まだモデルが読み込まれていません");
     return;
   }
-  api.diag(stage.describeDiagnostics(versions));
+  // モデルの中身 (表情の一覧と今の重みを含む) と、口パクの駆動源
+  api.diag(`${stage.describeDiagnostics(versions)}\n  ${lipSync.describe()}`);
 }
 
 // 画面側で拾えなかったエラーも端末に出す (シェーダーのエラーなどが分かる)
@@ -434,6 +441,8 @@ let previous = performance.now();
 function tick(now) {
   const delta = Math.min(0.1, (now - previous) / 1000); // タブ復帰時の飛びを抑える
   previous = now;
+  // 口の開きを先に決めてから描く (stage.update の中で表情に混ぜられる)
+  stage.setMouth(lipSync.update(delta));
   stage.update(delta);
   updatePassthrough();
   requestAnimationFrame(tick);
@@ -441,7 +450,10 @@ function tick(now) {
 
 async function start() {
   const character = await api.getCharacter();
-  talk = new Talk({ bubble: el.bubble, character });
+  talk = new Talk({ bubble: el.bubble, character, stage, lipSync });
+
+  // 感情の後追い判定 (タグが無かった返事について、main が JSON 方式で判定し直す)
+  api.onEmotion((payload) => talk?.onEmotionUpdate(payload));
 
   const capabilities = await api.getCapabilities();
   const settings = await api.getSettings();

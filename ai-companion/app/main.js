@@ -39,6 +39,13 @@ function replyTools() {
   if (!replyToolsPromise) replyToolsPromise = import(REPLY_MODULE);
   return replyToolsPromise;
 }
+// 感情タグの付け外し (Phase 3) も chat.mjs と共用する
+const EMOTION_MODULE = pathToFileURL(path.join(ROOT, "..", "emotion.mjs")).toString();
+let emotionToolsPromise = null;
+function emotionTools() {
+  if (!emotionToolsPromise) emotionToolsPromise = import(EMOTION_MODULE);
+  return emotionToolsPromise;
+}
 
 // -------------------------------------------------------------
 // 独自スキーム companion:// の登録
@@ -321,16 +328,83 @@ async function detectModel() {
   return id;
 }
 
+// -------------------------------------------------------------
+// 感情の後追い判定 (Phase 3 のフォールバック)
+//
+// 主軸は「返事の先頭に [happy] のようなタグを付けてもらう」方式 (emotion.mjs)。
+// タグが取れなかったときだけ、LM Studio の Structured Output
+// (JSON Schema 強制) で「この返事の感情は何か」を別便で聞き直す。
+//
+// なぜ別便にするか:
+//   本文の生成そのものに JSON を強制すると、対応していないサーバーでは
+//   400 が返って会話ごと死ぬ。小型モデルは JSON に前置きを付けたがるので、
+//   「本文が読めなくなる」失敗の仕方をする。感情は付け足しの情報なので、
+//   取れなくても会話を止めない作りにしてある。
+//
+// 返事はすでに画面に出しているので、判定できたら後から表情だけを差し替える。
+// -------------------------------------------------------------
+/** "unknown" = 未確認 / "ok" = 使える / "unsupported" = このサーバーでは使えない */
+let structuredOutput = "unknown";
+/** 何回目の返事に対する感情か (古い判定が新しい返事を上書きしないように) */
+let emotionSeq = 0;
+
+async function classifyEmotion(text, id) {
+  if (structuredOutput === "unsupported" || !cachedModel) return;
+  const { EMOTION_JSON_SCHEMA, EMOTION_CLASSIFY_PROMPT, emotionFromJsonText } = await emotionTools();
+  try {
+    const res = await fetch(`${LMSTUDIO}/v1/chat/completions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: cachedModel,
+        messages: [
+          { role: "system", content: EMOTION_CLASSIFY_PROMPT },
+          { role: "user", content: text },
+        ],
+        temperature: 0,
+        max_tokens: 256,
+        response_format: { type: "json_schema", json_schema: EMOTION_JSON_SCHEMA },
+      }),
+      signal: AbortSignal.timeout(20000),
+    });
+    if (!res.ok) {
+      // json_schema を知らないサーバーは 400 を返す。以後は聞きに行かない
+      structuredOutput = "unsupported";
+      diag(`感情: JSON 方式は使えませんでした (HTTP ${res.status})。以後はタグ方式だけで判定します`);
+      return;
+    }
+    const { extractReply } = await replyTools();
+    const body = extractReply(await res.json()).reply;
+    const emotion = emotionFromJsonText(body);
+    if (!emotion) {
+      diag("感情: JSON 方式でも読み取れませんでした (取得方式=フォールバック失敗 → neutral)");
+      return;
+    }
+    structuredOutput = "ok";
+    diag(`感情: ${emotion} (取得方式=JSON/Structured Output・後追い)`);
+    if (win && !win.isDestroyed()) win.webContents.send("emotion:update", { id, emotion });
+  } catch (err) {
+    const why = err.name === "TimeoutError" ? "時間切れ" : (err.message ?? err);
+    diag(`感情: 後追い判定に失敗しました (${why}) → neutral のままにします`);
+  }
+}
+
 ipcMain.handle("chat:send", async (_e, messages) => {
   if (!Array.isArray(messages)) return { ok: false, kind: "bad-request" };
   try {
-    if (!cachedModel) cachedModel = await detectModel();
+    if (!cachedModel) {
+      const detected = await detectModel();
+      // モデルが変わったら、Structured Output が使えるかを判定し直す
+      if (detected !== cachedModel) structuredOutput = "unknown";
+      cachedModel = detected;
+    }
   } catch {
     cachedModel = null;
     return { ok: false, kind: "no-lmstudio" };
   }
 
   const { extractReply, tokenBudget, describeReply } = await replyTools();
+  const { messagesWithEmotionGuide, splitEmotion } = await emotionTools();
   const maxTokens = tokenBudget(cachedModel, knownReasoningModels.has(cachedModel));
 
   try {
@@ -339,7 +413,9 @@ ipcMain.handle("chat:send", async (_e, messages) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         model: cachedModel,
-        messages,
+        // 感情タグの指示は、ここで system プロンプトに足す。
+        // character.json 側には書かないので、人格を書き換えても表情は動く
+        messages: messagesWithEmotionGuide(messages),
         temperature: 0.8,
         // 考えるモデル (Gemma 4 など) は思考ぶんもここから食う。
         // 300 だと思考だけで使い切って本文が出ないため、大きめに取る
@@ -367,9 +443,29 @@ ipcMain.handle("chat:send", async (_e, messages) => {
         truncated: info.truncated,
       };
     }
+
+    // 感情タグ ([happy] など) を剥がして、本文と感情に分ける。
+    // 吹き出しにも VOICEVOX にも、タグを外した本文だけを渡す
+    const parted = splitEmotion(info.reply);
+    const id = ++emotionSeq;
+    diag(`感情: ${parted.emotion} (取得方式=${parted.source === "tag" ? "タグ" : "なし"})`);
+
+    if (parted.text === "") {
+      // タグだけで本文が無かった (まれ)。無言にせず案内を出す
+      return { ok: false, kind: "empty-reply", truncated: info.truncated };
+    }
+    // タグが付いていなかったら、JSON 方式で後から聞き直す (返事は待たせない)
+    if (parted.source === "none") classifyEmotion(parted.text, id);
+
     return {
       ok: true,
-      reply: info.reply,
+      reply: parted.text,
+      // 履歴に積み直すのはタグ付きのほう。
+      // タグの無い返事を履歴に残すと、モデルが「タグは要らない」と学習してしまう
+      raw: info.reply,
+      emotion: parted.emotion,
+      emotionSource: parted.source,
+      emotionId: id,
       source: info.source,
       truncated: info.truncated,
     };

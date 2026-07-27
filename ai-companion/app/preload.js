@@ -35,6 +35,14 @@ contextBridge.exposeInMainWorld("companion", {
   hasVoice: () => ipcRenderer.invoke("voice:check"),
   speak: (text) => ipcRenderer.invoke("voice:speak", text),
 
+  /**
+   * 感情の後追い判定 (Phase 3) の結果を受け取る。
+   * 返事にタグが付いていなかったとき、main 側が JSON 方式で判定し直して
+   * 少し遅れて送ってくる。{ id, emotion } が届く
+   */
+  onEmotion: (callback) =>
+    ipcRenderer.on("emotion:update", (_event, payload) => callback(payload)),
+
   // --- ウィンドウ操作 ---
   getCapabilities: () => ipcRenderer.invoke("window:capabilities"),
   setPassthrough: (ignore) => ipcRenderer.send("window:passthrough", ignore),

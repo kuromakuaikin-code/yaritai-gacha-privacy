@@ -19,6 +19,9 @@ import { fileURLToPath } from "node:url";
 // 返事の取り出し方は app/ (Electron 版) と同じものを使う。
 // Gemma 4 のような「考えてから答える」モデルへの対応がここに入っている
 import { extractReply, tokenBudget, describeReply } from "./reply.mjs";
+// 感情タグ ([happy] など) の付け外しも app/ と同じものを使う。
+// ターミナル版に表情は無いが、タグをそのまま表示・読み上げしないために剥がす
+import { withEmotionGuide, splitEmotion } from "./emotion.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
 
@@ -87,7 +90,8 @@ const hasVoice = await detectVoicevox();
 console.log(`--- ${character.name} (モデル: ${model} / 声: ${hasVoice ? "VOICEVOX" : "なし"}) ---`);
 console.log("話しかけてください。終わるときは Ctrl+C か「バイバイ」\n");
 
-const messages = [{ role: "system", content: character.systemPrompt }];
+// 感情タグの指示はコード側で足す (character.json を書き換えても壊れないように)
+const messages = [{ role: "system", content: withEmotionGuide(character.systemPrompt) }];
 const rl = createInterface({ input: process.stdin, output: process.stdout });
 // 一度でも思考を返したら覚えておき、次から max_tokens の枠を広げる
 let knownReasoning = false;
@@ -128,11 +132,17 @@ while (true) {
     continue;
   }
 
-  const reply = info.reply;
-  messages.push({ role: "assistant", content: reply });
+  // 感情タグを剥がして、本文と感情に分ける (読み上げも表示も本文だけ)
+  const parted = splitEmotion(info.reply);
+  const reply = parted.text === "" ? info.reply : parted.text;
+  // 履歴にはタグ付きのまま積む (タグを消すと、モデルが付けなくなる)
+  messages.push({ role: "assistant", content: info.reply });
   // 履歴が伸びすぎたら古いものから忘れる (system は残す)
   if (messages.length > 41) messages.splice(1, 2);
 
+  if (debug) {
+    console.log(`  [診断] 感情=${parted.emotion} (取得方式=${parted.source === "tag" ? "タグ" : "なし"})`);
+  }
   console.log(`${character.name} > ${reply}\n`);
   if (info.truncated) console.log("  (※ 長さの上限に達したため、途中で切れています)\n");
   if (hasVoice) await speak(reply);

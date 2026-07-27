@@ -5,6 +5,7 @@
 //   - VRM (0.x / 1.0 どちらも) を読み込んで立たせる
 //   - 読み込み直後に自然な立ち姿 (基準姿勢) を当てる
 //   - まばたきと呼吸のアイドルモーションを、基準姿勢の上に足す
+//   - 表情 (感情) と口の開きを ExpressionMixer 経由でまとめて入れる
 //   - 「今マウスがキャラの上にいるか」をレイキャストで判定する
 //     ← クリック透過の切り替えに使う、このアプリの心臓部
 //   - マテリアルの診断と、MToon → 標準マテリアルの代替表示
@@ -12,6 +13,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { VRMLoaderPlugin, VRMUtils } from "@pixiv/three-vrm";
+import { ExpressionMixer } from "./expression.mjs";
 
 // キャラが画面の高さ・幅のどれくらいを占めるか。
 // 余った分は主に上へ回して、吹き出しの居場所にする (LIFT_MAX が上限)。
@@ -117,6 +119,10 @@ export class Stage {
     this.blinkWait = BLINK_INTERVAL_MIN;
     this.blinkLeft = 0;
 
+    // 表情 (感情のクロスフェード + 口の開き + まばたき) をまぜる係。
+    // setValue を呼ぶのはここ 1 か所だけにして、値の取り合いを防ぐ
+    this.expressions = new ExpressionMixer();
+
     // 当たり判定用
     this.raycaster = new THREE.Raycaster();
     this.pointerNdc = new THREE.Vector2();
@@ -194,6 +200,9 @@ export class Stage {
     this.applyRestPose();
     vrm.update(0); // 正規化ボーンの回転を実際の骨に反映させる
 
+    // このモデルで使える表情を調べる (無い感情はここで諦める)
+    this.expressions.bind(vrm.expressionManager);
+
     // 前回まで代替マテリアルで見ていたなら、その状態を引き継ぐ
     if (this.fallback) this.applyMaterialMode();
 
@@ -226,6 +235,7 @@ export class Stage {
     this.vrm = null;
     this.meshes = [];
     this.rest = new Map();
+    this.expressions.bind(null);
     this.diagnostics = null;
     this.screenRect = null;
     this.frame = null;
@@ -335,6 +345,11 @@ export class Stage {
       `  テクスチャあり ${d.withTexture} 個 / 半透明 ${d.transparent} 個 / ` +
         `表情 ${d.expressions} 種 / 姿勢に使う骨 ${d.bones}/${Object.keys(REST_POSE).length}`,
       `  描画モード: ${d.fallback ? "代替 (MeshStandardMaterial)" : "通常 (MToon)"}`,
+      // 表情まわり (Phase 3/4)。どの感情が出せるモデルかはここで分かる
+      ...this.expressions
+        .describe()
+        .split("\n")
+        .map((line) => `  ${line}`),
     ];
     for (const m of d.materials) {
       lines.push(
@@ -524,17 +539,34 @@ export class Stage {
     if (this.vrm) {
       this.updateBlink(delta);
       this.updateBreath();
+      // 感情・口・まばたきをまとめて表情に入れる (順番の取り合いを避けるため最後)
+      this.expressions.update(delta);
       // ボーンをいじったあとに呼ぶ (ここで表情・揺れものが反映される)
       this.vrm.update(delta);
     }
     this.renderer.render(this.scene, this.camera);
   }
 
+  // -----------------------------------------------------------
+  // 表情 (Phase 3) と口の開き (Phase 4) の入口。
+  // 実際の重みの計算とクロスフェードは expression.mjs にある
+  // -----------------------------------------------------------
+  /**
+   * 感情を切り替える (0.25 秒かけて変わる)。
+   * @param {string} emotion happy / angry / sad / relaxed / surprised / neutral
+   * @returns {string} 実際に採用された感情 (モデルに無ければ neutral)
+   */
+  setEmotion(emotion) {
+    return this.expressions.setEmotion(emotion);
+  }
+
+  /** @param {number} level 口の開き 0〜1 (LipSync が毎フレーム入れる) */
+  setMouth(level) {
+    this.expressions.setMouth(level);
+  }
+
   /** 自動まばたき。閉じて開くまでを三角波で作る */
   updateBlink(delta) {
-    const expressions = this.vrm.expressionManager;
-    if (!expressions) return;
-
     if (this.blinkLeft > 0) {
       this.blinkLeft -= delta;
     } else {
@@ -551,7 +583,8 @@ export class Stage {
       const t = this.blinkLeft / BLINK_DURATION; // 1 → 0
       weight = 1 - Math.abs(t * 2 - 1); // 0 → 1 → 0
     }
-    expressions.setValue("blink", weight);
+    // 感情とは無関係に重ねる (笑っていても瞬きはする)
+    this.expressions.setBlink(weight);
   }
 
   /**
