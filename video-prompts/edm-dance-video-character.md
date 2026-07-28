@@ -1,6 +1,6 @@
 # EDM ダンス動画 キャラクター (紅ドレスのツインテール)
 
-[edm-dance-video-style.md](edm-dance-video-style.md) と組み合わせる踊り手のキャラクター設定。参照画像は [edm-dance-video-character.jpg](edm-dance-video-character.jpg) (動画キャプチャからキャラ部分のみ切り抜き済み。中央の再生ボタンは画像に焼き込まれているため残っている点に注意)。
+[edm-dance-video-style.md](edm-dance-video-style.md) と組み合わせる踊り手のキャラクター設定。参照画像は [edm-dance-video-character.jpg](edm-dance-video-character.jpg) (白背景・全身の一枚絵)。
 
 ## キャラクタータグ全文 (コピペ用)
 
@@ -41,4 +41,4 @@
 
 ## メモ
 
-- 参照画像は再生ボタンの写り込みでベルト付近が隠れているため、画像参照入力に使う場合はきれいな静止画に差し替えるのが望ましい。
+- 参照画像の封筒 (縁談の手紙) と困り顔はこのポーズ固有の要素なので、キャラタグには含めていない。ダンス動画では手ぶら・自信ありげな笑み (smug smile) を採用。
