@@ -1,6 +1,6 @@
 # EDM ダンス動画 キャラクター 2 (紅ドレスのツインテール)
 
-[edm-dance-video-style.md](edm-dance-video-style.md) と組み合わせる踊り手の 2 人目。参照画像は [edm-dance-video-character-2.jpg](edm-dance-video-character-2.jpg) (動画の 1 フレームのキャプチャのため、中央に再生ボタンが写り込んでいる点に注意)。
+[edm-dance-video-style.md](edm-dance-video-style.md) と組み合わせる踊り手の 2 人目。参照画像は [edm-dance-video-character-2.jpg](edm-dance-video-character-2.jpg) (動画キャプチャからキャラ部分のみ切り抜き済み。中央の再生ボタンは画像に焼き込まれているため残っている点に注意)。
 
 1 人目 (星の魔女っ子) は [edm-dance-video-character.md](edm-dance-video-character.md)。こちらはチビ体型ではなく通常頭身。
 

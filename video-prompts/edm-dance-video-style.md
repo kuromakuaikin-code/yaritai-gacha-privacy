@@ -7,6 +7,8 @@ AI 動画生成用のスタイルプリセット。EDM / テックハウスの�
 1. [edm-dance-video-character.md](edm-dance-video-character.md) — 星の魔女っ子 (チビ体型、三面図つき)
 2. [edm-dance-video-character-2.md](edm-dance-video-character-2.md) — 紅ドレスのツインテール (通常頭身)
 
+2 人同時出演は [edm-dance-video-duo.md](edm-dance-video-duo.md) (2girls 構成、頭身統一の 2 案)。
+
 ## プロンプト全文 (コピペ用)
 
 ```
