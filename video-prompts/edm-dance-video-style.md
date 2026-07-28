@@ -2,7 +2,10 @@
 
 AI 動画生成用のスタイルプリセット。EDM / テックハウスのパーティーで、手持ちカメラ (魚眼) が音楽に合わせて揺れながら、ダンサーを捉える映像。画風は伝統画材風のセミスケッチで、線や塗りが常時ちらつく (boiled lines) アニメーション。
 
-踊り手のキャラクター設定は [edm-dance-video-character.md](edm-dance-video-character.md) (三面図つき) を参照。
+踊り手のキャラクター設定:
+
+1. [edm-dance-video-character.md](edm-dance-video-character.md) — 星の魔女っ子 (チビ体型、三面図つき)
+2. [edm-dance-video-character-2.md](edm-dance-video-character-2.md) — 紅ドレスのツインテール (通常頭身)
 
 ## プロンプト全文 (コピペ用)
 
