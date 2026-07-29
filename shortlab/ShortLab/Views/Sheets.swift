@@ -9,6 +9,7 @@ struct TextSheet: View {
 
     @State private var text = ""
     @State private var fontSize: CGFloat = 72
+    @State private var colorName: String = TextPalette.defaultName
 
     var body: some View {
         NavigationStack {
@@ -22,8 +23,36 @@ struct TextSheet: View {
                     }
                     Text(text.isEmpty ? "プレビュー" : text)
                         .font(.system(size: fontSize * 0.35, weight: .bold))
+                        .foregroundStyle(TextPalette.color(colorName))
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(TextPalette.backgroundColor(colorName),
+                                    in: RoundedRectangle(cornerRadius: 6))
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding(.vertical, 8)
+                }
+                Section("文字の色") {
+                    HStack(spacing: 14) {
+                        ForEach(TextPalette.entries, id: \.name) { entry in
+                            Button {
+                                colorName = entry.name
+                            } label: {
+                                Circle()
+                                    .fill(Color(uiColor: entry.color))
+                                    .frame(width: 34, height: 34)
+                                    .overlay(
+                                        Circle().strokeBorder(
+                                            colorName == entry.name ? Color.green : Color.gray.opacity(0.4),
+                                            lineWidth: colorName == entry.name ? 3 : 1
+                                        )
+                                    )
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(entry.label)
+                        }
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.vertical, 4)
                 }
                 Section {
                     Text("追加後はプレビュー上をドラッグで移動、長押しで削除できます")
@@ -39,14 +68,15 @@ struct TextSheet: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("追加") {
-                        viewModel.addTextOverlay(text: text, fontSize: fontSize)
+                        viewModel.addTextOverlay(text: text, fontSize: fontSize,
+                                                 colorName: colorName)
                         dismiss()
                     }
                     .disabled(text.trimmingCharacters(in: .whitespaces).isEmpty)
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
 }
 
@@ -220,6 +250,7 @@ struct ExportSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var shareURL: URL?
+    @State private var previewURL: URL?
     @State private var showPaywall = false
 
     init(viewModel: EditorViewModel, purchase: PurchaseManager) {
@@ -268,6 +299,12 @@ struct ExportSheet: View {
         }
         .sheet(isPresented: $showPaywall) {
             PaywallSheet(purchase: purchase)
+        }
+        .sheet(item: Binding(
+            get: { previewURL.map { ShareItem(url: $0) } },
+            set: { if $0 == nil { previewURL = nil } }
+        )) { item in
+            VideoPreviewSheet(url: item.url)
         }
     }
 
@@ -340,6 +377,12 @@ struct ExportSheet: View {
                     .background(Color.green, in: RoundedRectangle(cornerRadius: 14))
                     .foregroundStyle(.black)
             }
+            Button {
+                previewURL = url
+            } label: {
+                Label("プレビュー", systemImage: "play.circle")
+                    .font(.subheadline)
+            }
             // 広告は編集画面に出さない設計。掲載面は完了画面のみ
             AdBannerView(purchase: purchase)
         }
@@ -363,6 +406,36 @@ struct ExportSheet: View {
 private struct ShareItem: Identifiable {
     let url: URL
     var id: String { url.absoluteString }
+}
+
+// MARK: - できあがった動画のプレビュー(かんたん・しっかり共用)
+
+struct VideoPreviewSheet: View {
+    let url: URL
+    @Environment(\.dismiss) private var dismiss
+    @State private var player: AVPlayer?
+
+    var body: some View {
+        NavigationStack {
+            VideoPlayer(player: player)
+                .background(Color.black)
+                .onAppear {
+                    let player = AVPlayer(url: url)
+                    self.player = player
+                    player.play()
+                }
+                .onDisappear {
+                    player?.pause()
+                }
+                .navigationTitle("できた動画")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("とじる") { dismiss() }
+                    }
+                }
+        }
+    }
 }
 
 struct ShareSheet: UIViewControllerRepresentable {

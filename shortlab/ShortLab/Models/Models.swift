@@ -1,6 +1,7 @@
 import Foundation
 import AVFoundation
 import SwiftUI
+import UIKit
 
 /// タイムライン上の1クリップ。
 /// - `url`: アプリ管理ディレクトリにコピー済みのローカルファイル
@@ -37,14 +38,52 @@ struct TextOverlayItem: Identifiable, Equatable {
     var text: String
     var relativePosition: CGPoint   // (0,0)=左上, (1,1)=右下
     var fontSize: CGFloat           // 1080x1920 基準のポイントサイズ
+    var colorName: String           // TextPalette のキー
 
     init(id: UUID = UUID(), text: String,
          relativePosition: CGPoint = CGPoint(x: 0.5, y: 0.4),
-         fontSize: CGFloat = 72) {
+         fontSize: CGFloat = 72,
+         colorName: String = TextPalette.defaultName) {
         self.id = id
         self.text = text
         self.relativePosition = relativePosition
         self.fontSize = fontSize
+        self.colorName = colorName
+    }
+}
+
+/// 文字色のパレット。プレビュー(SwiftUI)と書き出し(CATextLayer)で
+/// 必ずここの同じ値を参照する(独自に色を作るとプレビューと書き出しがズレる)。
+/// 背景帯は文字色に合わせて自動で反転する(黒文字だけ白帯)。
+enum TextPalette {
+    static let defaultName = "white"
+
+    /// (キー, 表示名, 文字色) の順。UIはこの順で並べる
+    static let entries: [(name: String, label: String, color: UIColor)] = [
+        ("white", "しろ", .white),
+        ("yellow", "きいろ", UIColor(red: 1.00, green: 0.84, blue: 0.04, alpha: 1)),
+        ("pink", "ピンク", UIColor(red: 1.00, green: 0.42, blue: 0.62, alpha: 1)),
+        ("blue", "みずいろ", UIColor(red: 0.35, green: 0.78, blue: 0.94, alpha: 1)),
+        ("black", "くろ", UIColor(red: 0.07, green: 0.07, blue: 0.07, alpha: 1))
+    ]
+
+    static func uiColor(_ name: String) -> UIColor {
+        entries.first { $0.name == name }?.color ?? .white
+    }
+
+    static func color(_ name: String) -> Color {
+        Color(uiColor: uiColor(name))
+    }
+
+    /// 文字の後ろの帯。黒文字のときだけ白帯にして読めるようにする
+    static func backgroundUIColor(_ name: String) -> UIColor {
+        name == "black"
+            ? UIColor.white.withAlphaComponent(0.75)
+            : UIColor.black.withAlphaComponent(0.55)
+    }
+
+    static func backgroundColor(_ name: String) -> Color {
+        Color(uiColor: backgroundUIColor(name))
     }
 }
 

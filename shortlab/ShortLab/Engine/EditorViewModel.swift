@@ -240,11 +240,13 @@ final class EditorViewModel: ObservableObject {
     }
 
     func addTextOverlay(text: String, fontSize: CGFloat,
-                        position: CGPoint = CGPoint(x: 0.5, y: 0.4)) {
+                        position: CGPoint = CGPoint(x: 0.5, y: 0.4),
+                        colorName: String = TextPalette.defaultName) {
         guard !text.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         pushUndo()
         project.textOverlays.append(
-            TextOverlayItem(text: text, relativePosition: position, fontSize: fontSize)
+            TextOverlayItem(text: text, relativePosition: position,
+                            fontSize: fontSize, colorName: colorName)
         )
     }
 

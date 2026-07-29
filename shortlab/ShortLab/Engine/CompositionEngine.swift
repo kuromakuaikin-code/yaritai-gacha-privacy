@@ -20,6 +20,9 @@ enum CompositionEngineError: Error, LocalizedError {
 struct CompositionResult {
     let composition: AVMutableComposition
     let videoComposition: AVMutableVideoComposition
+    /// BGM の音量を反映するミックス。プレビュー(AVPlayerItem.audioMix)と
+    /// 書き出し(AVAssetExportSession.audioMix)の両方に必ず渡す。
+    let audioMix: AVAudioMix?
 }
 
 enum CompositionEngine {
@@ -83,7 +86,9 @@ enum CompositionEngine {
             cursor = CMTimeAdd(cursor, scaledDuration)
         }
 
-        // BGMトラック(動画長に合わせて末尾カット。動画より短ければそのまま)
+        // BGMトラック(動画長に合わせて末尾カット。動画より短ければそのまま)。
+        // 音量は AVAudioMix で下げる(動画本体の声が BGM に埋もれないように)
+        var audioMix: AVAudioMix?
         if let music = project.music {
             let musicAsset = AVURLAsset(url: music.url)
             if let srcMusic = try await musicAsset.loadTracks(withMediaType: .audio).first,
@@ -95,6 +100,12 @@ enum CompositionEngine {
                 try bgmTrack.insertTimeRange(
                     CMTimeRange(start: .zero, duration: insertDuration),
                     of: srcMusic, at: .zero)
+
+                let bgmParams = AVMutableAudioMixInputParameters(track: bgmTrack)
+                bgmParams.setVolume(music.volume, at: .zero)
+                let mix = AVMutableAudioMix()
+                mix.inputParameters = [bgmParams]
+                audioMix = mix
             }
         }
 
@@ -103,7 +114,9 @@ enum CompositionEngine {
         videoComposition.renderSize = RenderSpec.renderSize
         videoComposition.frameDuration = CMTime(value: 1, timescale: 30)
 
-        return CompositionResult(composition: composition, videoComposition: videoComposition)
+        return CompositionResult(composition: composition,
+                                 videoComposition: videoComposition,
+                                 audioMix: audioMix)
     }
 
     /// 素材の preferredTransform を解決した上で renderSize にアスペクトフィットさせる変換を返す。

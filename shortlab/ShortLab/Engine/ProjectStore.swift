@@ -34,6 +34,8 @@ enum ProjectStore {
             var x: Double
             var y: Double
             var fontSize: Double
+            // 後から追加したフィールド。旧データには無いため Optional で受ける
+            var colorName: String?
         }
         struct Music: Codable {
             var fileName: String
@@ -55,7 +57,8 @@ enum ProjectStore {
         stored.texts = project.textOverlays.map {
             Stored.Text(id: $0.id, text: $0.text,
                         x: $0.relativePosition.x, y: $0.relativePosition.y,
-                        fontSize: Double($0.fontSize))
+                        fontSize: Double($0.fontSize),
+                        colorName: $0.colorName)
         }
         stored.music = project.music.map {
             Stored.Music(fileName: $0.url.lastPathComponent, volume: $0.volume)
@@ -85,7 +88,8 @@ enum ProjectStore {
         project.textOverlays = stored.texts.map {
             TextOverlayItem(id: $0.id, text: $0.text,
                             relativePosition: CGPoint(x: $0.x, y: $0.y),
-                            fontSize: CGFloat($0.fontSize))
+                            fontSize: CGFloat($0.fontSize),
+                            colorName: $0.colorName ?? TextPalette.defaultName)
         }
         if let m = stored.music,
            var track = BGMLibrary.tracks().first(where: { $0.url.lastPathComponent == m.fileName }) {

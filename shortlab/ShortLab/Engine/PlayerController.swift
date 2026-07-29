@@ -33,6 +33,7 @@ final class PlayerController: ObservableObject {
 
         let item = AVPlayerItem(asset: result.composition)
         item.videoComposition = result.videoComposition
+        item.audioMix = result.audioMix
         player.replaceCurrentItem(with: item)
 
         duration = result.composition.duration.seconds

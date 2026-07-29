@@ -26,6 +26,10 @@ final class ExportManager: ObservableObject {
         guard case .idle = state else { return } // 二重実行ガード
         state = .exporting(progress: 0)
 
+        // 書き出し中に自動ロックされると失敗するため、スリープを止める(終了時に必ず戻す)
+        UIApplication.shared.isIdleTimerDisabled = true
+        defer { UIApplication.shared.isIdleTimerDisabled = false }
+
         do {
             let result = try await CompositionEngine.build(project: project)
 
@@ -49,6 +53,7 @@ final class ExportManager: ObservableObject {
             session.outputURL = outputURL
             session.outputFileType = .mp4
             session.videoComposition = videoComposition
+            session.audioMix = result.audioMix
             self.session = session
 
             startProgressPolling()
@@ -121,8 +126,8 @@ final class ExportManager: ObservableObject {
         layer.string = overlay.text
         layer.font = UIFont.systemFont(ofSize: overlay.fontSize, weight: .bold)
         layer.fontSize = overlay.fontSize
-        layer.foregroundColor = UIColor.white.cgColor
-        layer.backgroundColor = UIColor.black.withAlphaComponent(0.55).cgColor
+        layer.foregroundColor = TextPalette.uiColor(overlay.colorName).cgColor
+        layer.backgroundColor = TextPalette.backgroundUIColor(overlay.colorName).cgColor
         layer.cornerRadius = 8
         layer.alignmentMode = .center
         layer.contentsScale = UIScreen.main.scale

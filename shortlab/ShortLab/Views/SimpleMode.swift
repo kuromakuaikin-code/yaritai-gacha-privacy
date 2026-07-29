@@ -399,6 +399,7 @@ private struct SimpleSaveStep: View {
 
     @StateObject private var photoSaver = PhotoSaver()
     @State private var shareURL: URL?
+    @State private var previewURL: URL?
     @State private var showPaywall = false
 
     var body: some View {
@@ -452,6 +453,12 @@ private struct SimpleSaveStep: View {
         }
         .sheet(isPresented: $showPaywall) {
             PaywallSheet(purchase: purchase)
+        }
+        .sheet(item: Binding(
+            get: { previewURL.map { SimpleShareItem(url: $0) } },
+            set: { if $0 == nil { previewURL = nil } }
+        )) { item in
+            VideoPreviewSheet(url: item.url)
         }
     }
 
@@ -548,6 +555,13 @@ private struct SimpleSaveStep: View {
                 shareURL = url
             } label: {
                 BigButtonLabel(title: "LINEなどで送る", systemImage: "paperplane.fill")
+            }
+            .buttonStyle(BigSecondaryButtonStyle())
+
+            Button {
+                previewURL = url
+            } label: {
+                BigButtonLabel(title: "できた動画を見る", systemImage: "play.circle")
             }
             .buttonStyle(BigSecondaryButtonStyle())
 

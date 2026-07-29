@@ -90,10 +90,11 @@ struct DraggableTextOverlay: View {
 
         Text(overlay.text)
             .font(.system(size: previewFontSize, weight: .bold))
-            .foregroundStyle(.white)
+            .foregroundStyle(TextPalette.color(overlay.colorName))
             .padding(.horizontal, 10)
             .padding(.vertical, 4)
-            .background(Color.black.opacity(0.55), in: RoundedRectangle(cornerRadius: 6))
+            .background(TextPalette.backgroundColor(overlay.colorName),
+                        in: RoundedRectangle(cornerRadius: 6))
             .position(
                 x: overlay.relativePosition.x * containerSize.width + dragOffset.width,
                 y: overlay.relativePosition.y * containerSize.height + dragOffset.height

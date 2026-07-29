@@ -21,6 +21,11 @@
 | 購入シート(マークなしにする) | `Views/PaywallSheet.swift` |
 | 広告バナーの掲載口 | `Views/AdBannerView.swift`(掲載してよいのは保存完了画面のみ) |
 | ストア関連ID(IAP製品ID/AdMob) | `Config/Store.xcconfig`(実IDは `Store.local.xcconfig`・コミット禁止) |
+| 文字色 | `Models/Models.swift` の `TextPalette`(プレビューと書き出しは必ず同じパレットを参照) |
+| BGM音量 | `CompositionEngine` の audioMix(AVPlayerItem と ExportSession の**両方**に渡す。片方だけだとプレビューと書き出しで音量が変わる) |
+| できた動画のプレビュー | `Views/Sheets.swift` の `VideoPreviewSheet`(両モード共用) |
+| アイコン | `ShortLab/Assets.xcassets/AppIcon.appiconset`(1024px 単一) |
+| 法的ページ | `privacy.html` / `terms.html`(GitHub Pages 配信) |
 
 ## 判断ツリー(迷ったら)
 
@@ -71,3 +76,5 @@
 - BGM 同梱素材(ライセンス確認済み mp3 を Resources/BGM/ へ)
 - AdMob の実配信(GoogleMobileAds パッケージ追加+実ID設定+実機確認。コード側は配線済み)
 - 実機での受け入れ検証(書き出し・購入・復元・プロジェクト復元はシミュレータ代替不可)
+- 横動画対応(9:16 固定をやめる案。RenderSpec が全域に効いているため、実機検証とセットでやること)
+- かんたんモードへの文字サイズ選択は**判断ツリー7のルールにより見送り**(機能を増やさない)
