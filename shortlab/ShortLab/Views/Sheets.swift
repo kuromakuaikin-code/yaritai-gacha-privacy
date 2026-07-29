@@ -216,15 +216,16 @@ struct ExportSheet: View {
     @ObservedObject var viewModel: EditorViewModel
     /// ExportManager の @Published は viewModel 経由では再描画されないため直接 observe する
     @ObservedObject var exporter: ExportManager
+    @ObservedObject var purchase: PurchaseManager
     @Environment(\.dismiss) private var dismiss
 
-    /// TODO: StoreKit 導入後は課金状態と連動させる
-    @State private var isPremium = false
     @State private var shareURL: URL?
+    @State private var showPaywall = false
 
-    init(viewModel: EditorViewModel) {
+    init(viewModel: EditorViewModel, purchase: PurchaseManager) {
         self.viewModel = viewModel
         self.exporter = viewModel.exportManager
+        self.purchase = purchase
     }
 
     var body: some View {
@@ -265,6 +266,9 @@ struct ExportSheet: View {
         )) { item in
             ShareSheet(url: item.url)
         }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheet(purchase: purchase)
+        }
     }
 
     private var isExporting: Bool {
@@ -280,16 +284,20 @@ struct ExportSheet: View {
             Text("1080p・\(Int(viewModel.project.totalDuration.rounded()))秒")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
-            if !isPremium {
+            if !purchase.isPremium {
                 Label("無料版は透かしが入ります", systemImage: "info.circle")
                     .font(.caption)
                     .foregroundStyle(.secondary)
+                if purchase.isConfigured {
+                    Button("透かしを外す(買い切り)") { showPaywall = true }
+                        .font(.caption.bold())
+                }
             }
             Button {
                 Task {
                     await exporter.export(
                         project: viewModel.project,
-                        showWatermark: !isPremium
+                        showWatermark: !purchase.isPremium
                     )
                 }
             } label: {
@@ -332,6 +340,8 @@ struct ExportSheet: View {
                     .background(Color.green, in: RoundedRectangle(cornerRadius: 14))
                     .foregroundStyle(.black)
             }
+            // 広告は編集画面に出さない設計。掲載面は完了画面のみ
+            AdBannerView(purchase: purchase)
         }
     }
 

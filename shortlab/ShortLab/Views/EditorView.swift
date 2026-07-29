@@ -3,6 +3,7 @@ import PhotosUI
 
 struct EditorView: View {
     @ObservedObject var viewModel: EditorViewModel
+    @ObservedObject var purchase: PurchaseManager
     /// かんたんモードへ戻る(RootView から注入。nil なら戻るボタン非表示)
     var onClose: (() -> Void)?
 
@@ -49,7 +50,7 @@ struct EditorView: View {
             case .speed: SpeedSheet(viewModel: viewModel)
             case .music: MusicSheet(viewModel: viewModel)
             case .trim: TrimSheet(viewModel: viewModel)
-            case .export: ExportSheet(viewModel: viewModel)
+            case .export: ExportSheet(viewModel: viewModel, purchase: purchase)
             }
         }
         .alert("エラー", isPresented: Binding(
@@ -166,6 +167,6 @@ func timeString(_ seconds: Double) -> String {
 }
 
 #Preview {
-    EditorView(viewModel: EditorViewModel())
+    EditorView(viewModel: EditorViewModel(), purchase: PurchaseManager())
         .preferredColorScheme(.dark)
 }

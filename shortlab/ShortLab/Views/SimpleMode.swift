@@ -10,6 +10,7 @@ import Photos
 
 struct SimpleModeView: View {
     @ObservedObject var viewModel: EditorViewModel
+    @ObservedObject var purchase: PurchaseManager
     var onOpenFullEditor: () -> Void
 
     enum Step: Int, CaseIterable {
@@ -52,6 +53,7 @@ struct SimpleModeView: View {
                 SimpleSaveStep(
                     viewModel: viewModel,
                     exporter: viewModel.exportManager,
+                    purchase: purchase,
                     onBack: { step = .adjust },
                     onRestart: { showRestartConfirm = true }
                 )
@@ -123,10 +125,7 @@ struct SimpleModeView: View {
     }
 
     private func restart() {
-        viewModel.playerController.pause()
-        viewModel.exportManager.reset()
-        viewModel.project = EditorProject()
-        viewModel.selectedClipID = nil
+        viewModel.resetProject()
         step = .pick
     }
 }
@@ -394,11 +393,13 @@ private struct SimpleSaveStep: View {
     @ObservedObject var viewModel: EditorViewModel
     // ExportManager の @Published も直接監視する(SimpleAdjustStep の player と同じ理由)
     @ObservedObject var exporter: ExportManager
+    @ObservedObject var purchase: PurchaseManager
     var onBack: () -> Void
     var onRestart: () -> Void
 
     @StateObject private var photoSaver = PhotoSaver()
     @State private var shareURL: URL?
+    @State private var showPaywall = false
 
     var body: some View {
         VStack(spacing: 16) {
@@ -449,6 +450,9 @@ private struct SimpleSaveStep: View {
         )) { item in
             ShareSheet(url: item.url)
         }
+        .sheet(isPresented: $showPaywall) {
+            PaywallSheet(purchase: purchase)
+        }
     }
 
     private var isExporting: Bool {
@@ -463,19 +467,29 @@ private struct SimpleSaveStep: View {
                 .foregroundStyle(.blue)
             Text("できあがり: \(Int(viewModel.project.totalDuration.rounded()))秒の動画")
                 .font(.title3.bold())
-            // TODO: StoreKit 導入後は課金状態と連動(しっかり編集の ExportSheet と共通化)
-            Text("無料版は、右下に小さく「ShortLab」のマークが入ります")
-                .font(.subheadline)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
+            if !purchase.isPremium {
+                Text("無料版は、右下に小さく「ShortLab」のマークが入ります")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
             Button {
                 Task {
-                    await exporter.export(project: viewModel.project, showWatermark: true)
+                    await exporter.export(project: viewModel.project,
+                                          showWatermark: !purchase.isPremium)
                 }
             } label: {
                 BigButtonLabel(title: "動画を作る", systemImage: "checkmark.circle.fill")
             }
             .buttonStyle(BigPrimaryButtonStyle())
+            if !purchase.isPremium && purchase.isConfigured {
+                Button {
+                    showPaywall = true
+                } label: {
+                    BigButtonLabel(title: "マークなしにする(一回のお支払い)", systemImage: "sparkles")
+                }
+                .buttonStyle(BigSecondaryButtonStyle())
+            }
         }
     }
 
@@ -536,6 +550,9 @@ private struct SimpleSaveStep: View {
                 BigButtonLabel(title: "LINEなどで送る", systemImage: "paperplane.fill")
             }
             .buttonStyle(BigSecondaryButtonStyle())
+
+            // 広告は編集画面に出さない設計。掲載面はほぞん完了画面のみ
+            AdBannerView(purchase: purchase)
         }
     }
 

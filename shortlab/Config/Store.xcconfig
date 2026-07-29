@@ -1,0 +1,11 @@
+// ShortLab のストア関連ID(課金・広告)。
+// このファイルは既定値(空)のままコミットする。実IDは同じディレクトリに
+// Store.local.xcconfig を作って書く(gitignore 済み・コミット禁止)。
+// 書き方の例は Store.local.xcconfig.example を参照。
+// 空のままだと: 購入ボタンは「準備中」表示、広告は非表示になる(ビルドは通る)。
+
+SHORTLAB_PREMIUM_PRODUCT_ID =
+SHORTLAB_ADMOB_APP_ID =
+SHORTLAB_ADMOB_BANNER_UNIT_ID =
+
+#include? "Store.local.xcconfig"

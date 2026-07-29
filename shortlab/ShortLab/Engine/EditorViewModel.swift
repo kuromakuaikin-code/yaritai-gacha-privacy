@@ -8,7 +8,10 @@ import AVFoundation
 final class EditorViewModel: ObservableObject {
 
     @Published var project = EditorProject() {
-        didSet { rebuildTask() }
+        didSet {
+            rebuildTask()
+            scheduleSave()
+        }
     }
     @Published var selectedClipID: UUID?
     @Published var isImporting = false
@@ -20,6 +23,16 @@ final class EditorViewModel: ObservableObject {
     private var undoStack: [EditorProject] = []
     private let undoLimit = 10
     private var rebuildWorkItem: Task<Void, Never>?
+    private var saveWorkItem: Task<Void, Never>?
+
+    init() {
+        if let restored = ProjectStore.load() {
+            // init 内の代入は didSet を呼ばないため、プレビュー再構築を明示的に起動する
+            project = restored
+            rebuildTask()
+        }
+        ProjectStore.cleanupOrphanClips(keeping: project)
+    }
 
     var selectedClip: VideoClip? {
         guard let selectedClipID else { return nil }
@@ -36,6 +49,36 @@ final class EditorViewModel: ObservableObject {
     }
 
     var canUndo: Bool { !undoStack.isEmpty }
+
+    // MARK: - Persistence
+
+    /// 編集のたびに保存すると書き込みが殺到するため 500ms デバウンス。
+    /// 強制終了で最後の 0.5 秒が落ちるのは許容(バックグラウンド移行時に saveNow で確定する)。
+    private func scheduleSave() {
+        saveWorkItem?.cancel()
+        saveWorkItem = Task { [weak self] in
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            guard let self, !Task.isCancelled else { return }
+            ProjectStore.save(self.project)
+        }
+    }
+
+    func saveNow() {
+        saveWorkItem?.cancel()
+        ProjectStore.save(project)
+    }
+
+    /// 「さいしょから」用。プロジェクトを空にし、素材ファイルも掃除する。
+    func resetProject() {
+        playerController.pause()
+        playerController.unload()
+        exportManager.reset()
+        selectedClipID = nil
+        undoStack = []
+        project = EditorProject()
+        saveNow()
+        ProjectStore.cleanupOrphanClips(keeping: project)
+    }
 
     func undo() {
         guard let previous = undoStack.popLast() else { return }
@@ -264,7 +307,7 @@ struct PickedMovie: Transferable {
         FileRepresentation(contentType: .movie) { movie in
             SentTransferredFile(movie.url)
         } importing: { received in
-            let dir = URL.documentsDirectory.appendingPathComponent("clips", isDirectory: true)
+            let dir = ProjectStore.clipsDirectory
             try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
             let dest = dir.appendingPathComponent("\(UUID().uuidString).\(received.file.pathExtension)")
             try FileManager.default.copyItem(at: received.file, to: dest)

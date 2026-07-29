@@ -1,3 +1,8 @@
 # Local bon-odori review and research files
 /bon-odori/preview.html
 /bon-odori/drafts/
+
+# ShortLab: generated / secret files
+/shortlab/ShortLab.xcodeproj/
+/shortlab/Support/
+/shortlab/Config/Store.local.xcconfig

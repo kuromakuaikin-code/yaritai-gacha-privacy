@@ -1,7 +1,7 @@
 # ShortLab — かんたん動画編集(iOS)
 
-SwiftUI + AVFoundation の縦動画(9:16)編集アプリ MVP。
-実装済み: 動画取り込み / カット・結合 / トリム / 分割 / 速度変更 / テキストオーバーレイ(焼き込み) / BGM / 1080p書き出し(透かし対応) / undo
+SwiftUI + AVFoundation の縦動画(9:16)編集アプリ。
+実装済み: 動画取り込み / カット・結合 / トリム / 分割 / 速度変更 / テキストオーバーレイ(焼き込み) / BGM / 1080p書き出し(透かし対応) / undo / **プロジェクト自動保存・復元** / **買い切り課金(StoreKit 2・透かし解除+広告非表示)** / **AdMob バナー掲載口(保存完了画面のみ)**
 
 **既定はかんたんモード**(シニア・非クリエイター向けの3画面一本道: えらぶ → ととのえる → ほぞん)。
 右上「しっかり編集」で従来のフル編集画面に切替でき、編集内容は両モードで共有される。
@@ -18,6 +18,10 @@ cd shortlab
 xcodegen
 open ShortLab.xcodeproj
 ```
+
+課金・広告を動かす場合は、先に `Config/Store.local.xcconfig.example` を
+`Config/Store.local.xcconfig` にコピーして実IDを記入してから `xcodegen` を実行する
+(未設定でもビルド可。購入ボタンは「準備中」表示・広告は非表示になる)。
 
 ### 方法B: 手動
 
@@ -47,12 +51,32 @@ CLAUDE.mdの成功基準1〜7を満たすことを確認したい。
 その後、受け入れ条件を上から順に実機で検証できるチェックリストを作って。
 ```
 
+## リリース設定(課金・広告)
+
+リリース前に行うアカウント作業と設定。コード変更は不要で、ID の記入だけで有効になる。
+
+1. **課金(買い切り ¥600)**: App Store Connect で非消耗型IAPを1つ作成
+   (例: `com.kuromakuaikin.shortlab.premium`)。製品IDを `Config/Store.local.xcconfig` の
+   `SHORTLAB_PREMIUM_PRODUCT_ID` に記入 → 購入・復元ボタンが自動で有効になる
+2. **広告(AdMob バナー)**: Xcode で SPM パッケージ
+   `https://github.com/googleads/swift-package-manager-google-mobile-ads`(12.x)を追加し、
+   `SHORTLAB_ADMOB_APP_ID` / `SHORTLAB_ADMOB_BANNER_UNIT_ID` に実IDを記入。
+   - パッケージ未追加でもビルドは通る(`AdBannerView` が canImport でガード)
+   - ⚠️ パッケージを追加したのにアプリIDが空・不正だと**起動時にクラッシュ**する。追加とID記入は必ずセットで
+   - 非パーソナライズ配信(npa=1)固定のため ATT ダイアログは不要
+   - 掲載面は保存(書き出し)完了画面のみ。編集画面には出さない設計
+3. **BGM**: `Resources/BGM/` にライセンス確認済み mp3 を追加(ファイル名は下記セットアップ参照)
+4. 実機で検証: 書き出し・購入(Sandbox)・購入の復元・アプリ再起動後のプロジェクト復元
+
 ## 構成
 
 ```
 ShortLab/
 ├── CLAUDE.md                     # Claude Code 用ルール・受け入れ条件
 ├── README.md
+├── Config/
+│   ├── Store.xcconfig            # ストア関連IDの既定値(空)・コミット対象
+│   └── Store.local.xcconfig      # 実ID(gitignore済み。example をコピーして作る)
 └── ShortLab/
     ├── ShortLabApp.swift         # RootView(かんたん⇔しっかりのモード切替、既定はかんたん)
     ├── Models/Models.swift       # VideoClip / TextOverlayItem / RenderSpec
@@ -60,14 +84,18 @@ ShortLab/
     │   ├── CompositionEngine.swift   # AVMutableComposition 構築(向き補正込み)
     │   ├── PlayerController.swift    # コアレスseek実装のプレビュー再生
     │   ├── ExportManager.swift       # 書き出し+透かし/テキスト焼き込み
-    │   └── EditorViewModel.swift     # 編集操作・undo・PhotosPicker取り込み・前後カット
+    │   ├── EditorViewModel.swift     # 編集操作・undo・PhotosPicker取り込み・前後カット・自動保存
+    │   ├── ProjectStore.swift        # プロジェクト保存/復元(project.json)+素材ファイル掃除
+    │   └── PurchaseManager.swift     # StoreKit 2 買い切り(購入・復元・購入状態)
     └── Views/
         ├── SimpleMode.swift          # かんたんモード(えらぶ→ととのえる→ほぞんの3画面)
         ├── EditorView.swift          # しっかり編集のルート画面
         ├── PreviewView.swift         # AVPlayerLayer + ドラッグ可能テキスト
         ├── TimelineView.swift        # クリップ帯(選択/移動/削除)
         ├── ToolsGridView.swift       # ツールグリッド
-        └── Sheets.swift              # テキスト/速度/トリム/音楽/書き出しシート・BGMLibrary
+        ├── Sheets.swift              # テキスト/速度/トリム/音楽/書き出しシート・BGMLibrary
+        ├── PaywallSheet.swift        # 購入シート(かんたん・しっかり共用)
+        └── AdBannerView.swift        # AdMob バナー掲載口(canImport ガード)
 ```
 
 ## 設計上の要点
@@ -78,6 +106,6 @@ ShortLab/
 - **seek はコアレス方式**(スクラブ連打でも詰まらない)
 - **ExportSession はプロパティ保持**(途中解放による silent fail 防止)
 
-## 未実装(意図的)
+## 未実装(残り)
 
-AdMob / StoreKit(買い切り¥600) / スタンプ / プロジェクト永続化 — CLAUDE.md「未実装」参照
+スタンプ(自作素材待ち) / BGM同梱素材 / AdMob実配信の実機確認 — CLAUDE.md「未実装(残り)」参照

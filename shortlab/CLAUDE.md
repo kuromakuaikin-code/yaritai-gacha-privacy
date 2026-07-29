@@ -16,6 +16,11 @@
 | モード切替(かんたん⇔しっかり) | `ShortLabApp.swift`(RootView。既定はかんたんモード) |
 | かんたんモード3画面・写真保存 | `Views/SimpleMode.swift` |
 | しっかり編集の画面 | `Views/`(EditorView がルート) |
+| プロジェクト保存・復元・素材掃除 | `Engine/ProjectStore.swift` |
+| 課金(購入・復元・購入状態) | `Engine/PurchaseManager.swift` |
+| 購入シート(マークなしにする) | `Views/PaywallSheet.swift` |
+| 広告バナーの掲載口 | `Views/AdBannerView.swift`(掲載してよいのは保存完了画面のみ) |
+| ストア関連ID(IAP製品ID/AdMob) | `Config/Store.xcconfig`(実IDは `Store.local.xcconfig`・コミット禁止) |
 
 ## 判断ツリー(迷ったら)
 
@@ -27,6 +32,8 @@
 6. **新機能を足したくなった** → MVP機能5つ(取り込み/カット結合/テキスト/BGM/書き出し)の外なら実装せず提案に留める。
 7. **かんたんモードの文言を書く** → カタカナ専門語禁止(トリム→切る、書き出し→ほぞん、BGM→音楽)。ボタンは高さ60pt以上・必ずテキストラベル付き。機能は「前後カット・文字3位置・音楽択一・保存/共有」から増やさない(増やしたくなったらしっかり編集へ誘導する設計を提案)。
 8. **PlayerController/ExportManager の @Published が画面に反映されない** → ネストした ObservableObject は親経由では再描画されない。その値を使うビューで直接 `@ObservedObject` として受け取る(`PlaybackBar` / `SimpleAdjustStep` / `SimpleSaveStep` 参照)。
+9. **購入ボタンが「準備中」のまま** → xcconfig 未設定。`Store.local.xcconfig` に `SHORTLAB_PREMIUM_PRODUCT_ID` があるか、`PurchaseManager.isConfigured` を確認。購入が反映されない場合は `Transaction.currentEntitlements`(refreshEntitlements)側を疑う。
+10. **復元したプロジェクトの動画が消えている** → `ProjectStore` は絶対パスを保存しない設計(Documents のパスは再インストールで変わる)。ファイル名以外を保存するコードを書いたら差し戻す。素材が見つからないクリップは復元時に黙って除外される仕様。
 
 ## タスク処理ルール
 
@@ -52,9 +59,15 @@
 - AdMob アプリID・IAP 製品IDはコードに直書きせず xcconfig で管理(リポジトリにコミットしない)
 - BGM 素材はライセンス(商用可・クレジット表記条件)を確認したもののみバンドルする
 
-## 未実装(意図的にMVP外)
+## 実装済み(旧・MVP外)
 
-- AdMob 統合(SPM: swift-package-manager版 GoogleMobileAds。編集画面には出さない設計は決定済み)
-- StoreKit 2 買い切りIAP(透かし解除+広告非表示、¥600想定)
+- StoreKit 2 買い切りIAP(透かし解除+広告非表示、¥600想定) — `PurchaseManager` + `PaywallSheet`。製品IDは xcconfig 注入
+- プロジェクト保存 — `ProjectStore`(project.json、クリップはファイル名参照、起動時復元+孤児ファイル掃除)
+- AdMob の掲載口 — `AdBannerView`(canImport ガード。パッケージ未追加でもビルド可。掲載は保存完了画面のみ)
+
+## 未実装(残り)
+
 - スタンプ機能(自作素材が揃ってから)
-- プロジェクト保存(現状はセッション内のみ。Codable 化は Models が既に対応しやすい構造)
+- BGM 同梱素材(ライセンス確認済み mp3 を Resources/BGM/ へ)
+- AdMob の実配信(GoogleMobileAds パッケージ追加+実ID設定+実機確認。コード側は配線済み)
+- 実機での受け入れ検証(書き出し・購入・復元・プロジェクト復元はシミュレータ代替不可)

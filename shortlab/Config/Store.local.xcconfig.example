@@ -1,0 +1,11 @@
+// これを Store.local.xcconfig という名前でコピーして実IDを書く。
+// Store.local.xcconfig はコミットしないこと(.gitignore 済み)。
+
+// App Store Connect で作成した非消耗型IAPの製品ID(買い切り ¥600 想定)
+SHORTLAB_PREMIUM_PRODUCT_ID = com.kuromakuaikin.shortlab.premium
+
+// AdMob のアプリID(~ 区切り)とバナー広告ユニットID(/ 区切り)。
+// 注意: GoogleMobileAds パッケージを追加したビルドでアプリIDが空・不正だと起動時にクラッシュする。
+// パッケージ追加と同時に必ず実IDを設定すること。
+SHORTLAB_ADMOB_APP_ID = ca-app-pub-0000000000000000~0000000000
+SHORTLAB_ADMOB_BANNER_UNIT_ID = ca-app-pub-0000000000000000/0000000000
