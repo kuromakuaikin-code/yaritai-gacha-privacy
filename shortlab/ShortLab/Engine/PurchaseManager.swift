@@ -76,13 +76,21 @@ final class PurchaseManager: ObservableObject {
         }
     }
 
-    /// 「まえに購入した方はこちら」(機種変更・入れ直し後の復元)
-    func restore() async {
-        guard state != .purchasing else { return }
+    /// 「まえに購入した方はこちら」(機種変更・入れ直し後の復元)。
+    /// 戻り値は同期に成功したか。false は「記録なし」ではなく「復元処理ができなかった」
+    /// (通信障害・キャンセル等) — 呼び出し側はこの2つを別の文言で伝えること。
+    func restore() async -> Bool {
+        guard state != .purchasing else { return false }
         state = .purchasing
-        try? await AppStore.sync()
+        defer { state = .idle }
+        var synced = true
+        do {
+            try await AppStore.sync()
+        } catch {
+            synced = false
+        }
         await refreshEntitlements()
-        state = .idle
+        return synced
     }
 
     func refreshEntitlements() async {
@@ -104,11 +112,15 @@ final class PurchaseManager: ObservableObject {
 
     private func handle(_ result: VerificationResult<StoreKit.Transaction>) async {
         guard case .verified(let transaction) = result else { return }
-        if transaction.productID == productID {
-            // revocationDate があるのは返金・ファミリー共有解除
-            setPremium(transaction.revocationDate == nil)
-        }
         await transaction.finish()
+        guard transaction.productID == productID else { return }
+        if transaction.revocationDate == nil {
+            setPremium(true)
+        } else {
+            // 返金・共有解除の通知1件で即降格しない。返金後に再購入したケースなど
+            // 別の有効な購入が残っている可能性があるため、権利全体から判定し直す
+            await refreshEntitlements()
+        }
     }
 
     private func setPremium(_ value: Bool) {

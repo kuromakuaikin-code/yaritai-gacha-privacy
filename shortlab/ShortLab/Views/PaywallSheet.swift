@@ -8,7 +8,7 @@ struct PaywallSheet: View {
     @ObservedObject var purchase: PurchaseManager
     @Environment(\.dismiss) private var dismiss
 
-    @State private var restoreFinishedWithoutPurchase = false
+    @State private var restoreMessage: String?
 
     var body: some View {
         NavigationStack {
@@ -77,8 +77,15 @@ struct PaywallSheet: View {
 
             Button {
                 Task {
-                    await purchase.restore()
-                    restoreFinishedWithoutPurchase = !purchase.isPremium
+                    let synced = await purchase.restore()
+                    if purchase.isPremium {
+                        restoreMessage = nil
+                    } else if synced {
+                        restoreMessage = "購入の記録が見つかりませんでした"
+                    } else {
+                        // 復元処理そのものの失敗は「記録なし」とは別の文言で伝える
+                        restoreMessage = "復元できませんでした。通信環境を確認して、もう一度お試しください"
+                    }
                 }
             } label: {
                 Text("まえに購入したことがある方はこちら")
@@ -87,8 +94,8 @@ struct PaywallSheet: View {
             }
             .disabled(purchase.state == .purchasing)
 
-            if restoreFinishedWithoutPurchase {
-                Text("購入の記録が見つかりませんでした")
+            if let restoreMessage {
+                Text(restoreMessage)
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

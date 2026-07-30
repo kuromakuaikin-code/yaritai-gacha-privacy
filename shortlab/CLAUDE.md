@@ -36,7 +36,7 @@
 ## 判断ツリー(迷ったら)
 
 1. **プレビューと書き出しの見た目が違う** → 原因は座標系。オーバーレイは正規化座標(0-1)が唯一の真実。プレビュー(SwiftUI, 左上原点)と CATextLayer(左下原点)の変換ミスを疑う。`ExportManager.textLayer` の y 反転を確認。
-2. **音がズレる** → timescale 混在(最優先ルール違反)か、`scaleTimeRange` を video/audio 片方にしか掛けていないか。
+2. **音がズレる** → timescale 混在(最優先ルール違反)か、`scaleTimeRange` を video/audio 片方にしか掛けていないか。**特定のクリップだけ無音になる** → 音声トラックが映像より短い素材。CompositionEngine は音声の実在範囲との交差だけを挿入する仕様(全体を throw で失敗させないため)。
 3. **書き出しが無言で失敗する** → `AVAssetExportSession` がローカル変数で解放されていないか、`outputURL` の既存ファイル衝突か。
 4. **縦横がおかしい/映像が回転する** → `preferredTransform` 未解決。`aspectFitTransform` を通っているか確認。naturalSize を直接使うコードは全部バグ。
 5. **seek がカクつく** → `player.seek` を直接呼んでいる箇所がないか。必ず `PlayerController.seek(to:)`(コアレス実装)経由。

@@ -61,8 +61,27 @@ enum CompositionEngine {
             let sourceRange = CMTimeRange(start: start, duration: duration)
 
             try videoTrack.insertTimeRange(sourceRange, of: srcVideo, at: cursor)
+
+            // 音声は映像より短い・遅く始まる素材が普通にある(録音開始のずれ)。
+            // 映像用の範囲をそのまま渡すと insertTimeRange が throw して全体が失敗するため、
+            // 音声トラックの実在範囲との交差だけを挿入し、足りない部分は空きで埋めて同期を保つ。
+            // 音声側の不整合は映像を道連れにしない(最悪そのクリップが無音になるだけ)。
             if let srcAudio {
-                try audioTrack.insertTimeRange(sourceRange, of: srcAudio, at: cursor)
+                do {
+                    let available = try await srcAudio.load(.timeRange)
+                    let clipped = sourceRange.intersection(available)
+                    if clipped.duration.seconds > 0.05 {
+                        let offset = CMTimeSubtract(clipped.start, sourceRange.start)
+                        let insertAt = CMTimeAdd(cursor, offset)
+                        let currentEnd = audioTrack.timeRange.isValid
+                            ? audioTrack.timeRange.end : .zero
+                        if CMTimeCompare(currentEnd, insertAt) < 0 {
+                            audioTrack.insertEmptyTimeRange(
+                                CMTimeRange(start: currentEnd, end: insertAt))
+                        }
+                        try audioTrack.insertTimeRange(clipped, of: srcAudio, at: insertAt)
+                    }
+                } catch {}
             }
 
             // 速度適用: 挿入した範囲を timeline 上でスケール
@@ -139,7 +158,7 @@ enum CompositionEngine {
         let videoComposition = AVMutableVideoComposition()
         videoComposition.instructions = instructions
         videoComposition.renderSize = RenderSpec.renderSize
-        videoComposition.frameDuration = CMTime(value: 1, timescale: 30)
+        videoComposition.frameDuration = RenderSpec.time(1.0 / 30.0) // 30fps
 
         return CompositionResult(composition: composition,
                                  videoComposition: videoComposition,

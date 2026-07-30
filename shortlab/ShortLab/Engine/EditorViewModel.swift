@@ -26,12 +26,19 @@ final class EditorViewModel: ObservableObject {
     private var saveWorkItem: Task<Void, Never>?
 
     init() {
-        if let restored = ProjectStore.load() {
+        switch ProjectStore.load() {
+        case .loaded(let restored):
             // init 内の代入は didSet を呼ばないため、プレビュー再構築を明示的に起動する
             project = restored
             rebuildTask()
+            ProjectStore.cleanupOrphanClips(keeping: project)
+        case .none, .empty:
+            ProjectStore.cleanupOrphanClips(keeping: project)
+        case .unreadable:
+            // project.json が読めないだけの時に掃除すると全素材を孤児扱いで消してしまう。
+            // 次の保存で上書きされるまで掃除は見送る(素材保護を最優先)
+            break
         }
-        ProjectStore.cleanupOrphanClips(keeping: project)
     }
 
     var selectedClip: VideoClip? {
@@ -124,11 +131,9 @@ final class EditorViewModel: ObservableObject {
     func deleteClip(id: UUID) {
         guard let index = project.clips.firstIndex(where: { $0.id == id }) else { return }
         pushUndo()
-        let removed = project.clips.remove(at: index)
-        // 分割由来のクリップは同一ファイルを共有するため、最後の参照のときだけ消す
-        if !project.clips.contains(where: { $0.url == removed.url }) {
-            try? FileManager.default.removeItem(at: removed.url)
-        }
+        project.clips.remove(at: index)
+        // 実ファイルはここでは消さない。undo で戻せる間は参照が生きているため、
+        // 掃除は undo 履歴が存在しない起動時・やりなおし時の cleanupOrphanClips に任せる
         if selectedClipID == id { selectedClipID = nil }
     }
 

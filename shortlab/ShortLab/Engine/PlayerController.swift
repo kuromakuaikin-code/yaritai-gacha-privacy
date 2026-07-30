@@ -40,7 +40,7 @@ final class PlayerController: ObservableObject {
         currentTime = 0
 
         timeObserver = player.addPeriodicTimeObserver(
-            forInterval: CMTime(value: 1, timescale: 10),
+            forInterval: RenderSpec.time(0.1),
             queue: .main
         ) { [weak self] time in
             Task { @MainActor [weak self] in

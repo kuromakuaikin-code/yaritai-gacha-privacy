@@ -70,11 +70,21 @@ enum ProjectStore {
         try? data.write(to: fileURL, options: .atomic)
     }
 
-    /// 復元。素材ファイルが消えているクリップは黙って除外し、全滅なら nil。
-    static func load() -> EditorProject? {
+    enum LoadOutcome {
+        case none                    // 保存ファイルなし(初回起動)
+        case loaded(EditorProject)
+        case empty                   // 読めたが復元対象なし(空プロジェクト・素材消失)
+        case unreadable              // 破損・将来形式。この場合は素材の掃除をしてはいけない
+    }
+
+    /// 復元。素材ファイルが消えているクリップは黙って除外する。
+    /// 「ファイルが無い」と「ファイルはあるが読めない」を区別して返す —
+    /// 読めないだけの時に孤児掃除を走らせると、全素材を消してしまうため。
+    static func load() -> LoadOutcome {
+        guard FileManager.default.fileExists(atPath: fileURL.path) else { return .none }
         guard let data = try? Data(contentsOf: fileURL),
               let stored = try? JSONDecoder().decode(Stored.self, from: data)
-        else { return nil }
+        else { return .unreadable }
 
         var project = EditorProject()
         for c in stored.clips {
@@ -86,7 +96,7 @@ enum ProjectStore {
             clip.speed = c.speed
             project.clips.append(clip)
         }
-        guard !project.clips.isEmpty else { return nil }
+        guard !project.clips.isEmpty else { return .empty }
 
         project.textOverlays = stored.texts.map {
             TextOverlayItem(id: $0.id, text: $0.text,
@@ -100,7 +110,7 @@ enum ProjectStore {
             project.music = track
         }
         project.videoAudioMuted = stored.videoAudioMuted ?? false
-        return project
+        return .loaded(project)
     }
 
     /// どのクリップからも参照されなくなった clips/ 内のファイルを消す(起動時・やりなおし時の掃除)
