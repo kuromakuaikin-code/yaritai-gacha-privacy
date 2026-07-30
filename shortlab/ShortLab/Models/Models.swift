@@ -102,11 +102,22 @@ struct MusicTrack: Identifiable, Equatable {
     }
 }
 
+/// BGM音量の3択(かんたん・しっかり共通)
+enum BGMVolume {
+    static let options: [(label: String, value: Float)] = [
+        ("ちいさめ", 0.35),
+        ("ふつう", 0.6),
+        ("おおきめ", 1.0)
+    ]
+}
+
 /// 編集プロジェクト全体の状態
 struct EditorProject: Equatable {
     var clips: [VideoClip] = []
     var textOverlays: [TextOverlayItem] = []
     var music: MusicTrack?
+    /// 動画のもとの音を消す(音楽だけにする)。風の音がうるさい等の定番ニーズ
+    var videoAudioMuted: Bool = false
 
     var totalDuration: Double {
         clips.reduce(0) { $0 + $1.timelineDuration }

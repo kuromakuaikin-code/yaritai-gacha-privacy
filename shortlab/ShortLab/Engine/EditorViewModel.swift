@@ -269,6 +269,19 @@ final class EditorViewModel: ObservableObject {
         project.music = track
     }
 
+    func setMusicVolume(_ volume: Float) {
+        guard var music = project.music, music.volume != volume else { return }
+        pushUndo()
+        music.volume = volume
+        project.music = music
+    }
+
+    func setVideoAudioMuted(_ muted: Bool) {
+        guard project.videoAudioMuted != muted else { return }
+        pushUndo()
+        project.videoAudioMuted = muted
+    }
+
     // MARK: - Preview rebuild
 
     /// project 変更のたびにプレビュー用コンポジションを再構築。

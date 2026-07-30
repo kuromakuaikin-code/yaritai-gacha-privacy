@@ -74,7 +74,11 @@ struct TimelineView: View {
         }
         .padding(.horizontal, 8)
         .frame(width: width, height: 64, alignment: .leading)
-        .background(color.opacity(0.18), in: RoundedRectangle(cornerRadius: 12))
+        .background(
+            // サムネイルを敷き、上に薄い黒を重ねて文字を読めるようにする
+            ClipThumbnailView(clip: clip, cornerRadius: 12)
+                .overlay(RoundedRectangle(cornerRadius: 12).fill(Color.black.opacity(0.35)))
+        )
         .overlay(
             RoundedRectangle(cornerRadius: 12)
                 .strokeBorder(isSelected ? Color.green : color.opacity(0.6),

@@ -86,9 +86,19 @@ enum CompositionEngine {
             cursor = CMTimeAdd(cursor, scaledDuration)
         }
 
+        // 音量調整はすべて AVAudioMix に集約する(トラックの抜き差しで表現しない。
+        // 挿入・変速の経路を muted の有無で変えると片系だけバグる)
+        var mixParameters: [AVMutableAudioMixInputParameters] = []
+
+        // 動画のもとの音を消す(音楽だけにする)
+        if project.videoAudioMuted {
+            let originalParams = AVMutableAudioMixInputParameters(track: audioTrack)
+            originalParams.setVolume(0, at: .zero)
+            mixParameters.append(originalParams)
+        }
+
         // BGMトラック(動画長に合わせて末尾カット。動画より短ければそのまま)。
-        // 音量は AVAudioMix で下げる(動画本体の声が BGM に埋もれないように)
-        var audioMix: AVAudioMix?
+        // 音量は選択値(BGMVolume)を反映し、動画本体の声が BGM に埋もれないようにする
         if let music = project.music {
             let musicAsset = AVURLAsset(url: music.url)
             if let srcMusic = try await musicAsset.loadTracks(withMediaType: .audio).first,
@@ -103,10 +113,15 @@ enum CompositionEngine {
 
                 let bgmParams = AVMutableAudioMixInputParameters(track: bgmTrack)
                 bgmParams.setVolume(music.volume, at: .zero)
-                let mix = AVMutableAudioMix()
-                mix.inputParameters = [bgmParams]
-                audioMix = mix
+                mixParameters.append(bgmParams)
             }
+        }
+
+        var audioMix: AVAudioMix?
+        if !mixParameters.isEmpty {
+            let mix = AVMutableAudioMix()
+            mix.inputParameters = mixParameters
+            audioMix = mix
         }
 
         let videoComposition = AVMutableVideoComposition()

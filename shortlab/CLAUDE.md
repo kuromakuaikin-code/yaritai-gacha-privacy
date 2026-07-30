@@ -24,6 +24,9 @@
 | 文字色 | `Models/Models.swift` の `TextPalette`(プレビューと書き出しは必ず同じパレットを参照) |
 | BGM音量 | `CompositionEngine` の audioMix(AVPlayerItem と ExportSession の**両方**に渡す。片方だけだとプレビューと書き出しで音量が変わる) |
 | できた動画のプレビュー | `Views/Sheets.swift` の `VideoPreviewSheet`(両モード共用) |
+| クリップのサムネイル | `Views/ClipThumbnail.swift`(NSCache・トリム開始0.1秒単位でキー化) |
+| 動画音ミュート/BGM音量3択 | `Models`(videoAudioMuted / BGMVolume)+ `CompositionEngine` の audioMix に集約 |
+| App Store 掲載文 | `store-listing.md` |
 | アイコン | `ShortLab/Assets.xcassets/AppIcon.appiconset`(1024px 単一) |
 | 法的ページ | `privacy.html` / `terms.html`(GitHub Pages 配信) |
 

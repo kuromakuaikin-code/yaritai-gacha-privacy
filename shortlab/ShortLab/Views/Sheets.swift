@@ -208,29 +208,48 @@ struct MusicSheet: View {
                             .foregroundStyle(.secondary)
                     }
                 }
-                ForEach(bundledTracks) { track in
-                    Button {
-                        viewModel.setMusic(track)
-                        dismiss()
-                    } label: {
-                        HStack {
-                            Image(systemName: "music.note")
-                                .foregroundStyle(.green)
-                            Text(track.name).foregroundStyle(.primary)
-                            Spacer()
-                            if viewModel.project.music?.name == track.name {
-                                Image(systemName: "checkmark").foregroundStyle(.green)
+                Section {
+                    ForEach(bundledTracks) { track in
+                        Button {
+                            viewModel.setMusic(track)
+                        } label: {
+                            HStack {
+                                Image(systemName: "music.note")
+                                    .foregroundStyle(.green)
+                                Text(track.name).foregroundStyle(.primary)
+                                Spacer()
+                                if viewModel.project.music?.name == track.name {
+                                    Image(systemName: "checkmark").foregroundStyle(.green)
+                                }
                             }
+                        }
+                    }
+                    if viewModel.project.music != nil {
+                        Button(role: .destructive) {
+                            viewModel.setMusic(nil)
+                        } label: {
+                            Label("BGMを外す", systemImage: "xmark.circle")
                         }
                     }
                 }
                 if viewModel.project.music != nil {
-                    Button(role: .destructive) {
-                        viewModel.setMusic(nil)
-                        dismiss()
-                    } label: {
-                        Label("BGMを外す", systemImage: "xmark.circle")
+                    Section("BGM音量") {
+                        Picker("BGM音量", selection: Binding(
+                            get: { viewModel.project.music?.volume ?? 0.6 },
+                            set: { viewModel.setMusicVolume($0) }
+                        )) {
+                            ForEach(BGMVolume.options, id: \.value) { option in
+                                Text(option.label).tag(option.value)
+                            }
+                        }
+                        .pickerStyle(.segmented)
                     }
+                }
+                Section {
+                    Toggle("動画の音を消す(BGMのみにする)", isOn: Binding(
+                        get: { viewModel.project.videoAudioMuted },
+                        set: { viewModel.setVideoAudioMuted($0) }
+                    ))
                 }
             }
             .navigationTitle("音楽")

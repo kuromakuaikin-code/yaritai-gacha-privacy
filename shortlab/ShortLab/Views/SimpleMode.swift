@@ -219,7 +219,9 @@ private struct SimplePickStep: View {
                 .frame(width: 34, height: 34)
                 .background(Color.blue.opacity(0.15), in: Circle())
                 .foregroundStyle(.blue)
-            Text("\(clip.timelineDuration, specifier: "%.0f")秒の動画")
+            ClipThumbnailView(clip: clip)
+                .frame(width: 56, height: 56)
+            Text("\(clip.timelineDuration, specifier: "%.0f")秒")
                 .font(.headline)
             Spacer()
             Button {
@@ -671,26 +673,46 @@ private struct SimpleMusicSheet: View {
     var body: some View {
         NavigationStack {
             List {
-                Button {
-                    viewModel.setMusic(nil)
-                    dismiss()
-                } label: {
-                    row(name: "音楽なし", icon: "speaker.slash",
-                        isSelected: viewModel.project.music == nil)
-                }
-                ForEach(BGMLibrary.tracks()) { track in
+                Section {
                     Button {
-                        viewModel.setMusic(track)
-                        dismiss()
+                        viewModel.setMusic(nil)
                     } label: {
-                        row(name: track.name, icon: "music.note",
-                            isSelected: viewModel.project.music?.name == track.name)
+                        row(name: "音楽なし", icon: "speaker.slash",
+                            isSelected: viewModel.project.music == nil)
+                    }
+                    ForEach(BGMLibrary.tracks()) { track in
+                        Button {
+                            viewModel.setMusic(track)
+                        } label: {
+                            row(name: track.name, icon: "music.note",
+                                isSelected: viewModel.project.music?.name == track.name)
+                        }
+                    }
+                    if BGMLibrary.tracks().isEmpty {
+                        Text("音楽ファイルが未追加です(README参照)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                 }
-                if BGMLibrary.tracks().isEmpty {
-                    Text("音楽ファイルが未追加です(README参照)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+                if viewModel.project.music != nil {
+                    Section("音楽の大きさ") {
+                        Picker("音楽の大きさ", selection: Binding(
+                            get: { viewModel.project.music?.volume ?? 0.6 },
+                            set: { viewModel.setMusicVolume($0) }
+                        )) {
+                            ForEach(BGMVolume.options, id: \.value) { option in
+                                Text(option.label).tag(option.value)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                    }
+                }
+                Section {
+                    Toggle("動画の音を消す(音楽だけにする)", isOn: Binding(
+                        get: { viewModel.project.videoAudioMuted },
+                        set: { viewModel.setVideoAudioMuted($0) }
+                    ))
+                    .font(.headline)
                 }
             }
             .navigationTitle("音楽をつける")

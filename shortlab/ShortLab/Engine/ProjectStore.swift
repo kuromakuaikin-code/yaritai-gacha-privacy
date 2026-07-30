@@ -45,6 +45,8 @@ enum ProjectStore {
         var clips: [Clip] = []
         var texts: [Text] = []
         var music: Music?
+        // 後から追加したフィールド。旧データには無いため Optional で受ける
+        var videoAudioMuted: Bool?
     }
 
     static func save(_ project: EditorProject) {
@@ -63,6 +65,7 @@ enum ProjectStore {
         stored.music = project.music.map {
             Stored.Music(fileName: $0.url.lastPathComponent, volume: $0.volume)
         }
+        stored.videoAudioMuted = project.videoAudioMuted
         guard let data = try? JSONEncoder().encode(stored) else { return }
         try? data.write(to: fileURL, options: .atomic)
     }
@@ -96,6 +99,7 @@ enum ProjectStore {
             track.volume = m.volume
             project.music = track
         }
+        project.videoAudioMuted = stored.videoAudioMuted ?? false
         return project
     }
 
