@@ -27,6 +27,9 @@
 | クリップのサムネイル | `Views/ClipThumbnail.swift`(NSCache・トリム開始0.1秒単位でキー化) |
 | 動画音ミュート/BGM音量3択 | `Models`(videoAudioMuted / BGMVolume)+ `CompositionEngine` の audioMix に集約 |
 | App Store 掲載文 | `store-listing.md` |
+| エラーの平易化 | `Engine/FriendlyError.swift`(生の localizedDescription を利用者に見せない) |
+| 触覚フィードバック | `Views/Haptics.swift`(変化が無いときは鳴らさないルール) |
+| 書き出し画質 | `ExportManager.export(preset:)`(2択UIはしっかり編集のみ。かんたんモードは1080p固定) |
 | アイコン | `ShortLab/Assets.xcassets/AppIcon.appiconset`(1024px 単一) |
 | 法的ページ | `privacy.html` / `terms.html`(GitHub Pages 配信) |
 

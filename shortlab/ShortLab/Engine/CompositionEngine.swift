@@ -113,6 +113,18 @@ enum CompositionEngine {
 
                 let bgmParams = AVMutableAudioMixInputParameters(track: bgmTrack)
                 bgmParams.setVolume(music.volume, at: .zero)
+                // 終端フェードアウト: 動画が終わると音楽がブツッと切れるのを防ぐ。
+                // 短い動画ではフェードが全体を食わないよう、十分な長さがある時だけ掛ける
+                let fadeDuration = 2.0
+                let bgmEndSeconds = insertDuration.seconds
+                if bgmEndSeconds > fadeDuration + 1.0 {
+                    bgmParams.setVolumeRamp(
+                        fromStartVolume: music.volume,
+                        toEndVolume: 0,
+                        timeRange: CMTimeRange(
+                            start: RenderSpec.time(bgmEndSeconds - fadeDuration),
+                            duration: RenderSpec.time(fadeDuration)))
+                }
                 mixParameters.append(bgmParams)
             }
         }

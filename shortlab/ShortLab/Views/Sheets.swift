@@ -1,5 +1,6 @@
 import SwiftUI
 import AVKit
+import AVFoundation
 
 // MARK: - テキスト追加
 
@@ -271,6 +272,7 @@ struct ExportSheet: View {
     @State private var shareURL: URL?
     @State private var previewURL: URL?
     @State private var showPaywall = false
+    @State private var preset = AVAssetExportPreset1920x1080
 
     init(viewModel: EditorViewModel, purchase: PurchaseManager) {
         self.viewModel = viewModel
@@ -337,9 +339,14 @@ struct ExportSheet: View {
             Image(systemName: "square.and.arrow.up.circle.fill")
                 .font(.system(size: 56))
                 .foregroundStyle(.green)
-            Text("1080p・\(Int(viewModel.project.totalDuration.rounded()))秒")
+            Text("\(Int(viewModel.project.totalDuration.rounded()))秒")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
+            Picker("画質", selection: $preset) {
+                Text("きれい (1080p)").tag(AVAssetExportPreset1920x1080)
+                Text("軽め (720p)").tag(AVAssetExportPreset1280x720)
+            }
+            .pickerStyle(.segmented)
             if !purchase.isPremium {
                 Label("無料版は透かしが入ります", systemImage: "info.circle")
                     .font(.caption)
@@ -353,7 +360,8 @@ struct ExportSheet: View {
                 Task {
                     await exporter.export(
                         project: viewModel.project,
-                        showWatermark: !purchase.isPremium
+                        showWatermark: !purchase.isPremium,
+                        preset: preset
                     )
                 }
             } label: {

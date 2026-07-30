@@ -82,6 +82,7 @@ final class EditorViewModel: ObservableObject {
 
     func undo() {
         guard let previous = undoStack.popLast() else { return }
+        Haptics.tap()
         project = previous
         if let selectedClipID, !project.clips.contains(where: { $0.id == selectedClipID }) {
             self.selectedClipID = nil
@@ -108,7 +109,8 @@ final class EditorViewModel: ObservableObject {
                 guard duration > 0.1 else { continue }
                 imported.append(VideoClip(url: movie.url, assetDuration: duration))
             } catch {
-                errorMessage = "読み込みに失敗しました: \(error.localizedDescription)"
+                errorMessage = FriendlyError.message(
+                    error, fallback: "動画を読み込めませんでした。もう一度えらび直してください")
             }
         }
 
@@ -181,6 +183,7 @@ final class EditorViewModel: ObservableObject {
         guard assetSeconds < clip.trimEnd - 0.2 else { return }
         guard index > 0 || assetSeconds > clip.trimStart + 0.05 else { return }
         pushUndo()
+        Haptics.tap()
         clip.trimStart = max(clip.trimStart, assetSeconds)
         var remaining = Array(project.clips[index...])
         remaining[0] = clip
@@ -199,6 +202,7 @@ final class EditorViewModel: ObservableObject {
         guard assetSeconds > clip.trimStart + 0.2 else { return }
         guard index < project.clips.count - 1 || assetSeconds < clip.trimEnd - 0.05 else { return }
         pushUndo()
+        Haptics.tap()
         clip.trimEnd = min(clip.trimEnd, assetSeconds)
         var remaining = Array(project.clips[...index])
         remaining[remaining.count - 1] = clip
@@ -229,6 +233,7 @@ final class EditorViewModel: ObservableObject {
         else { return }
 
         pushUndo()
+        Haptics.tap()
         var first = clip
         first.trimEnd = splitPoint
         var second = VideoClip(url: clip.url, assetDuration: clip.assetDuration)
@@ -308,7 +313,8 @@ final class EditorViewModel: ObservableObject {
             playerController.seek(to: min(position, project.totalDuration))
             if wasPlaying { playerController.togglePlay() }
         } catch {
-            errorMessage = error.localizedDescription
+            errorMessage = FriendlyError.message(
+                error, fallback: "プレビューを作れませんでした。もう一度お試しください")
         }
     }
 }

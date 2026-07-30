@@ -22,7 +22,9 @@ final class ExportManager: ObservableObject {
 
     /// - Parameters:
     ///   - showWatermark: 無料版は true(課金で解除)
-    func export(project: EditorProject, showWatermark: Bool) async {
+    ///   - preset: 書き出し画質。既定 1080p。720p は「軽め」(しっかり編集のみ選択可)
+    func export(project: EditorProject, showWatermark: Bool,
+                preset: String = AVAssetExportPreset1920x1080) async {
         guard case .idle = state else { return } // 二重実行ガード
         state = .exporting(progress: 0)
 
@@ -45,7 +47,7 @@ final class ExportManager: ObservableObject {
 
             guard let session = AVAssetExportSession(
                 asset: result.composition,
-                presetName: AVAssetExportPreset1920x1080
+                presetName: preset
             ) else {
                 state = .failed("エクスポートセッションを作成できませんでした")
                 return
@@ -64,18 +66,24 @@ final class ExportManager: ObservableObject {
 
             switch session.status {
             case .completed:
+                Haptics.success()
                 state = .finished(outputURL)
             case .cancelled:
                 state = .idle
             default:
-                let message = session.error?.localizedDescription ?? "不明なエラー"
-                state = .failed(message)
+                Haptics.warning()
+                let fallback = "動画を作れませんでした。もう一度お試しください"
+                state = .failed(session.error.map {
+                    FriendlyError.message($0, fallback: fallback)
+                } ?? fallback)
             }
             self.session = nil
         } catch {
             stopProgressPolling()
             session = nil
-            state = .failed(error.localizedDescription)
+            Haptics.warning()
+            state = .failed(FriendlyError.message(
+                error, fallback: "動画を作れませんでした。もう一度お試しください"))
         }
     }
 

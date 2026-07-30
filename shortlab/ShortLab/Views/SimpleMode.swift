@@ -766,8 +766,10 @@ private final class PhotoSaver: ObservableObject {
         }) { success, error in
             Task { @MainActor in
                 if success {
+                    Haptics.success()
                     self.state = .saved
                 } else {
+                    Haptics.warning()
                     self.state = .failed(error?.localizedDescription ?? "ほぞんできませんでした。設定アプリで写真へのアクセスを許可してください")
                 }
             }
