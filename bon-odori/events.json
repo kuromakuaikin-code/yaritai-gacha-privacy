@@ -384,11 +384,11 @@
     },
     {
       "id": "toyoake-natsumatsuri",
-      "status": "pending",
-      "name": "豊明夏まつり",
+      "status": "published",
+      "name": "2026 豊明夏まつり",
       "city": "豊明市",
-      "venue": "（会場未確認）",
-      "address": "豊明市",
+      "venue": "豊明市文化会館 駐車場・館内",
+      "address": "豊明市西川町広原28-1",
       "lat": 35.051,
       "lng": 137.013,
       "dates": [
@@ -403,19 +403,20 @@
           "end": "21:00"
         }
       ],
-      "rain": "",
+      "rain": "雨天決行・荒天中止。花火のみ9月6日に予備日あり",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "盆踊りと屋外イベント、花火を行う夏まつりです。花火は両日20時から予定され、荒天時の予備日は花火のみ開催されます。",
       "posterType": "admin",
       "source": {
-        "name": "豊明市公式サイト「2026年豊明夏まつり開催決定」",
-        "url": "https://www.city.toyoake.lg.jp/item/34582.htm"
+        "name": "愛知県観光公式サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1497/"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-07-30",
       "imageAllowed": false,
       "image": "",
-      "desc": "（承認待ち）両日16:00〜21:00の開催は市公式ページで確認済みだが、盆踊りプログラムの有無と会場が未確認。確認後に公開する。",
+      "desc": "豊明市文化会館を会場に、盆踊り、屋外イベント、ワークショップ、打上花火を2日間楽しめる夏まつりです。",
       "scale": "regional",
+      "category": "bonodori",
       "prefecture": "愛知県"
     },
     {
@@ -4004,6 +4005,175 @@
       "image": "",
       "desc": "港かっぽれ総おどり、みこし、海の行事、海上花火を3日間にわたり行う清水港の夏祭りです。",
       "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "obu-summer-festival-2026",
+      "status": "published",
+      "name": "第45回 大府夏まつり",
+      "city": "大府市",
+      "venue": "大府駅前広場（JR大府駅東側）",
+      "address": "大府市中央町3丁目",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "17:00", "end": "21:00"},
+        {"date": "2026-08-02", "start": "17:00", "end": "21:00"}
+      ],
+      "rain": "小雨決行",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りのほか、屋台やダンスなどを行う市民参加型の夏まつりです。会場周辺は交通規制があるため公共交通機関の利用が案内されています。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県観光公式サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/3700/"
+      },
+      "lastVerified": "2026-07-30",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "JR大府駅東側を会場に、盆踊り、屋台、ダンスパフォーマンスなどを2日間楽しめる夏まつりです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "toyota-obara-summer-festival-2026",
+      "status": "published",
+      "name": "小原夏まつり",
+      "city": "豊田市",
+      "venue": "小原ふれあい公園",
+      "address": "豊田市小原町孫八456",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-15", "start": "17:00"}
+      ],
+      "rain": "雨天時は19時から花火のみ。荒天時は翌日に花火のみ順延",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは18時、花火は20時からの予定です。雨天時は内容が変わるため、当日正午以降に公式情報をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県観光公式サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1581/"
+      },
+      "lastVerified": "2026-07-30",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "小原ふれあい公園で盆踊りと打上花火を楽しめる、豊田市小原地区の夏まつりです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "gujo-kanomizu-odori-2026",
+      "status": "published",
+      "name": "寒水踊り 盆前の踊り",
+      "city": "郡上市",
+      "venue": "寒水白山神社 拝殿",
+      "address": "郡上市明宝寒水",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-11", "start": "19:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "お囃子や音頭取りを使わず、下駄の音と掛け合い歌で踊る地域の伝統行事です。神社拝殿内で行われます。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県グリーン・ツーリズム公式サイト",
+        "url": "https://gifu-inaka.pref.gifu.lg.jp/gifudo/area3/6480.html"
+      },
+      "lastVerified": "2026-07-30",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "寒水白山神社の拝殿で、下駄の音と踊り手の掛け合い歌に合わせて踊る郡上市明宝の伝統的な盆踊りです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "takayama-kuguno-summer-festival-2026",
+      "status": "published",
+      "name": "ひだ桃源郷くぐの納涼夏まつり",
+      "city": "高山市",
+      "venue": "久々野支所周辺",
+      "address": "高山市久々野町無数河580-1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-11", "start": "16:30", "end": "22:30"}
+      ],
+      "rain": "雨天時は8月22日に延期",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊り、飲食・物販、花火を行う地域の夏まつりです。会場周辺で交通規制があり、臨時駐車場は協力金が必要です。",
+      "posterType": "admin",
+      "source": {
+        "name": "飛騨高山観光公式サイト 飛騨高山旅ガイド",
+        "url": "https://www.hidatakayama.or.jp/event/detail_2550.html"
+      },
+      "lastVerified": "2026-07-30",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "久々野支所周辺で盆踊りや飲食ブースを楽しみ、山あいに響く花火で締めくくる納涼夏まつりです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "gifu-sakaigawa-summer-festival-2026",
+      "status": "published",
+      "name": "2026境川ふれあい夏祭り花火大会",
+      "city": "岐阜市",
+      "venue": "境川緑道公園（道の駅柳津周辺）",
+      "address": "岐阜市柳津町地内 境川緑道公園",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-22", "start": "17:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りではなく、花火と夜店を中心とする地域の夏祭りとして掲載しています。詳しい進行は公式情報をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光公式サイト 岐阜の旅ガイド",
+        "url": "https://www.kankou-gifu.jp/event/detail_6040.html"
+      },
+      "lastVerified": "2026-07-30",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "境川緑道公園で夜店や地域の催しを楽しみ、約2000発の花火で締めくくる柳津町の夏祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "fuji-fujikawa-summer-festival-2026",
+      "status": "published",
+      "name": "第36回 ふじかわ夏まつり",
+      "city": "富士市",
+      "venue": "富士川河川敷憩いの広場",
+      "address": "富士市富士川河川敷",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-01", "start": "15:00", "end": "20:00"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "花火、各種出店、地域イベントを行う夏まつりです。公式ページでは前年に盆踊りを実施したことが紹介されていますが、2026年の盆踊り実施は明記されていないため祭り情報として掲載しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "富士市公式サイト",
+        "url": "https://www.city.fuji.shizuoka.jp/1015059066/p001295.html"
+      },
+      "lastVerified": "2026-07-30",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "富士川河川敷で各種出店や地域イベントを楽しみ、手筒花火を含む花火で締めくくる夏まつりです。",
+      "scale": "regional",
       "category": "festival",
       "prefecture": "静岡県"
     }
