@@ -4176,6 +4176,175 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "静岡県"
+    },
+    {
+      "id": "tokai-city-fireworks-2026",
+      "status": "published",
+      "name": "第57回 東海まつり花火大会",
+      "city": "東海市",
+      "venue": "大池公園",
+      "address": "東海市中央町三丁目地内",
+      "lat": 35.0207,
+      "lng": 136.9024,
+      "dates": [
+        {"date": "2026-08-08", "start": "19:20", "end": "20:30"}
+      ],
+      "rain": "小雨決行、荒天中止（順延なし）",
+      "eventStatus": "scheduled",
+      "statusNote": "花火大会として掲載しています。会場内では花火以外の催しはなく、開催可否は当日の東海市・東海市観光協会の案内をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "東海市観光協会公式サイト",
+        "url": "https://www.tokaikanko.com/news/news_ooikepark/%E7%AC%AC57%E5%9B%9E%E6%9D%B1%E6%B5%B7%E3%81%BE%E3%81%A4%E3%82%8A%E8%8A%B1%E7%81%AB%E5%A4%A7%E4%BC%9A/"
+      },
+      "lastVerified": "2026-08-02",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "大池公園で約4000発の花火を楽しめる東海市の夏の恒例行事です。会場周辺の交通・駐車案内は公式ページで確認できます。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "kariya-wansaka-festival-2026",
+      "status": "published",
+      "name": "刈谷わんさか祭り2026",
+      "city": "刈谷市",
+      "venue": "刈谷市総合運動公園",
+      "address": "刈谷市築地町荒田1",
+      "lat": 35.0123,
+      "lng": 137.0269,
+      "dates": [
+        {"date": "2026-08-15", "start": "17:00", "end": "21:00"}
+      ],
+      "rain": "開催状況や変更は刈谷市公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "2026年は花火大会のみの開催で、ステージイベントと「かりや盆フェス」は実施されません。花火は19:30～20:15の予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "刈谷市公式サイト",
+        "url": "https://www.city.kariya.lg.jp/kankobunka/1008694/1010968.html"
+      },
+      "lastVerified": "2026-08-02",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "飲食・縁日ブースと花火を楽しむ刈谷の夏まつりです。2026年は例年と内容が異なり、花火大会を中心に開催されます。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "iwakura-summer-bonodori-2026",
+      "status": "published",
+      "name": "令和8年度 いわくら夏まつり市民盆おどり",
+      "city": "岩倉市",
+      "venue": "アデリア総合体育文化センター駐車場",
+      "address": "岩倉市鈴井町下新田123",
+      "lat": 35.2855,
+      "lng": 136.8678,
+      "dates": [
+        {"date": "2026-08-21", "start": "18:30", "end": "20:30"},
+        {"date": "2026-08-22", "start": "18:30", "end": "20:30"}
+      ],
+      "rain": "雨天時の予備日は8月23日",
+      "eventStatus": "scheduled",
+      "statusNote": "17:30からナイトマルシェも併催予定です。曲目や順番は変更される場合があります。",
+      "posterType": "admin",
+      "source": {
+        "name": "NPO法人いわくら観光振興会公式サイト",
+        "url": "https://iwakura-kanko.com/event.php?id=2026_7_6"
+      },
+      "lastVerified": "2026-08-02",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "やぐらを囲んで地域の曲や定番曲を踊る、岩倉市の市民盆おどりです。会場では飲食やゲームの夜市も開かれます。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "seki-odorinsai-2026",
+      "status": "published",
+      "name": "関おどりん祭 2026",
+      "city": "関市",
+      "venue": "関市文化会館",
+      "address": "関市桜本町2-30-1",
+      "lat": 35.4869,
+      "lng": 136.9087,
+      "dates": [
+        {"date": "2026-08-07", "start": "16:00", "end": "21:00"}
+      ],
+      "rain": "雨天決行",
+      "eventStatus": "scheduled",
+      "statusNote": "夜は屋外市民広場で盆踊りを行う予定です。詳しい進行は公式サイトをご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光公式サイト 岐阜の旅ガイド",
+        "url": "https://www.kankou-gifu.jp/event/detail_10055.html"
+      },
+      "lastVerified": "2026-08-02",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "関市文化会館で体験企画や音楽、屋台を楽しみ、夜は関盆おどりや郡上おどりなどを踊る夏まつりです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "kameyama-noryo-festival-2026",
+      "status": "published",
+      "name": "2026亀山市納涼大会",
+      "city": "亀山市",
+      "venue": "亀山公園芝生広場一帯",
+      "address": "亀山市若山町",
+      "lat": 34.8567,
+      "lng": 136.4524,
+      "dates": [
+        {"date": "2026-08-08", "start": "17:00"}
+      ],
+      "rain": "荒天などによる変更は亀山市公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "灯おどり、竹あかり、スカイランタンなどを予定しています。スカイランタンは有料・事前申込制です。",
+      "posterType": "admin",
+      "source": {
+        "name": "亀山市公式サイト",
+        "url": "https://www.city.kameyama.mie.jp/docs/2025052900076/"
+      },
+      "lastVerified": "2026-08-02",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "亀山公園で地域の灯おどりや竹あかりを楽しむ納涼大会です。灯りをテーマにした催しや出店が集まります。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "susono-awaodori-2026",
+      "status": "published",
+      "name": "富士山すその阿波おどり2026",
+      "city": "裾野市",
+      "venue": "裾野駅前周辺",
+      "address": "裾野市平松地内",
+      "lat": 35.1709,
+      "lng": 138.909,
+      "dates": [
+        {"date": "2026-08-08", "start": "13:00", "end": "20:00"}
+      ],
+      "rain": "雨天決行",
+      "eventStatus": "scheduled",
+      "statusNote": "一般イベントは13:00～17:00、阿波おどりは17:00～20:00です。専用駐車場はありません。",
+      "posterType": "admin",
+      "source": {
+        "name": "裾野市公式サイト",
+        "url": "https://www.city.susono.shizuoka.jp/kanko/2/1/1/17295.html"
+      },
+      "lastVerified": "2026-08-02",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "裾野駅前の通りを舞台に、昼の催しと夕方からの阿波おどりを楽しめる地域の踊りイベントです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
     }
   ]
 }
