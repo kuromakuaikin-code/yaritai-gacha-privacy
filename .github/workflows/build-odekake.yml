@@ -39,5 +39,12 @@ jobs:
             echo "変更なし"
           else
             git commit -m "自動ビルド: スポットページと sitemap を再生成"
+            # 盆踊りナビのビルドと同時に走ると push が競合し、黙って再生成されないまま
+            # 終わってしまう。生成先ディレクトリは別なので rebase すれば衝突しない。
+            for i in 1 2 3; do
+              if git push; then exit 0; fi
+              echo "push が競合したので rebase して再試行 ($i/3)"
+              git pull --rebase origin "${{ github.ref_name }}"
+            done
             git push
           fi

@@ -54,6 +54,12 @@ def e(s):
     return html.escape(str(s if s is not None else ""))
 
 
+def safe_url(u):
+    """spots.json の値をそのまま href に入れない。https 以外は落とす。"""
+    u = str(u or "").strip()
+    return u if u.startswith("https://") else ""
+
+
 def jdate(iso):
     """2026-10-17 → 2026年10月17日"""
     y, m, d = iso.split("-")
@@ -152,8 +158,9 @@ def page_html(sp):
         warn = ('<div class="warn">⚠️ ライトアップやイベントの日程は年ごとに変わります。'
                 'おでかけ前に情報元・公式サイトで最新の日程をご確認ください。</div>')
 
-    src = (f'<a href="{e(sp["source"])}" target="_blank" rel="noopener">'
-           f'{e(sp.get("sourceName") or "情報元")}</a>') if sp.get("source") else e(sp.get("sourceName") or "—")
+    src_url = safe_url(sp.get("source"))
+    src = (f'<a href="{e(src_url)}" target="_blank" rel="noopener">'
+           f'{e(sp.get("sourceName") or "情報元")}</a>') if src_url else e(sp.get("sourceName") or "—")
 
     return f"""<!DOCTYPE html>
 <html lang="ja">

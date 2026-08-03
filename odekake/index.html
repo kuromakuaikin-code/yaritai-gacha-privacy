@@ -281,7 +281,7 @@ function render(){
       (s.desc ? `<p class="desc">${esc(s.desc)}</p>` : "") +
       `<div class="acts">` +
         `<a class="map" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">地図で見る</a>` +
-        (s.source ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">情報元を見る</a>` : "") +
+        (safeUrl(s.source) ? `<a href="${esc(safeUrl(s.source))}" target="_blank" rel="noopener">情報元を見る</a>` : "") +
       `</div>` +
       `<p class="src">情報元：${esc(s.sourceName || "—")}　／　最終確認：${esc(s.lastVerified || "—")}</p>`;
     el.appendChild(d);
@@ -291,6 +291,12 @@ function render(){
 function setPressed(el, on, cls){
   el.classList.toggle(cls, on);
   el.setAttribute("aria-pressed", on ? "true" : "false");
+}
+/* spots.json の値をそのまま href に入れない。スマホの GitHub Web 画面から
+   編集する運用なので、打ち間違いで javascript: 等が入る余地を残さない。 */
+function safeUrl(u){
+  const s = String(u == null ? "" : u);
+  return /^https:\/\//i.test(s) ? s : "";
 }
 function esc(s){
   return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
