@@ -14,6 +14,35 @@ Privacy policy for やりたいガチャ
 - 掲載データ: 自治体公式サイトで確認した実データ（名古屋市・半田市ほか、順次拡充）
 - 応援ページ: `bon-odori/support.html`（寄付ボタン・チラシ作成サービス。URLの設定方法は ADMIN.md）
 
+## 東海おでかけナビ
+
+盆踊りナビの姉妹サイト。**盆踊りが終わる8月中旬から翌年6月までの空白を埋める**ために作った。
+
+- 公開URL: https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/odekake/
+- 一覧: `odekake/index.html`（紅葉／イルミネーションをジャンル切替、見頃順・県別・ライトアップ有無・現在地から近い順）
+- 個別ページ: `odekake/s/*.html`（schema.org の TouristAttraction / Event 構造化データ付き）
+- **データ更新**: `odekake/spots.json` を編集 → `cd odekake && python3 build.py` → コミット
+- 運用手順・掲載ルール・要確認の運用: `odekake/ADMIN.md`
+
+### なぜ作ったか
+
+盆踊りナビは価値のあるデータ収集パイプラインを持っているのに、年の10か月間それが遊んでいた。
+紅葉（10〜12月）とイルミネーション（10月〜翌5月）を足すと、年間の切れ目がほぼ消える。
+
+さらに、**紅葉スポットとイルミネーション会場は毎年ほぼ同じ**なので、盆踊りのようにデータを
+毎年作り直す必要がない。運用コストが盆踊りナビよりはるかに低いのが、この構成の要点。
+
+### 収益化（未設定）
+
+現在、盆踊りナビ・おでかけナビとも収益導線が1本もつながっていない。設定箇所は2つだけ。
+
+| 場所 | ファイル | 変数 |
+|---|---|---|
+| AdSense | `odekake/index.html` | `const ADSENSE = { client: "", slot: "" }` |
+| 寄付 | `bon-odori/support.html` | `const DONATE_URL = ""` |
+
+アクセス数は Cloudflare Web Analytics で測れているので、AdSense を入れる価値があるかは実データで判断できる。
+
 ## こえかえ（ボイスチェンジャー）
 
 録った声をその場で変えるWebアプリ。音声処理はすべてブラウザ内で完結し、外部送信は一切ない。

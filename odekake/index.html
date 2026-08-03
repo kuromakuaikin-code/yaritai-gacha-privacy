@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#7b3f2e">
+<title>東海おでかけナビ｜紅葉・イルミネーションの見頃を愛知・岐阜・三重・静岡から探す</title>
+<meta name="description" content="愛知・岐阜・三重・静岡の紅葉スポットとイルミネーションを、見頃・ライトアップ・現在地からの距離で探せます。情報元と最終確認日を明記。">
+<meta property="og:title" content="東海おでかけナビ｜紅葉・イルミネーションの見頃を探す">
+<meta property="og:description" content="愛知・岐阜・三重・静岡の紅葉とイルミネーションを、見頃と現在地から探せます。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%8D%81%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#faf7f2; --card:#fff; --ink:#33291f; --sub:#7d7264; --line:#e7ddd0;
+  --accent:#c0392b; --accent-soft:#fbeae7; --head:#7b3f2e;
+  --blue:#2c5282; --green:#2e7d4f; --green-soft:#e6f2ea;
+  --orange:#b45309; --orange-soft:#fdf0dd; --gray-soft:#f0ece5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Noto Sans JP",Meiryo,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.8;font-size:15px;
+  -webkit-text-size-adjust:100%;
+}
+a{color:var(--blue)}
+.wrap{max-width:680px;margin:0 auto;padding:0 14px 60px}
+header{background:var(--head);color:#fff;padding:12px 0 14px}
+header .wrap{padding-bottom:0}
+header .brand{font-size:1.12rem;font-weight:800;letter-spacing:.02em}
+header .tag{font-size:.79rem;opacity:.9;line-height:1.6}
+
+/* ジャンル */
+.genres{display:flex;gap:8px;margin:14px 0 6px}
+.genre{
+  flex:1;padding:11px 4px;border-radius:11px;border:1px solid var(--line);
+  background:#fff;color:var(--sub);font:inherit;font-size:.9rem;font-weight:800;
+  cursor:pointer;text-align:center;text-decoration:none;display:block;
+  -webkit-tap-highlight-color:transparent;
+}
+.genre.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.genre .n{display:block;font-size:.72rem;font-weight:600;opacity:.85}
+.season-hint{
+  background:var(--orange-soft);color:var(--orange);border-radius:10px;
+  padding:9px 13px;font-size:.83rem;font-weight:700;margin:8px 0 0;
+}
+
+/* 絞り込み */
+.filters{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.chip{
+  padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:#fff;
+  color:var(--sub);font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+.chip.on{background:var(--head);color:#fff;border-color:var(--head)}
+.count{font-size:.8rem;color:var(--sub);margin:10px 0 0}
+
+/* カード */
+.list{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.spot{
+  background:var(--card);border:1px solid var(--line);border-radius:13px;
+  padding:14px 15px;
+}
+.spot h2{font-size:1.06rem;margin:0 0 2px;line-height:1.5}
+.spot h2 a{color:var(--ink);text-decoration:none}
+.spot .kana{font-size:.72rem;color:var(--sub);margin-bottom:6px}
+.badges{display:flex;flex-wrap:wrap;gap:5px;margin:0 0 8px}
+.b{font-size:.73rem;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.b.now{background:var(--accent);color:#fff}
+.b.soon{background:var(--orange-soft);color:var(--orange)}
+.b.later{background:var(--gray-soft);color:var(--sub)}
+.b.done{background:var(--gray-soft);color:var(--sub)}
+.b.light{background:#fff6da;color:#9a6b00;border:1px solid #f0dfae}
+.b.pref{background:var(--green-soft);color:var(--green)}
+.b.check{background:#fdecef;color:#a32b44}
+.meta{font-size:.87rem;color:var(--ink);margin:2px 0}
+.meta b{color:var(--sub);font-weight:700;font-size:.8rem;margin-right:5px}
+.desc{font-size:.87rem;color:var(--sub);margin:7px 0 0}
+.src{font-size:.73rem;color:var(--sub);margin-top:9px;padding-top:8px;border-top:1px dashed var(--line)}
+.src a{color:var(--sub)}
+.acts{display:flex;gap:8px;margin-top:10px}
+.acts a{
+  flex:1;text-align:center;padding:9px 4px;border-radius:9px;font-size:.84rem;
+  font-weight:800;text-decoration:none;border:1px solid var(--line);color:var(--blue);background:#fff;
+}
+.acts a.map{background:var(--green-soft);color:var(--green);border-color:#cbe4d6}
+
+.empty{background:#fff;border:1px dashed var(--line);border-radius:12px;padding:26px 16px;text-align:center;color:var(--sub);font-size:.9rem}
+
+/* 相互リンク・広告枠 */
+.cross{
+  background:#fff;border:1px solid var(--line);border-left:4px solid var(--head);
+  border-radius:11px;padding:13px 15px;margin:18px 0 0;
+}
+.cross b{display:block;font-size:.95rem;margin-bottom:3px}
+.cross p{font-size:.83rem;color:var(--sub);margin-bottom:8px}
+.cross a{font-weight:800;font-size:.88rem}
+#adArea{margin:18px 0 0;min-height:0}
+.adnote{
+  background:var(--gray-soft);color:var(--sub);border-radius:10px;padding:11px 14px;
+  font-size:.78rem;text-align:center;
+}
+footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:.78rem;color:var(--sub)}
+footer a{color:var(--sub)}
+footer p{margin:4px 0}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brand">🍁 東海おでかけナビ</div>
+    <div class="tag">愛知・岐阜・三重・静岡の紅葉とイルミネーションを、見頃と現在地から探す</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <nav class="genres" id="genres">
+    <button class="genre active" data-genre="koyo">🍁 紅葉<span class="n">見頃で探す</span></button>
+    <button class="genre" data-genre="illumi">✨ イルミ<span class="n">冬の定番</span></button>
+    <a class="genre" href="../bon-odori/">🏮 祭り<span class="n">盆踊りナビへ</span></a>
+  </nav>
+
+  <div class="season-hint" id="seasonHint"></div>
+
+  <div class="filters" id="prefFilters"></div>
+  <div class="filters">
+    <button class="chip" id="lightChip">💡 ライトアップあり</button>
+    <button class="chip" id="nearChip">📍 現在地から近い順</button>
+  </div>
+
+  <p class="count" id="count"></p>
+
+  <div class="list" id="list"></div>
+
+  <div class="cross">
+    <b>🏮 夏は盆踊りナビへ</b>
+    <p>7〜8月の東海の盆踊り・地域祭りは、姉妹サイトで町内会レベルまで探せます。</p>
+    <a href="../bon-odori/">盆踊り・地域祭りナビ東海を見る →</a>
+  </div>
+
+  <div id="adArea"></div>
+
+  <footer>
+    <p><b>掲載情報について</b></p>
+    <p>各スポットの見頃は例年の目安です。ライトアップやイベントの日程は年ごとに変わるため、「要確認」の表示があるものは、おでかけ前に公式サイトでご確認ください。情報元と最終確認日は各カードに記載しています。</p>
+    <p style="margin-top:10px">
+      <a href="../bon-odori/">盆踊り・地域祭りナビ東海</a> ／
+      <a href="../bon-odori/support.html">このサイトを応援する</a>
+    </p>
+    <p>個人が運営しているサイトです。</p>
+  </footer>
+
+</div>
+
+<script>
+"use strict";
+
+/* AdSense を使う場合はここに入れる（未設定なら広告枠は出さない）
+   client: "ca-pub-xxxxxxxxxxxxxxxx" / slot: "1234567890" */
+const ADSENSE = { client: "", slot: "" };
+
+const GENRE_LABEL = { koyo: "紅葉", illumi: "イルミネーション" };
+const state = { genre: "koyo", pref: "", lightOnly: false, near: false, pos: null };
+let SPOTS = [];
+
+const $ = id => document.getElementById(id);
+const pad = n => String(n).padStart(2, "0");
+
+/* ---------- 見頃の判定 ----------
+   紅葉は seasonFrom/seasonTo（MM-DD、毎年繰り返す）
+   イルミネーションは dateFrom/dateTo（年をまたぐので実日付）        */
+function statusOf(s, today){
+  const t = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  if(s.dateFrom && s.dateTo){
+    const from = parseISO(s.dateFrom), to = parseISO(s.dateTo);
+    if(t < from){
+      const d = days(t, from);
+      return d <= 30 ? { k:"soon", label:"まもなく開始", d }
+                     : { k:"later", label:"開催予定", d };
+    }
+    if(t <= to) return { k:"now", label:"開催中", d:0 };
+    return { k:"done", label:"終了", d:0 };
+  }
+
+  if(!s.seasonFrom || !s.seasonTo) return { k:"later", label:"時期未定", d:9999 };
+
+  // 今年の期間。終了が開始より前なら年をまたぐ扱い。
+  const y = t.getFullYear();
+  let from = mmdd(y, s.seasonFrom), to = mmdd(y, s.seasonTo);
+  if(to < from) to = mmdd(y + 1, s.seasonTo);
+  if(t > to){ from = mmdd(y + 1, s.seasonFrom); to = mmdd(y + 1, s.seasonTo); if(to < from) to = mmdd(y + 2, s.seasonTo); }
+
+  if(t >= from && t <= to) return { k:"now", label:"見頃", d:0 };
+  const d = days(t, from);
+  if(d <= 21) return { k:"soon", label:"まもなく見頃", d };
+  return { k:"later", label:"あと" + d + "日", d };
+}
+function mmdd(y, s){ const [m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
+function parseISO(s){ const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); }
+function days(a, b){ return Math.round((b - a) / 86400000); }
+
+/* ---------- 距離 ---------- */
+function distKm(a, b, c, d){
+  const R = 6371, r = Math.PI / 180;
+  const dLat = (c - a) * r, dLng = (d - b) * r;
+  const h = Math.sin(dLat/2)**2 + Math.cos(a*r) * Math.cos(c*r) * Math.sin(dLng/2)**2;
+  return 2 * R * Math.asin(Math.sqrt(h));
+}
+
+/* ---------- 描画 ---------- */
+function render(){
+  const today = new Date();
+  let list = SPOTS.filter(s => s.genre === state.genre);
+  if(state.pref) list = list.filter(s => s.prefecture === state.pref);
+  if(state.lightOnly) list = list.filter(s => s.lightup);
+
+  list = list.map(s => {
+    const st = statusOf(s, today);
+    const km = (state.near && state.pos && s.lat && s.lng)
+      ? distKm(state.pos.lat, state.pos.lng, s.lat, s.lng) : null;
+    return { s, st, km };
+  });
+
+  if(state.near && state.pos){
+    list.sort((a, b) => (a.km ?? 1e9) - (b.km ?? 1e9));
+  }else{
+    // 見頃 → まもなく → これから → 終了。同順位は編集部の順位、次に県名。
+    const w = { now:0, soon:1, later:2, done:3 };
+    list.sort((a, b) =>
+      w[a.st.k] - w[b.st.k]
+      || a.st.d - b.st.d
+      || (b.s.rank || 0) - (a.s.rank || 0)
+      || a.s.prefecture.localeCompare(b.s.prefecture, "ja"));
+  }
+
+  $("count").textContent = list.length + " 件";
+  const el = $("list");
+  el.innerHTML = "";
+  if(!list.length){
+    el.innerHTML = '<div class="empty">条件に合うスポットがありません。絞り込みを外してみてください。</div>';
+    return;
+  }
+
+  for(const { s, st, km } of list){
+    const d = document.createElement("div");
+    d.className = "spot";
+
+    const badges = [`<span class="b ${st.k}">${st.label}</span>`,
+                    `<span class="b pref">${esc(s.prefecture)}</span>`];
+    if(s.lightup) badges.push('<span class="b light">💡 ライトアップ</span>');
+    if(s.verifyStatus === "要確認") badges.push('<span class="b check">日程は要確認</span>');
+
+    const rows = [
+      [s.genre === "koyo" ? "見頃" : "期間", s.seasonNote || ""],
+      ["場所", (s.city ? s.city + "　" : "") + (s.venue || "")],
+      ["料金", s.fee || ""],
+      s.lightup && s.lightupNote ? ["点灯", s.lightupNote] : null,
+      km != null ? ["距離", "現在地から約 " + (km < 10 ? km.toFixed(1) : Math.round(km)) + " km"] : null
+    ].filter(Boolean);
+
+    const q = encodeURIComponent(s.name + " " + (s.address || ""));
+    d.innerHTML =
+      `<h2>${esc(s.name)}</h2>` +
+      (s.kana ? `<div class="kana">${esc(s.kana)}</div>` : "") +
+      `<div class="badges">${badges.join("")}</div>` +
+      rows.map(([k, v]) => `<p class="meta"><b>${k}</b>${esc(v)}</p>`).join("") +
+      (s.desc ? `<p class="desc">${esc(s.desc)}</p>` : "") +
+      `<div class="acts">` +
+        `<a class="map" href="https://www.google.com/maps/search/?api=1&query=${q}" target="_blank" rel="noopener">地図で見る</a>` +
+        (s.source ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">情報元を見る</a>` : "") +
+      `</div>` +
+      `<p class="src">情報元：${esc(s.sourceName || "—")}　／　最終確認：${esc(s.lastVerified || "—")}</p>`;
+    el.appendChild(d);
+  }
+}
+function esc(s){
+  return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
+    ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
+}
+
+/* ---------- 季節の案内 ---------- */
+function seasonHint(){
+  const m = new Date().getMonth() + 1;
+  if(m >= 7 && m <= 8)  return { g:"koyo",   t:"いまは盆踊りの季節です。祭りは 🏮 から盆踊りナビへ。紅葉は10月からです。" };
+  if(m === 9)           return { g:"koyo",   t:"紅葉シーズンまであと少し。岐阜の山間部は10月から色づき始めます。" };
+  if(m >= 10 && m <= 12)return { g:"koyo",   t:"紅葉シーズンです。標高の高い岐阜から順に見頃を迎えます。" };
+  if(m >= 1 && m <= 3)  return { g:"illumi", t:"イルミネーションの季節です。なばなの里は5月末まで続きます。" };
+  return                       { g:"illumi", t:"春です。なばなの里のイルミネーションは5月末まで見られます。" };
+}
+
+/* ---------- 起動 ---------- */
+async function init(){
+  const hint = seasonHint();
+  state.genre = hint.g;
+  $("seasonHint").textContent = hint.t;
+  document.querySelectorAll(".genre[data-genre]").forEach(b =>
+    b.classList.toggle("active", b.dataset.genre === state.genre));
+
+  try{
+    const res = await fetch("./spots.json", { cache: "no-cache" });
+    SPOTS = (await res.json()).spots || [];
+  }catch(e){
+    $("list").innerHTML = '<div class="empty">データを読み込めませんでした。時間をおいて再読み込みしてください。</div>';
+    return;
+  }
+
+  // 県フィルタはデータにある県だけ出す
+  const prefs = [...new Set(SPOTS.map(s => s.prefecture))].sort((a, b) => a.localeCompare(b, "ja"));
+  const pf = $("prefFilters");
+  pf.innerHTML = '<button class="chip on" data-pref="">すべての県</button>' +
+    prefs.map(p => `<button class="chip" data-pref="${esc(p)}">${esc(p)}</button>`).join("");
+  pf.onclick = e => {
+    const b = e.target.closest(".chip"); if(!b) return;
+    state.pref = b.dataset.pref;
+    pf.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+    render();
+  };
+
+  document.querySelectorAll(".genre[data-genre]").forEach(b => {
+    b.onclick = () => {
+      state.genre = b.dataset.genre;
+      document.querySelectorAll(".genre[data-genre]").forEach(x =>
+        x.classList.toggle("active", x === b));
+      render();
+    };
+  });
+
+  $("lightChip").onclick = e => {
+    state.lightOnly = !state.lightOnly;
+    e.currentTarget.classList.toggle("on", state.lightOnly);
+    render();
+  };
+
+  $("nearChip").onclick = e => {
+    if(state.near){
+      state.near = false; e.currentTarget.classList.remove("on");
+      e.currentTarget.textContent = "📍 現在地から近い順";
+      render(); return;
+    }
+    if(!navigator.geolocation){ alert("この端末では現在地を取得できません。"); return; }
+    e.currentTarget.textContent = "📍 取得中…";
+    navigator.geolocation.getCurrentPosition(
+      p => {
+        state.pos = { lat:p.coords.latitude, lng:p.coords.longitude };
+        state.near = true;
+        e.currentTarget.classList.add("on");
+        e.currentTarget.textContent = "📍 現在地から近い順";
+        render();
+      },
+      () => {
+        e.currentTarget.textContent = "📍 現在地から近い順";
+        alert("現在地を取得できませんでした。位置情報の許可をご確認ください。");
+      },
+      { timeout: 10000 }
+    );
+  };
+
+  if(ADSENSE.client && ADSENSE.slot){
+    const s = document.createElement("script");
+    s.async = true;
+    s.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + ADSENSE.client;
+    s.crossOrigin = "anonymous";
+    document.head.appendChild(s);
+    $("adArea").innerHTML =
+      `<ins class="adsbygoogle" style="display:block" data-ad-client="${ADSENSE.client}" ` +
+      `data-ad-slot="${ADSENSE.slot}" data-ad-format="auto" data-full-width-responsive="true"></ins>`;
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }
+
+  render();
+}
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
