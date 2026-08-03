@@ -58,6 +58,10 @@ header .tag{font-size:.79rem;opacity:.9;line-height:1.6}
   -webkit-tap-highlight-color:transparent;
 }
 .chip.on{background:var(--head);color:#fff;border-color:var(--head)}
+/* キーボード操作時だけ枠を出す（タップでは出さない） */
+.genre:focus-visible,.chip:focus-visible,.acts a:focus-visible,footer a:focus-visible,.cross a:focus-visible{
+  outline:2px solid var(--head);outline-offset:2px;border-radius:8px;
+}
 .count{font-size:.8rem;color:var(--sub);margin:10px 0 0}
 
 /* カード */
@@ -122,10 +126,10 @@ footer p{margin:4px 0}
 <div class="wrap">
 
   <nav class="genres" id="genres">
-    <button class="genre" data-genre="sakura">🌸 桜<span class="n">3月下旬〜4月</span></button>
-    <button class="genre" data-genre="ajisai">💠 あじさい<span class="n">6月</span></button>
-    <button class="genre" data-genre="koyo">🍁 紅葉<span class="n">10〜12月</span></button>
-    <button class="genre" data-genre="illumi">✨ イルミ<span class="n">10月〜翌5月</span></button>
+    <button class="genre" data-genre="sakura" aria-pressed="false">🌸 桜<span class="n">3月下旬〜4月</span></button>
+    <button class="genre" data-genre="ajisai" aria-pressed="false">💠 あじさい<span class="n">6月</span></button>
+    <button class="genre" data-genre="koyo" aria-pressed="false">🍁 紅葉<span class="n">10〜12月</span></button>
+    <button class="genre" data-genre="illumi" aria-pressed="false">✨ イルミ<span class="n">10月〜翌5月</span></button>
     <a class="genre" href="../bon-odori/">🏮 祭り<span class="n">7〜8月</span></a>
   </nav>
 
@@ -133,8 +137,8 @@ footer p{margin:4px 0}
 
   <div class="filters" id="prefFilters"></div>
   <div class="filters">
-    <button class="chip" id="lightChip">💡 ライトアップあり</button>
-    <button class="chip" id="nearChip">📍 現在地から近い順</button>
+    <button class="chip" id="lightChip" aria-pressed="false">💡 ライトアップあり</button>
+    <button class="chip" id="nearChip" aria-pressed="false">📍 現在地から近い順</button>
   </div>
 
   <p class="count" id="count"></p>
@@ -283,6 +287,11 @@ function render(){
     el.appendChild(d);
   }
 }
+/* 見た目の on/off と、支援技術に伝わる状態を必ず一緒に切り替える */
+function setPressed(el, on, cls){
+  el.classList.toggle(cls, on);
+  el.setAttribute("aria-pressed", on ? "true" : "false");
+}
 function esc(s){
   return String(s == null ? "" : s).replace(/[&<>"']/g, c =>
     ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c]));
@@ -317,7 +326,7 @@ async function init(){
   state.genre = hint.g;
   $("seasonHint").textContent = hint.t;
   document.querySelectorAll(".genre[data-genre]").forEach(b =>
-    b.classList.toggle("active", b.dataset.genre === state.genre));
+    setPressed(b, b.dataset.genre === state.genre, "active"));
 
   try{
     const res = await fetch("./spots.json", { cache: "no-cache" });
@@ -330,12 +339,12 @@ async function init(){
   // 県フィルタはデータにある県だけ出す
   const prefs = [...new Set(SPOTS.map(s => s.prefecture))].sort((a, b) => a.localeCompare(b, "ja"));
   const pf = $("prefFilters");
-  pf.innerHTML = '<button class="chip on" data-pref="">すべての県</button>' +
-    prefs.map(p => `<button class="chip" data-pref="${esc(p)}">${esc(p)}</button>`).join("");
+  pf.innerHTML = '<button class="chip on" data-pref="" aria-pressed="true">すべての県</button>' +
+    prefs.map(p => `<button class="chip" data-pref="${esc(p)}" aria-pressed="false">${esc(p)}</button>`).join("");
   pf.onclick = e => {
     const b = e.target.closest(".chip"); if(!b) return;
     state.pref = b.dataset.pref;
-    pf.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+    pf.querySelectorAll(".chip").forEach(c => setPressed(c, c === b, "on"));
     render();
   };
 
@@ -343,20 +352,20 @@ async function init(){
     b.onclick = () => {
       state.genre = b.dataset.genre;
       document.querySelectorAll(".genre[data-genre]").forEach(x =>
-        x.classList.toggle("active", x === b));
+        setPressed(x, x === b, "active"));
       render();
     };
   });
 
   $("lightChip").onclick = e => {
     state.lightOnly = !state.lightOnly;
-    e.currentTarget.classList.toggle("on", state.lightOnly);
+    setPressed(e.currentTarget, state.lightOnly, "on");
     render();
   };
 
   $("nearChip").onclick = e => {
     if(state.near){
-      state.near = false; e.currentTarget.classList.remove("on");
+      state.near = false; setPressed(e.currentTarget, false, "on");
       e.currentTarget.textContent = "📍 現在地から近い順";
       render(); return;
     }
@@ -366,7 +375,7 @@ async function init(){
       p => {
         state.pos = { lat:p.coords.latitude, lng:p.coords.longitude };
         state.near = true;
-        e.currentTarget.classList.add("on");
+        setPressed(e.currentTarget, true, "on");
         e.currentTarget.textContent = "📍 現在地から近い順";
         render();
       },

@@ -163,6 +163,7 @@ def page_html(sp):
 <meta name="theme-color" content="#7b3f2e">
 <title>{e(title)}</title>
 <meta name="description" content="{e(desc)}">
+<link rel="canonical" href="{e(BASE_URL + 's/' + sp['id'] + '.html') if BASE_URL else './' + e(sp['id']) + '.html'}">
 <meta property="og:title" content="{e(title)}">
 <meta property="og:description" content="{e(desc)}">
 <meta property="og:type" content="article">

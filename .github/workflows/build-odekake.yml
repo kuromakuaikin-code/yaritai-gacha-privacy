@@ -1,0 +1,43 @@
+name: 東海おでかけナビ自動ビルド
+
+# spots.json か build.py が変更されたら、個別ページと sitemap を自動再生成してコミットする。
+# これにより管理者は GitHub の Web 画面（スマホ可）で spots.json を編集するだけでよい。
+on:
+  push:
+    paths:
+      - "odekake/spots.json"
+      - "odekake/build.py"
+      - "odekake/site-config.json"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-odekake-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: 個別ページ・sitemap を生成
+        run: python3 odekake/build.py
+
+      - name: 変更があればコミット
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- odekake/s
+          if [ -e odekake/sitemap.xml ]; then
+            git add -A -- odekake/sitemap.xml
+          fi
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "自動ビルド: スポットページと sitemap を再生成"
+            git push
+          fi

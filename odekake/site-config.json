@@ -1,6 +1,6 @@
 {
   "siteName": "東海おでかけナビ",
-  "publicBaseUrl": "",
+  "publicBaseUrl": "https://kuromakuaikin-code.github.io/yaritai-gacha-privacy/odekake/",
   "description": "愛知・岐阜・三重の桜、あじさい、紅葉、イルミネーションを、見頃・ライトアップ・現在地から探せる情報サイトです。",
   "analyticsToken": "b0553bddca524bb7816ae0fbe97fcab1",
   "_analyticsNote": "盆踊りナビと同じ Cloudflare Web Analytics のトークン。同一ホスト配下なのでダッシュボードではパスで見分けられる。別集計にしたい場合は新しいトークンを入れる。"
