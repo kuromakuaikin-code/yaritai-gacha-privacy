@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#7b3f2e">
-<title>東海おでかけナビ｜紅葉・イルミネーションの見頃を愛知・岐阜・三重・静岡から探す</title>
-<meta name="description" content="愛知・岐阜・三重・静岡の紅葉スポットとイルミネーションを、見頃・ライトアップ・現在地からの距離で探せます。情報元と最終確認日を明記。">
-<meta property="og:title" content="東海おでかけナビ｜紅葉・イルミネーションの見頃を探す">
-<meta property="og:description" content="愛知・岐阜・三重・静岡の紅葉とイルミネーションを、見頃と現在地から探せます。">
+<title>東海おでかけナビ｜桜・あじさい・紅葉・イルミネーションの見頃を愛知・岐阜・三重から探す</title>
+<meta name="description" content="愛知・岐阜・三重の桜、あじさい、紅葉、イルミネーションを、見頃・ライトアップ・現在地からの距離で探せます。情報元と最終確認日を明記。">
+<meta property="og:title" content="東海おでかけナビ｜桜・あじさい・紅葉・イルミネーションの見頃を探す">
+<meta property="og:description" content="愛知・岐阜・三重の四季のおでかけ先を、見頃と現在地から探せます。">
 <meta property="og:type" content="website">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ctext y='52' font-size='52'%3E%F0%9F%8D%81%3C/text%3E%3C/svg%3E">
 <style>
@@ -31,10 +31,15 @@ header .brand{font-size:1.12rem;font-weight:800;letter-spacing:.02em}
 header .tag{font-size:.79rem;opacity:.9;line-height:1.6}
 
 /* ジャンル */
-.genres{display:flex;gap:8px;margin:14px 0 6px}
+/* ジャンルは5つあるので横スクロールにする（スマホで潰れないため） */
+.genres{
+  display:flex;gap:8px;margin:14px 0 6px;overflow-x:auto;
+  padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.genres::-webkit-scrollbar{display:none}
 .genre{
-  flex:1;padding:11px 4px;border-radius:11px;border:1px solid var(--line);
-  background:#fff;color:var(--sub);font:inherit;font-size:.9rem;font-weight:800;
+  flex:0 0 auto;min-width:5.6em;padding:9px 12px;border-radius:11px;border:1px solid var(--line);
+  background:#fff;color:var(--sub);font:inherit;font-size:.88rem;font-weight:800;
   cursor:pointer;text-align:center;text-decoration:none;display:block;
   -webkit-tap-highlight-color:transparent;
 }
@@ -110,16 +115,18 @@ footer p{margin:4px 0}
 <header>
   <div class="wrap">
     <div class="brand">🍁 東海おでかけナビ</div>
-    <div class="tag">愛知・岐阜・三重・静岡の紅葉とイルミネーションを、見頃と現在地から探す</div>
+    <div class="tag">愛知・岐阜・三重の桜・あじさい・紅葉・イルミネーションを、見頃と現在地から探す</div>
   </div>
 </header>
 
 <div class="wrap">
 
   <nav class="genres" id="genres">
-    <button class="genre active" data-genre="koyo">🍁 紅葉<span class="n">見頃で探す</span></button>
-    <button class="genre" data-genre="illumi">✨ イルミ<span class="n">冬の定番</span></button>
-    <a class="genre" href="../bon-odori/">🏮 祭り<span class="n">盆踊りナビへ</span></a>
+    <button class="genre" data-genre="sakura">🌸 桜<span class="n">3月下旬〜4月</span></button>
+    <button class="genre" data-genre="ajisai">💠 あじさい<span class="n">6月</span></button>
+    <button class="genre" data-genre="koyo">🍁 紅葉<span class="n">10〜12月</span></button>
+    <button class="genre" data-genre="illumi">✨ イルミ<span class="n">10月〜翌5月</span></button>
+    <a class="genre" href="../bon-odori/">🏮 祭り<span class="n">7〜8月</span></a>
   </nav>
 
   <div class="season-hint" id="seasonHint"></div>
@@ -254,7 +261,7 @@ function render(){
     if(s.verifyStatus === "要確認") badges.push('<span class="b check">日程は要確認</span>');
 
     const rows = [
-      [s.genre === "koyo" ? "見頃" : "期間", s.seasonNote || ""],
+      [s.genre === "illumi" ? "期間" : "見頃", s.seasonNote || ""],
       ["場所", (s.city ? s.city + "　" : "") + (s.venue || "")],
       ["料金", s.fee || ""],
       s.lightup && s.lightupNote ? ["点灯", s.lightupNote] : null,
@@ -284,11 +291,24 @@ function esc(s){
 /* ---------- 季節の案内 ---------- */
 function seasonHint(){
   const m = new Date().getMonth() + 1;
-  if(m >= 7 && m <= 8)  return { g:"koyo",   t:"いまは盆踊りの季節です。祭りは 🏮 から盆踊りナビへ。紅葉は10月からです。" };
-  if(m === 9)           return { g:"koyo",   t:"紅葉シーズンまであと少し。岐阜の山間部は10月から色づき始めます。" };
-  if(m >= 10 && m <= 12)return { g:"koyo",   t:"紅葉シーズンです。標高の高い岐阜から順に見頃を迎えます。" };
-  if(m >= 1 && m <= 3)  return { g:"illumi", t:"イルミネーションの季節です。なばなの里は5月末まで続きます。" };
-  return                       { g:"illumi", t:"春です。なばなの里のイルミネーションは5月末まで見られます。" };
+  switch(m){
+    case 1: case 2:
+      return { g:"illumi", t:"イルミネーションの季節です。なばなの里は5月末まで続きます。" };
+    case 3:
+      return { g:"sakura", t:"桜の季節が始まります。東海の見頃は例年3月下旬〜4月上旬です。" };
+    case 4:
+      return { g:"sakura", t:"桜の見頃です。岐阜の淡墨桜は平地より少し遅れて4月中旬まで楽しめます。" };
+    case 5:
+      return { g:"ajisai", t:"あじさいまであと少し。なばなの里のイルミネーションは5月末までです。" };
+    case 6:
+      return { g:"ajisai", t:"あじさいの季節です。山あじさいは6月上旬から7月上旬まで長く咲きます。" };
+    case 7: case 8:
+      return { g:"koyo",   t:"いまは盆踊りの季節です。祭りは 🏮 から盆踊りナビへ。紅葉は10月からです。" };
+    case 9:
+      return { g:"koyo",   t:"紅葉シーズンまであと少し。岐阜の山間部は10月から色づき始めます。" };
+    default:
+      return { g:"koyo",   t:"紅葉シーズンです。標高の高い岐阜から順に見頃を迎えます。" };
+  }
 }
 
 /* ---------- 起動 ---------- */

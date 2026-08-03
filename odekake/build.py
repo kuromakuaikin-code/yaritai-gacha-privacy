@@ -37,9 +37,13 @@ ANALYTICS = (
 ) if TOKEN else ""
 
 GENRE = {
+    "sakura": ("桜", "🌸", "桜の名所"),
+    "ajisai": ("あじさい", "💠", "あじさいの名所"),
     "koyo":   ("紅葉", "🍁", "紅葉スポット"),
     "illumi": ("イルミネーション", "✨", "イルミネーション会場"),
 }
+# 期間の見出し。花は「見頃」、イルミは点灯期間なので「期間」。
+PERIOD_LABEL = {"sakura": "見頃", "ajisai": "見頃", "koyo": "見頃", "illumi": "期間"}
 MONTHS = {
     "01": "1月", "02": "2月", "03": "3月", "04": "4月", "05": "5月", "06": "6月",
     "07": "7月", "08": "8月", "09": "9月", "10": "10月", "11": "11月", "12": "12月",
@@ -126,7 +130,7 @@ def page_html(sp):
         f"見頃は{period}。ライトアップの有無・料金・場所・情報元・最終確認日を掲載しています。"
     )
 
-    rows = [("見頃" if sp["genre"] == "koyo" else "期間", period),
+    rows = [(PERIOD_LABEL.get(sp["genre"], "期間"), period),
             ("場所", f"{pref}{city}　{sp.get('venue','')}")]
     if sp.get("address"):
         rows.append(("住所", sp["address"]))
