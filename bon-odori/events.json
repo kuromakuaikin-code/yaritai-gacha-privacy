@@ -128,7 +128,7 @@
       "name": "名古屋城夏まつり 大盆踊り大会",
       "city": "名古屋市中区",
       "venue": "名古屋城",
-      "address": "名古屋市中区本丸",
+      "address": "名古屋市中区本丸1番1号",
       "lat": 35.185,
       "lng": 136.9,
       "dates": [
@@ -178,15 +178,15 @@
           "end": "20:00"
         }
       ],
-      "rain": "天候により中止の場合は当日15時頃までに公式サイト等で告知",
+      "rain": "天候の状況等により、催事内容等が変更・中止になる場合があります。最新情報は名古屋城公式トピックスでご確認ください。",
       "eventStatus": "scheduled",
       "statusNote": "",
       "posterType": "admin",
       "source": {
         "name": "名古屋城公式ウェブサイト",
-        "url": "https://www.nagoyajo.city.nagoya.jp/event/2026/07/20260708_4897.html"
+        "url": "https://www.nagoyajo.city.nagoya.jp/nagoya-jo_interactive/fes2026-2027/summer/"
       },
-      "lastVerified": "2026-07-17",
+      "lastVerified": "2026-08-05",
       "imageAllowed": false,
       "image": "",
       "desc": "名古屋城夏まつり期間中の9日間、特設の盆踊り櫓を囲んで18時から20時まで行われる大盆踊り大会。入場方法や当日の開催状況は公式サイトをご確認ください。",
@@ -227,10 +227,10 @@
     {
       "id": "handa-kametomo-kamezaki",
       "status": "published",
-      "name": "かめともの亀崎盆踊り",
+      "name": "亀崎盆踊り",
       "city": "半田市",
       "venue": "亀崎公園",
-      "address": "半田市亀崎町",
+      "address": "半田市亀崎町5-102",
       "lat": 34.925,
       "lng": 136.96,
       "dates": [
@@ -240,30 +240,29 @@
           "end": "20:00"
         }
       ],
-      "rain": "",
+      "rain": "雨天時は8月30日（日）に順延",
       "eventStatus": "scheduled",
       "statusNote": "",
       "posterType": "admin",
       "source": {
-        "name": "半田市公式サイト「令和8年度 市内地区夏祭り・盆踊り一覧表」",
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
         "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-05",
       "imageAllowed": false,
       "image": "",
-      "desc": "夏の終わりに亀崎公園で行われる地区の盆踊り。詳細は半田市の地区夏祭り・盆踊り一覧表（情報元）をご確認ください。",
+      "desc": "地域団体「かめとも」が亀崎公園で開く盆踊りです。雨天時は翌日に順延します。",
       "scale": "neighborhood",
+      "category": "bonodori",
       "prefecture": "愛知県"
     },
     {
       "id": "handa-ariwaki",
       "status": "published",
-      "name": "有脇地区 夏祭り・盆踊り",
+      "name": "有脇盆踊り大会",
       "city": "半田市",
-      "venue": "有脇児童館 グラウンド",
-      "address": "半田市有脇町",
-      "lat": 34.936,
-      "lng": 136.925,
+      "venue": "有脇児童館グラウンド",
+      "address": "半田市有脇町5-1-1",
       "dates": [
         {
           "date": "2026-08-09",
@@ -271,19 +270,20 @@
           "end": "20:50"
         }
       ],
-      "rain": "雨天の場合は翌日に順延",
+      "rain": "雨天時は8月10日（月）に順延。8月10日も雨天の場合は中止",
       "eventStatus": "scheduled",
       "statusNote": "",
       "posterType": "admin",
       "source": {
-        "name": "半田市公式サイト「令和8年度 市内地区夏祭り・盆踊り一覧表」",
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
         "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-05",
       "imageAllowed": false,
       "image": "",
-      "desc": "有脇地区の夏祭り・盆踊り。正式なイベント名称・詳細は半田市の一覧表（情報元）をご確認ください。",
+      "desc": "有脇児童館のグラウンドで行われる盆踊り大会です。雨天時は翌日に順延し、順延日も雨の場合は中止となります。",
       "scale": "neighborhood",
+      "category": "bonodori",
       "prefecture": "愛知県"
     },
     {
@@ -324,62 +324,71 @@
     },
     {
       "id": "handa-hirachi",
-      "status": "pending",
-      "name": "平地地区の盆踊り",
+      "status": "published",
+      "name": "平地1区区民盆踊り大会",
       "city": "半田市",
-      "venue": "平地中央公園",
-      "address": "半田市平地町",
-      "lat": 34.876,
-      "lng": 136.918,
+      "venue": "平地中央公園・平地公民館",
+      "address": "半田市平地町2-51（平地中央公園）、2-50-1（平地公民館）",
+      "lat": 34.916816,
+      "lng": 136.953807,
       "dates": [
         {
           "date": "2026-08-13",
           "start": "19:00",
           "end": "20:30"
+        },
+        {
+          "date": "2026-08-14",
+          "start": "19:00",
+          "end": "20:30"
         }
       ],
-      "rain": "",
+      "rain": "雨天中止",
       "eventStatus": "scheduled",
       "statusNote": "",
       "posterType": "admin",
       "source": {
-        "name": "半田市公式サイト「令和8年度 市内地区夏祭り・盆踊り一覧表」",
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
         "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-05",
       "imageAllowed": false,
       "image": "",
-      "desc": "（承認待ち）雨天時の会場変更の記載が未確認のため、市の一覧表PDFの原本確認後に公開する。",
+      "desc": "平地中央公園と平地公民館を会場に2日間行われる、平地1区の盆踊り大会です。雨天の場合は中止となります。",
       "scale": "neighborhood",
+      "category": "bonodori",
       "prefecture": "愛知県"
     },
     {
       "id": "handa-shimin-bonodori",
-      "status": "pending",
-      "name": "はんだ市民盆踊り大会",
+      "status": "published",
+      "name": "第72回はんだ市民盆踊り大会",
       "city": "半田市",
-      "venue": "JR半田駅前 平和通り（例年）",
-      "address": "半田市",
+      "venue": "平和通り（JR半田駅前）",
+      "address": "半田市御幸町110-1",
       "lat": 34.892,
       "lng": 136.933,
       "dates": [
         {
-          "date": "2026-08-22"
+          "date": "2026-08-22",
+          "start": "17:00",
+          "end": "21:15"
         }
       ],
-      "rain": "",
+      "rain": "雨天時は8月23日（日）に順延",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "住所は公式案内のアクセスマップが示すJR半田駅の所在地です。",
       "posterType": "admin",
       "source": {
-        "name": "半田市公式サイト「はんだ市民盆踊り大会」",
-        "url": "https://www.city.handa.lg.jp/bunka/kanko/1002901/1010010.html"
+        "name": "半田市公式サイト「第72回はんだ市民盆踊り大会」",
+        "url": "https://www.city.handa.lg.jp/bunka/kanko/1002901/1012010.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-05",
       "imageAllowed": false,
       "image": "",
-      "desc": "（承認待ち）令和8年度の開催日・時間が未確認。市公式ページで2026年日程を確認してから日付を修正し公開する（上記日付は仮置き）。",
+      "desc": "JR半田駅前の平和通りで、子ども向け・一般向けの盆踊りや郡上踊り、夏山車の演出が行われます。",
       "scale": "major",
+      "category": "bonodori",
       "prefecture": "愛知県"
     },
     {
@@ -2451,8 +2460,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-18", "start": "18:30", "end": "20:30"},
-        {"date": "2026-07-19", "start": "18:30", "end": "20:30"}
+        {
+          "date": "2026-07-18",
+          "start": "18:30",
+          "end": "20:30"
+        },
+        {
+          "date": "2026-07-19",
+          "start": "18:30",
+          "end": "20:30"
+        }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2479,7 +2496,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "18:30", "end": "20:00"}
+        {
+          "date": "2026-07-25",
+          "start": "18:30",
+          "end": "20:00"
+        }
       ],
       "rain": "雨天時は7月26日に順延。両日雨天の場合は中止",
       "eventStatus": "scheduled",
@@ -2506,7 +2527,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "17:00", "end": "20:00"}
+        {
+          "date": "2026-07-25",
+          "start": "17:00",
+          "end": "20:00"
+        }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2533,7 +2558,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "17:30", "end": "20:10"}
+        {
+          "date": "2026-07-25",
+          "start": "17:30",
+          "end": "20:10"
+        }
       ],
       "rain": "雨天時は7月26日に順延予定",
       "eventStatus": "scheduled",
@@ -2560,7 +2589,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "17:30", "end": "20:30"}
+        {
+          "date": "2026-08-01",
+          "start": "17:30",
+          "end": "20:30"
+        }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2587,7 +2620,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "18:00", "end": "20:30"}
+        {
+          "date": "2026-08-01",
+          "start": "18:00",
+          "end": "20:30"
+        }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2614,7 +2651,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "18:00", "end": "21:00"}
+        {
+          "date": "2026-08-01",
+          "start": "18:00",
+          "end": "21:00"
+        }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2641,8 +2682,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "", "end": ""},
-        {"date": "2026-08-02", "start": "", "end": ""}
+        {
+          "date": "2026-08-01",
+          "start": "",
+          "end": ""
+        },
+        {
+          "date": "2026-08-02",
+          "start": "",
+          "end": ""
+        }
       ],
       "rain": "最新の実施時間と開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2669,9 +2718,21 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-31", "start": "18:00", "end": "20:00"},
-        {"date": "2026-08-01", "start": "18:00", "end": "20:00"},
-        {"date": "2026-08-02", "start": "18:00", "end": "20:00"}
+        {
+          "date": "2026-07-31",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-08-01",
+          "start": "18:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "18:00",
+          "end": "20:00"
+        }
       ],
       "rain": "雨天中止。中止時は主催者の公式SNSで当日13時までに案内予定",
       "eventStatus": "scheduled",
@@ -2698,7 +2759,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-20", "start": "18:20", "end": "20:00"}
+        {
+          "date": "2026-07-20",
+          "start": "18:20",
+          "end": "20:00"
+        }
       ],
       "rain": "雨天決行、荒天中止",
       "eventStatus": "scheduled",
@@ -2725,7 +2790,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "18:00", "end": "20:30"}
+        {
+          "date": "2026-07-25",
+          "start": "18:00",
+          "end": "20:30"
+        }
       ],
       "rain": "荒天時は7月26日に順延",
       "eventStatus": "scheduled",
@@ -2752,7 +2821,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "18:00", "end": "21:00"}
+        {
+          "date": "2026-07-25",
+          "start": "18:00",
+          "end": "21:00"
+        }
       ],
       "rain": "小雨決行。開催可否は当日正午までに決定",
       "eventStatus": "scheduled",
@@ -2779,8 +2852,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "18:10", "end": "20:00"},
-        {"date": "2026-08-09", "start": "17:40", "end": "20:25"}
+        {
+          "date": "2026-07-25",
+          "start": "18:10",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-08-09",
+          "start": "17:40",
+          "end": "20:25"
+        }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
@@ -2807,7 +2888,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-09", "start": "14:30", "end": "19:00"}
+        {
+          "date": "2026-08-09",
+          "start": "14:30",
+          "end": "19:00"
+        }
       ],
       "rain": "屋内を中心に開催。変更時は主催者情報を確認してください",
       "eventStatus": "scheduled",
@@ -2834,7 +2919,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-08", "start": "17:30", "end": "21:30"}
+        {
+          "date": "2026-08-08",
+          "start": "17:30",
+          "end": "21:30"
+        }
       ],
       "rain": "小雨決行。荒天時は中止の場合があります",
       "eventStatus": "scheduled",
@@ -2861,7 +2950,10 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "16:00"}
+        {
+          "date": "2026-08-01",
+          "start": "16:00"
+        }
       ],
       "rain": "雨天時は一部内容を変更する場合があります",
       "eventStatus": "scheduled",
@@ -2888,7 +2980,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-15", "start": "10:00", "end": "20:30"}
+        {
+          "date": "2026-08-15",
+          "start": "10:00",
+          "end": "20:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -2916,7 +3012,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "18:30", "end": "21:00"}
+        {
+          "date": "2026-08-01",
+          "start": "18:30",
+          "end": "21:00"
+        }
       ],
       "rain": "雨天中止・順延なし。中止決定は当日16時",
       "eventStatus": "scheduled",
@@ -2943,7 +3043,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "19:00", "end": "21:00"}
+        {
+          "date": "2026-08-01",
+          "start": "19:00",
+          "end": "21:00"
+        }
       ],
       "rain": "雨天中止・順延なし。中止決定は当日16時",
       "eventStatus": "scheduled",
@@ -2970,7 +3074,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-02", "start": "18:00", "end": "20:30"}
+        {
+          "date": "2026-08-02",
+          "start": "18:00",
+          "end": "20:30"
+        }
       ],
       "rain": "雨天中止・順延なし。中止決定は当日16時",
       "eventStatus": "scheduled",
@@ -2997,7 +3105,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-02", "start": "18:30", "end": "21:00"}
+        {
+          "date": "2026-08-02",
+          "start": "18:30",
+          "end": "21:00"
+        }
       ],
       "rain": "雨天中止・順延なし。中止決定は当日14時",
       "eventStatus": "scheduled",
@@ -3024,7 +3136,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-14", "start": "17:00", "end": "20:00"}
+        {
+          "date": "2026-08-14",
+          "start": "17:00",
+          "end": "20:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3051,7 +3167,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-22"}
+        {
+          "date": "2026-08-22"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3078,7 +3196,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-17", "start": "14:00", "end": "21:00"}
+        {
+          "date": "2026-08-17",
+          "start": "14:00",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3105,7 +3227,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "17:45", "end": "21:00"}
+        {
+          "date": "2026-08-01",
+          "start": "17:45",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3132,7 +3258,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-22", "start": "15:00", "end": "20:30"}
+        {
+          "date": "2026-08-22",
+          "start": "15:00",
+          "end": "20:30"
+        }
       ],
       "rain": "少雨決行・荒天中止。中止決定は当日8時",
       "eventStatus": "scheduled",
@@ -3160,8 +3290,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-22", "start": "19:00", "end": "21:00"},
-        {"date": "2026-07-23", "start": "19:00", "end": "21:00"}
+        {
+          "date": "2026-07-22",
+          "start": "19:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-07-23",
+          "start": "19:00",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3188,8 +3326,14 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "18:00"},
-        {"date": "2026-07-26", "start": "09:10"}
+        {
+          "date": "2026-07-25",
+          "start": "18:00"
+        },
+        {
+          "date": "2026-07-26",
+          "start": "09:10"
+        }
       ],
       "rain": "少雨決行。最新の開催状況は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3217,8 +3361,12 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25"},
-        {"date": "2026-07-26"}
+        {
+          "date": "2026-07-25"
+        },
+        {
+          "date": "2026-07-26"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3246,7 +3394,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "18:30", "end": "21:30"}
+        {
+          "date": "2026-08-01",
+          "start": "18:30",
+          "end": "21:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3274,8 +3426,14 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "20:00"},
-        {"date": "2026-08-02", "start": "09:00"}
+        {
+          "date": "2026-08-01",
+          "start": "20:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "09:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3303,7 +3461,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-07", "start": "18:30", "end": "21:00"}
+        {
+          "date": "2026-08-07",
+          "start": "18:30",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3330,7 +3492,10 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-26", "start": "11:30"}
+        {
+          "date": "2026-07-26",
+          "start": "11:30"
+        }
       ],
       "rain": "小雨決行",
       "eventStatus": "scheduled",
@@ -3358,7 +3523,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-22", "start": "15:00", "end": "21:30"}
+        {
+          "date": "2026-08-22",
+          "start": "15:00",
+          "end": "21:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3386,9 +3555,21 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-07", "start": "16:00", "end": "21:30"},
-        {"date": "2026-08-08", "start": "10:00", "end": "21:30"},
-        {"date": "2026-08-09", "start": "10:00", "end": "20:30"}
+        {
+          "date": "2026-08-07",
+          "start": "16:00",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-08-08",
+          "start": "10:00",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-08-09",
+          "start": "10:00",
+          "end": "20:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3416,8 +3597,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "19:00", "end": "21:30"},
-        {"date": "2026-08-02", "start": "19:00", "end": "21:30"}
+        {
+          "date": "2026-08-01",
+          "start": "19:00",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "19:00",
+          "end": "21:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3445,8 +3634,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-11", "start": "19:00", "end": "21:00"},
-        {"date": "2026-08-12", "start": "19:00", "end": "21:00"}
+        {
+          "date": "2026-08-11",
+          "start": "19:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-12",
+          "start": "19:00",
+          "end": "21:00"
+        }
       ],
       "rain": "雨天中止",
       "eventStatus": "scheduled",
@@ -3474,8 +3671,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-31", "start": "16:00", "end": "21:00"},
-        {"date": "2026-08-01", "start": "16:00", "end": "21:00"}
+        {
+          "date": "2026-07-31",
+          "start": "16:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-01",
+          "start": "16:00",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3503,7 +3708,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "16:00", "end": "20:00"}
+        {
+          "date": "2026-07-25",
+          "start": "16:00",
+          "end": "20:00"
+        }
       ],
       "rain": "雨天時は7月26日に順延",
       "eventStatus": "scheduled",
@@ -3531,8 +3740,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "16:30", "end": "20:30"},
-        {"date": "2026-07-26", "start": "16:30", "end": "20:30"}
+        {
+          "date": "2026-07-25",
+          "start": "16:30",
+          "end": "20:30"
+        },
+        {
+          "date": "2026-07-26",
+          "start": "16:30",
+          "end": "20:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3560,7 +3777,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25"}
+        {
+          "date": "2026-07-25"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3588,8 +3807,12 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25"},
-        {"date": "2026-07-26"}
+        {
+          "date": "2026-07-25"
+        },
+        {
+          "date": "2026-07-26"
+        }
       ],
       "rain": "小雨決行",
       "eventStatus": "scheduled",
@@ -3617,7 +3840,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-02"}
+        {
+          "date": "2026-08-02"
+        }
       ],
       "rain": "一部催しは雨天時に産業文化センターへ変更",
       "eventStatus": "scheduled",
@@ -3645,8 +3870,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-24", "start": "18:30", "end": "21:30"},
-        {"date": "2026-07-25", "start": "10:00", "end": "21:30"}
+        {
+          "date": "2026-07-24",
+          "start": "18:30",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-07-25",
+          "start": "10:00",
+          "end": "21:30"
+        }
       ],
       "rain": "花火大会は雨天時に翌日順延予定。最新の開催状況は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3674,7 +3907,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "16:30", "end": "20:30"}
+        {
+          "date": "2026-07-25",
+          "start": "16:30",
+          "end": "20:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3702,7 +3939,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "19:20", "end": "21:00"}
+        {
+          "date": "2026-07-25",
+          "start": "19:20",
+          "end": "21:00"
+        }
       ],
       "rain": "荒天中止・順延なし",
       "eventStatus": "scheduled",
@@ -3730,7 +3971,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-25", "start": "19:40", "end": "21:00"}
+        {
+          "date": "2026-07-25",
+          "start": "19:40",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3758,7 +4003,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-02"}
+        {
+          "date": "2026-08-02"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3786,7 +4033,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "19:00", "end": "20:30"}
+        {
+          "date": "2026-08-01",
+          "start": "19:00",
+          "end": "20:30"
+        }
       ],
       "rain": "荒天中止",
       "eventStatus": "scheduled",
@@ -3814,8 +4065,12 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01"},
-        {"date": "2026-08-02"}
+        {
+          "date": "2026-08-01"
+        },
+        {
+          "date": "2026-08-02"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3843,10 +4098,22 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "10:05", "end": "21:30"},
-        {"date": "2026-08-02"},
-        {"date": "2026-08-03"},
-        {"date": "2026-08-04", "start": "15:00", "end": "22:00"}
+        {
+          "date": "2026-08-01",
+          "start": "10:05",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-08-02"
+        },
+        {
+          "date": "2026-08-03"
+        },
+        {
+          "date": "2026-08-04",
+          "start": "15:00",
+          "end": "22:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3874,8 +4141,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "15:30", "end": "22:00"},
-        {"date": "2026-08-02", "start": "16:00", "end": "19:30"}
+        {
+          "date": "2026-08-01",
+          "start": "15:30",
+          "end": "22:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "16:00",
+          "end": "19:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3903,8 +4178,14 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "00:00"},
-        {"date": "2026-08-02", "start": "02:00"}
+        {
+          "date": "2026-08-01",
+          "start": "00:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "02:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3932,7 +4213,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "09:00", "end": "21:00"}
+        {
+          "date": "2026-08-01",
+          "start": "09:00",
+          "end": "21:00"
+        }
       ],
       "rain": "雨天時は8月2日に順延予定",
       "eventStatus": "scheduled",
@@ -3960,7 +4245,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01"}
+        {
+          "date": "2026-08-01"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -3988,9 +4275,21 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-07-31", "start": "18:30", "end": "21:00"},
-        {"date": "2026-08-01", "start": "17:50", "end": "21:00"},
-        {"date": "2026-08-02", "start": "18:15", "end": "20:30"}
+        {
+          "date": "2026-07-31",
+          "start": "18:30",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-01",
+          "start": "17:50",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "18:15",
+          "end": "20:30"
+        }
       ],
       "rain": "海上花火大会は荒天中止・順延なし",
       "eventStatus": "scheduled",
@@ -4018,8 +4317,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "17:00", "end": "21:00"},
-        {"date": "2026-08-02", "start": "17:00", "end": "21:00"}
+        {
+          "date": "2026-08-01",
+          "start": "17:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "17:00",
+          "end": "21:00"
+        }
       ],
       "rain": "小雨決行",
       "eventStatus": "scheduled",
@@ -4047,7 +4354,10 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-15", "start": "17:00"}
+        {
+          "date": "2026-08-15",
+          "start": "17:00"
+        }
       ],
       "rain": "雨天時は19時から花火のみ。荒天時は翌日に花火のみ順延",
       "eventStatus": "scheduled",
@@ -4075,7 +4385,10 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-11", "start": "19:00"}
+        {
+          "date": "2026-08-11",
+          "start": "19:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4103,7 +4416,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-11", "start": "16:30", "end": "22:30"}
+        {
+          "date": "2026-08-11",
+          "start": "16:30",
+          "end": "22:30"
+        }
       ],
       "rain": "雨天時は8月22日に延期",
       "eventStatus": "scheduled",
@@ -4131,7 +4448,10 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-22", "start": "17:00"}
+        {
+          "date": "2026-08-22",
+          "start": "17:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4159,7 +4479,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-01", "start": "15:00", "end": "20:00"}
+        {
+          "date": "2026-08-01",
+          "start": "15:00",
+          "end": "20:00"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4187,7 +4511,11 @@
       "lat": 35.0207,
       "lng": 136.9024,
       "dates": [
-        {"date": "2026-08-08", "start": "19:20", "end": "20:30"}
+        {
+          "date": "2026-08-08",
+          "start": "19:20",
+          "end": "20:30"
+        }
       ],
       "rain": "小雨決行、荒天中止（順延なし）",
       "eventStatus": "scheduled",
@@ -4215,7 +4543,11 @@
       "lat": 35.0123,
       "lng": 137.0269,
       "dates": [
-        {"date": "2026-08-15", "start": "17:00", "end": "21:00"}
+        {
+          "date": "2026-08-15",
+          "start": "17:00",
+          "end": "21:00"
+        }
       ],
       "rain": "開催状況や変更は刈谷市公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4243,8 +4575,16 @@
       "lat": 35.2855,
       "lng": 136.8678,
       "dates": [
-        {"date": "2026-08-21", "start": "18:30", "end": "20:30"},
-        {"date": "2026-08-22", "start": "18:30", "end": "20:30"}
+        {
+          "date": "2026-08-21",
+          "start": "18:30",
+          "end": "20:30"
+        },
+        {
+          "date": "2026-08-22",
+          "start": "18:30",
+          "end": "20:30"
+        }
       ],
       "rain": "雨天時の予備日は8月23日",
       "eventStatus": "scheduled",
@@ -4272,7 +4612,11 @@
       "lat": 35.4869,
       "lng": 136.9087,
       "dates": [
-        {"date": "2026-08-07", "start": "16:00", "end": "21:00"}
+        {
+          "date": "2026-08-07",
+          "start": "16:00",
+          "end": "21:00"
+        }
       ],
       "rain": "雨天決行",
       "eventStatus": "scheduled",
@@ -4300,7 +4644,10 @@
       "lat": 34.8567,
       "lng": 136.4524,
       "dates": [
-        {"date": "2026-08-08", "start": "17:00"}
+        {
+          "date": "2026-08-08",
+          "start": "17:00"
+        }
       ],
       "rain": "荒天などによる変更は亀山市公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4328,7 +4675,11 @@
       "lat": 35.1709,
       "lng": 138.909,
       "dates": [
-        {"date": "2026-08-08", "start": "13:00", "end": "20:00"}
+        {
+          "date": "2026-08-08",
+          "start": "13:00",
+          "end": "20:00"
+        }
       ],
       "rain": "雨天決行",
       "eventStatus": "scheduled",
@@ -4356,7 +4707,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-09", "start": "19:20", "end": "20:45"}
+        {
+          "date": "2026-08-09",
+          "start": "19:20",
+          "end": "20:45"
+        }
       ],
       "rain": "荒天時は8月15日に延期（それ以降の延期なし）",
       "eventStatus": "scheduled",
@@ -4384,8 +4739,16 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-12", "start": "17:30", "end": "20:30"},
-        {"date": "2026-08-13", "start": "17:30", "end": "20:30"}
+        {
+          "date": "2026-08-12",
+          "start": "17:30",
+          "end": "20:30"
+        },
+        {
+          "date": "2026-08-13",
+          "start": "17:30",
+          "end": "20:30"
+        }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4413,7 +4776,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-15", "start": "17:30", "end": "20:00"}
+        {
+          "date": "2026-08-15",
+          "start": "17:30",
+          "end": "20:00"
+        }
       ],
       "rain": "雨天時は8月16日19:20から打ち上げ花火のみ実施",
       "eventStatus": "scheduled",
@@ -4441,7 +4808,11 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-15", "start": "18:30", "end": "20:30"}
+        {
+          "date": "2026-08-15",
+          "start": "18:30",
+          "end": "20:30"
+        }
       ],
       "rain": "荒天・河川増水時は8月29日、さらに荒天の場合は9月12日に延期",
       "eventStatus": "scheduled",
@@ -4469,7 +4840,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-14"}
+        {
+          "date": "2026-08-14"
+        }
       ],
       "rain": "2026年は開催されません",
       "eventStatus": "cancelled",
@@ -4497,8 +4870,14 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-13"},
-        {"date": "2026-08-14", "start": "19:30", "end": "20:00"}
+        {
+          "date": "2026-08-13"
+        },
+        {
+          "date": "2026-08-14",
+          "start": "19:30",
+          "end": "20:00"
+        }
       ],
       "rain": "花火大会は雨天時8月15日に順延",
       "eventStatus": "scheduled",
@@ -4526,7 +4905,9 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-15"}
+        {
+          "date": "2026-08-15"
+        }
       ],
       "rain": "内容・時間が変更される場合があります",
       "eventStatus": "scheduled",
@@ -4554,8 +4935,12 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-14"},
-        {"date": "2026-08-15"}
+        {
+          "date": "2026-08-14"
+        },
+        {
+          "date": "2026-08-15"
+        }
       ],
       "rain": "開催状況や詳しい巡行予定は公式情報をご確認ください",
       "eventStatus": "scheduled",
@@ -4583,9 +4968,21 @@
       "lat": null,
       "lng": null,
       "dates": [
-        {"date": "2026-08-08", "start": "19:30", "end": "21:00"},
-        {"date": "2026-08-09", "start": "18:00", "end": "21:00"},
-        {"date": "2026-08-10", "start": "14:00", "end": "21:00"}
+        {
+          "date": "2026-08-08",
+          "start": "19:30",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-09",
+          "start": "18:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-10",
+          "start": "14:00",
+          "end": "21:00"
+        }
       ],
       "rain": "8月10日の花火は安全に開催できない場合に順延。8月9日の太鼓合戦は雨天時に屋内開催",
       "eventStatus": "scheduled",
@@ -4602,6 +4999,945 @@
       "scale": "major",
       "category": "festival",
       "prefecture": "静岡県"
+    },
+    {
+      "id": "handa-otogawa-bonodori",
+      "status": "published",
+      "name": "乙川盆踊り大会",
+      "city": "半田市",
+      "venue": "乙川公園",
+      "address": "半田市乙川太田町1-28",
+      "dates": [
+        {
+          "date": "2026-08-08",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時は8月9日（日）に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "乙川公園で行われる乙川地区の盆踊り大会です。雨天時は翌日に順延します。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-nishi-summer",
+      "status": "published",
+      "name": "半田西区納涼夏祭り",
+      "city": "半田市",
+      "venue": "おおまた公園",
+      "address": "半田市南末広町",
+      "dates": [
+        {
+          "date": "2026-08-08",
+          "start": "17:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時は8月9日（日）に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "おおまた公園で夕方から行われる半田西区の納涼夏祭りです。雨天時は翌日に順延します。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-itayama-summer-bonodori",
+      "status": "published",
+      "name": "板山区夏祭り盆踊り大会",
+      "city": "半田市",
+      "venue": "板山公民館広場",
+      "address": "半田市板山町1-100-11",
+      "lat": 34.889997,
+      "lng": 136.891665,
+      "dates": [
+        {
+          "date": "2026-08-08",
+          "start": "15:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時は8月9日（日）に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "板山公民館の広場で開催される、板山区の夏祭りと盆踊り大会です。雨天時は翌日に順延します。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-mukaiyama-summer",
+      "status": "published",
+      "name": "向山区夏祭り",
+      "city": "半田市",
+      "venue": "市杵嶋神社",
+      "address": "半田市向山町1-127",
+      "dates": [
+        {
+          "date": "2026-08-09",
+          "start": "16:00",
+          "end": "22:00"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "市杵嶋神社を会場に行われる向山区の夏祭りです。雨天の場合は中止となります。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-karasune-bonodori",
+      "status": "published",
+      "name": "鴉根区民盆踊り大会",
+      "city": "半田市",
+      "venue": "鴉根区民館前",
+      "address": "半田市稲荷町2-42",
+      "dates": [
+        {
+          "date": "2026-08-09",
+          "start": "16:30",
+          "end": "20:00"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "鴉根区民館前で行われる地域の盆踊り大会です。雨天の場合は中止となります。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-hikozu-bonodori",
+      "status": "published",
+      "name": "彦洲町盆踊り大会",
+      "city": "半田市",
+      "venue": "彦洲コミュニティ広場",
+      "address": "半田市彦洲町",
+      "dates": [
+        {
+          "date": "2026-08-12",
+          "start": "19:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-14",
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "8月12日は雨天中止。8月14日の雨天対応は公式一覧に記載なし",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "彦洲コミュニティ広場で2日間行われる彦洲町の盆踊り大会です。8月12日は雨天中止で、8月14日の雨天対応は公式一覧に記載されていません。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-shingu-bonodori",
+      "status": "published",
+      "name": "新宮町盆踊り大会",
+      "city": "半田市",
+      "venue": "新宮会館広場",
+      "address": "半田市青山4-11-1",
+      "dates": [
+        {
+          "date": "2026-08-13",
+          "start": "19:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-14",
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "新宮会館の広場で2日間行われる新宮町の盆踊り大会です。雨天の場合は中止となります。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-narawa3-bonodori",
+      "status": "published",
+      "name": "成岩第三区区民盆踊り大会",
+      "city": "半田市",
+      "venue": "成岩公園（成岩公民館下）",
+      "address": "半田市成岩本町4-45",
+      "dates": [
+        {
+          "date": "2026-08-13",
+          "start": "18:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-14",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "成岩公園で2日間行われる成岩第三区の盆踊り大会です。雨天の場合は中止となります。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "handa-nishinarawa-bonodori",
+      "status": "published",
+      "name": "西成岩区民盆踊り大会",
+      "city": "半田市",
+      "venue": "成石グラウンド（宮本公園）",
+      "address": "半田市宮本町4-15",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "半田市公式サイト「令和8年度 半田市内地区夏祭り・盆踊り一覧表」",
+        "url": "https://www.city.handa.lg.jp/kurashi/shimin/1001954/1010098.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "成石グラウンドで行われる西成岩区の盆踊り大会です。雨天の場合は中止となります。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-meito-umemorisaka-summer",
+      "status": "published",
+      "name": "梅森坂学区納涼夏まつり",
+      "city": "名古屋市名東区",
+      "venue": "梅森荘中央公園",
+      "address": "名古屋市名東区梅森坂四丁目",
+      "dates": [
+        {
+          "date": "2026-08-07",
+          "start": "18:50",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-08",
+          "start": "18:50",
+          "end": "21:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市名東区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "梅森荘中央公園で2日間開催される、梅森坂学区の納涼夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-atsuta-takakura-bonodori",
+      "status": "published",
+      "name": "高蔵公園盆踊り",
+      "city": "名古屋市熱田区",
+      "venue": "高蔵公園グラウンド",
+      "address": "名古屋市熱田区高蔵町",
+      "dates": [
+        {
+          "date": "2026-08-08",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市熱田区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/atsuta/kurashi/1022320/1022179/1051836.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "高蔵公園グラウンドで開催される地域の盆踊りです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-atsuta-yume-odori",
+      "status": "published",
+      "name": "あつた夢おどり",
+      "city": "名古屋市熱田区",
+      "venue": "神宮東公園 南園広場",
+      "address": "名古屋市熱田区六野二丁目・三本松町",
+      "dates": [
+        {
+          "date": "2026-08-07",
+          "start": "15:00",
+          "end": "20:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "主催は、白鳥学区連絡協議会とあつた宮宿会で構成する、あつた夢おどり実行委員会です。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市熱田区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/atsuta/kurashi/1022320/1022179/1051836.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "神宮東公園の南園広場で開催される、地域の盆踊りイベントです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-moriyama-kikko-summer",
+      "status": "published",
+      "name": "吉根納涼夏祭り（提灯山）",
+      "city": "名古屋市守山区",
+      "venue": "吉根公園",
+      "address": "名古屋市守山区吉根三丁目",
+      "dates": [
+        {
+          "date": "2026-08-08",
+          "start": "16:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市公式ウェブサイト「地域の祭り情報発信」",
+        "url": "https://www.city.nagoya.jp/kankou/rekishi/1017203/1017220.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "吉根公園で提灯山を掲げて開催される地域の納涼夏祭りです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-moriyama-katte-sha-bonodori",
+      "status": "published",
+      "name": "提灯山と納涼盆踊り大会",
+      "city": "名古屋市守山区",
+      "venue": "勝手社",
+      "address": "名古屋市守山区上志段味",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "18:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "公式ページに終了時刻の記載はありません。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市公式ウェブサイト「地域の祭り情報発信」",
+        "url": "https://www.city.nagoya.jp/kankou/rekishi/1017203/1017220.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "勝手社で提灯山と盆踊りを行う、上志段味地区の夏の行事です。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-moriyama-hyakuto-bonodori",
+      "status": "published",
+      "name": "百灯祭納涼盆踊り大会（提灯山）",
+      "city": "名古屋市守山区",
+      "venue": "諏訪神社",
+      "address": "名古屋市守山区中志段味",
+      "dates": [
+        {
+          "date": "2026-08-14",
+          "start": "18:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "百灯祭は18時、納涼盆踊り大会は18時30分から20時30分までの予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市公式ウェブサイト「地域の祭り情報発信」",
+        "url": "https://www.city.nagoya.jp/kankou/rekishi/1017203/1017220.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "諏訪神社で百灯祭に続いて納涼盆踊りを行う、中志段味地区の行事です。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-nishi-jaike-mantoro",
+      "status": "published",
+      "name": "蛇池神社万灯流し大祭",
+      "city": "名古屋市西区",
+      "venue": "蛇池公園",
+      "address": "名古屋市西区比良二丁目",
+      "dates": [
+        {
+          "date": "2026-08-20",
+          "start": "19:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "19時は盆踊りの開始時刻です。大祭全体の開始・終了時刻は公式ページに記載されていません。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市公式ウェブサイト「地域の祭り情報発信」",
+        "url": "https://www.city.nagoya.jp/kankou/rekishi/1017203/1017220.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "蛇池公園で行われる万灯流し大祭。盆踊りは19時から始まります。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-midori-naruko-matsuri",
+      "status": "published",
+      "name": "鳴子まつり",
+      "city": "名古屋市緑区",
+      "venue": "鳴子中央公園",
+      "address": "名古屋市緑区鳴子町2丁目",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "17:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "予備日8月23日（実施条件は公式記載なし）",
+      "eventStatus": "scheduled",
+      "statusNote": "原則として学区住民や町内会・自治会加入者向けの行事です。",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市緑区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "鳴子中央公園で夕方から開催される地域の夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-meito-gokuraku-summer",
+      "status": "published",
+      "name": "令和8年度 極楽学区納涼夏まつり",
+      "city": "名古屋市名東区",
+      "venue": "極楽小学校",
+      "address": "名古屋市名東区高針台三丁目901",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "17:30",
+          "end": "20:45"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市名東区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "極楽小学校で開催される、極楽学区の納涼夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-meito-maeyama-summer",
+      "status": "published",
+      "name": "前山学区夏まつり",
+      "city": "名古屋市名東区",
+      "venue": "前山小学校",
+      "address": "名古屋市名東区牧の里二丁目1501",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "17:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市名東区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "前山小学校で開催される、前山学区の夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nagoya-meito-kifune-summer",
+      "status": "published",
+      "name": "貴船学区夏まつり",
+      "city": "名古屋市名東区",
+      "venue": "貴船小学校",
+      "address": "名古屋市名東区貴船三丁目2301",
+      "dates": [
+        {
+          "date": "2026-08-29",
+          "start": "17:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "予備日8月30日（実施条件は公式記載なし）",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "名古屋市名東区公式ウェブサイト",
+        "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "貴船小学校で開催される、貴船学区の夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-imaise-bonodori",
+      "status": "published",
+      "name": "今伊勢連区 盆踊り大会",
+      "city": "一宮市",
+      "venue": "今伊勢小学校 屋外運動場",
+      "address": "一宮市今伊勢町新神戸字乾26",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "8月8日10:00から今伊勢公民館で盆踊り練習会を実施。",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076238.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "今伊勢小学校の屋外運動場で開かれる今伊勢連区の盆踊り大会です。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "inazawa-orizu-fureai-hiroba",
+      "status": "published",
+      "name": "下津ふれあい広場",
+      "city": "稲沢市",
+      "venue": "下津市民センター",
+      "address": "稲沢市下津高戸町58",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "13:00",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-08-23",
+          "start": "09:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは両日とも19:00開始。",
+      "posterType": "admin",
+      "source": {
+        "name": "稲沢市公式サイト",
+        "url": "https://www.city.inazawa.aichi.jp/0000000796.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "盆踊り、飲食出店、アユのつかみ取り、カラオケ大会や作品展などを2日間楽しめる下津地区の催しです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-kifune-bonodori",
+      "status": "published",
+      "name": "貴船盆踊り大会",
+      "city": "一宮市",
+      "venue": "大乗公園",
+      "address": "一宮市桜三丁目14番1",
+      "dates": [
+        {
+          "date": "2026-08-21",
+          "start": "19:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-22",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076310.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "大乗公園で2日間開かれる、貴船連区・貴船公民館主催の盆踊り大会です。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-on-kitakata-summer",
+      "status": "published",
+      "name": "第19回おん北方夏まつり",
+      "city": "一宮市",
+      "venue": "北方公民館 駐車場",
+      "address": "一宮市北方町北方字勅使53-1",
+      "dates": [
+        {
+          "date": "2026-08-29",
+          "start": "17:00"
+        }
+      ],
+      "rain": "雨天予備日は8月30日",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは19:00開始。",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076343.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "和太鼓やフラダンス、サンバ、盆踊り、お楽しみ抽選会が行われる北方町連区の夏まつりです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-oki-summer",
+      "status": "published",
+      "name": "起連区夏まつり",
+      "city": "一宮市",
+      "venue": "守成公民館",
+      "address": "一宮市起字堤町183",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "17:30",
+          "end": "20:30"
+        }
+      ],
+      "rain": "雨天順延なし。雨天時も守成公民館室内のゲーム等は開催",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076131.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "守成公民館を会場に開かれる起連区の夏まつりです。雨天時も室内のゲームなどは実施されます。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-kisogawa-bonodori",
+      "status": "published",
+      "name": "2026年度木曽川町連区盆踊りのつどい",
+      "city": "一宮市",
+      "venue": "木曽川運動場",
+      "address": "一宮市木曽川町黒田字北宿三の切1番地1",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "18:30",
+          "end": "20:30"
+        },
+        {
+          "date": "2026-08-23",
+          "start": "18:30",
+          "end": "20:30"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076132.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "木曽川運動場で2夜にわたり開かれる木曽川町連区の盆踊りです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-tanyo-bonodori",
+      "status": "published",
+      "name": "2026年度 丹陽町連区盆踊り大会",
+      "city": "一宮市",
+      "venue": "丹陽公民館 大会議室",
+      "address": "一宮市三ツ井3丁目2-37",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "18:30",
+          "end": "20:00"
+        }
+      ],
+      "rain": "雨天決行。熱中症警戒アラートの有無にかかわらず実施",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1075731/1075993.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "丹陽公民館大会議室で開催される、丹陽町連区公民館主催の屋内盆踊り大会です。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ichinomiya-asai-summer",
+      "status": "published",
+      "name": "2026 浅井町サマーフェスティバル",
+      "city": "一宮市",
+      "venue": "浅井公民館 駐車場",
+      "address": "一宮市浅井町前野字郷西85",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "18:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "雨天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "対象は浅井町連区に在住の方。",
+      "posterType": "admin",
+      "source": {
+        "name": "一宮市公式サイト「連区回覧」",
+        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1075731/1075950.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "一宮太鼓保存会の演奏、あかつき会の舞踏や夜店を楽しめる、浅井町連区住民向けの夏祭りです。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "taketoyo-furusato-matsuri",
+      "status": "published",
+      "name": "武豊町ふるさとまつり",
+      "city": "武豊町",
+      "venue": "武豊町中央公民館",
+      "address": "知多郡武豊町字山ノ神20-1",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "18:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-23",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "8月22日が雨天の場合は盆踊り大会と夜店を中止し、竜宮ハウスのみ講堂内で開催。8月23日が雨天の場合は全イベント中止。雨の状態により変更の場合あり",
+      "eventStatus": "scheduled",
+      "statusNote": "8月22日は18:00からオープニングイベントを予定。",
+      "posterType": "admin",
+      "source": {
+        "name": "武豊町公式ホームページ",
+        "url": "https://www.town.taketoyo.lg.jp/kosodate/1001520/1002029/1004426.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "中央公民館で盆踊り大会や夜店を楽しむ、武豊町のふるさとまつりです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "chiryu-yoitoko-matsuri",
+      "status": "published",
+      "name": "第25回知立よいとこ祭り",
+      "city": "知立市",
+      "venue": "知立市役所駐車場、中央公民館、知立中学校グラウンド、御林公園、周辺道路",
+      "address": "知立市広見3-1",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "14:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "荒天中止・予備日なし",
+      "eventStatus": "scheduled",
+      "statusNote": "やぐら盆踊りは第1駐車場で17:30～20:00。",
+      "posterType": "admin",
+      "source": {
+        "name": "知立市公式サイト「広報ちりゅう 2026年8月号」",
+        "url": "https://www.city.chiryu.aichi.jp/material/files/group/1/202608_4.pdf"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "市役所周辺でステージ、体験企画、やぐら盆踊りや花火などを楽しめる知立市の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
     }
   ]
 }

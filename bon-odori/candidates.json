@@ -1,17 +1,7 @@
 {
   "_comment": "盆踊りの可能性があるが、2026年の日時・会場・内容または本サイト対象かを確認中の候補。確定イベントとは分けて表示する。",
-  "lastChecked": "2026-07-20",
+  "lastChecked": "2026-08-05",
   "candidates": [
-    {
-      "id": "candidate-ichinomiya-imaise",
-      "name": "今伊勢連区 盆踊り大会",
-      "prefecture": "愛知県",
-      "city": "一宮市",
-      "venue": "今伊勢連区内",
-      "dateText": "例年夏・2026年日程未確認",
-      "source": {"name": "一宮市公式サイト（連区回覧情報）", "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1056049/1056236.html"},
-      "reason": "過年度の市公式情報は確認できましたが、2026年の開催日と会場を確認中です。"
-    },
     {
       "id": "candidate-nagoya-higashibetsuin",
       "name": "東別院まつり 盆踊り",

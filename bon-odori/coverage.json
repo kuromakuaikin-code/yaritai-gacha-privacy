@@ -1,6 +1,6 @@
 {
   "_comment": "地域ごとの2026年公式情報確認状況。イベントが公開済みの地域は画面上で自動的に公式情報ありとなる。",
-  "lastChecked": "2026-07-16",
+  "lastChecked": "2026-08-05",
   "areas": [
     {"prefecture":"愛知県","city":"名古屋市千種区","region":"名古屋市","status":"unknown"},
     {"prefecture":"愛知県","city":"名古屋市東区","region":"名古屋市","status":"unknown"},
@@ -46,7 +46,7 @@
     {"prefecture":"愛知県","city":"飛島村","region":"尾張","status":"unknown"},
 
     {"prefecture":"愛知県","city":"半田市","region":"知多","status":"unknown"},
-    {"prefecture":"愛知県","city":"常滑市","region":"知多","status":"unknown"},
+    {"prefecture":"愛知県","city":"常滑市","region":"知多","status":"review","note":"市公式の地区盆踊り訂正情報を確認済み。元の一覧表と会場情報を再照合中"},
     {"prefecture":"愛知県","city":"東海市","region":"知多","status":"unknown"},
     {"prefecture":"愛知県","city":"大府市","region":"知多","status":"waiting","note":"9地区の講習会は確認済み。本番日程待ち"},
     {"prefecture":"愛知県","city":"知多市","region":"知多","status":"waiting","note":"地区開催予定の公式記載あり。個別日程待ち"},
