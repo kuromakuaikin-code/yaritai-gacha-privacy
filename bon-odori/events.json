@@ -4345,6 +4345,263 @@
       "scale": "major",
       "category": "festival",
       "prefecture": "静岡県"
+    },
+    {
+      "id": "shinshiro-noryo-fireworks-2026",
+      "status": "published",
+      "name": "第57回 新城納涼花火大会",
+      "city": "新城市",
+      "venue": "桜淵公園",
+      "address": "新城市庭野字八名井田",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-09", "start": "19:20", "end": "20:45"}
+      ],
+      "rain": "荒天時は8月15日に延期（それ以降の延期なし）",
+      "eventStatus": "scheduled",
+      "statusNote": "2026年度は従来の8月13日固定から、試行的に8月第2日曜日へ開催日が変更されています。",
+      "posterType": "admin",
+      "source": {
+        "name": "新城市公式サイト",
+        "url": "https://www.city.shinshiro.lg.jp/kanko/event/kanko/noryo-hanabi.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "桜淵公園を会場に、豊川の両岸から約2000発の花火を楽しめる新城のお盆行事です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "toyota-shimoyama-summer-festival-2026",
+      "status": "published",
+      "name": "しもやま夏まつり",
+      "city": "豊田市",
+      "venue": "下山運動場",
+      "address": "豊田市大沼町船橋28-1",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-12", "start": "17:30", "end": "20:30"},
+        {"date": "2026-08-13", "start": "17:30", "end": "20:30"}
+      ],
+      "rain": "開催状況や変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "花火の打ち上げは8月12日の予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県観光公式サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1669/"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "下山運動場で盆踊りと花火を楽しめる、山あいの地域に根付いた夏まつりです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "toyota-inabu-festival-2026",
+      "status": "published",
+      "name": "第44回 稲武まつり",
+      "city": "豊田市",
+      "venue": "どんぐり工房前駐車場",
+      "address": "豊田市武節町ソト田15-15",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-15", "start": "17:30", "end": "20:00"}
+      ],
+      "rain": "雨天時は8月16日19:20から打ち上げ花火のみ実施",
+      "eventStatus": "scheduled",
+      "statusNote": "天候により内容が変更される場合があります。",
+      "posterType": "admin",
+      "source": {
+        "name": "豊田市公式観光サイト ツーリズムとよた",
+        "url": "https://www.tourismtoyota.jp/spots/detail/2247/"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "どんぐり工房前で地域の催しと打ち上げ花火を楽しむ、稲武地区の夏まつりです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nishio-yonezu-river-festival-2026",
+      "status": "published",
+      "name": "第78回 西尾・米津の川まつり",
+      "city": "西尾市",
+      "venue": "矢作川米津橋下流",
+      "address": "西尾市米津町 米津橋下流",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-15", "start": "18:30", "end": "20:30"}
+      ],
+      "rain": "荒天・河川増水時は8月29日、さらに荒天の場合は9月12日に延期",
+      "eventStatus": "scheduled",
+      "statusNote": "万灯流しは19:00から、花火大会は19:30から20:30の予定です。会場周辺に駐車場はありません。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県観光公式サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1524/"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "矢作川で万灯流しと花火を行い、水難者や戦没者を慰霊する西尾のお盆行事です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nishio-kaifuki-kagimanto-2026",
+      "status": "published",
+      "name": "貝吹のかぎ万燈",
+      "city": "西尾市",
+      "venue": "貝吹町万灯山",
+      "address": "西尾市貝吹町",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-14"}
+      ],
+      "rain": "2026年は開催されません",
+      "eventStatus": "cancelled",
+      "statusNote": "西尾市観光協会の公式案内で、2026年は開催しないことが発表されています。",
+      "posterType": "admin",
+      "source": {
+        "name": "西尾市観光協会公式サイト",
+        "url": "https://nishiokanko.com/eventpage/"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "貝吹町の万灯山で例年8月14日に行われる火祭りです。2026年は開催されません。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "hida-kamioka-summer-festival-2026",
+      "status": "published",
+      "name": "ひだ神岡夏まつり・納涼花火大会",
+      "city": "飛騨市",
+      "venue": "神岡町市街地・高原川西里橋周辺",
+      "address": "飛騨市神岡町船津",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-13"},
+        {"date": "2026-08-14", "start": "19:30", "end": "20:00"}
+      ],
+      "rain": "花火大会は雨天時8月15日に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "8月13日は船津盆おどり、14日は19:30から納涼花火大会を予定しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "飛騨市公式観光サイト 飛騨の旅",
+        "url": "https://www.hida-kankou.jp/event/416"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "県指定の船津盆おどりと、高原川沿いの花火を2日間で楽しむ神岡の夏まつりです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "watarai-makae-kanko-dance-2026",
+      "status": "published",
+      "name": "麻加江かんこ踊り",
+      "city": "度会町",
+      "venue": "慶林寺",
+      "address": "度会郡度会町麻加江",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-15"}
+      ],
+      "rain": "内容・時間が変更される場合があります",
+      "eventStatus": "scheduled",
+      "statusNote": "詳しい開始時間は公式情報または度会町産業振興課へご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県観光公式サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/37372"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "先祖供養のために受け継がれてきた、かんこと綾おどりを奉納する麻加江の伝統行事です。",
+      "scale": "neighborhood",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "shimoda-taiko-festival-2026",
+      "status": "published",
+      "name": "下田太鼓祭り",
+      "city": "下田市",
+      "venue": "下田八幡神社・下田市旧町内",
+      "address": "下田市一丁目18-38周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-14"},
+        {"date": "2026-08-15"}
+      ],
+      "rain": "開催状況や詳しい巡行予定は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "下田八幡神社を基点に、みこしや太鼓台などが旧町内を巡ります。",
+      "posterType": "admin",
+      "source": {
+        "name": "下田市公式サイト",
+        "url": "https://www.city.shimoda.shizuoka.jp/category/100200event_ikou/110748.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "笛や三味線、太鼓の音とともに、みこしや太鼓台が下田の旧町内を巡る伝統的な例大祭です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "ito-anjin-festival-2026",
+      "status": "published",
+      "name": "第80回 按針祭",
+      "city": "伊東市",
+      "venue": "伊東海岸一帯・なぎさ公園・伊東市観光会館ほか",
+      "address": "伊東市渚町6周辺",
+      "lat": null,
+      "lng": null,
+      "dates": [
+        {"date": "2026-08-08", "start": "19:30", "end": "21:00"},
+        {"date": "2026-08-09", "start": "18:00", "end": "21:00"},
+        {"date": "2026-08-10", "start": "14:00", "end": "21:00"}
+      ],
+      "rain": "8月10日の花火は安全に開催できない場合に順延。8月9日の太鼓合戦は雨天時に屋内開催",
+      "eventStatus": "scheduled",
+      "statusNote": "8日は灯籠流し、9日は太鼓合戦、10日は式典と20:00からの海上花火を予定しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "伊東市公式観光サイト 伊豆・伊東観光ガイド",
+        "url": "https://itospa.com/event/detail_10020.html"
+      },
+      "lastVerified": "2026-08-05",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "三浦按針の功績をたたえ、灯籠流しや太鼓、式典、海上花火を3日間にわたって行う伊東市の祭典です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
     }
   ]
 }

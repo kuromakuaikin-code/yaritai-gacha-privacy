@@ -285,7 +285,8 @@ function renderCalendar(){
 
   const year=calendarMonth.getFullYear(), month=calendarMonth.getMonth();
   const monthPrefix=`${year}-${String(month+1).padStart(2,"0")}-`;
-  const filtered=EVENTS.filter(matchesCalendarFilters);
+  const activeEvents=EVENTS.filter(ev=>ev.eventStatus!=="cancelled");
+  const filtered=activeEvents.filter(matchesCalendarFilters);
   const counts={};
   filtered.forEach(ev=>(ev.dates||[]).forEach(item=>{
     if(item.date.startsWith(monthPrefix)) counts[item.date]=(counts[item.date]||0)+1;
@@ -311,7 +312,7 @@ function renderCalendar(){
     selection.textContent=`× ${fmtD(selectedDate)} ${selectedCount}件`;
   }
 
-  const allDates=EVENTS.flatMap(ev=>(ev.dates||[]).map(item=>item.date)).filter(Boolean).sort();
+  const allDates=activeEvents.flatMap(ev=>(ev.dates||[]).map(item=>item.date)).filter(Boolean).sort();
   const currentKey=year*12+month;
   const minDate=allDates[0]?parseD(allDates[0]):calendarMonth;
   const maxDate=allDates.length?parseD(allDates[allDates.length-1]):calendarMonth;
