@@ -4591,10 +4591,10 @@
       "statusNote": "17:30からナイトマルシェも併催予定です。曲目や順番は変更される場合があります。",
       "posterType": "admin",
       "source": {
-        "name": "NPO法人いわくら観光振興会公式サイト",
-        "url": "https://iwakura-kanko.com/event.php?id=2026_7_6"
+        "name": "岩倉市公式ホームページ",
+        "url": "https://www.city.iwakura.aichi.jp/0000004308.html"
       },
-      "lastVerified": "2026-08-02",
+      "lastVerified": "2026-08-07",
       "imageAllowed": false,
       "image": "",
       "desc": "やぐらを囲んで地域の曲や定番曲を踊る、岩倉市の市民盆おどりです。会場では飲食やゲームの夜市も開かれます。",
@@ -5297,12 +5297,12 @@
       "dates": [
         {
           "date": "2026-08-07",
-          "start": "18:50",
+          "start": "18:30",
           "end": "21:00"
         },
         {
           "date": "2026-08-08",
-          "start": "18:50",
+          "start": "18:30",
           "end": "21:00"
         }
       ],
@@ -5314,7 +5314,7 @@
         "name": "名古屋市名東区公式ウェブサイト",
         "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-07",
       "imageAllowed": false,
       "image": "",
       "desc": "梅森荘中央公園で2日間開催される、梅森坂学区の納涼夏まつりです。",
@@ -5936,6 +5936,194 @@
       "image": "",
       "desc": "市役所周辺でステージ、体験企画、やぐら盆踊りや花火などを楽しめる知立市の夏祭りです。",
       "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ama-jimokuji-momotoka-matsuri",
+      "status": "published",
+      "name": "九万九千功徳日 桃十日祭",
+      "city": "あま市",
+      "venue": "甚目寺観音",
+      "address": "あま市甚目寺東門前24",
+      "dates": [
+        {
+          "date": "2026-08-08",
+          "start": "17:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天の場合は奉納行事・盆踊りを中止。御祈祷は実施",
+      "eventStatus": "scheduled",
+      "statusNote": "御祈祷は本堂で18:00～21:00に行われます。",
+      "posterType": "admin",
+      "source": {
+        "name": "甚目寺観音公式ウェブサイト",
+        "url": "https://jimokuji.or.jp/modules/bulletin/"
+      },
+      "lastVerified": "2026-08-07",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "甚目寺観音の境内で盆踊り、太鼓の奉納や露店を楽しむ夏祭りです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "ama-oyako-night-indoor-bonodori",
+      "status": "published",
+      "name": "親子ナイト夏まつり・室内盆踊り",
+      "city": "あま市",
+      "venue": "あま市役所 エントランス・屋外東側",
+      "address": "あま市七宝町沖之島深坪1",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "17:00",
+          "end": "20:00"
+        }
+      ],
+      "rain": "雨天時は屋外のキッチンカー・マルシェを中止。室内イベントは開催",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは17:30と19:00から。屋外のマルシェは16:00開始。",
+      "posterType": "admin",
+      "source": {
+        "name": "あま市観光協会公式サイト",
+        "url": "https://ama-kankou.jp/event/10222/"
+      },
+      "lastVerified": "2026-08-07",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "あま市役所のエントランスで、幹遼太鼓の演奏、室内盆踊りやお菓子まきを楽しむ親子向け夏祭りです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "kota-summer-festival-2026",
+      "status": "published",
+      "name": "第29回こうた夏まつり",
+      "city": "幸田町",
+      "venue": "ハッピネス・ヒル・幸田",
+      "address": "額田郡幸田町大字大草字丸山60",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "16:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "雨天の場合は8月16日（日）に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "花火は20:10頃から。",
+      "posterType": "admin",
+      "source": {
+        "name": "幸田町公式ホームページ",
+        "url": "https://www.town.kota.lg.jp/soshiki/24/837.html"
+      },
+      "lastVerified": "2026-08-07",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "町民総踊り、ステージ、キッチンカーや打ち上げ花火を楽しめる幸田町の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "miyoshi-iijan-festival-2026",
+      "status": "published",
+      "name": "第32回三好いいじゃんまつり",
+      "city": "みよし市",
+      "venue": "三好稲荷閣周辺道路",
+      "address": "みよし市三好町蜂ヶ池5",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "17:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "雨天対応は公式案内に記載されていません。",
+      "posterType": "admin",
+      "source": {
+        "name": "みよし市公式ホームページ",
+        "url": "https://www.city.aichi-miyoshi.lg.jp/soshiki/shiminkeizai/sangyo/kankou/13.html"
+      },
+      "lastVerified": "2026-08-07",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "オリジナル曲に合わせ、色鮮やかな衣装の踊り手が三好稲荷閣周辺を踊り歩く市民参加型の祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "miyoshi-ochochin-festival-2026",
+      "status": "published",
+      "name": "三好大提灯まつり",
+      "city": "みよし市",
+      "venue": "三好稲荷閣",
+      "address": "みよし市三好町蜂ヶ池5",
+      "dates": [
+        {
+          "date": "2026-08-22",
+          "start": "18:30",
+          "end": "21:30"
+        },
+        {
+          "date": "2026-08-23",
+          "start": "10:30",
+          "end": "11:00"
+        },
+        {
+          "date": "2026-08-23",
+          "start": "18:30",
+          "end": "21:30"
+        }
+      ],
+      "rain": "少雨決行",
+      "eventStatus": "scheduled",
+      "statusNote": "8月23日の花火は20:00～20:30。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/148/"
+      },
+      "lastVerified": "2026-08-07",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "高さ約11メートルの大提灯の点灯、棒の手奉納や花火を楽しむ三好稲荷閣の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "minamichita-himakajima-tako-festival-2026",
+      "status": "published",
+      "name": "たこ祭り",
+      "city": "南知多町",
+      "venue": "日間賀島東浜海水浴場",
+      "address": "知多郡南知多町日間賀島字東側",
+      "dates": [
+        {
+          "date": "2026-08-12"
+        }
+      ],
+      "rain": "",
+      "eventStatus": "scheduled",
+      "statusNote": "開催時刻と雨天対応は公式案内に記載されていません。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1519/"
+      },
+      "lastVerified": "2026-08-07",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "たこの供養と豊漁を祈願し、夜は子どもたちの太鼓やダンス、打ち上げ花火を楽しむ日間賀島の祭りです。",
+      "scale": "regional",
       "category": "festival",
       "prefecture": "愛知県"
     }
