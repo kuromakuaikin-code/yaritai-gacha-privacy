@@ -186,7 +186,7 @@
         "name": "名古屋城公式ウェブサイト",
         "url": "https://www.nagoyajo.city.nagoya.jp/nagoya-jo_interactive/fes2026-2027/summer/"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "名古屋城夏まつり期間中の9日間、特設の盆踊り櫓を囲んで18時から20時まで行われる大盆踊り大会。入場方法や当日の開催状況は公式サイトをご確認ください。",
@@ -526,7 +526,7 @@
         "name": "三重県観光連盟 公式サイト「観光三重」",
         "url": "https://www.kankomie.or.jp/event/17076"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "紀宝町井田で8月9日に行われる供養の盆踊り。やぐらを囲む踊りに加え、地域に伝わるほうき踊りも予定されています。開始時刻などは公式情報をご確認ください。",
@@ -734,7 +734,7 @@
         "name": "名古屋市名東区公式サイト「令和8年度 各学区日程案内」",
         "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "藤が丘小学校で2夜開催される学区の盆踊り大会。両日とも18時から21時までの予定です。",
@@ -867,9 +867,9 @@
       "posterType": "admin",
       "source": {
         "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
-        "url": "https://www.kankou-gifu.jp/spot/detail_1329.html"
+        "url": "https://www.kankou-gifu.jp/event/detail_1329.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "郡上市白鳥町の神社拝殿で行われる伝統的な踊り。今後の開催日は8月16日・17日・20日と9月20日で、各日20時から22時の予定です。",
@@ -1776,7 +1776,7 @@
         "name": "日進市公式「令和8年度 各区・自治会の夏まつり予定一覧表」",
         "url": "https://www.city.nisshin.lg.jp/material/files/group/26/matsuri_chiiki.pdf"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "東小学校で行われる米野木区の夏祭り。盆踊りや鳴子踊りなどが予定されています。",
@@ -2859,19 +2859,19 @@
         },
         {
           "date": "2026-08-09",
-          "start": "17:40",
-          "end": "20:25"
+          "start": "17:08",
+          "end": "20:40"
         }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
-      "statusNote": "7月25日と8月9日で会場と進行内容が異なります。",
+      "statusNote": "8月9日の伝馬通会場は17時8分から20時40分まで。岡崎おどり、みこし、えびすくい音頭などが順に行われます。",
       "posterType": "organizer",
       "source": {
         "name": "岡崎まつり公式サイト",
         "url": "https://www.okazakimatsuri.jp/Summer/entry-321.html"
       },
-      "lastVerified": "2026-07-16",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "岡崎城下家康公夏まつりの踊り行事。7月はアウトレット会場、8月は伝馬通会場で岡崎おどりなどが行われます。",
@@ -2902,7 +2902,7 @@
         "name": "岐阜青年会議所公式サイト",
         "url": "https://www.gifujc.or.jp/2026jcof/archives/info/3602"
       },
-      "lastVerified": "2026-07-16",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "岐阜市文化センターを中心に行われる参加無料の盆踊りイベント。暑さ対策として屋内会場も使われます。",
@@ -4721,7 +4721,7 @@
         "name": "新城市公式サイト",
         "url": "https://www.city.shinshiro.lg.jp/kanko/event/kanko/noryo-hanabi.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "桜淵公園を会場に、豊川の両岸から約2000発の花火を楽しめる新城のお盆行事です。",
@@ -6126,6 +6126,173 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "愛知県"
+    },
+    {
+      "id": "togo-town-noryo-matsuri-2026",
+      "status": "published",
+      "name": "第48回 東郷町民納涼まつり",
+      "city": "東郷町",
+      "venue": "いこまい館芝生広場周辺",
+      "address": "愛知郡東郷町大字春木字西羽根穴2225番地4",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時は8月16日に延期。開催判断は8月15日13時に町公式サイトで案内",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは18時から20時20分まで、手筒花火は20時30分から21時まで。露店は17時から開きます。",
+      "posterType": "admin",
+      "source": {
+        "name": "東郷町公式ホームページ",
+        "url": "https://www.town.aichi-togo.lg.jp/event_news/13694.html"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "東郷音頭の盆踊りと太鼓演奏、手筒花火を楽しめる町の納涼まつりです。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "shitara-damine-nenbutsu-odori-2026",
+      "status": "published",
+      "name": "田峯地区 念仏踊り",
+      "city": "設楽町",
+      "venue": "田峯地区・田峰観音ほか",
+      "address": "北設楽郡設楽町田峰字鍛治沢14",
+      "dates": [
+        {
+          "date": "2026-08-17",
+          "start": "18:30",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天対応は公式案内に記載されていません",
+      "eventStatus": "scheduled",
+      "statusNote": "戦没者供養の後、田峰観音で太鼓踊りや手踊りが行われます。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/2979/"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "念仏供養と太鼓踊り、手踊りを受け継ぐ設楽町田峯地区の盆行事です。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nakatsugawa-oiden-festival-2026",
+      "status": "published",
+      "name": "中津川夏祭り おいでん祭",
+      "city": "中津川市",
+      "venue": "中津川河畔（桃山）・中心市街地一帯",
+      "address": "中津川市桃山・中津川駅前周辺",
+      "dates": [
+        {
+          "date": "2026-08-12",
+          "start": "19:30",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-08-13",
+          "start": "16:15",
+          "end": "20:30"
+        }
+      ],
+      "rain": "小雨決行・荒天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "8月12日は納涼花火大会、13日は中津川おどりや風流おどり、みこしなどの本祭りです。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
+        "url": "https://www.kankou-gifu.jp/event/detail_3799.html"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "花火で始まり、翌日は踊りや郷土芸能、みこしで中心市街地がにぎわう中津川の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "yokkaichi-tomida-isshiki-kenka-matsuri-2026",
+      "status": "published",
+      "name": "富田一色のけんか祭り",
+      "city": "四日市市",
+      "venue": "富田一色町 飛鳥神社",
+      "address": "四日市市富田一色町",
+      "dates": [
+        {
+          "date": "2026-08-14",
+          "start": "08:30",
+          "end": "16:00"
+        },
+        {
+          "date": "2026-08-15",
+          "start": "13:00"
+        }
+      ],
+      "rain": "予定が変わる場合があるため、直前に公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "8月14日は町練り、15日は13時から3組が順に本練りを行い、各町の宮参りは18時30分からです。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県公式観光サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/17781"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "大きな鉦と太鼓を担いだ3組が、威勢のよい掛け声とともに飛鳥神社へ練り込む伝統祭礼です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "shizuoka-summer-night-market-2026",
+      "status": "published",
+      "name": "第62回 静岡夏まつり 夜店市",
+      "city": "静岡市葵区",
+      "venue": "紺屋町・呉六・呉服町・七間町の各商店街",
+      "address": "静岡市葵区七間町・呉服町周辺",
+      "dates": [
+        {
+          "date": "2026-08-14",
+          "start": "16:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-15",
+          "start": "16:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-16",
+          "start": "16:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時も開催",
+      "eventStatus": "scheduled",
+      "statusNote": "会場周辺では時間帯により車両通行止めなどの交通規制があります。",
+      "posterType": "admin",
+      "source": {
+        "name": "静岡市中央商店街連合会 公式サイト",
+        "url": "https://yomiseichi.com/"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "中心商店街に夜店や飲食店、音楽ステージが並ぶ静岡市街地の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
     }
   ]
 }
