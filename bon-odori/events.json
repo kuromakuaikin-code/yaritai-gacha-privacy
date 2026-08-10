@@ -6461,6 +6461,240 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "静岡県"
+    },
+    {
+      "id": "inuyama-nihon-line-long-run-fireworks-2026",
+      "status": "published",
+      "name": "日本ライン夏まつりロングラン花火",
+      "city": "犬山市",
+      "venue": "木曽川河畔（ツインブリッジ下流）",
+      "address": "犬山市犬山",
+      "dates": [
+        {
+          "date": "2026-08-01",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-03",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-04",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-05",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-06",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-07",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-08",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-09",
+          "start": "20:00",
+          "end": "20:10"
+        },
+        {
+          "date": "2026-08-10",
+          "start": "20:00",
+          "end": "20:10"
+        }
+      ],
+      "rain": "木曽川増水時などの荒天時は中止。最新状況は公式ページをご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "8月10日は最終日。各日約300発で、観客席の設置はありません。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1513/"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "犬山城を望む木曽川で、10日間にわたり毎晩約10分間花火を打ち上げる催しです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "takayama-matsukura-ema-market-2026",
+      "status": "published",
+      "name": "松倉絵馬市",
+      "city": "高山市",
+      "venue": "素玄寺",
+      "address": "高山市天性寺町39",
+      "dates": [
+        {
+          "date": "2026-08-09",
+          "start": "12:00",
+          "end": "23:00"
+        },
+        {
+          "date": "2026-08-10",
+          "start": "06:00",
+          "end": "14:00"
+        }
+      ],
+      "rain": "開催状況は公式サイト・公式SNSをご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "公式Xで8月10日の開催中投稿を確認。今夏はクマ出没への配慮から素玄寺で開催されています。",
+      "posterType": "admin",
+      "source": {
+        "name": "飛騨・高山観光コンベンション協会 公式サイト",
+        "url": "https://www.hidatakayama.or.jp/event/detail_2067.html"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "素玄寺で祈祷と紙絵馬の頒布が行われる伝統行事です。8月10日は6時～14時と18時～20時に開かれます。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "takayama-bato-ema-market-2026",
+      "status": "published",
+      "name": "馬頭絵馬市",
+      "city": "高山市",
+      "venue": "山桜神社",
+      "address": "高山市本町2-65",
+      "dates": [
+        {
+          "date": "2026-08-01",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-02",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-03",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-04",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-05",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-06",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-07",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-08",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-09",
+          "start": "10:00",
+          "end": "15:00"
+        },
+        {
+          "date": "2026-08-10",
+          "start": "10:00",
+          "end": "15:00"
+        }
+      ],
+      "rain": "開催状況は公式サイト・公式SNSをご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "公式Xで8月8日の開催中投稿を確認。8月10日が最終日です。",
+      "posterType": "admin",
+      "source": {
+        "name": "飛騨・高山観光コンベンション協会 公式サイト",
+        "url": "https://www.hidatakayama.or.jp/event/detail_2023.html"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "山桜神社で、家内安全や商売繁盛などを願う紙絵馬を頒布する飛騨高山の夏の行事です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "toyota-asuke-tankororin-2026",
+      "status": "published",
+      "name": "たんころりんの夕涼み",
+      "city": "豊田市",
+      "venue": "足助重伝建の町並み一帯",
+      "address": "豊田市足助町西町～新田町",
+      "dates": [
+        {
+          "date": "2026-08-08"
+        },
+        {
+          "date": "2026-08-09"
+        },
+        {
+          "date": "2026-08-10"
+        },
+        {
+          "date": "2026-08-11"
+        },
+        {
+          "date": "2026-08-12"
+        },
+        {
+          "date": "2026-08-13"
+        },
+        {
+          "date": "2026-08-14"
+        },
+        {
+          "date": "2026-08-15"
+        }
+      ],
+      "rain": "荒天時の変更は公式ページ・足助観光協会の案内をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "各日、日没後から21時まで。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/135/"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "足助の古い町並みに竹かごと和紙の行灯を灯し、日没後から21時まで散策を楽しむ夏の催しです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "愛知県"
     }
   ]
 }
