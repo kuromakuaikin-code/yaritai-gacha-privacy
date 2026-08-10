@@ -186,7 +186,7 @@
         "name": "名古屋城公式ウェブサイト",
         "url": "https://www.nagoyajo.city.nagoya.jp/nagoya-jo_interactive/fes2026-2027/summer/"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-10",
       "imageAllowed": false,
       "image": "",
       "desc": "名古屋城夏まつり期間中の9日間、特設の盆踊り櫓を囲んで18時から20時まで行われる大盆踊り大会。入場方法や当日の開催状況は公式サイトをご確認ください。",
@@ -526,7 +526,7 @@
         "name": "三重県観光連盟 公式サイト「観光三重」",
         "url": "https://www.kankomie.or.jp/event/17076"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "紀宝町井田で8月9日に行われる供養の盆踊り。やぐらを囲む踊りに加え、地域に伝わるほうき踊りも予定されています。開始時刻などは公式情報をご確認ください。",
@@ -593,10 +593,10 @@
       "statusNote": "",
       "posterType": "admin",
       "source": {
-        "name": "網代温泉観光協会 公式サイト",
-        "url": "https://ajirospa.com/%E3%81%B5%E3%82%8B%E3%81%95%E3%81%A8%E7%A5%AD%E3%82%8A2026/"
+        "name": "熱海市公式観光サイト「あたみニュース」",
+        "url": "https://www.ataminews.gr.jp/event/189/"
       },
-      "lastVerified": "2026-07-19",
+      "lastVerified": "2026-08-10",
       "imageAllowed": false,
       "image": "",
       "desc": "網代の大縄公園で2夜開催される地域の夏祭り。盆踊りのほか、スイカ割りやミニ花火、模擬店などが予定されています。",
@@ -734,7 +734,7 @@
         "name": "名古屋市名東区公式サイト「令和8年度 各学区日程案内」",
         "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "藤が丘小学校で2夜開催される学区の盆踊り大会。両日とも18時から21時までの予定です。",
@@ -794,10 +794,10 @@
       "statusNote": "夜念仏は19時頃、盆踊りは20時20分頃からの予定です。",
       "posterType": "admin",
       "source": {
-        "name": "豊田市公式サイト",
-        "url": "https://www.city.toyota.aichi.jp/sportsbunka/bunka/1009223/1009222/1052112.html"
+        "name": "豊田市公式サイト「広報とよた」",
+        "url": "https://www.city.toyota.aichi.jp/shisei/koho/kohotoyota/1073580/1075950/1075286/1075310/1077615.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-10",
       "imageAllowed": false,
       "image": "",
       "desc": "平勝寺で8月10日と15日に公開される伝統行事。夜念仏の後、20時20分頃から盆踊りが行われ、21時30分頃に終了する予定です。",
@@ -867,9 +867,9 @@
       "posterType": "admin",
       "source": {
         "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
-        "url": "https://www.kankou-gifu.jp/spot/detail_1329.html"
+        "url": "https://www.kankou-gifu.jp/event/detail_1329.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "郡上市白鳥町の神社拝殿で行われる伝統的な踊り。今後の開催日は8月16日・17日・20日と9月20日で、各日20時から22時の予定です。",
@@ -1776,7 +1776,7 @@
         "name": "日進市公式「令和8年度 各区・自治会の夏まつり予定一覧表」",
         "url": "https://www.city.nisshin.lg.jp/material/files/group/26/matsuri_chiiki.pdf"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "東小学校で行われる米野木区の夏祭り。盆踊りや鳴子踊りなどが予定されています。",
@@ -2859,19 +2859,19 @@
         },
         {
           "date": "2026-08-09",
-          "start": "17:40",
-          "end": "20:25"
+          "start": "17:08",
+          "end": "20:40"
         }
       ],
       "rain": "最新の開催状況は公式情報を確認してください",
       "eventStatus": "scheduled",
-      "statusNote": "7月25日と8月9日で会場と進行内容が異なります。",
+      "statusNote": "8月9日の伝馬通会場は17時8分から20時40分まで。岡崎おどり、みこし、えびすくい音頭などが順に行われます。",
       "posterType": "organizer",
       "source": {
         "name": "岡崎まつり公式サイト",
         "url": "https://www.okazakimatsuri.jp/Summer/entry-321.html"
       },
-      "lastVerified": "2026-07-16",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "岡崎城下家康公夏まつりの踊り行事。7月はアウトレット会場、8月は伝馬通会場で岡崎おどりなどが行われます。",
@@ -2902,7 +2902,7 @@
         "name": "岐阜青年会議所公式サイト",
         "url": "https://www.gifujc.or.jp/2026jcof/archives/info/3602"
       },
-      "lastVerified": "2026-07-16",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "岐阜市文化センターを中心に行われる参加無料の盆踊りイベント。暑さ対策として屋内会場も使われます。",
@@ -3653,7 +3653,7 @@
         "name": "名古屋市中川区公式サイト",
         "url": "https://www.city.nagoya.jp/nakagawa/miryoku/1051186/1051459.html"
       },
-      "lastVerified": "2026-07-21",
+      "lastVerified": "2026-08-10",
       "imageAllowed": false,
       "image": "",
       "desc": "もちの木公園で2夜にわたって行われる、中郷地区の盆踊りです。",
@@ -4721,7 +4721,7 @@
         "name": "新城市公式サイト",
         "url": "https://www.city.shinshiro.lg.jp/kanko/event/kanko/noryo-hanabi.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-09",
       "imageAllowed": false,
       "image": "",
       "desc": "桜淵公園を会場に、豊川の両岸から約2000発の花火を楽しめる新城のお盆行事です。",
@@ -4992,7 +4992,7 @@
         "name": "伊東市公式観光サイト 伊豆・伊東観光ガイド",
         "url": "https://itospa.com/event/detail_10020.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-10",
       "imageAllowed": false,
       "image": "",
       "desc": "三浦按針の功績をたたえ、灯籠流しや太鼓、式典、海上花火を3日間にわたって行う伊東市の祭典です。",
@@ -6126,6 +6126,341 @@
       "scale": "regional",
       "category": "festival",
       "prefecture": "愛知県"
+    },
+    {
+      "id": "togo-town-noryo-matsuri-2026",
+      "status": "published",
+      "name": "第48回 東郷町民納涼まつり",
+      "city": "東郷町",
+      "venue": "いこまい館芝生広場周辺",
+      "address": "愛知郡東郷町大字春木字西羽根穴2225番地4",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "18:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時は8月16日に延期。開催判断は8月15日13時に町公式サイトで案内",
+      "eventStatus": "scheduled",
+      "statusNote": "盆踊りは18時から20時20分まで、手筒花火は20時30分から21時まで。露店は17時から開きます。",
+      "posterType": "admin",
+      "source": {
+        "name": "東郷町公式ホームページ",
+        "url": "https://www.town.aichi-togo.lg.jp/event_news/13694.html"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "東郷音頭の盆踊りと太鼓演奏、手筒花火を楽しめる町の納涼まつりです。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "shitara-damine-nenbutsu-odori-2026",
+      "status": "published",
+      "name": "田峯地区 念仏踊り",
+      "city": "設楽町",
+      "venue": "田峯地区・田峰観音ほか",
+      "address": "北設楽郡設楽町田峰字鍛治沢14",
+      "dates": [
+        {
+          "date": "2026-08-17",
+          "start": "18:30",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天対応は公式案内に記載されていません",
+      "eventStatus": "scheduled",
+      "statusNote": "戦没者供養の後、田峰観音で太鼓踊りや手踊りが行われます。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/2979/"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "念仏供養と太鼓踊り、手踊りを受け継ぐ設楽町田峯地区の盆行事です。",
+      "scale": "regional",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nakatsugawa-oiden-festival-2026",
+      "status": "published",
+      "name": "中津川夏祭り おいでん祭",
+      "city": "中津川市",
+      "venue": "中津川河畔（桃山）・中心市街地一帯",
+      "address": "中津川市桃山・中津川駅前周辺",
+      "dates": [
+        {
+          "date": "2026-08-12",
+          "start": "19:30",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-08-13",
+          "start": "16:15",
+          "end": "20:30"
+        }
+      ],
+      "rain": "小雨決行・荒天中止",
+      "eventStatus": "scheduled",
+      "statusNote": "8月12日は納涼花火大会、13日は中津川おどりや風流おどり、みこしなどの本祭りです。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
+        "url": "https://www.kankou-gifu.jp/event/detail_3799.html"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "花火で始まり、翌日は踊りや郷土芸能、みこしで中心市街地がにぎわう中津川の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "yokkaichi-tomida-isshiki-kenka-matsuri-2026",
+      "status": "published",
+      "name": "富田一色のけんか祭り",
+      "city": "四日市市",
+      "venue": "富田一色町 飛鳥神社",
+      "address": "四日市市富田一色町",
+      "dates": [
+        {
+          "date": "2026-08-14",
+          "start": "08:30",
+          "end": "16:00"
+        },
+        {
+          "date": "2026-08-15",
+          "start": "13:00"
+        }
+      ],
+      "rain": "予定が変わる場合があるため、直前に公式情報を確認してください",
+      "eventStatus": "scheduled",
+      "statusNote": "8月14日は町練り、15日は13時から3組が順に本練りを行い、各町の宮参りは18時30分からです。",
+      "posterType": "admin",
+      "source": {
+        "name": "三重県公式観光サイト 観光三重",
+        "url": "https://www.kankomie.or.jp/event/17781"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "大きな鉦と太鼓を担いだ3組が、威勢のよい掛け声とともに飛鳥神社へ練り込む伝統祭礼です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "shizuoka-summer-night-market-2026",
+      "status": "published",
+      "name": "第62回 静岡夏まつり 夜店市",
+      "city": "静岡市葵区",
+      "venue": "紺屋町・呉六・呉服町・七間町の各商店街",
+      "address": "静岡市葵区七間町・呉服町周辺",
+      "dates": [
+        {
+          "date": "2026-08-14",
+          "start": "16:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-15",
+          "start": "16:00",
+          "end": "21:00"
+        },
+        {
+          "date": "2026-08-16",
+          "start": "16:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "雨天時も開催",
+      "eventStatus": "scheduled",
+      "statusNote": "会場周辺では時間帯により車両通行止めなどの交通規制があります。",
+      "posterType": "admin",
+      "source": {
+        "name": "静岡市中央商店街連合会 公式サイト",
+        "url": "https://yomiseichi.com/"
+      },
+      "lastVerified": "2026-08-09",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "中心商店街に夜店や飲食店、音楽ステージが並ぶ静岡市街地の夏祭りです。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "toyota-asuke-summer-festival-2026",
+      "status": "published",
+      "name": "足助夏まつり2026",
+      "city": "豊田市",
+      "venue": "足助の町並み・足助川遊歩道ほか",
+      "address": "豊田市足助町",
+      "dates": [
+        {
+          "date": "2026-08-08"
+        },
+        {
+          "date": "2026-08-09"
+        },
+        {
+          "date": "2026-08-10"
+        },
+        {
+          "date": "2026-08-11"
+        },
+        {
+          "date": "2026-08-12"
+        },
+        {
+          "date": "2026-08-13"
+        },
+        {
+          "date": "2026-08-14"
+        },
+        {
+          "date": "2026-08-15"
+        }
+      ],
+      "rain": "8月15日の灯籠流しは少雨決行。河川増水などによる中止は当日12時までに公式サイトで案内",
+      "eventStatus": "scheduled",
+      "statusNote": "8月11日は手筒花火、13日・14日は足助川万灯まつり、14日は花火大会、15日は地蔵まつり・灯籠流しを予定しています。各日の時刻は公式ページをご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "愛知県公式観光サイト Aichi Now",
+        "url": "https://aichinow.pref.aichi.jp/events/detail/1593/"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "足助の町並みで、手筒花火、万灯、花火大会、灯籠流しなどが日替わりで行われる夏祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "愛知県"
+    },
+    {
+      "id": "nakatsugawa-agi-summer-festival-2026",
+      "status": "published",
+      "name": "阿木夏祭り・花火大会",
+      "city": "中津川市",
+      "venue": "阿木地区久須田新開地区",
+      "address": "中津川市阿木79-1",
+      "dates": [
+        {
+          "date": "2026-08-14",
+          "start": "20:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "小雨決行。荒天時は8月15日に順延",
+      "eventStatus": "scheduled",
+      "statusNote": "公式ページ掲載の20:00から20:30は花火の時間です。盆踊りなどの開始時刻は公式情報をご確認ください。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
+        "url": "https://www.kankou-gifu.jp/event/detail_5270.html"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "阿木地区で盆踊りや安岐太鼓、子どもみこし、抽選会を行い、花火で締めくくる地域の夏祭りです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "hida-kamioka-lantern-floating-2026",
+      "status": "published",
+      "name": "神岡の灯籠流し",
+      "city": "飛騨市",
+      "venue": "円城寺・高原川西里橋下の河原周辺",
+      "address": "飛騨市神岡町船津1129",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "18:30",
+          "end": "19:30"
+        }
+      ],
+      "rain": "天候による変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "公式ページでは毎年8月15日の開催として案内されています。会場周辺に駐車場はありません。",
+      "posterType": "admin",
+      "source": {
+        "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
+        "url": "https://www.kankou-gifu.jp/event/detail_5307.html"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "円城寺での読経後、灯籠を高原川へ運び、送り盆に先祖や諸霊を見送る神岡の行事です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "taki-vison-bonbon-bon-festival-2026",
+      "status": "published",
+      "name": "BonBon盆祭",
+      "city": "多気町",
+      "venue": "和ヴィソン 食祭広場",
+      "address": "多気郡多気町ヴィソン672-1",
+      "dates": [
+        {
+          "date": "2026-08-18",
+          "start": "18:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "雨天時はVISON DOMEで開催予定",
+      "eventStatus": "scheduled",
+      "statusNote": "17時から縁日、18時から演奏、19時から丹生音頭、19時30分から盆踊りを予定しています。スケジュールは変更となる場合があります。",
+      "posterType": "admin",
+      "source": {
+        "name": "VISON公式サイト",
+        "url": "https://vison.jp/eventcalendar/detail.php?id=1259"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "VISONの食祭広場で、生演奏や地元の音頭とともに輪になって踊る参加無料の盆祭です。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "三重県"
+    },
+    {
+      "id": "atami-taga-hyakuhattai-lantern-festival-2026",
+      "status": "published",
+      "name": "多賀百八体流灯祭",
+      "city": "熱海市",
+      "venue": "多賀湾（長浜海水浴場前）",
+      "address": "熱海市上多賀地先",
+      "dates": [
+        {
+          "date": "2026-08-16",
+          "start": "19:30"
+        }
+      ],
+      "rain": "天候による変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "19時30分から灯籠流し、20時からかがり火の点火を予定しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "熱海市公式観光サイト「あたみニュース」",
+        "url": "https://www.ataminews.gr.jp/event/190"
+      },
+      "lastVerified": "2026-08-10",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "多賀湾で灯籠を流し、海岸線のかがり火を灯して先祖を見送る、300年以上続く送り盆行事です。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "静岡県"
     }
   ]
 }
