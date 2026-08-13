@@ -180,13 +180,13 @@
       ],
       "rain": "天候の状況等により、催事内容等が変更・中止になる場合があります。最新情報は名古屋城公式トピックスでご確認ください。",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "大盆踊りは8月16日まで各日18時から20時まで。8月14日はグランパスデーも予定されています。",
       "posterType": "admin",
       "source": {
         "name": "名古屋城公式ウェブサイト",
         "url": "https://www.nagoyajo.city.nagoya.jp/nagoya-jo_interactive/fes2026-2027/summer/"
       },
-      "lastVerified": "2026-08-10",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "名古屋城夏まつり期間中の9日間、特設の盆踊り櫓を囲んで18時から20時まで行われる大盆踊り大会。入場方法や当日の開催状況は公式サイトをご確認ください。",
@@ -797,7 +797,7 @@
         "name": "豊田市公式サイト「広報とよた」",
         "url": "https://www.city.toyota.aichi.jp/shisei/koho/kohotoyota/1073580/1075950/1075286/1075310/1077615.html"
       },
-      "lastVerified": "2026-08-10",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "平勝寺で8月10日と15日に公開される伝統行事。夜念仏の後、20時20分頃から盆踊りが行われ、21時30分頃に終了する予定です。",
@@ -2994,7 +2994,7 @@
         "name": "鈴鹿市公式ウェブサイト",
         "url": "https://www.city.suzuka.lg.jp/shisei/shisetsu/1010134/1012424/1012881/1015564.html"
       },
-      "lastVerified": "2026-07-17",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "西条中央公園で開かれる地域の夏祭り。シャボン玉イベントやダンスステージなどが案内されています。詳しい内容は公式ページをご確認ください。",
@@ -4557,7 +4557,7 @@
         "name": "刈谷市公式サイト",
         "url": "https://www.city.kariya.lg.jp/kankobunka/1008694/1010968.html"
       },
-      "lastVerified": "2026-08-02",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "飲食・縁日ブースと花火を楽しむ刈谷の夏まつりです。2026年は例年と内容が異なり、花火大会を中心に開催されます。",
@@ -6021,7 +6021,7 @@
         "name": "幸田町公式ホームページ",
         "url": "https://www.town.kota.lg.jp/soshiki/24/837.html"
       },
-      "lastVerified": "2026-08-07",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "町民総踊り、ステージ、キッチンカーや打ち上げ花火を楽しめる幸田町の夏祭りです。",
@@ -6149,7 +6149,7 @@
         "name": "東郷町公式ホームページ",
         "url": "https://www.town.aichi-togo.lg.jp/event_news/13694.html"
       },
-      "lastVerified": "2026-08-09",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "東郷音頭の盆踊りと太鼓演奏、手筒花火を楽しめる町の納涼まつりです。",
@@ -6335,7 +6335,7 @@
         "name": "愛知県公式観光サイト Aichi Now",
         "url": "https://aichinow.pref.aichi.jp/events/detail/1593/"
       },
-      "lastVerified": "2026-08-10",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "足助の町並みで、手筒花火、万灯、花火大会、灯籠流しなどが日替わりで行われる夏祭りです。",
@@ -6688,13 +6688,137 @@
         "name": "愛知県公式観光サイト Aichi Now",
         "url": "https://aichinow.pref.aichi.jp/events/detail/135/"
       },
-      "lastVerified": "2026-08-10",
+      "lastVerified": "2026-08-14",
       "imageAllowed": false,
       "image": "",
       "desc": "足助の古い町並みに竹かごと和紙の行灯を灯し、日没後から21時まで散策を楽しむ夏の催しです。",
       "scale": "regional",
       "category": "festival",
       "prefecture": "愛知県"
+    },
+    {
+      "id": "kasamatsu-summer-fes-2026",
+      "status": "published",
+      "name": "かさまつサマーフェス2026",
+      "city": "笠松町",
+      "venue": "笠松みなと公園",
+      "address": "羽島郡笠松町港町官有地無番地",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "17:00",
+          "end": "20:30"
+        }
+      ],
+      "rain": "大雨などで中止の場合も予備日はありません。最新状況は笠松町公式ページをご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "ステージは18時から。フィナーレに約3分の花火を予定しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "笠松町公式ホームページ",
+        "url": "https://www.town.kasamatsu.gifu.jp/docs/2024071100030/"
+      },
+      "lastVerified": "2026-08-14",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "音楽ステージ、飲食出店、フィナーレの花火を楽しめる笠松町の夏イベントです。",
+      "scale": "regional",
+      "category": "festival",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "seki-tawara-mukashi-bonodori-2026",
+      "status": "published",
+      "name": "田原昔盆おどり",
+      "city": "関市",
+      "venue": "小松寺境内",
+      "address": "関市西田原",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "19:00",
+          "end": "21:00"
+        }
+      ],
+      "rain": "小雨決行・雨天中止の扱いは行事ごとに異なるため、当日の案内をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "関盆おどり保存会の行事で、関おはやし会の生演奏が予定されています。",
+      "posterType": "admin",
+      "source": {
+        "name": "関市観光協会公式サイト せき観光ナビ",
+        "url": "https://sekikanko.jp/event/detail_5008.html"
+      },
+      "lastVerified": "2026-08-14",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "小松寺境内で、生のお囃子に合わせて地域に伝わる踊りを楽しむ盆踊りです。",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "kawanehon-tokuyama-bonodori-2026",
+      "status": "published",
+      "name": "徳山の盆踊",
+      "city": "川根本町",
+      "venue": "浅間神社",
+      "address": "榛原郡川根本町徳山2894",
+      "dates": [
+        {
+          "date": "2026-08-15",
+          "start": "18:40",
+          "end": "21:30"
+        }
+      ],
+      "rain": "雨天時の案内は徳山古典芸能保存会の公式ページをご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "鹿ん舞の地区巡回は9時から、浅間神社例祭は13時から、盆踊奉納は18時40分からの予定です。",
+      "posterType": "admin",
+      "source": {
+        "name": "徳山古典芸能保存会 公式サイト",
+        "url": "https://sites.google.com/view/tkymsgjj/%E5%BE%B3%E5%B1%B1%E5%8F%A4%E5%85%B8%E8%8A%B8%E8%83%BD%E4%BF%9D%E5%AD%98%E4%BC%9A"
+      },
+      "lastVerified": "2026-08-14",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "浅間神社の例祭に合わせ、鹿ん舞、ヒーヤイ、狂言などを奉納するユネスコ無形文化遺産「風流踊」の一つです。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "静岡県"
+    },
+    {
+      "id": "mishima-matsuri-2026",
+      "status": "published",
+      "name": "令和8年 三嶋大祭り",
+      "city": "三島市",
+      "venue": "三嶋大社・三島市中心市街地",
+      "address": "三島市大宮町2-1-5",
+      "dates": [
+        {
+          "date": "2026-08-15"
+        },
+        {
+          "date": "2026-08-16"
+        },
+        {
+          "date": "2026-08-17"
+        }
+      ],
+      "rain": "天候や各催事の変更は三嶋大祭り公式サイトをご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "15日は山車とシャギリ、16日は伝統芸能、17日は踊りの日。三嶋大社では16日19時から手筒花火神事を予定しています。",
+      "posterType": "admin",
+      "source": {
+        "name": "三嶋大社公式サイト",
+        "url": "https://www.mishimataisha.or.jp/r8reisai"
+      },
+      "lastVerified": "2026-08-14",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "三嶋大社の例祭に合わせ、山車とシャギリ、伝統芸能、踊り、流鏑馬などが3日間行われる三島の大祭です。",
+      "scale": "major",
+      "category": "festival",
+      "prefecture": "静岡県"
     }
   ]
 }
