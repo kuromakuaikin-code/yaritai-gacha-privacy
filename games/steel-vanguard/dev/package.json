@@ -1,0 +1,9 @@
+{
+  "name": "steel-vanguard-dev",
+  "private": true,
+  "type": "module",
+  "description": "STEEL VANGUARD のスモークテスト (node smoke.mjs)",
+  "dependencies": {
+    "playwright": "^1.49.0"
+  }
+}
