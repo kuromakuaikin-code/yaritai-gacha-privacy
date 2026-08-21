@@ -54,16 +54,22 @@ function mulberry(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;
 const KEYMAP={arrowleft:'L',a:'L',arrowright:'R',d:'R',arrowup:'U',w:'U',
   arrowdown:'D',s:'D',z:'F',j:'F',enter:'F',x:'J',k:'J',' ':'J',
   c:'M',l:'M',shift:'LK',p:'P',escape:'P',m:'MU',r:'RS'};
+// e.code (物理キー) を優先。日本語IMEがONでも (e.key='Process') 動くようにする
+const CODEMAP={ArrowLeft:'L',KeyA:'L',ArrowRight:'R',KeyD:'R',ArrowUp:'U',KeyW:'U',
+  ArrowDown:'D',KeyS:'D',KeyZ:'F',KeyJ:'F',Enter:'F',NumpadEnter:'F',
+  KeyX:'J',KeyK:'J',Space:'J',KeyC:'M',KeyL:'M',
+  ShiftLeft:'LK',ShiftRight:'LK',KeyP:'P',Escape:'P',KeyM:'MU',KeyR:'RS'};
 const keys={},pkeys={},qpress={};
 let tapped=false;
 function key(k){return !!keys[k];}
 function pressed(k){return !!qpress[k]||(!!keys[k]&&!pkeys[k]);}
+function keyOf(e){return CODEMAP[e.code]||KEYMAP[e.key.toLowerCase()];}
 addEventListener('keydown',e=>{
-  const k=KEYMAP[e.key.toLowerCase()];
+  const k=keyOf(e);
   if(k){if(!keys[k])qpress[k]=1;keys[k]=1;e.preventDefault();initAudio();}
 });
 addEventListener('keyup',e=>{
-  const k=KEYMAP[e.key.toLowerCase()];
+  const k=keyOf(e);
   if(k)keys[k]=0;
 });
 addEventListener('blur',()=>{for(const k in keys)keys[k]=0;});
