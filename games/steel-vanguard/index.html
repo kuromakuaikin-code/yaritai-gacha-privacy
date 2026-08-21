@@ -7,7 +7,7 @@
   html,body{margin:0;padding:0;height:100%;background:#07060c;overflow:hidden;touch-action:none;
     -webkit-user-select:none;user-select:none;}
   #wrap{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#07060c;}
-  #cv{image-rendering:pixelated;image-rendering:crisp-edges;background:#171030;}
+  #cv{image-rendering:pixelated;image-rendering:crisp-edges;background:#171030;outline:none;}
   .tbtn{position:fixed;z-index:5;display:none;align-items:center;justify-content:center;
     width:58px;height:58px;border-radius:50%;border:2px solid rgba(255,210,122,.5);
     background:rgba(20,24,40,.42);color:#ffd27a;font:bold 13px monospace;
@@ -18,7 +18,7 @@
   #bJ{right:92px;bottom:52px;} #bM{right:16px;bottom:26px;}
   body.touch .tbtn{display:flex;}
 </style>
-<div id="wrap"><canvas id="cv" width="480" height="270"></canvas></div>
+<div id="wrap"><canvas id="cv" width="480" height="270" tabindex="0"></canvas></div>
 <div class="tbtn" id="bL" data-k="L">&#9664;</div>
 <div class="tbtn" id="bR" data-k="R">&#9654;</div>
 <div class="tbtn" id="bJ" data-k="J">JUMP</div>
@@ -84,8 +84,11 @@ for(const el of document.querySelectorAll('.tbtn')){
   el.addEventListener('pointerleave',off);
   el.addEventListener('pointercancel',off);
 }
-cv.addEventListener('pointerdown',e=>{e.preventDefault();tapped=true;initAudio();});
+cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.focus();tapped=true;initAudio();});
 addEventListener('contextmenu',e=>e.preventDefault());
+// 埋め込み表示 (iframe) でもクリックで確実にキーボードを掴む
+addEventListener('pointerdown',()=>cv.focus());
+setTimeout(()=>cv.focus(),100);
 
 /* ---------------- サウンド ---------------- */
 let AC=null,gMaster,gMusic,gSfx,gHover,noiseBuf,muted=false;
