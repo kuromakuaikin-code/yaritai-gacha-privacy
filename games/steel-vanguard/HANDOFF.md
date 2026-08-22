@@ -33,7 +33,7 @@ node smoke.mjs
 | 入力 | `KEYMAP` / `keys` / `qpress` (keydown ラッチ。押下取りこぼし防止のため必須)。タッチボタンは `.tbtn` |
 | サウンド | `initAudio` (初回入力で生成)、`SFX.*`、`musicTick` = 16 分音符スケジューラ (`BASS`/`LEADN`、ボス時は `bossMusic` で転調+テンポ増) |
 | レベル | `STAGE_W=6400`, `GY=232` (地面)、`solids` (地形矩形)、`SPAWNS` (敵配置)、`ARENA_L/R`・`BOSS_TRIG` (ボス戦域)、`IND_X=3150` (工業地帯の境界)、`deco` (背景装飾。`mulberry` シード乱数で事前生成) |
-| プレイヤー | `P` (feet 基準座標)。`stepPlayer` = 移動/ホバー (EN 0.62/f 消費・0.5/f 回復)/AABB 衝突/攻撃。`muzzlePos`・`fireVulcan`・`fireMissiles` |
+| プレイヤー | `P` (feet 基準座標)。`stepPlayer` = 移動/ホバー (EN 1.05/f 消費・0.32/f 回復、連続約1.6秒。上空 y<56 に見えない天井)/AABB 衝突/攻撃。`muzzlePos`・`fireVulcan`・`fireMissiles` |
 | 敵 | `spawnEnemy` + `stepEnemy` の type 分岐 (walker/turret/drone/tank/heli/crate)。共通処理 `hitEnemy`/`explode` |
 | ボス | `spawnBoss`/`stepBoss`。状態機械 st = enter→idle→(gat/msl/dash/mortar/laser)→die。HP45% 未満で `phase=2` (laser 解禁・高速化)。`armA` はワールド角。**待機時の腕はプレイヤー方向へ戻す (角度ラップ処理あり。壊すと腕が後ろを向く)** |
 | 弾 | `pb` (自弾)/`eb` (敵弾。`grav`+`shell` で曲射)/`msl` (誘導弾。`hostile` はバルカンで迎撃可)/`beams` (ボスレーザー)/`marks` (迫撃着弾予告) |

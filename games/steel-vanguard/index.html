@@ -411,13 +411,13 @@ function stepPlayer(){
   if(pressed('J')&&P.onG){P.vy=-6.3;P.onG=false;SFX.jump();addParts(P.x,P.y,5,'dust','#666');}
   P.vy+=0.32;
   P.hover=false;
-  if(key('J')&&!P.onG&&P.vy>-2.4&&P.en>0){
-    P.vy-=0.58;P.hover=true;P.en-=0.62;P.enDelay=28;
+  if(key('J')&&!P.onG&&P.vy>-1.8&&P.en>0){
+    P.vy-=0.50;P.hover=true;P.en-=1.05;P.enDelay=40;
     if(frame%3===0)addParts(P.x-P.face*7,P.y-4,1,'flame','#ff9c50');
     if(P.en<0)P.en=0;
   }
   if(gHover)gHover.gain.setTargetAtTime(P.hover?0.13:0,AC.currentTime,0.06);
-  if(!P.hover){if(P.enDelay>0)P.enDelay--;else P.en=Math.min(100,P.en+0.5);}
+  if(!P.hover){if(P.enDelay>0)P.enDelay--;else P.en=Math.min(100,P.en+0.32);}
   P.vy=clamp(P.vy,-6.5,5.6);
   // 衝突
   const hw=P.w/2;
@@ -438,6 +438,7 @@ function stepPlayer(){
     if(P.vy>=0&&P.y>=r.y&&P.y-P.vy-1<=r.y&&P.y-P.h<r.y){P.y=r.y;P.vy=0;P.onG=true;}
     else if(P.vy<0&&P.y-P.h<=r.y+r.h&&P.y-P.h-P.vy>=r.y+r.h-1&&P.y>r.y+r.h){P.y=r.y+r.h+P.h;P.vy=0;}
   }
+  if(P.y<56){P.y=56;if(P.vy<0)P.vy=0;} // 画面上端の見えない天井
   if(wasAir&&P.onG){addParts(P.x,P.y,6,'dust','#666');SFX.clank();}
   // 攻撃
   if(key('F')&&P.cool<=0){fireVulcan();P.cool=6;}
