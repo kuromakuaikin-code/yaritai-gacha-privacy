@@ -30,7 +30,7 @@ node smoke.mjs
 
 | セクション | 内容 |
 | --- | --- |
-| 入力 | `KEYMAP` / `keys` / `qpress` (keydown ラッチ。押下取りこぼし防止のため必須)。タッチボタンは `.tbtn` |
+| 入力 | `KEYMAP`(e.key)/`CODEMAP`(e.code 優先、IME 対策)/`qpress` ラッチ (押下取りこぼし防止)。タッチは `.tbtn` (各ボタンで `setPointerCapture` — 同時押し・指ズレ対策)、FIRE 短タップで `autoFire` 切替、移動は `#moveZone` のスライド式パッド。`fitCanvas` は小画面で端数倍率・2 倍以上は 0.5 刻み |
 | サウンド | `initAudio` (初回入力で生成)、`SFX.*`、`musicTick` = 16 分音符スケジューラ (`BASS`/`LEADN`、ボス時は `bossMusic` で転調+テンポ増) |
 | レベル | `STAGE_W=6400`, `GY=232` (地面)、`solids` (地形矩形)、`SPAWNS` (敵配置)、`ARENA_L/R`・`BOSS_TRIG` (ボス戦域)、`IND_X=3150` (工業地帯の境界)、`deco` (背景装飾。`mulberry` シード乱数で事前生成) |
 | プレイヤー | `P` (feet 基準座標)。`stepPlayer` = 移動/ホバー (EN 1.05/f 消費・0.32/f 回復、連続約1.6秒。上空 y<56 に見えない天井)/連続照準 (`aimA` を目標角へ補間、上-1.25〜空中下+1.05rad)/シールド (`P.shield`=地上+↓)/AABB 衝突/攻撃。`muzzlePos`・`fireVulcan`・`fireMissiles`・`fireFlame`・`fireLaser` |
