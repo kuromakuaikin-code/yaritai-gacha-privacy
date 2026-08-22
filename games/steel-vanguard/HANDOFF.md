@@ -33,16 +33,18 @@ node smoke.mjs
 | 入力 | `KEYMAP` / `keys` / `qpress` (keydown ラッチ。押下取りこぼし防止のため必須)。タッチボタンは `.tbtn` |
 | サウンド | `initAudio` (初回入力で生成)、`SFX.*`、`musicTick` = 16 分音符スケジューラ (`BASS`/`LEADN`、ボス時は `bossMusic` で転調+テンポ増) |
 | レベル | `STAGE_W=6400`, `GY=232` (地面)、`solids` (地形矩形)、`SPAWNS` (敵配置)、`ARENA_L/R`・`BOSS_TRIG` (ボス戦域)、`IND_X=3150` (工業地帯の境界)、`deco` (背景装飾。`mulberry` シード乱数で事前生成) |
-| プレイヤー | `P` (feet 基準座標)。`stepPlayer` = 移動/ホバー (EN 1.05/f 消費・0.32/f 回復、連続約1.6秒。上空 y<56 に見えない天井)/AABB 衝突/攻撃。`muzzlePos`・`fireVulcan`・`fireMissiles` |
+| プレイヤー | `P` (feet 基準座標)。`stepPlayer` = 移動/ホバー (EN 1.05/f 消費・0.32/f 回復、連続約1.6秒。上空 y<56 に見えない天井)/連続照準 (`aimA` を目標角へ補間、上-1.25〜空中下+1.05rad)/シールド (`P.shield`=地上+↓)/AABB 衝突/攻撃。`muzzlePos`・`fireVulcan`・`fireMissiles`・`fireFlame`・`fireLaser` |
 | 敵 | `spawnEnemy` + `stepEnemy` の type 分岐 (walker/turret/drone/tank/heli/crate)。共通処理 `hitEnemy`/`explode` |
 | ボス | `spawnBoss`/`stepBoss`。状態機械 st = enter→idle→(gat/msl/dash/mortar/laser)→die。HP45% 未満で `phase=2` (laser 解禁・高速化)。`armA` はワールド角。**待機時の腕はプレイヤー方向へ戻す (角度ラップ処理あり。壊すと腕が後ろを向く)** |
-| 弾 | `pb` (自弾)/`eb` (敵弾。`grav`+`shell` で曲射)/`msl` (誘導弾。`hostile` はバルカンで迎撃可)/`beams` (ボスレーザー)/`marks` (迫撃着弾予告) |
+| 弾 | `pb` (自弾。`flame` フラグで火炎弾)/`eb` (敵弾。`grav`+`shell` で曲射)/`msl` (誘導弾。`hostile` はバルカンで迎撃可)/`beams` (ボスレーザー)/`pbeams` (自機レーザー演出)/`marks` (迫撃着弾予告) |
 | 描画 | 480×270 固定 → CSS 拡大 (pixelated)。`drawSky/Far/Mid` = 視差 0.06/0.18/0.45。HUD・各画面 (`drawTitle/Brief/Over/Clear/Pause`)・スキャンライン |
 | ループ | 60fps 固定ステップ (`acc` 蓄積式)。`state` = TITLE/BRIEF/PLAY/OVER/CLEAR + `paused` |
 
 ## バランス調整の主なパラメータ
 
-- プレイヤー: HP100 / EN100、バルカン dmg4・6f 間隔、ミサイル dmg26・初期 30 発、被弾無敵 55f
+- プレイヤー: HP100 / EN100、バルカン dmg4・6f 間隔、被弾無敵 55f
+- サブウェポン (V/Tab 切替、C 使用): ミサイル dmg26・初期30 / 火炎放射 EN0.5/f+火炎弾dmg2 / レーザー dmg30 貫通・初期8・CD45f。弾薬補給アイテムで MSL+8, LSR+2
+- シールド (地上で↓長押し。構え中は移動減速・射撃不可): 正面攻撃を EN 消費でブロック (弾4 / 砲弾9 / ミサイル7 / ボスレーザー0.9/f)。EN<4 だと防げない
 - ボス: HP950、ランク閾値は `finishStats` (S:13000 / A:10500 / B:8000)
 - 敵の発射間隔・弾速は `stepEnemy` 内の `e.t%N` と `eshot` の引数
 
@@ -52,13 +54,13 @@ node smoke.mjs
 - ボス出現位置は「アリーナ左端にカメラがあるときの視界内」(ARENA_R-280) に停止させている。アリーナ寸法を変えるときはここも連動させること
 - ボス戦開始時に `bossLock` で後方の残存敵を除去している (画面外狙撃の防止)
 - ミュート解除時の BGM 暴発防止のため `musicTick` はミュート中に `musicNext` を現在時刻へ進めている
+- 接地系の敵はスポーン時にブロックとの重なりを検出して上面へスナップする (`spawnEnemy` 末尾)。過去に「敵がブロックに埋まって湧く」不具合があった対策なので消さないこと
 
 ## 次の候補タスク (推奨順)
 
 1. **強化ショップ**: クリア/スコアでバルカン威力・EN 容量・装甲を強化 (ガンハザードの中核要素。localStorage に保存)
 2. **ステージ 2**: 夜の市街戦など。`solids`/`SPAWNS`/背景セットをステージ配列化する構造変更から
-3. **武器切替**: 火炎放射 (近距離持続)・レーザー (貫通) を C 長押し or Tab 切替で
-4. ゲームパッド対応 (Gamepad API)、難易度選択
+3. ゲームパッド対応 (Gamepad API)、難易度選択、EN 回復アイテム
 
 ## 参考
 

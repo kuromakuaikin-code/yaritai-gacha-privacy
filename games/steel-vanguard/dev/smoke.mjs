@@ -63,6 +63,40 @@ expect('前進できている (x>300)', p1.x > 300);
 expect('ミサイルを消費した', p1.ammo < 30);
 await shot('s3-play.png');
 
+// サブウェポン: 火炎放射 (EN 消費)
+await page.keyboard.press('v');
+await page.waitForTimeout(150);
+const en0 = await page.evaluate(() => P.en);
+await page.keyboard.down('c');
+await page.waitForTimeout(600);
+await page.keyboard.up('c');
+expect('火炎放射で EN を消費', await page.evaluate(() => P.en) < en0 - 5);
+
+// サブウェポン: レーザー (残弾消費)
+await page.keyboard.press('v');
+await page.waitForTimeout(150);
+await page.keyboard.press('c');
+await page.waitForTimeout(250);
+expect('レーザーで残弾を消費', await page.evaluate(() => P.lsr) < 8);
+await page.keyboard.press('v'); // ミサイルへ戻す
+await page.waitForTimeout(150);
+
+// シールド: 正面からの敵弾を無効化
+const sr = await page.evaluate(async () => {
+  enemies.splice(0); eb.splice(0); msl.splice(0);
+  P.hp = 100; P.en = 100; P.iframe = 0; P.face = 1; P.vx = 0;
+  keys.D = 1;
+  await new Promise(r => setTimeout(r, 120));
+  eb.push({x: P.x + 30, y: P.y - 16, vx: -3, vy: 0, dmg: 8, t: 0, r: 2.5});
+  await new Promise(r => setTimeout(r, 400));
+  const res = {hp: P.hp, en: P.en, shield: P.shield};
+  keys.D = 0;
+  return res;
+});
+expect('シールドを構えられる', sr.shield === true);
+expect('シールドで正面弾を無効化 (HP 減なし)', sr.hp === 100);
+expect('ブロックで EN を消費', sr.en < 100);
+
 // ボス戦へ
 await page.evaluate(() => { P.x = 5700; P.y = 232; camX = 5300; P.hp = 100; });
 await page.keyboard.down('ArrowRight');
