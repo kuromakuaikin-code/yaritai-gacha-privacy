@@ -14,6 +14,7 @@
     "statusNote": "中止・延期・変更の補足",
     "posterType": "admin=公式ページを情報元に掲載 / organizer=主催者からの情報 / resident=住民からの情報・公式未確認",
     "source": "情報元。name=公式発表元の名称, url=自治体・主催者・公式観光団体などの公式情報URL。公開イベントはURL必須",
+    "socials": "任意。自治体・主催者ページから公式性を確認したSNSの配列。platform=媒体名, name=表示名, url=公式アカウントURL",
     "lastVerified": "運営が情報を最後に確認した日 YYYY-MM-DD",
     "imageAllowed": "チラシ等の画像の掲載許可を確認済みなら true",
     "image": "画像パス（imageAllowed が true の場合のみ）",
@@ -383,7 +384,7 @@
         "name": "半田市公式サイト「第72回はんだ市民盆踊り大会」",
         "url": "https://www.city.handa.lg.jp/bunka/kanko/1002901/1012010.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "JR半田駅前の平和通りで、子ども向け・一般向けの盆踊りや郡上踊り、夏山車の演出が行われます。",
@@ -1086,30 +1087,28 @@
     },
     {
       "id": "matsusaka-asada-jizo-bonodori",
-      "status": "pending",
+      "status": "published",
       "name": "朝田地蔵会式 盆踊り",
       "city": "松阪市",
       "venue": "朝田寺",
-      "address": "松阪市朝田町",
+      "address": "松阪市朝田町427",
       "dates": [
         {
-          "date": "2026-08-23",
-          "start": "19:00",
-          "end": "21:00"
+          "date": "2026-08-23"
         }
       ],
-      "rain": "",
+      "rain": "開催状況や変更は朝田寺公式情報をご確認ください",
       "eventStatus": "scheduled",
-      "statusNote": "公式観光ページ内で2026年8月23日の曜日表記に矛盾があるため、確認が取れるまで非公開。",
-      "posterType": "admin",
+      "statusNote": "朝田寺の2026年公式案内で8月23日の夜に盆踊り、採灯護摩、花火、夜店を予定。開始時刻は2026年公式案内で確認できないため未掲載です。",
+      "posterType": "organizer",
       "source": {
-        "name": "三重県観光連盟 公式サイト「観光三重」",
-        "url": "https://www.kankomie.or.jp/event/5037"
+        "name": "朝田寺公式サイト「朝田地蔵まつり」",
+        "url": "https://chodenji.jp/%E6%9C%9D%E7%94%B0%E5%9C%B0%E8%94%B5%E3%81%BE%E3%81%A4%E3%82%8A/"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
-      "desc": "（確認待ち）日付と曜日の公式表記を主催者へ確認後に公開する。",
+      "desc": "朝田寺で8日間営まれる地蔵会式の最終夜に、盆踊り、採灯護摩と火渡り、打ち上げ花火、夜店が行われます。",
       "scale": "regional",
       "prefecture": "三重県"
     },
@@ -1510,7 +1509,7 @@
         "name": "尾張旭市公式ホームページ「令和8年度 盆踊り大会等の日程」",
         "url": "https://www.city.owariasahi.lg.jp/page/2300.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "第一緑ヶ丘集会所で18時30分から20時まで行われる町内会の盆踊りです。",
@@ -1539,7 +1538,7 @@
         "name": "尾張旭市公式ホームページ「令和8年度 盆踊り大会等の日程」",
         "url": "https://www.city.owariasahi.lg.jp/page/2300.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "三郷小学校で18時45分から20時30分まで行われる校区の盆踊りです。",
@@ -1568,7 +1567,7 @@
         "name": "尾張旭市公式ホームページ「令和8年度 盆踊り大会等の日程」",
         "url": "https://www.city.owariasahi.lg.jp/page/2300.html"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "宮浦ちびっこ広場と稲葉集会所で行われる納涼盆踊り大会。雨天時は翌日に順延予定です。",
@@ -1950,7 +1949,7 @@
         "name": "日進市公式「令和8年度 各区・自治会の夏まつり予定一覧表」",
         "url": "https://www.city.nisshin.lg.jp/material/files/group/26/matsuri_chiiki.pdf"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "竹の山小学校のグラウンドで行われる夏祭り。盆踊りやステージ企画、模擬店が予定されています。",
@@ -3179,7 +3178,7 @@
         "name": "菰野町公式ウェブサイト",
         "url": "https://www2.town.komono.mie.jp/site/70th-komonotown/10539.html"
       },
-      "lastVerified": "2026-07-19",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "三滝川河川敷のランタン点灯と、福祉公園の噴水を囲む町民盆踊り大会を一緒に楽しめる地域イベントです。",
@@ -3204,13 +3203,13 @@
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
-      "statusNote": "名称は出店者募集時点の仮称です。一般向けの詳細発表後に更新します。",
+      "statusNote": "名称は仮称です。商工会の公式案内で日時・会場を確認していますが、一般向けの内容・開催可否は主催者の最新案内をご確認ください。",
       "posterType": "organizer",
       "source": {
         "name": "岐阜県商工会連合会・北方町商工会公式サイト",
         "url": "https://www.gifushoko.or.jp/%EF%BC%88%E5%8C%97%E6%96%B9%E7%94%BA%E5%95%86%E5%B7%A5%E4%BC%9A%E3%81%8B%E3%82%89%E3%81%AE%E3%81%8A%E7%9F%A5%E3%82%89%E3%81%9B%EF%BC%89%E6%AD%A9%E8%A1%8C%E8%80%85%E5%A4%A9%E5%9B%BD%E4%BB%A3%E6%9B%BF/"
       },
-      "lastVerified": "2026-07-19",
+      "lastVerified": "2026-08-16",
       "imageAllowed": false,
       "image": "",
       "desc": "円鏡寺公園で開催予定の夏まつり盆踊り大会。出店者募集の公式案内で日時と会場が公表されています。",
@@ -3264,18 +3263,25 @@
           "end": "20:30"
         }
       ],
-      "rain": "少雨決行・荒天中止。中止決定は当日8時",
+      "rain": "雨天決行。荒天等は延期・中止の可能性があります。開催可否は当日10時に公式サイトで案内",
       "eventStatus": "scheduled",
-      "statusNote": "2026年の盆踊り実施は公式情報で確認できていないため、地域の祭りとして掲載しています。",
-      "posterType": "admin",
+      "statusNote": "盆踊りエリアは17時25分から。盆踊りは17時50分〜18時50分の予定です。会場周辺は14時30分〜21時に交通規制予定です。",
+      "posterType": "organizer",
       "source": {
-        "name": "稲沢市公式ウェブサイト",
-        "url": "https://www.city.inazawa.aichi.jp/0000000865.html"
+        "name": "稲沢夏まつり2026公式サイト",
+        "url": "https://ina-natsu.gonna.jp/"
       },
-      "lastVerified": "2026-07-19",
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "稲沢夏まつり公式Facebook",
+          "url": "https://www.facebook.com/inazawa.summer/"
+        }
+      ],
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
-      "desc": "サリオパーク祖父江で開催される市の夏まつり。会場イベントと打ち上げ花火が案内されています。",
+      "desc": "サリオパーク祖父江で開かれる稲沢市の夏まつり。盆踊り、飲食・ゲーム出店、花火などを予定しています。",
       "scale": "major",
       "category": "festival",
       "prefecture": "愛知県"
@@ -3518,7 +3524,7 @@
       "status": "published",
       "name": "こまき令和夏まつり",
       "city": "小牧市",
-      "venue": "小牧駅・ラピオ周辺道路、ラピオ5階",
+      "venue": "小牧駅・ラピオ周辺道路、ラピオ4・5階",
       "address": "小牧市中央1丁目周辺",
       "lat": null,
       "lng": null,
@@ -3531,16 +3537,28 @@
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
-      "statusNote": "一部会場は12時から19時まで。盆踊りではなく、誰でも参加できる総踊りを行う夏まつりです。",
+      "statusNote": "道路会場は15時〜21時30分。ラピオ5階は12時〜19時で、4階でも催事があります。盆踊りではなく、誰でも参加できる総踊りを行う夏まつりです。",
       "posterType": "admin",
       "source": {
-        "name": "愛知県公式観光サイト Aichi Now",
-        "url": "https://aichinow.pref.aichi.jp/events/detail/1355/"
+        "name": "小牧市公式サイト「こまき令和夏まつり」",
+        "url": "https://www.city.komaki.aichi.jp/admin/soshiki/chiikikassei/city/2/1/2019natsumatsuri/8-1/51564.html"
       },
-      "lastVerified": "2026-07-20",
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "小牧市観光協会 Facebook",
+          "url": "https://www.facebook.com/KomakiKanko/"
+        },
+        {
+          "platform": "Instagram",
+          "name": "小牧市観光協会 Instagram",
+          "url": "https://www.instagram.com/komaki_kanko/"
+        }
+      ],
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
-      "desc": "小牧駅周辺で総踊り、手筒花火、飲食企画や子ども向け催事を楽しめる夏まつりです。",
+      "desc": "小牧駅周辺で総踊り、手筒花火、飲食企画や子ども向け催事を楽しめる夏まつりです。道路会場は15時〜21時30分、ラピオ5階は12時〜19時で、4階でも催事があります。",
       "scale": "major",
       "category": "festival",
       "prefecture": "愛知県"
@@ -4453,18 +4471,18 @@
           "start": "17:00"
         }
       ],
-      "rain": "開催状況や変更は公式情報をご確認ください",
+      "rain": "悪天候時は8月23日（日）に順延",
       "eventStatus": "scheduled",
-      "statusNote": "盆踊りではなく、花火と夜店を中心とする地域の夏祭りとして掲載しています。詳しい進行は公式情報をご確認ください。",
+      "statusNote": "夜店ストリートは17時〜20時30分、花火は19時から予定。盆踊りではなく、花火と夜店を中心とする地域の夏祭りとして掲載しています。",
       "posterType": "admin",
       "source": {
-        "name": "岐阜県観光公式サイト 岐阜の旅ガイド",
-        "url": "https://www.kankou-gifu.jp/event/detail_6040.html"
+        "name": "境川緑道公園公式サイト",
+        "url": "https://www.sakaigawa-ryokudopark.com/information.html?01-0000=0183"
       },
-      "lastVerified": "2026-07-30",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
-      "desc": "境川緑道公園で夜店や地域の催しを楽しみ、約2000発の花火で締めくくる柳津町の夏祭りです。",
+      "desc": "境川緑道公園で夜店や地域の催しを楽しみ、19時からの花火で締めくくる柳津町の夏祭りです。",
       "scale": "regional",
       "category": "festival",
       "prefecture": "岐阜県"
@@ -4594,7 +4612,14 @@
         "name": "岩倉市公式ホームページ",
         "url": "https://www.city.iwakura.aichi.jp/0000004308.html"
       },
-      "lastVerified": "2026-08-07",
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "岩倉市観光協会 Facebook",
+          "url": "https://www.facebook.com/iiwakun"
+        }
+      ],
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "やぐらを囲んで地域の曲や定番曲を踊る、岩倉市の市民盆おどりです。会場では飲食やゲームの夜市も開かれます。",
@@ -5522,7 +5547,7 @@
         "name": "名古屋市緑区公式ウェブサイト",
         "url": "https://www.city.nagoya.jp/midori/oshirase/1024402/1051527.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "鳴子中央公園で夕方から開催される地域の夏まつりです。",
@@ -5552,7 +5577,7 @@
         "name": "名古屋市名東区公式ウェブサイト",
         "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "極楽小学校で開催される、極楽学区の納涼夏まつりです。",
@@ -5582,7 +5607,7 @@
         "name": "名古屋市名東区公式ウェブサイト",
         "url": "https://www.city.nagoya.jp/meito/kosodate/1025302/1025306/1036338.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "前山小学校で開催される、前山学区の夏まつりです。",
@@ -5636,13 +5661,13 @@
       ],
       "rain": "雨天中止",
       "eventStatus": "scheduled",
-      "statusNote": "8月8日10:00から今伊勢公民館で盆踊り練習会を実施。",
+      "statusNote": "開催内容は主催者の最新案内をご確認ください。",
       "posterType": "admin",
       "source": {
         "name": "一宮市公式サイト「連区回覧」",
         "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076238.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "今伊勢小学校の屋外運動場で開かれる今伊勢連区の盆踊り大会です。",
@@ -5669,15 +5694,15 @@
           "end": "21:00"
         }
       ],
-      "rain": "",
+      "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
-      "statusNote": "盆踊りは両日とも19:00開始。",
+      "statusNote": "盆踊りは両日とも19時開始予定です。",
       "posterType": "admin",
       "source": {
         "name": "稲沢市公式サイト",
         "url": "https://www.city.inazawa.aichi.jp/0000000796.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "盆踊り、飲食出店、アユのつかみ取り、カラオケ大会や作品展などを2日間楽しめる下津地区の催しです。",
@@ -5704,15 +5729,15 @@
           "end": "21:00"
         }
       ],
-      "rain": "",
+      "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "8月21日は19時から、22日は18時から開催予定です。",
       "posterType": "admin",
       "source": {
         "name": "一宮市公式サイト「連区回覧」",
         "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076310.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "大乗公園で2日間開かれる、貴船連区・貴船公民館主催の盆踊り大会です。",
@@ -5763,15 +5788,15 @@
           "end": "20:30"
         }
       ],
-      "rain": "雨天順延なし。雨天時も守成公民館室内のゲーム等は開催",
+      "rain": "雨天順延なし。雨天時でも室内のゲーム等は開催予定です。",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "屋外企画の変更などは、主催者の最新案内をご確認ください。",
       "posterType": "admin",
       "source": {
         "name": "一宮市公式サイト「連区回覧」",
         "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076131.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "守成公民館を会場に開かれる起連区の夏まつりです。雨天時も室内のゲームなどは実施されます。",
@@ -5798,15 +5823,15 @@
           "end": "20:30"
         }
       ],
-      "rain": "",
+      "rain": "開催状況や変更は公式情報をご確認ください",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "8月22日・23日の2日間開催予定です。",
       "posterType": "admin",
       "source": {
         "name": "一宮市公式サイト「連区回覧」",
         "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1076170/1076132.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "木曽川運動場で2夜にわたり開かれる木曽川町連区の盆踊りです。",
@@ -5828,15 +5853,15 @@
           "end": "20:00"
         }
       ],
-      "rain": "雨天決行。熱中症警戒アラートの有無にかかわらず実施",
+      "rain": "雨天決行。熱中症警戒アラートの有無にかかわらず実施予定です。",
       "eventStatus": "scheduled",
-      "statusNote": "",
+      "statusNote": "屋内会場で開催予定です。",
       "posterType": "admin",
       "source": {
         "name": "一宮市公式サイト「連区回覧」",
         "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1075731/1075993.html"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "丹陽公民館大会議室で開催される、丹陽町連区公民館主催の屋内盆踊り大会です。",
@@ -5860,16 +5885,16 @@
       ],
       "rain": "雨天中止",
       "eventStatus": "scheduled",
-      "statusNote": "対象は浅井町連区に在住の方。",
-      "posterType": "admin",
+      "statusNote": "盆踊りは18時45分から。会場に駐車場はなく、徒歩・自転車での来場が案内されています。",
+      "posterType": "organizer",
       "source": {
-        "name": "一宮市公式サイト「連区回覧」",
-        "url": "https://www.city.ichinomiya.aichi.jp/shisei/koho/1028378/1075731/1075950.html"
+        "name": "浅井町地域づくり協議会公式サイト",
+        "url": "https://138azai.org/?information=information-12134"
       },
-      "lastVerified": "2026-08-05",
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
-      "desc": "一宮太鼓保存会の演奏、あかつき会の舞踏や夜店を楽しめる、浅井町連区住民向けの夏祭りです。",
+      "desc": "盆踊りを中心に、太鼓体験、演舞、縁日やキッチンカーを楽しめる浅井町の地域イベントです。",
       "scale": "neighborhood",
       "category": "festival",
       "prefecture": "愛知県"
@@ -5895,16 +5920,23 @@
       ],
       "rain": "8月22日が雨天の場合は盆踊り大会と夜店を中止し、竜宮ハウスのみ講堂内で開催。8月23日が雨天の場合は全イベント中止。雨の状態により変更の場合あり",
       "eventStatus": "scheduled",
-      "statusNote": "8月22日は18:00からオープニングイベントを予定。",
+      "statusNote": "両日18時〜21時。町公式LINEが8月15日に配信した「10時〜12時」は誤りで、町公式ページに訂正が掲載されています。8月22日は18時からオープニングイベントを予定しています。",
       "posterType": "admin",
       "source": {
         "name": "武豊町公式ホームページ",
         "url": "https://www.town.taketoyo.lg.jp/kosodate/1001520/1002029/1004426.html"
       },
-      "lastVerified": "2026-08-05",
+      "socials": [
+        {
+          "platform": "LINE",
+          "name": "武豊町LINE公式アカウント",
+          "url": "https://page.line.me/taketoyo_town"
+        }
+      ],
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
-      "desc": "中央公民館で盆踊り大会や夜店を楽しむ、武豊町のふるさとまつりです。",
+      "desc": "中央公民館で盆踊り大会や夜店を楽しむ、武豊町のふるさとまつりです。開催は両日18時〜21時で、町公式LINEが8月15日に配信した「10時〜12時」は誤りとして公式ページで訂正されています。",
       "scale": "regional",
       "category": "festival",
       "prefecture": "愛知県"
@@ -6043,15 +6075,22 @@
           "end": "21:00"
         }
       ],
-      "rain": "",
+      "rain": "雨天決行。警報発令など荒天時は中止。開催・中止は当日15時に公式ページまたはみよし市公式LINEで発表予定",
       "eventStatus": "scheduled",
-      "statusNote": "雨天対応は公式案内に記載されていません。",
+      "statusNote": "開催・中止の決定は当日15時に公式ページまたはみよし市公式LINEで発表予定です。15時以降に再確認してください。",
       "posterType": "admin",
       "source": {
         "name": "みよし市公式ホームページ",
         "url": "https://www.city.aichi-miyoshi.lg.jp/soshiki/shiminkeizai/sangyo/kankou/13.html"
       },
-      "lastVerified": "2026-08-07",
+      "socials": [
+        {
+          "platform": "LINE",
+          "name": "みよし市LINE公式アカウント",
+          "url": "https://page.line.me/?accountId=miyoshi_city"
+        }
+      ],
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "オリジナル曲に合わせ、色鮮やかな衣装の踊り手が三好稲荷閣周辺を踊り歩く市民参加型の祭りです。",
@@ -6088,10 +6127,17 @@
       "statusNote": "8月23日の花火は20:00～20:30。",
       "posterType": "admin",
       "source": {
-        "name": "愛知県公式観光サイト Aichi Now",
-        "url": "https://aichinow.pref.aichi.jp/events/detail/148/"
+        "name": "みよし市公式サイト「三好大提灯まつり」",
+        "url": "https://www.city.aichi-miyoshi.lg.jp/kanko_bunka_sports/event/4718.html"
       },
-      "lastVerified": "2026-08-07",
+      "socials": [
+        {
+          "platform": "LINE",
+          "name": "みよし市LINE公式アカウント",
+          "url": "https://page.line.me/?accountId=miyoshi_city"
+        }
+      ],
+      "lastVerified": "2026-08-22",
       "imageAllowed": false,
       "image": "",
       "desc": "高さ約11メートルの大提灯の点灯、棒の手奉納や花火を楽しむ三好稲荷閣の夏祭りです。",
