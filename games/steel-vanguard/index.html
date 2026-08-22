@@ -11,23 +11,35 @@
   .tbtn{position:fixed;z-index:5;display:none;align-items:center;justify-content:center;
     width:58px;height:58px;border-radius:50%;border:2px solid rgba(255,210,122,.5);
     background:rgba(20,24,40,.42);color:#ffd27a;font:bold 13px monospace;
-    touch-action:none;-webkit-tap-highlight-color:transparent;}
-  .tbtn:active{background:rgba(201,84,44,.55);}
-  #bL{left:14px;bottom:78px;} #bR{left:86px;bottom:78px;}
-  #bF{right:14px;bottom:118px;width:66px;height:66px;}
-  #bJ{right:92px;bottom:60px;} #bM{right:16px;bottom:26px;}
-  #bS{right:100px;bottom:140px;width:46px;height:46px;font-size:10px;}
-  #bG{left:14px;bottom:146px;width:52px;height:52px;font-size:10px;}
-  body.touch .tbtn{display:flex;}
+    touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;}
+  .tbtn:active,.tbtn.on,#moveZone .pad.on{background:rgba(201,84,44,.55);}
+  #moveZone{position:fixed;z-index:5;display:none;left:10px;bottom:12px;width:164px;height:74px;touch-action:none;}
+  #moveZone .pad{position:absolute;top:2px;width:70px;height:70px;border-radius:50%;
+    border:2px solid rgba(255,210,122,.5);background:rgba(20,24,40,.42);
+    color:#ffd27a;font:bold 16px monospace;display:flex;align-items:center;justify-content:center;
+    pointer-events:none;}
+  #padL{left:0;} #padR{right:0;}
+  #bG{left:10px;bottom:94px;width:54px;height:54px;font-size:10px;}
+  #bU{left:120px;bottom:94px;width:54px;height:54px;font-size:11px;}
+  #bJ{right:14px;bottom:14px;width:72px;height:72px;}
+  #bF{right:96px;bottom:26px;width:72px;height:72px;}
+  #bM{right:16px;bottom:96px;width:56px;height:56px;font-size:11px;}
+  #bS{right:98px;bottom:108px;width:46px;height:46px;font-size:10px;}
+  body.touch .tbtn,body.touch #moveZone{display:flex;}
+  #rot{position:fixed;z-index:6;top:0;left:0;right:0;display:none;justify-content:center;
+    padding:7px;background:rgba(20,10,22,.78);color:#ffd27a;font:bold 12px monospace;
+    pointer-events:none;}
+  @media (orientation:portrait){ body.touch #rot{display:flex;} }
 </style>
 <div id="wrap"><canvas id="cv" width="480" height="270" tabindex="0"></canvas></div>
-<div class="tbtn" id="bL" data-k="L">&#9664;</div>
-<div class="tbtn" id="bR" data-k="R">&#9654;</div>
+<div id="rot">&#128241;&#8635; 横持ちにすると大画面で遊べます</div>
+<div id="moveZone"><div class="pad" id="padL">&#9664;</div><div class="pad" id="padR">&#9654;</div></div>
+<div class="tbtn" id="bG" data-k="D">GRD</div>
+<div class="tbtn" id="bU" data-k="U">&#9650;AIM</div>
 <div class="tbtn" id="bJ" data-k="J">JUMP</div>
 <div class="tbtn" id="bF" data-k="F">FIRE</div>
 <div class="tbtn" id="bM" data-k="M">SUB</div>
 <div class="tbtn" id="bS" data-k="SW">SW</div>
-<div class="tbtn" id="bG" data-k="D">GRD</div>
 <script>
 "use strict";
 /* ================= STEEL VANGUARD =================
@@ -44,7 +56,7 @@ const REDUCED=matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches
 function fitCanvas(){
   const w=innerWidth,h=innerHeight;
   let s=Math.min(w/W,h/H);
-  if(s>1)s=Math.max(1,Math.floor(s*2)/2);
+  if(s>=2)s=Math.floor(s*2)/2; // 大画面は 0.5 刻み、小画面は端数のまま最大化
   cv.style.width=(W*s)+'px';cv.style.height=(H*s)+'px';
 }
 addEventListener('resize',fitCanvas);fitCanvas();
@@ -87,6 +99,26 @@ for(const el of document.querySelectorAll('.tbtn')){
   el.addEventListener('pointerup',off);
   el.addEventListener('pointerleave',off);
   el.addEventListener('pointercancel',off);
+}
+// 移動パッド: 指をスライドで ◀▶ を切替できる一体型ゾーン
+const mz=document.getElementById('moveZone');
+{
+  let mzId=null;
+  const padL=document.getElementById('padL'),padR=document.getElementById('padR');
+  const mzSet=e=>{
+    const r=mz.getBoundingClientRect();
+    const left=(e.clientX-r.left)<r.width/2;
+    keys.L=left?1:0;keys.R=left?0:1;
+    padL.classList.toggle('on',left);padR.classList.toggle('on',!left);
+  };
+  const mzEnd=()=>{mzId=null;keys.L=0;keys.R=0;
+    padL.classList.remove('on');padR.classList.remove('on');};
+  mz.addEventListener('pointerdown',e=>{e.preventDefault();mzId=e.pointerId;
+    try{mz.setPointerCapture(e.pointerId);}catch(err){}
+    mzSet(e);initAudio();});
+  mz.addEventListener('pointermove',e=>{if(e.pointerId===mzId)mzSet(e);});
+  mz.addEventListener('pointerup',e=>{if(e.pointerId===mzId)mzEnd();});
+  mz.addEventListener('pointercancel',e=>{if(e.pointerId===mzId)mzEnd();});
 }
 cv.addEventListener('pointerdown',e=>{e.preventDefault();cv.focus();tapped=true;initAudio();});
 addEventListener('contextmenu',e=>e.preventDefault());
