@@ -441,6 +441,7 @@ function render(){
         <span class="ptype ${pt[0]}">${pt[1]}</span>
         ${ev.sample?'<span class="ptype sample">仮データ</span>':""}
         <span>情報元: ${esc(ev.source&&ev.source.name||"—")}</span>
+        ${Array.isArray(ev.socials)&&ev.socials.length?`<span>公式SNS: ${ev.socials.length}件</span>`:""}
         <span>最終確認: ${esc(ev.lastVerified||"—")}</span>
       </div>
     </a>`;
