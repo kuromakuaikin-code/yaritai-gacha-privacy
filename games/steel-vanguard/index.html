@@ -13,6 +13,7 @@
     background:rgba(20,24,40,.42);color:#ffd27a;font:bold 13px monospace;
     touch-action:none;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;}
   .tbtn:active,.tbtn.on,#moveZone .pad.on{background:rgba(201,84,44,.55);}
+  .tbtn.auto{background:rgba(201,84,44,.6);border-color:#ffd27a;}
   #moveZone{position:fixed;z-index:5;display:none;left:10px;bottom:12px;width:164px;height:74px;touch-action:none;}
   #moveZone .pad{position:absolute;top:2px;width:70px;height:70px;border-radius:50%;
     border:2px solid rgba(255,210,122,.5);background:rgba(20,24,40,.42);
@@ -76,7 +77,7 @@ const CODEMAP={ArrowLeft:'L',KeyA:'L',ArrowRight:'R',KeyD:'R',ArrowUp:'U',KeyW:'
   KeyX:'J',KeyK:'J',Space:'J',KeyC:'M',KeyL:'M',KeyV:'SW',Tab:'SW',
   ShiftLeft:'LK',ShiftRight:'LK',KeyP:'P',Escape:'P',KeyM:'MU',KeyR:'RS'};
 const keys={},pkeys={},qpress={};
-let tapped=false;
+let tapped=false,autoFire=false;
 function key(k){return !!keys[k];}
 function pressed(k){return !!qpress[k]||(!!keys[k]&&!pkeys[k]);}
 function keyOf(e){return CODEMAP[e.code]||KEYMAP[e.key.toLowerCase()];}
@@ -91,13 +92,26 @@ addEventListener('keyup',e=>{
 addEventListener('blur',()=>{for(const k in keys)keys[k]=0;});
 // タッチ
 if('ontouchstart' in window||navigator.maxTouchPoints>0)document.body.classList.add('touch');
+// 各ボタンでポインタを捕捉: 指がズレても離れず、複数ボタンの同時押しが確実に効く
 for(const el of document.querySelectorAll('.tbtn')){
   const k=el.dataset.k;
-  const on=e=>{e.preventDefault();if(!keys[k])qpress[k]=1;keys[k]=1;initAudio();};
-  const off=e=>{e.preventDefault();keys[k]=0;};
+  const on=e=>{
+    e.preventDefault();
+    try{el.setPointerCapture(e.pointerId);}catch(err){}
+    el._t=performance.now();
+    if(!keys[k])qpress[k]=1;keys[k]=1;el.classList.add('on');initAudio();
+  };
+  const off=e=>{
+    e.preventDefault();keys[k]=0;el.classList.remove('on');
+    if(k==='F'&&performance.now()-el._t<220){ // 短タップでオートファイア切替
+      autoFire=!autoFire;
+      el.classList.toggle('auto',autoFire);
+      el.textContent=autoFire?'AUTO':'FIRE';
+      SFX.sel();
+    }
+  };
   el.addEventListener('pointerdown',on);
   el.addEventListener('pointerup',off);
-  el.addEventListener('pointerleave',off);
   el.addEventListener('pointercancel',off);
 }
 // 移動パッド: 指をスライドで ◀▶ を切替できる一体型ゾーン
@@ -529,7 +543,7 @@ function stepPlayer(){
   }
   if(P.lcool>0)P.lcool--;
   if(!P.shield){
-    if(key('F')&&P.cool<=0){fireVulcan();P.cool=6;}
+    if((key('F')||autoFire)&&P.cool<=0){fireVulcan();P.cool=6;}
     if(P.sub===0){if(pressed('M'))fireMissiles();}
     else if(P.sub===1){if(key('M')&&P.en>1)fireFlame();}
     else{if(pressed('M'))fireLaser();}
