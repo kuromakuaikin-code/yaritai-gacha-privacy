@@ -24,6 +24,9 @@ PUBLIC_BASE_URL = SITE_CONFIG.get("publicBaseUrl", "").strip().rstrip("/")
 if PUBLIC_BASE_URL:
     PUBLIC_BASE_URL += "/"
 CONTACT_URL = "https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor"
+ANALYTICS_SNIPPET = """<!-- Cloudflare Web Analytics -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"b0553bddca524bb7816ae0fbe97fcab1"}'></script>
+<!-- End Cloudflare Web Analytics -->"""
 OUT_DIR = os.path.join(HERE, "e")
 
 WEEKDAYS = ["月", "火", "水", "木", "金", "土", "日"]
@@ -126,6 +129,17 @@ def page_html(ev):
         f'<a href="{e(source_url)}" target="_blank" rel="noopener">{e(source_name or "公式情報")}</a>'
         if source_url else e(source_name or "—")
     )
+    socials = ev.get("socials") or []
+    social_links = " / ".join(
+        f'<a href="{e(social["url"])}" target="_blank" rel="noopener">{e(social.get("name") or social["platform"])}</a>'
+        for social in socials
+    )
+    socials_html = (
+        '\n    <div class="row"><span class="k">公式SNS</span><span class="social-links">'
+        + social_links
+        + '<br><small>開催状況は、リンク先の投稿日時も確認してください。</small></span></div>'
+        if social_links else ""
+    )
 
     img_html = ""
     if ev.get("imageAllowed") and ev.get("image"):
@@ -157,6 +171,8 @@ def page_html(ev):
         "description": desc_meta,
         "organizer": {"@type": "Organization", "name": source_name or "主催者"},
     }
+    if socials:
+        ld["sameAs"] = [social["url"] for social in socials]
     if first.get("date"):
         ld["startDate"] = first["date"] + (f"T{first['start']}:00+09:00" if first.get("start") else "")
         last = dates[-1]
@@ -235,6 +251,7 @@ ul.dates li{{font-size:1.05rem;padding:2px 0}}
 .btn.primary{{background:var(--accent);border-color:var(--accent);color:#fff}}
 .note{{font-size:.78rem;color:var(--sub);margin-top:14px}}
 </style>
+{ANALYTICS_SNIPPET}
 </head>
 <body>
 <header><div class="wrap"><a href="../index.html">← 🏮 {SITE_NAME}</a></div></header>
@@ -262,7 +279,7 @@ ul.dates li{{font-size:1.05rem;padding:2px 0}}
     <div class="row"><span class="k">情報区分</span><span><span class="ptype {pt_cls}">{pt_label}</span><br><small>{pt_desc}</small></span></div>
     <div class="row"><span class="k">規模</span><span><span class="scale {scale_cls}">{scale_label}</span><br><small>{scale_desc}</small></span></div>
     <div class="row"><span class="k">種類</span><span><b>{e(category_label)}</b><br><small>{e(category_desc)}</small></span></div>
-    <div class="row"><span class="k">情報元</span><span>{source_html}</span></div>
+    <div class="row"><span class="k">情報元</span><span>{source_html}</span></div>{socials_html}
     <div class="row"><span class="k">最終確認日</span><span>{e(ev.get('lastVerified','—'))}</span></div>
     <div class="row"><span class="k">画像</span><span>{"掲載許可を確認済み" if ev.get('imageAllowed') else "掲載画像なし（権利確認済みの画像のみ掲載します）"}</span></div>
   </div>
@@ -298,6 +315,17 @@ def main():
         source = ev.get("source") or {}
         if not source.get("name") or not source.get("url", "").startswith(("https://", "http://")):
             sys.exit(f"エラー: 公開イベント {ev['id']} には公式情報元の名称とURLが必要です")
+        socials = ev.get("socials") or []
+        if not isinstance(socials, list):
+            sys.exit(f"エラー: 公開イベント {ev['id']} の socials は配列で指定してください")
+        for social in socials:
+            if (
+                not isinstance(social, dict)
+                or not social.get("platform")
+                or not social.get("name")
+                or not social.get("url", "").startswith(("https://", "http://"))
+            ):
+                sys.exit(f"エラー: 公開イベント {ev['id']} の公式SNSには platform・name・URLが必要です")
         if not ev.get("desc"):
             sys.exit(f"エラー: 公開イベント {ev['id']} には独自要約 desc が必要です")
         if ev.get("image") and not ev.get("imageAllowed"):

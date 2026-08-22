@@ -62,6 +62,33 @@ header .sub{font-size:.78rem;opacity:.9;margin-top:2px}
 .pref-count{flex:0 0 auto;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:5px 9px;font-size:.78rem;cursor:pointer}
 .pref-count.on{border-color:var(--accent);background:#fff4f2;color:var(--accent);font-weight:700}
 
+/* 月間カレンダー */
+.calendar-panel{background:#fff;border:1px solid var(--line);border-radius:8px;margin-top:12px;padding:10px}
+.calendar-panel[hidden]{display:none}
+.calendar-head{display:grid;grid-template-columns:38px 1fr 38px;align-items:center;gap:6px;margin-bottom:7px}
+.calendar-head h2{text-align:center;font-size:.98rem;line-height:1.3}
+.cal-nav{width:38px;height:38px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink);font-size:1.3rem;line-height:1;cursor:pointer}
+.cal-nav:disabled{opacity:.3;cursor:default}
+.cal-weekdays,.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.cal-weekdays{margin-bottom:3px}
+.cal-weekdays span{text-align:center;color:var(--sub);font-size:.68rem;font-weight:700}
+.cal-weekdays span:first-child{color:var(--accent)}
+.cal-weekdays span:last-child{color:var(--blue)}
+.cal-blank{min-height:50px}
+.cal-day{position:relative;width:100%;height:50px;border:1px solid transparent;border-radius:7px;background:#faf8f5;color:var(--sub);font:inherit;cursor:default}
+.cal-day:nth-child(7n+1) .cal-num{color:var(--accent)}
+.cal-day:nth-child(7n) .cal-num{color:var(--blue)}
+.cal-day.has-events{background:#fff;border-color:var(--line);color:var(--ink);cursor:pointer}
+.cal-day.has-events:hover{border-color:var(--accent)}
+.cal-day.today{box-shadow:inset 0 0 0 1px var(--blue)}
+.cal-day.selected{background:var(--accent-soft);border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.cal-num{position:absolute;top:3px;left:6px;font-size:.72rem;font-weight:700}
+.cal-badge{position:absolute;right:5px;bottom:4px;display:grid;place-items:center;width:23px;height:23px;border-radius:50%;background:var(--accent);color:#fff;font-size:.7rem;font-weight:800;line-height:1}
+.cal-summary{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:28px;margin-top:7px;padding-top:7px;border-top:1px solid var(--line);font-size:.76rem;color:var(--sub)}
+.cal-selection{border:0;background:transparent;color:var(--blue);font:inherit;font-size:.76rem;font-weight:700;cursor:pointer;text-align:right}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:390px){.calendar-panel{padding:8px}.cal-weekdays,.cal-grid{gap:2px}.cal-day{height:44px}.cal-blank{min-height:44px}.cal-badge{width:21px;height:21px;right:3px;bottom:3px}}
+
 .count{font-size:.8rem;color:var(--sub);margin:10px 2px 8px}
 .count b{color:var(--accent)}
 
@@ -115,7 +142,14 @@ header .sub{font-size:.78rem;opacity:.9;margin-top:2px}
 
 footer{background:#2b2621;color:#c9beb1;font-size:.75rem;padding:22px 14px 110px;text-align:center;line-height:2}
 footer a{color:#e8d9a0}
+.season-next{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:12px;padding:14px 15px;margin:18px 0 84px}
+.season-next b{display:block;font-size:.98rem;margin-bottom:3px}
+.season-next p{font-size:.85rem;color:var(--sub);margin:0 0 9px;line-height:1.7}
+.season-next a{font-weight:800;font-size:.9rem;color:var(--blue);text-decoration:none}
 </style>
+<!-- Cloudflare Web Analytics -->
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"b0553bddca524bb7816ae0fbe97fcab1"}'></script>
+<!-- End Cloudflare Web Analytics -->
 </head>
 <body>
 
@@ -156,12 +190,29 @@ footer a{color:#e8d9a0}
   </div>
   <div class="policy">「公式情報あり」は公式ページを情報元にしている表示で、開催保証ではありません。来場前にリンク先で最新情報をご確認ください。本文・画像の無断転載は行いません。</div>
 
+  <section class="calendar-panel" id="calendarPanel" aria-labelledby="calendarTitle">
+    <div class="calendar-head">
+      <button class="cal-nav" id="calendarPrev" type="button" aria-label="前の月" title="前の月">‹</button>
+      <h2 id="calendarTitle"></h2>
+      <button class="cal-nav" id="calendarNext" type="button" aria-label="次の月" title="次の月">›</button>
+    </div>
+    <div class="cal-weekdays" aria-hidden="true"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+    <div class="cal-grid" id="calendarGrid"></div>
+    <div class="cal-summary"><span id="calendarMonthSummary"></span><button class="cal-selection" id="calendarSelection" type="button" hidden></button></div>
+  </section>
+
   <div class="count"><b id="cnt">0</b> <span id="countUnit">件</span>（<span id="sortLabel">開催日順</span>）<span id="geoNote"></span></div>
 
   <div class="list" id="list"></div>
   <div class="empty" id="empty" style="display:none">
     条件に合う盆踊り・地域のお祭りが見つかりませんでした。<br>
     ご存じの情報があれば、ぜひ投稿してください。
+  </div>
+
+  <div class="season-next">
+    <b>🍁 夏が終わったら</b>
+    <p>秋の紅葉、冬のイルミネーション、春の桜。東海のおでかけ先を姉妹サイトにまとめています。</p>
+    <a href="../odekake/">東海おでかけナビを見る →</a>
   </div>
 
 </div>
@@ -173,7 +224,8 @@ footer a{color:#e8d9a0}
 <footer>
   掲載情報は主催者・自治体等の公式ページと投稿に基づく参考情報です。<br>
   開催有無は各イベントページ記載の情報元でご確認ください。<br>
-  <a href="submit.html">情報を投稿する</a> ／ <a href="https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor" target="_blank" rel="noopener">運営へ問い合わせる</a> ／ <a href="policy.html">掲載・著作権方針</a> ／ <a href="support.html">このサイトを応援する</a>
+  <a href="submit.html">情報を投稿する</a> ／ <a href="https://docs.google.com/forms/d/e/1FAIpQLSe79hdutpq0chrswO8KipS_5beNv3iJMLCICtOdo05RSqyLQA/viewform?usp=publish-editor" target="_blank" rel="noopener">運営へ問い合わせる</a> ／ <a href="policy.html">掲載・著作権方針</a> ／ <a href="support.html">このサイトを応援する</a><br>
+  <a href="../odekake/">🍁 東海おでかけナビ（桜・あじさい・紅葉・イルミネーション）</a>
 </footer>
 
 <script>
@@ -182,9 +234,10 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const WD=["日","月","火","水","木","金","土"];
 
-let EVENTS=[], COVERAGE=[], UNCONFIRMED=[], mode="all", prefFilter="", cityFilter="", scaleFilter="", categoryFilter="", query="", nearMode=false, geo=null;
+let EVENTS=[], COVERAGE=[], UNCONFIRMED=[], mode="all", prefFilter="", cityFilter="", scaleFilter="", categoryFilter="", query="", nearMode=false, geo=null, selectedDate="";
 
 const today=new Date(); today.setHours(0,0,0,0);
+let calendarMonth=new Date(today.getFullYear(),today.getMonth(),1);
 const ymd=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
 const TODAY=ymd(today);
 // 今週末 = 直近の土日（金曜なら明日あさって、土曜なら今日明日、日曜なら今日）
@@ -213,6 +266,60 @@ const PT={admin:["admin","公式情報あり"],organizer:["organizer","主催者
 const SCALE={major:["major","大きめ・有名"],regional:["regional","地域イベント"],neighborhood:["neighborhood","町内会・学区"]};
 const CATEGORY={bonodori:"🏮 盆踊り",festival:"⛩ 地域の祭り"};
 
+function matchesCalendarFilters(ev){
+  if(prefFilter && ev.prefecture!==prefFilter) return false;
+  if(cityFilter && ev.city!==cityFilter) return false;
+  if(scaleFilter && ev.scale!==scaleFilter) return false;
+  if(categoryFilter && (ev.category||"bonodori")!==categoryFilter) return false;
+  if(query){
+    const hay=[ev.name,ev.prefecture,ev.city,ev.venue,ev.address,ev.rain,ev.desc,CATEGORY[ev.category||"bonodori"]].join(" ").toLowerCase();
+    if(!hay.includes(query)) return false;
+  }
+  return true;
+}
+
+function renderCalendar(){
+  const panel=$("#calendarPanel");
+  panel.hidden=mode==="coverage";
+  if(panel.hidden) return;
+
+  const year=calendarMonth.getFullYear(), month=calendarMonth.getMonth();
+  const monthPrefix=`${year}-${String(month+1).padStart(2,"0")}-`;
+  const activeEvents=EVENTS.filter(ev=>ev.eventStatus!=="cancelled");
+  const filtered=activeEvents.filter(matchesCalendarFilters);
+  const counts={};
+  filtered.forEach(ev=>(ev.dates||[]).forEach(item=>{
+    if(item.date.startsWith(monthPrefix)) counts[item.date]=(counts[item.date]||0)+1;
+  }));
+  const monthEvents=filtered.filter(ev=>(ev.dates||[]).some(item=>item.date.startsWith(monthPrefix)));
+  const firstDay=new Date(year,month,1).getDay();
+  const daysInMonth=new Date(year,month+1,0).getDate();
+  const cells=[];
+  for(let i=0;i<firstDay;i++) cells.push('<span class="cal-blank" aria-hidden="true"></span>');
+  for(let day=1;day<=daysInMonth;day++){
+    const date=`${monthPrefix}${String(day).padStart(2,"0")}`;
+    const n=counts[date]||0;
+    const classes=["cal-day",n?"has-events":"",date===TODAY?"today":"",date===selectedDate?"selected":""].filter(Boolean).join(" ");
+    cells.push(`<button class="${classes}" type="button" data-date="${date}" ${n?"":"disabled"} aria-label="${month+1}月${day}日 ${n}件"><span class="cal-num">${day}</span>${n?`<span class="cal-badge" aria-hidden="true">${n}</span><span class="sr-only">${n}件</span>`:""}</button>`);
+  }
+  $("#calendarTitle").textContent=`${year}年${month+1}月`;
+  $("#calendarGrid").innerHTML=cells.join("");
+  $("#calendarMonthSummary").textContent=`${month+1}月は${monthEvents.length}件・掲載日${Object.keys(counts).length}日`;
+  const selection=$("#calendarSelection");
+  selection.hidden=!selectedDate;
+  if(selectedDate){
+    const selectedCount=filtered.filter(ev=>(ev.dates||[]).some(item=>item.date===selectedDate)).length;
+    selection.textContent=`× ${fmtD(selectedDate)} ${selectedCount}件`;
+  }
+
+  const allDates=activeEvents.flatMap(ev=>(ev.dates||[]).map(item=>item.date)).filter(Boolean).sort();
+  const currentKey=year*12+month;
+  const minDate=allDates[0]?parseD(allDates[0]):calendarMonth;
+  const maxDate=allDates.length?parseD(allDates[allDates.length-1]):calendarMonth;
+  $("#calendarPrev").disabled=currentKey<=minDate.getFullYear()*12+minDate.getMonth();
+  $("#calendarNext").disabled=currentKey>=maxDate.getFullYear()*12+maxDate.getMonth();
+}
+
 function featureLabels(ev){
   const text=[ev.name,ev.desc,ev.venue,ev.address].join(" ");
   const labels=[];
@@ -226,8 +333,9 @@ function featureLabels(ev){
 }
 
 function render(){
-  $("#clearFilters").hidden=!(mode!=="all"||prefFilter||cityFilter||scaleFilter||categoryFilter||query||nearMode);
+  $("#clearFilters").hidden=!(mode!=="all"||prefFilter||cityFilter||scaleFilter||categoryFilter||query||nearMode||selectedDate);
   document.querySelectorAll(".pref-count").forEach(x=>x.classList.toggle("on",x.dataset.pref===prefFilter));
+  renderCalendar();
   if(mode==="coverage"){
     const confirmed=new Set(EVENTS.map(ev=>`${ev.prefecture||"愛知県"}|${ev.city}`));
     const labels={unknown:["掲載情報を募集中","unknown"],waiting:["詳細発表待ち","waiting"],review:["内容整理中","review"]};
@@ -280,6 +388,7 @@ function render(){
     const up=upcoming(ev);
     if(mode==="today" && !up.some(x=>x.date===TODAY)) return false;
     if(mode==="weekend" && !up.some(x=>weekendDates.has(x.date))) return false;
+    if(selectedDate && !(ev.dates||[]).some(x=>x.date===selectedDate)) return false;
     if(prefFilter && ev.prefecture!==prefFilter) return false;
     if(cityFilter && ev.city!==cityFilter) return false;
     if(scaleFilter && ev.scale!==scaleFilter) return false;
@@ -302,11 +411,11 @@ function render(){
   });
   $("#cnt").textContent=list.length;
   $("#countUnit").textContent="件";
-  $("#sortLabel").textContent=nearMode&&geo?"現在地に近い順":"開催日順";
+  $("#sortLabel").textContent=selectedDate?`${fmtD(selectedDate)}の掲載`:nearMode&&geo?"現在地に近い順":"開催日順";
   $("#list").innerHTML=list.map(ev=>{
     const up=upcoming(ev);
     const ended=!up.length;
-    const shown=ended?[...(ev.dates||[])].sort((a,b)=>a.date>b.date?-1:1):up;
+    const shown=selectedDate?(ev.dates||[]).filter(x=>x.date===selectedDate):ended?[...(ev.dates||[])].sort((a,b)=>a.date>b.date?-1:1):up;
     const next=shown[0]||{};
     const isToday=up.some(x=>x.date===TODAY);
     const dtxt=shown.slice(0,2).map(x=>fmtD(x.date)).join("・")+(shown.length>2?" ほか":"");
@@ -332,6 +441,7 @@ function render(){
         <span class="ptype ${pt[0]}">${pt[1]}</span>
         ${ev.sample?'<span class="ptype sample">仮データ</span>':""}
         <span>情報元: ${esc(ev.source&&ev.source.name||"—")}</span>
+        ${Array.isArray(ev.socials)&&ev.socials.length?`<span>公式SNS: ${ev.socials.length}件</span>`:""}
         <span>最終確認: ${esc(ev.lastVerified||"—")}</span>
       </div>
     </a>`;
@@ -342,7 +452,7 @@ function render(){
 
 document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>{
   document.querySelectorAll(".tab").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false")});
-  t.classList.add("on"); t.setAttribute("aria-pressed","true"); mode=t.dataset.mode;
+  t.classList.add("on"); t.setAttribute("aria-pressed","true"); mode=t.dataset.mode; selectedDate="";
   $("#scale").disabled=mode==="coverage";
   $("#category").disabled=mode==="coverage";
   $("#btnNear").disabled=mode==="coverage";
@@ -355,7 +465,7 @@ $("#category").addEventListener("change",e=>{categoryFilter=e.target.value;rende
 $("#q").addEventListener("input",e=>{query=e.target.value.trim().toLowerCase();render()});
 $("#clearFilters").addEventListener("click",()=>{
   prefFilter=cityFilter=scaleFilter=categoryFilter=query="";
-  nearMode=false; geo=null; mode="all";
+  nearMode=false; geo=null; mode="all"; selectedDate=""; calendarMonth=new Date(today.getFullYear(),today.getMonth(),1);
   ["pref","city","scale","category","q"].forEach(id=>$("#"+id).value="");
   document.querySelectorAll(".tab").forEach(x=>{x.classList.remove("on");x.setAttribute("aria-pressed","false")});
   const allTab=document.querySelector('[data-mode="all"]');
@@ -364,6 +474,17 @@ $("#clearFilters").addEventListener("click",()=>{
   $("#btnNear").classList.remove("on"); $("#geoNote").textContent="";
   render();
 });
+$("#calendarGrid").addEventListener("click",e=>{
+  const button=e.target.closest(".cal-day.has-events");
+  if(!button) return;
+  selectedDate=selectedDate===button.dataset.date?"":button.dataset.date;
+  mode="all";
+  document.querySelectorAll(".tab").forEach(x=>{x.classList.toggle("on",x.dataset.mode==="all");x.setAttribute("aria-pressed",x.dataset.mode==="all"?"true":"false")});
+  render();
+});
+$("#calendarSelection").addEventListener("click",()=>{selectedDate="";render()});
+$("#calendarPrev").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);selectedDate="";render()});
+$("#calendarNext").addEventListener("click",()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);selectedDate="";render()});
 $("#btnNear").addEventListener("click",()=>{
   if(nearMode){nearMode=false;$("#btnNear").classList.remove("on");$("#geoNote").textContent="";render();return}
   if(!navigator.geolocation){$("#geoNote").textContent=" ／ この端末では現在地を取得できません";return}
