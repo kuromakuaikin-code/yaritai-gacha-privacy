@@ -561,12 +561,19 @@
         "name": "三重県観光連盟 公式サイト「観光三重」",
         "url": "https://www.kankomie.or.jp/event/40097"
       },
-      "lastVerified": "2026-07-10",
+      "lastVerified": "2026-09-06",
       "imageAllowed": false,
       "image": "",
-      "desc": "四日市ドームで土曜10時から翌日15時まで行われる長時間の盆踊りイベント。18歳未満は22時から翌5時まで入場できないため、来場前に公式案内をご確認ください。",
+      "desc": "四日市ドームで9月26日10時から翌27日15時まで開催予定の盆踊りです。入場無料、飲食は有料。18歳未満は22時から翌5時まで入場できません。観光三重の案内は2026年4月時点の情報のため、直前の変更は公式Instagramもご確認ください。",
       "scale": "major",
-      "prefecture": "三重県"
+      "prefecture": "三重県",
+      "socials": [
+        {
+          "platform": "Instagram",
+          "name": "よんてつ 公式Instagram",
+          "url": "https://www.instagram.com/yontetsu_yokkaichi/"
+        }
+      ]
     },
     {
       "id": "atami-ajiro-furusato-matsuri",
@@ -842,6 +849,11 @@
       "address": "郡上市白鳥町",
       "dates": [
         {
+          "date": "2026-07-09",
+          "start": "20:00",
+          "end": "22:00"
+        },
+        {
           "date": "2026-08-16",
           "start": "20:00",
           "end": "22:00"
@@ -864,16 +876,16 @@
       ],
       "rain": "",
       "eventStatus": "scheduled",
-      "statusNote": "2026年7月9日の回は終了済み。会場は開催日ごとに公式情報をご確認ください。",
+      "statusNote": "",
       "posterType": "admin",
       "source": {
         "name": "岐阜県観光連盟 公式サイト「岐阜の旅ガイド」",
         "url": "https://www.kankou-gifu.jp/event/detail_1329.html"
       },
-      "lastVerified": "2026-08-09",
+      "lastVerified": "2026-09-06",
       "imageAllowed": false,
       "image": "",
-      "desc": "郡上市白鳥町の神社拝殿で行われる伝統的な踊り。今後の開催日は8月16日・17日・20日と9月20日で、各日20時から22時の予定です。",
+      "desc": "白鳥町内の神社拝殿で開催される踊りです。2026年の案内は7月9日、8月16日・17日・20日、9月20日の5日間、各日20時から22時。会場は開催日ごとに異なるため、白鳥観光協会の案内をご確認ください。",
       "scale": "regional",
       "prefecture": "岐阜県"
     },
@@ -4409,20 +4421,27 @@
         }
       ],
       "rain": "開催状況や変更は公式情報をご確認ください",
-      "eventStatus": "scheduled",
-      "statusNote": "お囃子や音頭取りを使わず、下駄の音と掛け合い歌で踊る地域の伝統行事です。神社拝殿内で行われます。",
+      "eventStatus": "cancelled",
+      "statusNote": "8月11日の「盆前の踊り」は台風接近の予想により中止と公式案内に追記されています。9月12日の「祭日踊り」とは別の開催分です。",
       "posterType": "admin",
       "source": {
-        "name": "岐阜県グリーン・ツーリズム公式サイト",
-        "url": "https://gifu-inaka.pref.gifu.lg.jp/gifudo/area3/6480.html"
+        "name": "ぎふの田舎へいこう！推進協議会（年間日程・中止告知）",
+        "url": "https://gifuina.com/inaka_experience/p-14960/"
       },
-      "lastVerified": "2026-07-30",
+      "lastVerified": "2026-09-06",
       "imageAllowed": false,
       "image": "",
       "desc": "寒水白山神社の拝殿で、下駄の音と踊り手の掛け合い歌に合わせて踊る郡上市明宝の伝統的な盆踊りです。",
       "scale": "neighborhood",
       "category": "bonodori",
-      "prefecture": "岐阜県"
+      "prefecture": "岐阜県",
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "明宝観光協会 公式Facebook",
+          "url": "https://www.facebook.com/meiho.kanko/"
+        }
+      ]
     },
     {
       "id": "takayama-kuguno-summer-festival-2026",
@@ -4448,7 +4467,7 @@
         "name": "飛騨高山観光公式サイト 飛騨高山旅ガイド",
         "url": "https://www.hidatakayama.or.jp/event/detail_2550.html"
       },
-      "lastVerified": "2026-07-30",
+      "lastVerified": "2026-09-06",
       "imageAllowed": false,
       "image": "",
       "desc": "久々野支所周辺で盆踊りや飲食ブースを楽しみ、山あいに響く花火で締めくくる納涼夏まつりです。",
@@ -6865,6 +6884,215 @@
       "scale": "major",
       "category": "festival",
       "prefecture": "静岡県"
+    },
+    {
+      "status": "published",
+      "rain": "雨天決行・荒天中止。中止時は東別院公式ホームページ・SNSで発表",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "scale": "regional",
+      "category": "bonodori",
+      "id": "nagoya-higashibetsuin-matsuri",
+      "name": "東別院まつり 盆踊り・シン・ボンオドリ",
+      "city": "名古屋市中区",
+      "venue": "東別院境内 特設会場",
+      "address": "名古屋市中区橘2-8-55",
+      "dates": [
+        {
+          "date": "2026-10-03",
+          "start": "17:10",
+          "end": "20:45"
+        }
+      ],
+      "source": {
+        "name": "真宗大谷派名古屋別院（東別院）公式サイト",
+        "url": "https://www.ohigashi.net/news/matsuri2026/"
+      },
+      "desc": "10月3日の盆踊りは17時10分から20時45分まで。まつり開演は17時、飲食・物販は16時開始です。入場無料。当日の駐車場はありません。地下鉄東別院駅4番出口から徒歩5分。",
+      "prefecture": "愛知県"
+    },
+    {
+      "status": "published",
+      "rain": "雨天時は一部内容を変更し、黒田小学校の屋内運動場で開催",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "scale": "regional",
+      "category": "festival",
+      "id": "ichinomiya-kisogawa-kazutoyo",
+      "name": "第43回 木曽川町一豊まつり",
+      "city": "一宮市",
+      "venue": "黒田小学校（メイン会場）ほか",
+      "address": "一宮市木曽川町黒田",
+      "dates": [
+        {
+          "date": "2026-11-08",
+          "start": "10:00",
+          "end": "15:00"
+        }
+      ],
+      "source": {
+        "name": "一宮市観光協会 公式サイト",
+        "url": "https://www.138ss.com/event/detail/21/"
+      },
+      "desc": "木曽川町一豊まつり実行委員会による11月8日の祭り。黒田小学校をメイン会場に10時から15時まで開催予定です。会場周辺に駐車場はありません。",
+      "prefecture": "愛知県"
+    },
+    {
+      "status": "published",
+      "rain": "天候等による変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "scale": "regional",
+      "category": "festival",
+      "id": "ichinomiya-bisai-matsuri",
+      "name": "第38回 びさいまつり",
+      "city": "一宮市",
+      "venue": "尾西市民会館・尾西庁舎周辺",
+      "address": "一宮市尾西市民会館周辺",
+      "dates": [
+        {
+          "date": "2026-10-24",
+          "start": "09:30",
+          "end": "16:00"
+        },
+        {
+          "date": "2026-10-25",
+          "start": "09:30",
+          "end": "16:00"
+        }
+      ],
+      "source": {
+        "name": "びさいまつり運営委員会 公式サイト",
+        "url": "https://bisai.online/bisaimatsuri/"
+      },
+      "desc": "10月24日・25日の9時30分から16時まで開催予定。25日は踊る仮装パレードが予定されています。2026年の詳細な時間割・会場マップ・出店情報は発表待ちです。",
+      "prefecture": "愛知県"
+    },
+    {
+      "status": "published",
+      "rain": "天候等による変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "scale": "major",
+      "category": "festival",
+      "id": "shizuoka-sumpujo-natsumatsuri",
+      "name": "駿府城夏まつり2026",
+      "city": "静岡市葵区",
+      "venue": "駿府城公園",
+      "address": "静岡市葵区駿府城公園1-1",
+      "dates": [
+        {
+          "date": "2026-09-12",
+          "start": "12:00",
+          "end": "20:00"
+        },
+        {
+          "date": "2026-09-13",
+          "start": "12:00",
+          "end": "20:00"
+        }
+      ],
+      "source": {
+        "name": "静岡新聞社（主催者発表・PR TIMES）",
+        "url": "https://prtimes.jp/main/html/rd/p/000000132.000100047.html"
+      },
+      "socials": [
+        {
+          "platform": "Instagram",
+          "name": "駿府城夏まつり 公式Instagram",
+          "url": "https://www.instagram.com/sumpujo_natsu/"
+        }
+      ],
+      "desc": "静岡市・静岡商工会議所・静岡新聞社・静岡放送による夏まつり。両日12時から20時まで開催予定で、入場は無料。一部ステージは事前申込・発券の無料整理券が必要です。駐車場はありません。",
+      "prefecture": "静岡県"
+    },
+    {
+      "status": "published",
+      "rain": "天候等による変更は公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "scale": "neighborhood",
+      "category": "bonodori",
+      "id": "gujo-kanomizu-matsuribi-odori",
+      "name": "寒水踊り 祭日踊り",
+      "city": "郡上市",
+      "venue": "寒水白山神社 拝殿",
+      "address": "郡上市明宝寒水",
+      "dates": [
+        {
+          "date": "2026-09-12",
+          "start": "19:00"
+        }
+      ],
+      "source": {
+        "name": "ぎふの田舎へいこう！推進協議会（年間日程・中止告知）",
+        "url": "https://gifuina.com/inaka_experience/p-14960/"
+      },
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "明宝観光協会 公式Facebook",
+          "url": "https://www.facebook.com/meiho.kanko/"
+        }
+      ],
+      "desc": "寒水白山神社の拝殿で9月12日19時から開催予定の祭日踊りです。中止となった8月11日の「盆前の踊り」とは別日程です。終了時刻は公式案内に記載されていません。",
+      "prefecture": "岐阜県"
+    },
+    {
+      "id": "gujo-shirotori-henso-odori",
+      "status": "published",
+      "name": "第80回 白鳥変装おどりコンクール",
+      "city": "郡上市",
+      "venue": "白鳥駅前通り",
+      "address": "郡上市白鳥町白鳥 駅前通り",
+      "dates": [
+        {
+          "date": "2026-09-19",
+          "start": "19:30"
+        }
+      ],
+      "rain": "少雨決行・荒天中止。直前の開催状況は白鳥観光協会の公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "郡上市移住定住ポータル 郡上・ふるさと定住機構",
+        "url": "https://gujolife.com/event/%E7%99%BD%E9%B3%A5%E5%A4%89%E8%A3%85%E3%81%8A%E3%81%A9%E3%82%8A%E3%82%B3%E3%83%B3%E3%82%AF%E3%83%BC%E3%83%AB/"
+      },
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "白鳥観光協会 公式Facebook",
+          "url": "https://www.facebook.com/shirotorikankoukyoukai/"
+        }
+      ],
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "9月19日19時30分から白鳥駅前通りで開催予定。変装して踊るコンクールで、参加無料、観覧のみも可能です。一般の部（個人・団体）と小学生までの部があり、オンライン事前受付は9月13日まで。終了時刻は公式案内に記載されていません。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
     }
   ]
 }
