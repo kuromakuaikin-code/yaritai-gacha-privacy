@@ -3,16 +3,6 @@
   "lastChecked": "2026-08-07",
   "candidates": [
     {
-      "id": "candidate-nagoya-higashibetsuin",
-      "name": "東別院まつり 盆踊り",
-      "prefecture": "愛知県",
-      "city": "名古屋市中区",
-      "venue": "東別院境内",
-      "dateText": "例年9月下旬・2026年日程未確認",
-      "source": {"name": "真宗大谷派名古屋別院公式サイト", "url": "https://www.ohigashi.net/news/matsuri2025/"},
-      "reason": "2025年の公式案内は確認済みですが、2026年の発表待ちです。"
-    },
-    {
       "id": "candidate-okazaki-bonodori-fes",
       "name": "岡崎盆おどりフェス",
       "prefecture": "愛知県",
@@ -20,17 +10,7 @@
       "venue": "岡崎城公園",
       "dateText": "例年9月・2026年日程未確認",
       "source": {"name": "岡崎市観光協会公式サイト", "url": "https://okazaki-kanko.jp/okazaki-park/program/4847"},
-      "reason": "公式ページは2024年開催情報のままで、2026年の開催告知を確認できていません。"
-    },
-    {
-      "id": "candidate-hida-kuguno-summer",
-      "name": "ひだ桃源郷くぐの納涼夏まつり 盆踊り",
-      "prefecture": "岐阜県",
-      "city": "高山市",
-      "venue": "高山市久々野支所前広場周辺",
-      "dateText": "2026年8月11日 16:30～22:30（雨天時は8月22日）",
-      "source": {"name": "岐阜県観光公式サイト", "url": "https://www.kankou-gifu.jp/event/detail_4994.html"},
-      "reason": "2026年の開催日時と会場は発表済みですが、公式ページの盆踊り説明は前年情報のため、2026年の実施内容を確認中です。"
+      "reason": "2026年9月6日再確認。公式ページは2024年開催情報のままで、2026年の開催告知を確認できていません。"
     },
     {
       "id": "candidate-domatsuri",
