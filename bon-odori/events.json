@@ -7057,6 +7057,42 @@
       ],
       "desc": "寒水白山神社の拝殿で9月12日19時から開催予定の祭日踊りです。中止となった8月11日の「盆前の踊り」とは別日程です。終了時刻は公式案内に記載されていません。",
       "prefecture": "岐阜県"
+    },
+    {
+      "id": "gujo-shirotori-henso-odori",
+      "status": "published",
+      "name": "第80回 白鳥変装おどりコンクール",
+      "city": "郡上市",
+      "venue": "白鳥駅前通り",
+      "address": "郡上市白鳥町白鳥 駅前通り",
+      "dates": [
+        {
+          "date": "2026-09-19",
+          "start": "19:30"
+        }
+      ],
+      "rain": "少雨決行・荒天中止。直前の開催状況は白鳥観光協会の公式情報をご確認ください",
+      "eventStatus": "scheduled",
+      "statusNote": "",
+      "posterType": "admin",
+      "source": {
+        "name": "郡上市移住定住ポータル 郡上・ふるさと定住機構",
+        "url": "https://gujolife.com/event/%E7%99%BD%E9%B3%A5%E5%A4%89%E8%A3%85%E3%81%8A%E3%81%A9%E3%82%8A%E3%82%B3%E3%83%B3%E3%82%AF%E3%83%BC%E3%83%AB/"
+      },
+      "socials": [
+        {
+          "platform": "Facebook",
+          "name": "白鳥観光協会 公式Facebook",
+          "url": "https://www.facebook.com/shirotorikankoukyoukai/"
+        }
+      ],
+      "lastVerified": "2026-09-06",
+      "imageAllowed": false,
+      "image": "",
+      "desc": "9月19日19時30分から白鳥駅前通りで開催予定。変装して踊るコンクールで、参加無料、観覧のみも可能です。一般の部（個人・団体）と小学生までの部があり、オンライン事前受付は9月13日まで。終了時刻は公式案内に記載されていません。",
+      "scale": "regional",
+      "category": "bonodori",
+      "prefecture": "岐阜県"
     }
   ]
 }
