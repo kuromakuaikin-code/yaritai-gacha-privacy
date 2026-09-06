@@ -497,7 +497,7 @@ $("#btnNear").addEventListener("click",()=>{
   },()=>{$("#geoNote").textContent=" ／ 現在地を取得できませんでした（位置情報の許可をご確認ください）"});
 });
 
-Promise.all([fetch("events.json"),fetch("coverage.json"),fetch("candidates.json")])
+Promise.all(["events.json","coverage.json","candidates.json"].map(url=>fetch(url,{cache:"no-cache"})))
   .then(async responses=>{
     if(responses.some(r=>!r.ok)) throw new Error("data load failed");
     return Promise.all(responses.map(r=>r.json()));
